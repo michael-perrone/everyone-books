@@ -1,7 +1,7 @@
 import React from "react";
 import LoginScreen from "./LoginScreen/LoginScreen";
 import { Route, Redirect, Switch, withRouter } from "react-router-dom";
-import BusinessSignup from "./BusinessSignUp/BusinessSignup";
+import BusinessSignup from "./BusinessSignup/BusinessSignup";
 import TennisClub from "./TennisClub/TennisClub";
 import TennisClubsList from "./TennisClubsList/TennisClubsList";
 import UserHome from "./UserHome/UserHome";
