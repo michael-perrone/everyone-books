@@ -1,0 +1,72 @@
+.subContainerRight {
+  height: 600px;
+  width: 80%;
+  transform: translateY(0);
+  display: flex;
+  flex-direction: column;
+  transition-duration: 2s;
+  align-items: center;
+}
+
+#animationSubRight {
+  transform: translateY(-200vh);
+}
+
+#form {
+  display: flex;
+  flex-direction: column;
+}
+
+#registerP {
+  font-size: 40px;
+  position: relative;
+  align-self: center;
+  font-family: "Stylish", sans-serif;
+  margin-bottom: 10px;
+}
+
+#registerForm {
+  height: 400px;
+  width: 430px;
+  box-shadow: 1px 1px 30px black;
+  border-radius: 22px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: transparent;
+  transition-duration: 2s;
+  justify-content: space-around;
+}
+
+#registerButton {
+  margin-top: 12px;
+  font-size: 18px;
+  border-radius: 14px;
+  padding-bottom: 2px;
+  width: 240px;
+  border: none;
+  box-shadow: 1px 1px 10px black;
+  height: 32px;
+  margin-bottom: 15px;
+}
+
+@media (max-width: 1587px) and (min-width: 1400px) {
+  .subContainerRight {
+    margin-right: 80px;
+  }
+}
+
+@media (max-width: 700px) and (min-width: 0px) {
+  .subContainerRight {
+    width: 95vw;
+    height: 490px;
+    align-items: center;
+  }
+}
+
+@media (max-width: 670px) and (min-width: 0px) {
+  #registerForm {
+    width: 290px;
+  }
+}

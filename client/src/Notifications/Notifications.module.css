@@ -1,0 +1,39 @@
+.notificationsContainer {
+  width: 450px;
+  height: 500px;
+  position: fixed;
+  padding: 40px 10px 10px 20px;
+  left: 29%;
+  top: 10px;
+  z-index: 999;
+  box-shadow: 1px 1px 9px white;
+  background-color: rgb(209, 247, 250);
+  border: 1px solid black;
+  overflow: auto;
+  font-family: sans-serif;
+  font-size: 20px;
+}
+
+.notificationContainer {
+  display: flex;
+  justify-content: space-around;
+  border-bottom: 2px solid black;
+  padding: 5px;
+}
+
+#backDrop {
+  position: fixed;
+  z-index: 998;
+  background-color: rgba(0, 0, 0, 0.801);
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+@media (max-width: 800px) {
+  .notificationsContainer {
+    width: 80%;
+    left: 2%;
+  }
+}

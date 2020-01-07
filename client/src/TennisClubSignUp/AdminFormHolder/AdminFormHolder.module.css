@@ -1,0 +1,31 @@
+.containerRight {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  padding: 12px;
+  height: 600px;
+}
+
+#pTag {
+  margin-top: 20px;
+  box-shadow: 2px 2px 8px rgb(66, 85, 29);
+  padding: 8px;
+  font-size: 16px;
+  margin-bottom: 12px;
+  background-color: rgb(239, 255, 208);
+  width: 100%;
+}
+
+#pTagContainer {
+  width: 90%;
+  margin-top: 20px;
+}
+
+
+@media(max-width: 670px) and (min-width: 0px) {
+  .containerRight {
+    height: 690px;
+  }
+}

@@ -1,0 +1,29 @@
+#signUpClubButton {
+  border: 10px double white;
+  color: white;
+  height: 75px;
+  width: 400px;
+  top: -10px;
+  font-size: 28px;
+  position: relative;
+  left: 40px;
+  border-radius: 85px;
+  background: transparent;
+  outline: none;
+  box-shadow: 2px 2px 50px white;
+  cursor: pointer;
+}
+
+@media (max-width: 1100px) and (min-width: 0) {
+  #signUpClubButton {
+    left: 0;
+    margin-top: 40px;
+  }
+}
+@media (max-width: 700px) and (min-width: 0) {
+  #signUpClubButton {
+    width: 300px;
+    font-size: 22px;
+    top: -40px;
+  }
+}

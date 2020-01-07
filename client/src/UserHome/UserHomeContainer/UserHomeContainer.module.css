@@ -1,0 +1,73 @@
+#userHomeContainer {
+  display: flex;
+}
+
+#clubsSubscribedHalf {
+  width: 55%;
+}
+
+#bookingsHalf {
+  width: 45%;
+}
+
+.half {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 80px;
+  padding-bottom: 40px;
+}
+
+.noClubsBookingsContainer {
+  box-shadow: 0px 1px 4px black;
+  z-index: 0;
+  width: 350px;
+  height: 130px;
+  background-color: rgb(208, 255, 208);
+  font-family: "Josefin Sans", sans-serif;
+  padding: 10px;
+  position: relative;
+  top: 12px;
+}
+
+.homeContainerClass {
+  height: 93vh;
+}
+
+@media (max-width: 740px) {
+  #userHomeContainer {
+    flex-direction: column;
+  }
+  #bookingsHalf {
+    width: 100%;
+    order: 1;
+  }
+  #clubsSubscribedHalf {
+    right: 0px;
+    order: 2;
+    width: 100%;
+  }
+  .noClubsBookingsContainer {
+    width: 320px;
+    height: 160px;
+    line-height: 22px;
+  }
+}
+
+@media (max-height: 700px) and (min-height: 500px) and (max-width: 600px) {
+  .homeContainerClass {
+    height: 105vh;
+  }
+}
+
+@media (max-width: 600px) {
+  .half {
+    margin-top: 0px;
+  }
+  #bookingsHalf {
+    margin-top: 80px;
+  }
+  #clubsSubscribedHalf {
+    margin-top: 0px;
+  }
+}

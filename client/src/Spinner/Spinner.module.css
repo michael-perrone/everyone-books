@@ -1,0 +1,113 @@
+.tennisBall {
+  animation-name: tennisBallBounce;
+  animation-duration: 6s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  transform-origin: center;
+  height: 50px;
+  width: 50px;
+  position: absolute;
+}
+
+#bottomRightStarter {
+  top: 160px;
+  left: 225px;
+  animation-name: bottomRightBall;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+#loadingTag {
+  font-weight: bold;
+  color: black;
+  font-size: 34px;
+  position: absolute;
+  left: 100px;
+  top: 100px;
+  animation-name: pTag;
+  animation-iteration-count: infinite;
+  animation-duration: 3s;
+  z-index: 10;
+}
+
+@keyframes pTag {
+  0% {
+    opacity: 1;
+  }
+  33% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+#topStarter {
+  top: 0px;
+  left: 130px;
+  animation-name: topBall;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+#bottomLeftStarter {
+  top: 160px;
+  left: 40px;
+  animation-name: bottomLeftBall;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+#backGround {
+  align-self: center;
+  position: relative;
+  top: 100px;
+  left: 200px;
+  height: 390px;
+  width: 492px;
+}
+
+@keyframes bottomLeftBall {
+  0% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(90px, -150px) rotate(120deg);
+  }
+  66% {
+    transform: translate(200px, 0px) rotate(240deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(360deg);
+  }
+}
+
+@keyframes bottomRightBall {
+  0% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(-160px, 0px) rotate(120deg);
+  }
+  66% {
+    transform: translate(-90px, -160px) rotate(240deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(360deg);
+  }
+}
+
+@keyframes topBall {
+  0% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(110px, 160px) rotate(120deg);
+  }
+  66% {
+    transform: translate(-100px, 160px) rotate(240deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(360deg);
+  }
+}

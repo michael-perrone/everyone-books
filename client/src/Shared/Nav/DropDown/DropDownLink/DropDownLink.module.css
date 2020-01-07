@@ -1,0 +1,8 @@
+#dropDownLink {
+    border-bottom: 1px solid gray;
+    padding-top: 15px;
+    width: 100%;
+    height: 40px;
+    text-align: right;
+    cursor: pointer;
+}

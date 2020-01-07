@@ -1,0 +1,11 @@
+#bioForm {
+  height: 240px;
+  width: 400px;
+}
+
+@media (max-width: 600px) and (min-width: 0px) {
+  #bioForm {
+    height: 310px;
+    width: 310px;
+  }
+}

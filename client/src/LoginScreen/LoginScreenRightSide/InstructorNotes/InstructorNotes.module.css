@@ -1,0 +1,42 @@
+#instructorNotesContainer {
+  width: 70%;
+  position: relative;
+  top: -15px;
+}
+
+.instructorNotes {
+  color: white;
+  font-size: 24px;
+}
+
+#note {
+  text-align: center;
+  margin-bottom: 10px;
+  margin-right: 20px;
+}
+
+#thanks {
+  margin-top: 10px;
+
+  text-align: center;
+}
+
+@media (max-width: 1000px) {
+  #thanks {
+    margin-top: 20px;
+  }
+  #instructorNotesContainer {
+    top: -20px;
+  }
+}
+
+@media (max-width: 700px) {
+  .instructorNotes {
+    font-size: 18px;
+  }
+
+  #instructorNotesContainer {
+    width: 80%;
+    top: -10px;
+  }
+}

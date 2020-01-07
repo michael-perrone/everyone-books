@@ -1,0 +1,51 @@
+#pTagAboveForm {
+  background-color: rgb(231, 231, 231);
+  display: flex;
+  justify-content: center;
+}
+
+.mainContentHolder {
+  background-color: rgb(231, 231, 231);
+  position: relative;
+  height: 100vh;
+}
+
+.divHolderNotAnimated {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  transform: translateX(-1200px);
+  transition-duration: 0.6s;
+}
+
+#divHolderAnimated {
+  transition-delay: 0.6s;
+  transform: translateX(0px);
+}
+
+.pTagsForSelection {
+  border: 1px solid black;
+  padding: 5px;
+  width: 80px;
+  text-align: center;
+  cursor: pointer;
+}
+
+#selectedPTag {
+  background-color: black;
+  color: rgb(202, 253, 202);
+  font-weight: bold;
+}
+
+#selectionHolder {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.pTag {
+  padding: 15px 20px;
+  width: 70%;
+}

@@ -1,0 +1,109 @@
+#loginFormContainer {
+  width: 43vw;
+  display: flex;
+  justify-content: center;
+}
+
+#loginFormSubContainer {
+  left: -30px;
+  position: relative;
+  margin-top: 15px;
+  margin-bottom: 25px;
+}
+
+#loginP {
+  font-size: 26px;
+  font-family: "Stylish", sans-serif;
+}
+
+.errorNoAnimation {
+  position: absolute;
+  left: 110px;
+  top: 15px;
+  font-size: 14px;
+  color: #000000;
+  opacity: 0;
+  transition-duration: 1.1s;
+  transform: translateY(-15px);
+  color: black;
+}
+
+#errorAnimation {
+  transition-duration: 1.1s;
+  opacity: 1;
+  transform: translateY(14px);
+}
+
+.loginInputs {
+  height: 22px;
+  font-family: "Stylish", sans-serif;
+  color: "black";
+  padding-left: 8px;
+  width: 175px;
+  font-size: 16px;
+  margin-left: 13px;
+  border-radius: 3px;
+  border: 2px solid black;
+  outline: none;
+}
+
+#loginButton {
+  height: 28px;
+  width: 55px;
+  padding-bottom: 2px;
+  position: relative;
+  font-size: 14px;
+  background-color: white;
+  border: none;
+  color: black;
+  margin-left: 12px;
+  border-radius: 18px;
+}
+
+@media (max-width: 1300px) and (min-width: 950px) {
+  #loginFormSubContainer {
+    left: 0px;
+  }
+  #loginFormContainer {
+    width: 45vw;
+  }
+}
+
+@media (max-width: 950px) and (min-width: 0px) {
+  #loginFormContainer {
+    width: 100%;
+    background: none;
+  }
+  #loginP {
+    display: none;
+  }
+  #loginFormSubContainer {
+    left: 0px;
+  }
+  #errorAnimation {
+    transform: translateY(22px);
+  }
+}
+
+@media (max-width: 750px) and (min-width: 0px) {
+  .loginInputs {
+    margin: 0px 4px;
+  }
+}
+
+@media (max-width: 700px) and (min-width: 0px) {
+  .loginInputs {
+    width: 128px;
+    font-size: 16px;
+  }
+  #loginButton {
+    width: 50px;
+    border-radius: 6px;
+    top: -1px;
+    margin-left: 4px;
+  }
+
+  .errorNoAnimation {
+    left: 40px;
+  }
+}

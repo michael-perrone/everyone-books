@@ -1,0 +1,38 @@
+.otherAlertContainer {
+  position: fixed;
+  left: -500px;
+  padding: 8px;
+  border: 1px solid black;
+  border-radius: 2px;
+  z-index: 999;
+  opacity: 0;
+}
+
+#otherAlertContainerAnimation {
+  animation-name: alertContainerSlide;
+  animation-duration: 4s;
+  animation-delay: none;
+  animation-iteration-count: 1;
+  opacity: 1;
+}
+
+@keyframes alertContainerSlide {
+  0% {
+    transform: translateX(0px);
+  }
+  5% {
+    top: 60px;
+  }
+  20% {
+    opacity: 1;
+    transform: translateX(550px);
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 60px;
+    transform: translate(550px, 250px);
+    opacity: 0;
+  }
+}

@@ -1,0 +1,51 @@
+.bookingModal {
+  height: 560px;
+  background-color: rgb(236, 236, 236);
+  box-shadow: 0px 1px 12px white;
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: fixed;
+  z-index: 499;
+  top: 20px;
+  align-items: center;
+}
+
+#topPartContainer {
+  height: 355px;
+  width: 96%;
+  margin-top: 8px;
+  background-color: lightgray;
+  justify-content: space-between;
+  box-shadow: 0px 0px 4px black;
+}
+
+#tryingToBookTopPart {
+  margin-top: 10px;
+  height: 250px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 10px;
+}
+
+#backdrop {
+  height: 100vh;
+  width: 100%;
+  background-color: black;
+  position: fixed;
+  top: 0;
+  z-index: 499;
+  opacity: 0.8;
+}
+
+.cancelConfirm {
+  height: 30px;
+  width: 90px;
+  border: none;
+  box-shadow: 0px 0px 2px black;
+  background-color: lightgreen;
+  margin: 0px 4px;
+}

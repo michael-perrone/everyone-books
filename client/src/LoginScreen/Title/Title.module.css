@@ -1,0 +1,78 @@
+#TitleContainer {
+  height: 46vh;
+  width: 44vw;
+  align-self: flex-end;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+}
+
+#title {
+  font-size: 68px;
+  font-weight: bold;
+  position: relative;
+  margin: 0;
+  position: relative;
+
+  font-family: "Permanent Marker", cursive;
+}
+
+#tennisBall {
+  position: relative;
+  top: 30px;
+  left: -30px;
+  animation-name: tennisBallBounce;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  transform-origin: center;
+}
+
+@keyframes tennisBallBounce {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 950px) and (min-width: 0px) {
+  #title {
+    left: 120px;
+    top: -26px;
+  }
+
+  #tennisBall {
+    top: -40px;
+    left: 70px;
+  }
+}
+
+@media (max-width: 950px) and (min-width: 0px) {
+  #TitleContainer {
+    justify-content: center;
+    left: 0px;
+    order: -1;
+    width: 100vw;
+    height: 20vh;
+    background: none;
+  }
+  #title {
+    width: 100vw;
+    top: 10px;
+    left: 0px;
+    text-align: center;
+  }
+  #tennisBall {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) and (min-width: 0px) {
+  #title {
+    font-size: 36px;
+  }
+}

@@ -1,0 +1,133 @@
+#formSelectors {
+  position: relative;
+  top: 22px;
+  width: 360px;
+  justify-content: space-around;
+  font-size: 16px;
+  display: flex;
+}
+#formsContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-left: 1px solid gray;
+}
+
+#text {
+  margin-top: 10px;
+  height: 200px;
+  width: 312px;
+  font-size: 16px;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+
+.createSkipButton {
+  width: 100px;
+  height: 30px;
+  color: black;
+  background-color: rgb(152, 241, 152);
+  border-radius: 4px;
+  border: 2px solid lightgray;
+  font-size: 14px;
+  padding-bottom: 4px;
+}
+
+.inputs {
+  width: 164px;
+  height: 16px;
+  font-size: 14px;
+  box-shadow: 0px 0px 2px black;
+  padding-left: 6px;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.formSeparator {
+  height: 30px;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+#pastExpForm {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 160px;
+  padding: 10px;
+  width: 335px;
+  border-radius: 4px;
+  border: 2px ridge black;
+}
+
+#addExp {
+  width: 120px;
+  align-self: center;
+}
+
+.pTags {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+#certForm {
+  align-self: center;
+  margin-top: 10px;
+  border: 2px ridge black;
+  width: 290px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding-left: 10px;
+  height: 140px;
+}
+
+.ml5 {
+  margin-left: 5px;
+}
+
+.selects {
+  width: 85px;
+  height: 20px;
+  font-size: 12px;
+  padding-left: 3px;
+  box-shadow: 0px 0px 2px;
+  margin-left: 5px;
+}
+
+.labels {
+  font-size: 14px;
+}
+
+.forms {
+  display: flex;
+  flex-direction: column;
+  width: 362px;
+  justify-content: space-around;
+}
+
+.individualSelectors {
+  padding-left: 4px;
+  padding-right: 4px;
+  cursor: pointer;
+}
+
+#formSelectorsSelected {
+  color: white;
+  background-color: gray;
+  padding: 4px;
+  border-radius: 5px;
+}
+
+.jobCertArrayDiv {
+  box-shadow: 0px 0px 3px black;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+@media (max-width: 775px) {
+  #formsContainer {
+    border-left: none;
+  }
+}

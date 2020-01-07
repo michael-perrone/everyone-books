@@ -1,0 +1,49 @@
+#courtContainer {
+  margin-top: 30px;
+  justify-content: center;
+  display: flex;
+  position: relative;
+  padding-bottom: 20px;
+}
+
+#bookingIntroDiv {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+::-webkit-scrollbar-track-piece:start {
+  width: 12px;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.bookingButtonsDiv {
+  opacity: 0;
+  z-index: -1;
+  position: fixed;
+  top: 20px;
+  transition-duration: 0.8s;
+  background-color: rgb(185, 255, 185);
+  border: 1px solid lightgray;
+  padding: 10px;
+}
+
+#showButtons {
+  opacity: 1;
+  z-index: 450;
+}
+
+.courtButton {
+  width: 120px;
+  height: 28px;
+  padding: 6px;
+  padding-bottom: 24px;
+  border-radius: 6px;
+  margin-left: 10px;
+  background-color: rgb(29, 29, 29);
+  border: 2px ridge lightgreen;
+  color: rgb(190, 255, 190);
+  font-weight: bold;
+}

@@ -1,0 +1,11 @@
+#clubsContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+#clubListHeader {
+  height: 70px;
+  font-size: 44px;
+}

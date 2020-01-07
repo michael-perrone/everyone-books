@@ -1,0 +1,40 @@
+#instructorProfileCreateContainer {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+#paragraphContainer {
+  width: 600px;
+  margin-top: 10px;
+  padding-right: 20px;
+  margin-left: 10px;
+}
+
+#title {
+  font-size: 34px;
+  font-family: "Permanent Marker", cursive;
+  position: relative;
+  left: 70px;
+  width: 210px;
+}
+
+#fakeNav {
+  height: 48px;
+  width: 100%;
+  background-color: lightgreen;
+  border-bottom: 1px solid gray;
+}
+
+@media (max-width: 775px) {
+  #instructorProfileCreateContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 450px) {
+  #paragraphContainer {
+    width: 92%;
+  }
+}

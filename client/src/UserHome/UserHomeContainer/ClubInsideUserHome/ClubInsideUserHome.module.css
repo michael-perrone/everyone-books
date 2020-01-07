@@ -1,0 +1,63 @@
+#userClubContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 190px;
+  width: 600px;
+  background-color: rgb(207, 253, 207);
+  box-shadow: 0px 2px 5px black;
+  margin-bottom: 20px;
+}
+
+.clubItem {
+  margin-top: 5px;
+  font-family: "Josefin Sans", sans-serif;
+}
+
+#buttonsContainer {
+  width: 240px;
+}
+
+.userSubContainer {
+  display: flex;
+  height: 184px;
+  flex-direction: column;
+  width: 330px;
+  align-items: center;
+  justify-content: space-around;
+  background-color: rgb(207, 253, 207);
+}
+
+.clubButton {
+  width: 150px;
+  border: none;
+  height: 18px;
+  color: black;
+  box-shadow: 0px 0px 3px black;
+  font-size: 14px;
+  height: 30px;
+  font-family: sans;
+  letter-spacing: 0.3px;
+}
+
+.clubButton:hover {
+  border: 1px solid darkgray;
+  box-shadow: 0px 0px 2px black;
+}
+
+#leftContainer {
+  margin-left: 5px;
+}
+
+#rightContainer {
+  margin-right: 5px;
+  justify-content: space-around;
+}
+
+@media (max-width: 1000px) {
+  #userClubContainer {
+    flex-direction: column;
+    width: 340px;
+    height: 400px;
+  }
+}

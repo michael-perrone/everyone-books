@@ -1,0 +1,10 @@
+#hi {
+  background-color: black;
+  color: white;
+  height: 200px;
+  width: 200px;
+}
+
+button {
+  cursor: pointer;
+}
