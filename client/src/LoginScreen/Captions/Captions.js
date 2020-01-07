@@ -9,17 +9,16 @@ class Captions extends React.Component {
         <div id={styles.captionsContainerSub}>
           
           <p className={styles.captions}>
-            <i className="far fa-building" id={styles.icons1} /> Get connected
-            to tennis clubs.
+            <i className="far fa-building" id={styles.icons1} /> Find great businesses near you.
           </p>
           <p className={styles.captions}>
             <i className="fas fa-user-friends" id={styles.icons2} />
-            Find other tennis players near you.
+            Easily schedule an appointment.
           </p>
 
           <p className={styles.captions}>
             <i id={styles.icons2} className="fas fa-thumbs-up" />
-            Meet helpful tennis instructors.{" "}
+            Never call front desks again!{" "}
           </p>
        
         </div>

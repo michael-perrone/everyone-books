@@ -1,17 +1,21 @@
 #signUpClubButton {
-  border: 10px double white;
-  color: white;
+  border: none;
+  color: lightgray;
   height: 75px;
   width: 400px;
-  top: -10px;
+  top: -40px;
   font-size: 28px;
   position: relative;
   left: 40px;
-  border-radius: 85px;
   background: transparent;
   outline: none;
-  box-shadow: 2px 2px 50px white;
+  box-shadow: 2px 2px 10px lightgray;
   cursor: pointer;
+}
+
+#signUpClubButton:hover {
+  box-shadow: none;
+  border: 2px solid white;
 }
 
 @media (max-width: 1100px) and (min-width: 0) {

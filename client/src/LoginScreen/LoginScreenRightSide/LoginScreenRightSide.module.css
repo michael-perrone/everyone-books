@@ -9,7 +9,6 @@
 
 @media (max-width: 950px) and (min-width: 0px) {
   #rightSideContainer {
-    background: rgba(0, 0, 0, 0.84);
     height: 840px;
     width: 100%;
   }

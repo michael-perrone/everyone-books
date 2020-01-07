@@ -1,7 +1,7 @@
 import React from "react";
 import LoginScreen from "./LoginScreen/LoginScreen";
 import { Route, Redirect, Switch, withRouter } from "react-router-dom";
-import TennisClubSignup from "./TennisClubSignUp/TennisClubSignup";
+import BusinessSignup from "./BusinessSignUp/BusinessSignup";
 import TennisClub from "./TennisClub/TennisClub";
 import TennisClubsList from "./TennisClubsList/TennisClubsList";
 import UserHome from "./UserHome/UserHome";
@@ -54,7 +54,6 @@ class App extends React.Component {
       <React.Fragment>
       {(token || instructorToken || adminToken) && <Nav/>}
       <Switch>
-        <Route path="/values" exact component={Values} />
         <Route
           path="/clubs"
           exact
@@ -70,7 +69,7 @@ class App extends React.Component {
           }
         />
 
-        <Route path="/registerTennisClub" exact component={TennisClubSignup} />
+        <Route path="/registerBusiness" exact component={BusinessSignup} />
         {instructorToken && (
           <Route
             path={`/instructor/${instructorToken.instructor.id}/createeditprofile`}

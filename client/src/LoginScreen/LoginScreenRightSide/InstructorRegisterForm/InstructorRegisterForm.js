@@ -11,6 +11,8 @@ import {
   INSTRUCTOR_REGISTER_SUCCESS
 } from "../../../actions/actions";
 
+// lightgray
+
 class InstructorRegisterForm extends React.Component {
   constructor(props) {
     super(props);
@@ -104,28 +106,28 @@ class InstructorRegisterForm extends React.Component {
         <p
           className={otherStyles.registerP}
           id={styles.instructorRegisterP}
-          style={{ color: "yellowgreen" }}
+          style={{ color: "lightgray" }}
         >
-          Register as an Instructor
+          Register as an Employee
         </p>
         <div
           onMouseEnter={this.showOptionals}
           onMouseLeave={this.hideOptionals}
-          className={styles.registerForm}
+          className={otherStyles.registerForm}
         >
-          <form id={styles.form}>
+          <form id={otherStyles.form}>
             <div
               style={{ marginTop: "8px" }}
               className={otherStyles.divWidthControl}
             >
               <label
-                style={{ color: "yellowgreen" }}
+                style={{ color: "lightgray" }}
                 className={otherStyles.labels}
               >
                 First Name:
               </label>
               <input
-                style={{ border: "2px solid yellowgreen" }}
+                style={{ border: "2px solid lightgray" }}
                 onBlur={this.setDirty}
                 onChange={this.getInstructorInput}
                 value={this.state.instructor.firstName}
@@ -142,14 +144,14 @@ class InstructorRegisterForm extends React.Component {
             </div>
             <div className={otherStyles.divWidthControl}>
               <label
-                style={{ color: "yellowgreen", letterSpacing: "0.3px" }}
+                style={{ color: "lightgray", letterSpacing: "0.3px" }}
                 className={otherStyles.labels}
               >
                 Last Name:
               </label>
               <input
                 style={{
-                  border: "2px solid yellowgreen"
+                  border: "2px solid lightgray"
                 }}
                 onBlur={this.setDirty}
                 onChange={this.getInstructorInput}
@@ -168,14 +170,14 @@ class InstructorRegisterForm extends React.Component {
 
             <div className={otherStyles.divWidthControl}>
               <label
-                style={{ color: "yellowgreen", letterSpacing: "0.3px" }}
+                style={{ color: "lightgray", letterSpacing: "0.3px" }}
                 className={otherStyles.labels}
               >
                 Email Address:
               </label>
               <input
                 style={{
-                  border: "2px solid yellowgreen"
+                  border: "2px solid lightgray"
                 }}
                 onBlur={this.setDirty}
                 onChange={this.getInstructorInput}
@@ -194,13 +196,13 @@ class InstructorRegisterForm extends React.Component {
 
             <div className={otherStyles.divWidthControl}>
               <label
-                style={{ color: "yellowgreen" }}
+                style={{ color: "lightgray" }}
                 className={otherStyles.labels}
               >
                 Phone Number:
               </label>
               <input
-                style={{ border: "2px solid yellowgreen" }}
+                style={{ border: "2px solid lightgray" }}
                 onBlur={this.setDirty}
                 onChange={this.getInstructorInput}
                 value={this.state.instructor.phoneNumber}
@@ -219,13 +221,13 @@ class InstructorRegisterForm extends React.Component {
 
             <div className={otherStyles.divWidthControl}>
               <label
-                style={{ color: "yellowgreen", letterSpacing: "0.7px" }}
+                style={{ color: "lightgray", letterSpacing: "0.7px" }}
                 className={otherStyles.labels}
               >
                 Create Password:
               </label>
               <input
-                style={{ border: "2px solid yellowgreen" }}
+                style={{ border: "2px solid lightgray" }}
                 onKeyDown={this.setDirty}
                 onChange={this.getInstructorInput}
                 value={this.state.instructor.createPassword}
@@ -244,13 +246,13 @@ class InstructorRegisterForm extends React.Component {
             </div>
             <div className={otherStyles.divWidthControl}>
               <label
-                style={{ color: "yellowgreen" }}
+                style={{ color: "lightgray" }}
                 className={otherStyles.labels}
               >
                 Password Confirm:
               </label>
               <input
-                style={{ border: "2px solid yellowgreen" }}
+                style={{ border: "2px solid lightgray" }}
                 onKeyDown={this.setDirty}
                 onChange={this.getInstructorInput}
                 value={this.state.instructor.passwordConfirm}
@@ -266,27 +268,7 @@ class InstructorRegisterForm extends React.Component {
                   <Alert alertPhrase={"Passwords must be matching"} />
                 )}
             </div>
-            <div className={otherStyles.divWidthControl}>
-              <label
-                style={{ color: "yellowgreen", letterSpacing: "0.3px" }}
-                className={otherStyles.labels}
-              >
-                Current Employer:
-              </label>
-              <input
-                style={{
-                  border: "2px solid yellowgreen"
-                }}
-                onChange={this.getInstructorInput}
-                value={this.state.instructor.tennisClub}
-                name="tennisClub"
-                placeholder="Tennis Club Name"
-                id={otherStyles.ml8}
-                className={otherStyles.inputs}
-                type="text"
-              />
-            </div>
-
+            
             <div style={{ display: "flex", justifyContent: "space-around" }}>
               <p
                 id={styles.headBack}
@@ -295,7 +277,7 @@ class InstructorRegisterForm extends React.Component {
                 Go back to user signup form
               </p>
               <button
-                style={{ left: "-5px", backgroundColor: "yellowgreen" }}
+                style={{ left: "-5px", backgroundColor: "lightgray" }}
                 onClick={this.registerInstructor}
                 id={otherStyles.signUpButton}
               >

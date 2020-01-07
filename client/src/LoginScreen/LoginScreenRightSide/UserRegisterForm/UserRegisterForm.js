@@ -8,6 +8,8 @@ import { withRouter } from "react-router-dom";
 import { USER_REGISTER_SUCCESS } from "../../../actions/actions";
 import Alert from "../../../Alert/Alert";
 
+
+
 class UserRegisterForm extends React.Component {
   constructor(props) {
     super(props);
@@ -117,7 +119,6 @@ class UserRegisterForm extends React.Component {
         <div
           onMouseEnter={this.showOptionals}
           onMouseLeave={this.hideOptionals}
-          id={styles.registerForm}
         >
           <form id={styles.form}>
             <div
@@ -226,7 +227,7 @@ class UserRegisterForm extends React.Component {
                 this.state.user.createPassword.length < 7 && (
                   <Alert
                     alertPhrase={
-                      "Password must be longer than eight characters"
+                      "Must be at least eight characters"
                     }
                   />
                 )}
