@@ -1,19 +1,7 @@
-#registerForm {
-  height: 330px;
-  width: 430px;
-  border: 2px solid white;
-  border-radius: 22px;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: transparent;
-  transition-duration: 2s;
-}
 
 #form {
   transition-duration: 2s;
-  height: 367px;
+  height: 300px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -29,18 +17,27 @@
   transition-duration: 1s;
 }
 
+button {
+  cursor: pointer;
+}
+
 #signUpButton {
-  height: 28px;
-  width: 68px;
-  border-radius: 10px;
-  font-size: 12px;
+  padding: 4px 3px;
+  font-size: 14px;
+  background-color: #00000000;
   border: none;
-  color: black;
+  color: white;
   position: relative;
-  background-color: white;
   letter-spacing: 1.4px;
   font-weight: bold;
   left: 18px;
+  box-shadow: 1px 1px 5px white;
+}
+
+#signUpButton:hover {
+  border: 1px solid white;
+  box-shadow: none;
+  left: 19px;
 }
 
 .divWidthControl {

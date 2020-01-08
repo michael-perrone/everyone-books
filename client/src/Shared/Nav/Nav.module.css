@@ -3,7 +3,7 @@
   width: 100%;
   height: 50px;
   border-bottom: 2px solid white;
-  background-color: rgb(152, 241, 152);
+  background-color: rgb(212, 212, 255);
   justify-content: space-between;
 }
 
@@ -27,12 +27,12 @@
   right: -10px;
 }
 
-
 #title {
   font-size: 34px;
   font-family: "Permanent Marker", cursive;
   position: relative;
   left: 60px;
+  color: gray;
 }
 
 #instructorBars {
@@ -56,6 +56,7 @@
   color: black;
   margin-right: 5px;
   cursor: pointer;
+  color: gray;
 }
 
 #secondContainer {

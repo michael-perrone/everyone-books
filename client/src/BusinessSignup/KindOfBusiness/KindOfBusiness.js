@@ -1,9 +1,10 @@
 import React from 'react';
-import {GET_KIND_OF_BUSINESS, GET_NAME_OF_BUSINESS} from '../../actions/actions'
+import {GET_KIND_OF_BUSINESS, GET_NAME_OF_BUSINESS, KIND_BUSINESS_COMPLETED} from '../../actions/actions'
 import {connect} from 'react-redux';
 import TemporaryStatement from '../../Shared/TemporaryStatement/TemporaryStatement';
 import styles from '../BusinessSignup.module.css';
-import SubmitButton from '../../Shared/SubmitButton/SubmitButton'
+import SubmitButton from '../../Shared/SubmitButton/SubmitButton';
+import StatementAppear from '../../Shared/StatementAppear/StatementAppear';
 
 
 
@@ -29,6 +30,7 @@ const KindOfBusiness = (props) => {
     <div id={styles.kindOfBusinessDiv}>
         <p>First, select below what business you would like to set up. If not found, click "Other".</p>
         <select onChange={getKindOfBusinessFunction} id={styles.inputOrSelectKindBusiness}>
+            <option> </option>
             <option>Skin Care Center</option>
             <option>Fitness Center</option>
             <option>Medical Office</option>
@@ -40,13 +42,16 @@ const KindOfBusiness = (props) => {
             <option>Tennis Club</option>
             <option>Other</option>
         </select>
-        <TemporaryStatement marginTop={'15px'} show={businessKindEntered}>Cool, a {props.kindOfBusiness}, got it.</TemporaryStatement>
-        {props.kindOfBusiness !== "" && !businessKindEntered  && 
-        <div id={styles.kindOfBusinessDiv}>
+        <TemporaryStatement marginTop={'15px'} show={businessKindEntered && props.kindOfBusiness !== ""}>Cool, a {props.kindOfBusiness}, got it.</TemporaryStatement>
+        <StatementAppear appear={props.kindOfBusiness !== ""}>
         <p>Now let's get the name of your business.</p>
         <input onChange={getNameOfBusinessFunction} style={{paddingLeft: "8px", width: '200px'}} id={styles.inputOrSelectKindBusiness} placeholder="Business Name"/>
         <SubmitButton onClick={submitName}>Submit</SubmitButton>
-        </div>}
+        </StatementAppear>
+        <StatementAppear marginTop={'40px'} appear={props.nameOfBusiness !== "" && props.kindOfBusiness !== ""}>
+        <p>Great, next we need some information about you. Would you like to continue?</p>
+        <SubmitButton marginTop={'30px'} onClick={props.kindBusinessCompleted}>Yes, lets do it!</SubmitButton>
+        </StatementAppear>
     </div>
     )
 }
@@ -54,13 +59,15 @@ const KindOfBusiness = (props) => {
 const mapDispatchToProps = dispatch => {
     return {
         getNameOfBusiness: (nameBusiness) => dispatch({type: GET_NAME_OF_BUSINESS, payload: nameBusiness }),
-        getKindOfBusiness: (kindBusiness) => dispatch({type: GET_KIND_OF_BUSINESS, payload: kindBusiness })
+        getKindOfBusiness: (kindBusiness) => dispatch({type: GET_KIND_OF_BUSINESS, payload: kindBusiness }),
+        kindBusinessCompleted: () => dispatch({type: KIND_BUSINESS_COMPLETED})
     }
 }
 
 const mapStateToProps = state => {
     return {
-        kindOfBusiness: state.newReducers.kindOfBusiness
+        kindOfBusiness: state.newReducers.kindOfBusiness,
+        nameOfBusiness: state.newReducers.nameOfBusiness
     }
 }
 

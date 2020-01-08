@@ -22,7 +22,6 @@ router.post(
     check("createPassword", "Password must be 6 characters long").isLength({
       min: 6
     }),
-    check("phoneNumber", "Please enter a valid Phone Number").isMobilePhone()
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -61,11 +60,8 @@ router.post(
             lastName: realLastName,
             fullName: realFirstName + " " + realLastName,
             email: req.body.email,
-            phoneNumber: req.body.phoneNumber,
             password: req.body.createPassword,
             tennisClub: req.body.tennisClub,
-            age: req.body.age,
-            gender: req.body.gender
           });
           const salt = await bcrypt.genSalt(10);
           newInstructor.password = await bcrypt.hash(

@@ -1,0 +1,9 @@
+.hide {
+    opacity: 0;
+    text-align: center;
+    transition-duration: 0.4s;
+}
+
+#appear {
+    opacity: 1;
+}

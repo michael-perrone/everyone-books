@@ -24,23 +24,15 @@ class InstructorRegisterForm extends React.Component {
         firstName: "",
         lastName: "",
         email: "",
-        phoneNumber: "",
         createPassword: "",
         passwordConfirm: "",
-        tennisClub: "",
-        age: "",
-        gender: ""
       },
       dirty: {
         firstName: false,
         lastName: false,
         email: false,
-        phoneNumber: false,
         createPassword: false,
         passwordConfirm: false,
-        age: false,
-        gender: false,
-        tennisClub: false
       },
       showOptionals: false
     };
@@ -62,11 +54,6 @@ class InstructorRegisterForm extends React.Component {
     newInstructorStateObject[event.target.name] = event.target.value;
     this.setState({ instructor: newInstructorStateObject });
   }
-
-  validatePhone = phone => {
-    let newRe = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
-    return newRe.test(phone);
-  };
 
   validateEmail = email => {
     let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -194,30 +181,7 @@ class InstructorRegisterForm extends React.Component {
                 )}
             </div>
 
-            <div className={otherStyles.divWidthControl}>
-              <label
-                style={{ color: "lightgray" }}
-                className={otherStyles.labels}
-              >
-                Phone Number:
-              </label>
-              <input
-                style={{ border: "2px solid lightgray" }}
-                onBlur={this.setDirty}
-                onChange={this.getInstructorInput}
-                value={this.state.instructor.phoneNumber}
-                name="phoneNumber"
-                placeholder="Phone Number"
-                id={otherStyles.input2}
-                className={otherStyles.inputs}
-                type="text"
-              />
-              {this.validatePhone(this.state.instructor.phoneNumber) ===
-                false &&
-                this.state.dirty.phoneNumber === true && (
-                  <Alert alertPhrase={"Please enter a valid phone number"} />
-                )}
-            </div>
+            
 
             <div className={otherStyles.divWidthControl}>
               <label
@@ -277,7 +241,7 @@ class InstructorRegisterForm extends React.Component {
                 Go back to user signup form
               </p>
               <button
-                style={{ left: "-5px", backgroundColor: "lightgray" }}
+                style={{ left: "-5px", backgroundColor: "transparent" }}
                 onClick={this.registerInstructor}
                 id={otherStyles.signUpButton}
               >
