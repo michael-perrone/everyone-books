@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
-const TennisClub = require("../../models/TennisClub");
+const TennisClub = require("../../models/Business");
 const Admin = require("../../models/Admin");
 const { check, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const User = require("../../models/User");
-const Instructor = require("../../models/Instructor");
+const Employee = require("../../models/Employee");
 const ClubProfile = require("../../models/ClubProfile");
 
 router.post(
@@ -25,8 +25,7 @@ router.post(
     check(
       "createPassword",
       "Enter a password eight characters or longer"
-    ).isLength({ min: 8 }),
-    check("phoneNumber", "Please enter a valid phone number").isMobilePhone()
+    ).isLength({ min: 8 })
   ],
   async (req, res) => {
     const errors = validationResult(req.body.admin);
@@ -43,7 +42,7 @@ router.post(
         return res.status(400).json({ errors: errors.array(false) });
       } else {
         try {
-          let instructor = await Instructor.findOne({ email: req.body.email });
+          let employee = await Employee.findOne({ email: req.body.email });
           let admin = await Admin.findOne({ email: req.body.admin.email });
           let user = await User.findOne({ email: req.body.email });
           if (admin || user || instructor) {
@@ -52,32 +51,31 @@ router.post(
               .json({ errors: [{ msg: "That email is being used" }] });
           }
 
-          let newTennisClub = new TennisClub({
-            clubNameAllLower: req.body.admin.clubName
+          let newTennisClub = new Business({
+            businessNameAllLower: req.body.admin.businessName
               .split(" ")
               .reduce((accum, element) => {
                 return (accum += element);
               }),
-            clubName: req.body.admin.clubName,
-            address: req.body.tennisClub.clubAddress,
-            city: req.body.tennisClub.clubCity,
-            zip: req.body.tennisClub.clubZip,
-            state: req.body.tennisClub.clubState,
-            numberCourts: req.body.tennisClub.numberCourts,
-            clubOpenTime: req.body.tennisClub.clubOpenTime,
-            clubCloseTime: req.body.tennisClub.clubCloseTime,
-            clubWebsite: req.body.tennisClub.clubWebsite,
-            phoneNumber: req.body.tennisClub.phoneNumber
+            businessName: req.body.admin.businessName,
+            address: req.body.business.address,
+            city: req.body.business.city,
+            zip: req.body.business.zip,
+            state: req.body.business.state,
+            numberCourts: req.body.business.numberBookingColumns,
+            openTime: req.body.business.openTime,
+            closeTime: req.body.business.closeTime,
+            website: req.body.business.website,
+            phoneNumber: req.body.business.phoneNumber
           });
 
           let newAdmin = new Admin({
-            clubName: newTennisClub.clubNameAllLower,
+            businessName: newTennisClub.clubNameAllLower,
             firstName: req.body.admin.firstName,
             lastName: req.body.admin.lastName,
             email: req.body.admin.email,
             password: req.body.admin.createPassword,
-            tennisClub: newTennisClub,
-            phoneNumber: req.body.admin.phoneNumber
+            business: newBusiness,
           });
           const salt = await bcrypt.genSalt(10);
           newAdmin.password = await bcrypt.hash(
@@ -87,11 +85,11 @@ router.post(
 
           const payload = {
             admin: {
-              clubName: newTennisClub.clubNameAllLower,
+              businessName: newBusiness.businessAllLower,
               name: `${newAdmin.firstName} ${newAdmin.lastName}`,
               isAdmin: true,
               id: newAdmin.id,
-              clubId: newTennisClub.id
+              clubId: newBusiness.id
             }
           };
 
@@ -108,7 +106,7 @@ router.post(
             }
           );
           await newAdmin.save();
-          await newTennisClub.save();
+          await newBusiness.save();
           return res.status(200).json({ success: "good shit bro" });
         } catch (error) {
           console.log(error);

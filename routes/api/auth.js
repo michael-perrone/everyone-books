@@ -115,6 +115,7 @@ router.post("/login", async (req, res) => {
           .status(400)
           .json({ error: "Email/Password Combination not recognized" });
       }
+      console.log(instructorLoggingIn)
       const payload = {
         instructor: {
           instructorName: `${instructorLoggingIn.firstName} ${instructorLoggingIn.lastName}`,

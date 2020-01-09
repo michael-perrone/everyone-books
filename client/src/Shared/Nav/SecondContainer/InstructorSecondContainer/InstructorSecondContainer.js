@@ -18,11 +18,9 @@ const InstructorSecondContainer = props => {
 
   const [notifications, setNotifications] = React.useState([]);
   const [newNotifications, setNewNotificationsState] = React.useState([]);
-  console.log(newNotifications)
-
-  console.log(props);
+ 
   let newVar = "";
-  if (instructorProfile && instructorProfile.instructor) {
+  if (instructorProfile && instructorProfile.instructor && instructorProfile.instructor.tennisClub) {
     newVar = `/clubs/${instructorProfile.instructor.tennisClub
       .split(" ")
       .reduce((accum, element) => accum + element)}`;

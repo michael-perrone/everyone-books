@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const InstructorSignUpSchema = new mongoose.Schema({
+const EmployeeSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: true
@@ -12,7 +12,6 @@ const InstructorSignUpSchema = new mongoose.Schema({
   fullName: {
     type: String
   },
-
   email: {
     type: String,
     required: true
@@ -21,10 +20,7 @@ const InstructorSignUpSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  tennisClub: {
-    type: String
-  },
-  clubAccepted: {
+  businessAccepted: {
     type: Boolean,
     default: false
   },
@@ -34,9 +30,9 @@ const InstructorSignUpSchema = new mongoose.Schema({
       ref: "courtBooked"
     }
   ],
-  tennisClubTeachingAt: {
+  businessWorkingAt: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "tennisClub"
+    ref: "business"
   },
   notifications: {
     type: [mongoose.Schema.Types.ObjectId],
@@ -44,6 +40,6 @@ const InstructorSignUpSchema = new mongoose.Schema({
   }
 });
 
-const Instructor = mongoose.model("instructor", InstructorSignUpSchema);
+const Employee = mongoose.model("employee", EmployeeSchema);
 
-module.exports = Instructor;
+module.exports = Employee;

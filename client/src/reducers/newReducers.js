@@ -1,10 +1,13 @@
-import {GET_KIND_OF_BUSINESS, GET_NAME_OF_BUSINESS, KIND_BUSINESS_COMPLETED} from '../actions/actions';
+import {GET_KIND_OF_BUSINESS, GET_NAME_OF_BUSINESS, KIND_BUSINESS_COMPLETED, SAVE_ADMIN_INFO, SAVE_BUSINESS_INFO} from '../actions/actions';
 
 
 const initialState = {
     kindOfBusiness: "",
     nameOfBusiness: "",
-    kindBusinessCompleted: false
+    kindBusinessCompleted: false,
+    adminInfo: {},
+    adminInfoComplete: false,
+    businessInfo: {}
 };
 
 export default function (state = initialState, action) {
@@ -24,6 +27,20 @@ export default function (state = initialState, action) {
                 ...state,
                 nameOfBusiness: action.payload
             }
+        case SAVE_ADMIN_INFO:
+            return {
+                ...state,
+                adminInfoComplete: true,
+                adminInfo: action.payload
+        }
+        case SAVE_BUSINESS_INFO: {
+            return {
+                ...state,
+                businessInfoComplete: true,
+                businessInfo: action.payload
+            }
+        }
+      
         default: 
         return state;
 

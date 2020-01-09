@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 
-const TennisClubSchema = new mongoose.Schema({
+const BusinessSchema = new mongoose.Schema({
   phoneNumber: {
     type: String
   },
-  clubNameAllLower: {
+  businessNameAllLower: {
     type: String
   },
-  clubName: {
-    type: String,
+  businessName: {
+  type: String,
     required: true
   },
   address: {
@@ -27,19 +27,19 @@ const TennisClubSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  numberCourts: {
+  numberBookingColumns: {
     type: String,
     required: true
   },
-  clubOpenTime: {
+  openTime: {
     type: String,
     required: true
   },
-  clubCloseTime: {
+  closeTime: {
     type: String,
     required: true
   },
-  clubWebsite: {
+  website: {
     type: String
   },
 
@@ -53,12 +53,11 @@ const TennisClubSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectId],
     ref: "user"
   },
-  photo: String,
-  clubProfile: {
+  businessProfile: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "clubProfile"
   }
 });
-const TennisClub = mongoose.model("tennisClub", TennisClubSchema);
+const Business = mongoose.model("business", BusinessSchema);
 
-module.exports = TennisClub;
+module.exports = Business;

@@ -8,7 +8,6 @@ import UserSecondContainer from "./UserSecondContainer/UserSecondContainer";
 import { SHOW_DROP_DOWN } from "../../../actions/actions";
 
 const SecondContainer = props => {
-  console.log(props.user)
   return (
     <div id={styles.secondContainerActually}>
       {props.admin && <AdminSecondContainer />}

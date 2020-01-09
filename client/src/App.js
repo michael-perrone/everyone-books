@@ -49,6 +49,7 @@ class App extends React.Component {
         .split(" ")
         .join("");
     }
+    console.log(instructorClubName, clubName)
 
     return (
       <React.Fragment>

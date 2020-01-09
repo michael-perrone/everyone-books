@@ -24,8 +24,6 @@ class UserRegisterForm extends React.Component {
         phoneNumber: "",
         createPassword: "",
         passwordConfirm: "",
-        age: "",
-        gender: ""
       },
       signingUpState: false,
       dirty: {
