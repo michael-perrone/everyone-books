@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
-const TennisClub = require("../../models/Business");
+const TennisClub = require("../../models/TennisClub");
 const Admin = require("../../models/Admin");
 const { check, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const User = require("../../models/User");
-const Employee = require("../../models/Employee");
+const Instructor = require("../../models/Instructor");
 const ClubProfile = require("../../models/ClubProfile");
 
 router.post(
@@ -75,7 +75,7 @@ router.post(
             lastName: req.body.admin.lastName,
             email: req.body.admin.email,
             password: req.body.admin.createPassword,
-            business: newBusiness,
+            business: newBusiness
           });
           const salt = await bcrypt.genSalt(10);
           newAdmin.password = await bcrypt.hash(

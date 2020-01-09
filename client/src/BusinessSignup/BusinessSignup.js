@@ -18,8 +18,9 @@ const BusinessSignup = (props) => {
         {props.kindBusinessCompleted && !props.adminInfoComplete && <p style={{fontSize: '20px', textAlign: 'center', borderBottom: '2px solid black', paddingBottom: '5px', color: 'black'}}>
         Now we need some information about you so we can create your administrator account. This shouldn't take too long.
         </p>}
-        {props.adminInfoComplete && <p style={{fontSize: '20px', textAlign: 'center', borderBottom: '2px solid black', paddingBottom: '5px', color: 'black'}}>We are almost done! We just need a little bit more information about your business to finish up on our end and then all done!</p>}
-        {(props.kindOfBusiness === "" || props.nameOfBusiness === "" || props.kindBusinessCompleted === false)  && <KindOfBusiness/>}
+        {props.adminInfoComplete && !props.businessInfoComplete && <p style={{fontSize: '20px', textAlign: 'center', borderBottom: '2px solid black', paddingBottom: '5px', color: 'black'}}>We need some more information about your business like the Street Address, City, Zip, and State so customers can find your business! Website is not required.</p>}
+            {props.businessInfoComplete && <p style={{fontSize: '20px', textAlign: 'center', borderBottom: '2px solid black', paddingBottom: '5px', color: 'black'}}>Enter the open and close time for each day of the week for your business. These times will help us build your schedule.</p>}
+            {(props.kindOfBusiness === "" || props.nameOfBusiness === "" || props.kindBusinessCompleted === false)  && <KindOfBusiness/>}
         {props.kindBusinessCompleted && !props.adminInfoComplete && <AdminSignup/>}
         {props.adminInfoComplete && !props.businessInfoComplete && <BusinessInfoEnter/>}
         {props.businessInfoComplete && <BusinessScheduleCreate/>}
