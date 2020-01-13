@@ -1,9 +1,15 @@
 const mongoose = require("mongoose");
 
-const BusinessSchemad = new mongoose.Schema({
+const BusinessSchema = new mongoose.Schema({
+  typeOfBusiness: String,
+  schedule: [
+      Object
+  ],
   phoneNumber: {
     type: String
   },
+  bookingColumnType: String,
+
   businessNameAllLower: {
     type: String
   },
@@ -27,24 +33,18 @@ const BusinessSchemad = new mongoose.Schema({
     type: String,
     required: true
   },
-  numberBookingColumns: {
-    type: String,
-    required: true
-  },
-  openTime: {
-    type: String,
-    required: true
-  },
-  closeTime: {
+  bookingColumnNumber: {
     type: String,
     required: true
   },
   website: {
     type: String
   },
-
   events: {
     type: String
+  },
+  promos: {
+      type: [String]
   },
   bio: {
     type: String
@@ -58,6 +58,6 @@ const BusinessSchemad = new mongoose.Schema({
     ref: "clubProfile"
   }
 });
-const Business = mongoose.model("businesss", BusinessSchemad);
+const Business = mongoose.model("business", BusinessSchema);
 
 module.exports = Business;

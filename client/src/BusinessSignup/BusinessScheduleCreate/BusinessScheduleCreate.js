@@ -1,16 +1,105 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styles from '../BusinessSignup.module.css'
 import SubmitButton from '../../Shared/SubmitButton/SubmitButton';
+import {connect} from 'react-redux';
+import {ENTER_BUSINESS_SCHEDULE} from '../../actions/actions';
 
 const BusinessScheduleCreate = (props) => {
+   const [sundayOpen, setSundayOpen] = useState('');
+   const [sundayClose, setSundayClose] = useState('');
+   const [mondayOpen, setMondayOpen] = useState('');
+   const [mondayClose, setMondayClose] = useState('');
+   const [tuesdayOpen, setTuesdayOpen] = useState('');
+   const [tuesdayClose, setTuesdayClose] = useState('');
+   const [wednesdayOpen, setWednesdayOpen] = useState('');
+   const [wednesdayClose, setWednesdayClose] = useState('');
+   const [thursdayOpen, setThursdayOpen] = useState('');
+   const [thursdayClose, setThursdayClose] = useState('');
+   const [fridayOpen, setFridayOpen] = useState('');
+   const [fridayClose, setFridayClose] = useState('');
+   const [saturdayOpen, setSaturdayOpen] = useState('');
+   const [saturdayClose, setSaturdayClose] = useState('');
+
+
+   function enterWholeBusinessArray() {
+   let businessArray = [
+      {open: sundayOpen, close: sundayClose},
+      {open: mondayOpen, close: mondayClose},
+      {open: tuesdayOpen, close: tuesdayClose},
+      {open: wednesdayOpen, close: wednesdayClose},
+      {open: thursdayOpen, close: thursdayClose},
+      {open: fridayOpen, close: fridayClose},
+      {open: saturdayOpen, close: saturdayClose}
+   ]
+      props.enterBusinessSchedule(businessArray)
+   }
+
+   function sundayOpenHandler(e){
+      setSundayOpen(e.target.value)
+   }
+
+   function sundayCloseHandler(e) {
+      setSundayClose(e.target.value)
+   }
+
+
+   function mondayOpenHandler(e){
+      setMondayOpen(e.target.value)
+   }
+
+   function mondayCloseHandler(e) {
+      setMondayClose(e.target.value)
+   }
+
+   function tuesdayOpenHandler(e){
+      setTuesdayOpen(e.target.value)
+   }
+
+   function tuesdayCloseHandler(e) {
+      setTuesdayClose(e.target.value)
+   }
+
+   function wednesdayOpenHandler(e){
+      setWednesdayOpen(e.target.value)
+   }
+
+   function wednesdayCloseHandler(e) {
+      setWednesdayClose(e.target.value)
+   }
+
+   function thursdayOpenHandler(e){
+      setThursdayOpen(e.target.value)
+   }
+
+   function thursdayCloseHandler(e) {
+      setThursdayClose(e.target.value)
+   }
+
+   function fridayOpenHandler(e){
+      setFridayOpen(e.target.value)
+   }
+
+   function fridayCloseHandler(e) {
+      setFridayClose(e.target.value)
+   }
+
+   function saturdayOpenHandler(e){
+      setSaturdayOpen(e.target.value)
+   }
+
+   function saturdayCloseHandler(e) {
+      setSaturdayClose(e.target.value)
+   }
+
+
     return (
         <div style={{height: '452px', marginTop: '20px', position: 'relative'}} id={styles.formContainer}>
-        <div style={{position: 'absolute', bottom: '-42px'}}><SubmitButton>Continue On!</SubmitButton></div>
+        <div style={{position: 'absolute', bottom: '-42px'}}><SubmitButton onClick={enterWholeBusinessArray}>Continue On!</SubmitButton></div>
               <div className={styles.daySeparator} >
               <p style={{width: '100%', textAlign: 'center', marginBottom: '7px'}}>Sunday:</p>
                 <span>Open: </span>
-                  <select>
-                    <option disabled> </option>
+                  <select onChange={sundayOpenHandler}>
+                    <option >Closed</option>
                     <option>12:00 AM</option>
                     <option>12:30 AM</option>
                     <option>1:00 AM</option>
@@ -61,8 +150,8 @@ const BusinessScheduleCreate = (props) => {
                     <option>11:30 PM</option>
                  </select>
                 <span style={{marginLeft: '14px'}}>Close: </span>
-                 <select>
-                    <option disabled> </option>
+                 <select onChange={sundayCloseHandler}>
+                    <option >Closed</option>
                     <option>12:00 AM</option>
                     <option>12:30 AM</option>
                     <option>1:00 AM</option>
@@ -116,8 +205,8 @@ const BusinessScheduleCreate = (props) => {
               <div className={styles.daySeparator}>
               <p style={{width: '100%', textAlign: 'center', marginBottom: '7px'}}>Monday:</p>
                 <span>Open: </span>
-                  <select>
-                    <option disabled> </option>
+                  <select onChange={mondayOpenHandler}>
+                    <option>Closed</option>
                     <option>12:00 AM</option>
                     <option>12:30 AM</option>
                     <option>1:00 AM</option>
@@ -168,8 +257,8 @@ const BusinessScheduleCreate = (props) => {
                     <option>11:30 PM</option>
                  </select>
                 <span style={{marginLeft: '14px'}}>Close: </span>
-                 <select>
-                    <option disabled> </option>
+                 <select onChange={mondayCloseHandler}>
+                    <option >Closed</option>
                     <option>12:00 AM</option>
                     <option>12:30 AM</option>
                     <option>1:00 AM</option>
@@ -224,8 +313,8 @@ const BusinessScheduleCreate = (props) => {
               <div className={styles.daySeparator}>
                <p style={{width: '100%', textAlign: 'center', marginBottom: '7px'}}>Tuesday:</p>
                 <span>Open: </span>
-                  <select>
-                    <option disabled> </option>
+                  <select onChange={tuesdayOpenHandler}>
+                    <option >Closed</option>
                     <option>12:00 AM</option>
                     <option>12:30 AM</option>
                     <option>1:00 AM</option>
@@ -276,8 +365,8 @@ const BusinessScheduleCreate = (props) => {
                     <option>11:30 PM</option>
                  </select>
                 <span style={{marginLeft: '14px'}}>Close: </span>
-                 <select>
-                    <option disabled> </option>
+                 <select onChange={tuesdayCloseHandler}>
+                    <option >Closed</option>
                     <option>12:00 AM</option>
                     <option>12:30 AM</option>
                     <option>1:00 AM</option>
@@ -331,8 +420,8 @@ const BusinessScheduleCreate = (props) => {
               <div className={styles.daySeparator}>
                <p style={{width: '100%', textAlign: 'center', marginBottom: '7px'}}>Wednesday:</p>
                <span>Open: </span>
-                  <select>
-                    <option disabled> </option>
+                  <select onChange={wednesdayOpenHandler}>
+                    <option >Closed</option>
                     <option>12:00 AM</option>
                     <option>12:30 AM</option>
                     <option>1:00 AM</option>
@@ -383,8 +472,8 @@ const BusinessScheduleCreate = (props) => {
                     <option>11:30 PM</option>
                  </select>
                 <span style={{marginLeft: '14px'}}>Close: </span>
-                 <select>
-                    <option disabled> </option>
+                 <select onChange={wednesdayCloseHandler}>
+                    <option >Closed</option>
                     <option>12:00 AM</option>
                     <option>12:30 AM</option>
                     <option>1:00 AM</option>
@@ -438,8 +527,8 @@ const BusinessScheduleCreate = (props) => {
               <div className={styles.daySeparator}>
                <p style={{width: '100%', textAlign: 'center', marginBottom: '7px'}}>Thursday:</p>
                 <span>Open: </span>
-                  <select>
-                    <option disabled> </option>
+                  <select onChange={thursdayOpenHandler}>
+                    <option >Closed</option>
                     <option>12:00 AM</option>
                     <option>12:30 AM</option>
                     <option>1:00 AM</option>
@@ -490,8 +579,8 @@ const BusinessScheduleCreate = (props) => {
                     <option>11:30 PM</option>
                  </select>
                 <span style={{marginLeft: '14px'}}>Close: </span>
-                 <select>
-                    <option disabled> </option>
+                 <select onChange={thursdayCloseHandler}>
+                    <option >Closed</option>
                     <option>12:00 AM</option>
                     <option>12:30 AM</option>
                     <option>1:00 AM</option>
@@ -545,8 +634,8 @@ const BusinessScheduleCreate = (props) => {
               <div className={styles.daySeparator}>
                <p style={{width: '100%', textAlign: 'center', marginBottom: '7px'}}>Friday:</p>
                 <span>Open: </span>
-                  <select>
-                    <option disabled> </option>
+                  <select onChange={fridayOpenHandler}>
+                    <option >Closed</option>
                     <option>12:00 AM</option>
                     <option>12:30 AM</option>
                     <option>1:00 AM</option>
@@ -597,8 +686,8 @@ const BusinessScheduleCreate = (props) => {
                     <option>11:30 PM</option>
                  </select>
                 <span style={{marginLeft: '14px'}}>Close: </span>
-                 <select>
-                    <option disabled> </option>
+                 <select onChange={fridayCloseHandler}>
+                    <option >Closed</option>
                     <option>12:00 AM</option>
                     <option>12:30 AM</option>
                     <option>1:00 AM</option>
@@ -652,8 +741,8 @@ const BusinessScheduleCreate = (props) => {
               <div style={{borderBottom: 'none'}} className={styles.daySeparator}>
               <p style={{width: '100%', textAlign: 'center', marginBottom: '7px'}}>Saturday:</p>
                 <span>Open: </span>
-                  <select>
-                    <option disabled> </option>
+                  <select onChange={saturdayOpenHandler}>
+                    <option >Closed</option>
                     <option>12:00 AM</option>
                     <option>12:30 AM</option>
                     <option>1:00 AM</option>
@@ -704,8 +793,8 @@ const BusinessScheduleCreate = (props) => {
                     <option>11:30 PM</option>
                  </select>
                 <span style={{marginLeft: '14px'}}>Close: </span>
-                 <select>
-                    <option disabled> </option>
+                 <select onChange={saturdayCloseHandler}>
+                    <option >Closed</option>
                     <option>12:00 AM</option>
                     <option>12:30 AM</option>
                     <option>1:00 AM</option>
@@ -761,4 +850,10 @@ const BusinessScheduleCreate = (props) => {
     )
 }
 
-export default BusinessScheduleCreate;
+const mapDispatchToProps = (dispatch) => {
+   return {
+      enterBusinessSchedule: (businessSchedule) => dispatch({type: ENTER_BUSINESS_SCHEDULE, payload: businessSchedule})  
+   }
+}
+
+export default connect(null, mapDispatchToProps)(BusinessScheduleCreate);

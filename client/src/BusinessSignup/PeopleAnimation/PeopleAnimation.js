@@ -1,10 +1,9 @@
 import React from 'react';
-import styles from './PeopleAnimation.module.css';
+import otherstyles from '../BusinessSignup.module.css';
 
 const PeopleAnimation = (props) => {
     return (
-        <div>
-            
+        <div className={otherstyles.peopleContainer}>
         </div>
     )
 }

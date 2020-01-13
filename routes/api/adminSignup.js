@@ -7,79 +7,52 @@ const { check, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const User = require("../../models/User");
-const Instructor = require("../../models/Instructor");
-const ClubProfile = require("../../models/ClubProfile");
+const Employee = require('../../models/Employee');
+const Business = require('../../models/Business');
 
-router.post(
-  "/",
-  [
-    check("tennisClub", "Please enter the club's name you wish to register"),
-    check("firstName", "Please enter your first name")
-      .not()
-      .isEmpty(),
-    check("lastName", "Please enter your last name")
-      .not()
-      .isEmpty(),
 
-    check("email", "Enter a valid Email").isEmail(),
-    check(
-      "createPassword",
-      "Enter a password eight characters or longer"
-    ).isLength({ min: 8 })
-  ],
+router.post('/',
   async (req, res) => {
-    const errors = validationResult(req.body.admin);
-    if (req.body.admin.createPassword != req.body.admin.passwordConfirm) {
-      const passConfirmError = {
-        msg: "Password's do not match",
-        param: "passwordConfirm",
-        location: "body"
-      };
-      const newErrors = [...errors.array(false), passConfirmError];
-      return res.status(400).json({ errors: newErrors });
-    } else {
-      if (errors.array().length !== 0) {
-        return res.status(400).json({ errors: errors.array(false) });
-      } else {
         try {
-          let employee = await Employee.findOne({ email: req.body.email });
-          let admin = await Admin.findOne({ email: req.body.admin.email });
-          let user = await User.findOne({ email: req.body.email });
-          if (admin || user || instructor) {
+          console.log(req.body)
+          let employee = await Employee.findOne({ email: req.body.adminInfo.email });
+          let admin = await Admin.findOne({ email: req.body.adminInfo.email });
+          let user = await User.findOne({ email: req.body.adminInfo.email });
+          if (admin || user || employee) {
             return res
               .status(400)
               .json({ errors: [{ msg: "That email is being used" }] });
           }
 
-          let newTennisClub = new Business({
-            businessNameAllLower: req.body.admin.businessName
+          let newBusiness = new Business({
+            businessNameAllLower: req.body.businessName
               .split(" ")
               .reduce((accum, element) => {
                 return (accum += element);
               }),
-            businessName: req.body.admin.businessName,
-            address: req.body.business.address,
-            city: req.body.business.city,
-            zip: req.body.business.zip,
-            state: req.body.business.state,
-            numberCourts: req.body.business.numberBookingColumns,
-            openTime: req.body.business.openTime,
-            closeTime: req.body.business.closeTime,
-            website: req.body.business.website,
-            phoneNumber: req.body.business.phoneNumber
+            typeOfBusiness: req.body.typeOfBusiness,
+            businessName: req.body.adminInfo.businessName,
+            address: req.body.businessInfo.address,
+            city: req.body.businessInfo.city,
+            zip: req.body.businessInfo.zip,
+            state: req.body.businessInfo.state,
+            numberBookingColumns: req.body.numberBookingColumns,
+            schedule: req.body.schedule,
+            website: req.body.businessInfo.website,
+            phoneNumber: req.body.businessInfo.phoneNumber
           });
 
           let newAdmin = new Admin({
-            businessName: newTennisClub.clubNameAllLower,
-            firstName: req.body.admin.firstName,
-            lastName: req.body.admin.lastName,
-            email: req.body.admin.email,
-            password: req.body.admin.createPassword,
+            businessName: newBusiness.businessNameAllLower,
+            firstName: req.body.adminInfo.firstName,
+            lastName: req.body.adminInfo.lastName,
+            email: req.body.adminInfo.email,
+            password: req.body.adminInfo.password,
             business: newBusiness
           });
           const salt = await bcrypt.genSalt(10);
           newAdmin.password = await bcrypt.hash(
-            req.body.admin.createPassword,
+            req.body.adminInfo.password,
             salt
           );
 
@@ -89,7 +62,7 @@ router.post(
               name: `${newAdmin.firstName} ${newAdmin.lastName}`,
               isAdmin: true,
               id: newAdmin.id,
-              clubId: newBusiness.id
+              businessId: newBusiness.id
             }
           };
 
@@ -112,7 +85,5 @@ router.post(
           console.log(error);
         }
       }
-    }
-  }
 );
 module.exports = router;

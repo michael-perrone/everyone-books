@@ -3,7 +3,7 @@ import styles from '../AdminSignup/AdminSignup.module.css';
 import Alert from '../../Alert/Alert';
 import SubmitButton from '../../Shared/SubmitButton/SubmitButton';
 import {connect} from 'react-redux';
-import {SAVE_BUSINESS_INFO} from '../../actions/actions';
+import {SAVE_BUSINESS_INFO, SET_BUSINESS_INFO_COMPLETE} from '../../actions/actions';
 
 const BusinessInfoEnter = (props) => {
     const [address, setAddress] = React.useState('');
@@ -77,6 +77,7 @@ const BusinessInfoEnter = (props) => {
             website
         }
         props.saveBusinessInfo(business)
+        props.setBusinessInfoComplete() 
     }
 
 
@@ -166,6 +167,7 @@ const BusinessInfoEnter = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+    setBusinessInfoComplete: () => dispatch({type: SET_BUSINESS_INFO_COMPLETE}),
     saveBusinessInfo: (businessInfo) => dispatch({type: SAVE_BUSINESS_INFO, payload: businessInfo}),
     }
 }

@@ -11,7 +11,7 @@ import {
   INSTRUCTOR_REGISTER_SUCCESS
 } from "../../../actions/actions";
 
-// lightgray
+// white
 
 class InstructorRegisterForm extends React.Component {
   constructor(props) {
@@ -92,9 +92,7 @@ class InstructorRegisterForm extends React.Component {
       <div className={styles.registerFormContainer} id={id}>
         <p
           className={otherStyles.registerP}
-          id={styles.instructorRegisterP}
-          style={{ color: "lightgray" }}
-        >
+          id={styles.instructorRegiste}>
           Register as an Employee
         </p>
         <div
@@ -108,13 +106,12 @@ class InstructorRegisterForm extends React.Component {
               className={otherStyles.divWidthControl}
             >
               <label
-                style={{ color: "lightgray" }}
                 className={otherStyles.labels}
               >
                 First Name:
               </label>
               <input
-                style={{ border: "2px solid lightgray" }}
+                style={{ border: "2px solid white" }}
                 onBlur={this.setDirty}
                 onChange={this.getInstructorInput}
                 value={this.state.instructor.firstName}
@@ -131,14 +128,14 @@ class InstructorRegisterForm extends React.Component {
             </div>
             <div className={otherStyles.divWidthControl}>
               <label
-                style={{ color: "lightgray", letterSpacing: "0.3px" }}
+                style={{ color: "white", letterSpacing: "0.3px" }}
                 className={otherStyles.labels}
               >
                 Last Name:
               </label>
               <input
                 style={{
-                  border: "2px solid lightgray"
+                  border: "2px solid white"
                 }}
                 onBlur={this.setDirty}
                 onChange={this.getInstructorInput}
@@ -157,14 +154,14 @@ class InstructorRegisterForm extends React.Component {
 
             <div className={otherStyles.divWidthControl}>
               <label
-                style={{ color: "lightgray", letterSpacing: "0.3px" }}
+                style={{ color: "white", letterSpacing: "0.3px" }}
                 className={otherStyles.labels}
               >
                 Email Address:
               </label>
               <input
                 style={{
-                  border: "2px solid lightgray"
+                  border: "2px solid white"
                 }}
                 onBlur={this.setDirty}
                 onChange={this.getInstructorInput}
@@ -185,13 +182,13 @@ class InstructorRegisterForm extends React.Component {
 
             <div className={otherStyles.divWidthControl}>
               <label
-                style={{ color: "lightgray", letterSpacing: "0.7px" }}
+                style={{ color: "white", letterSpacing: "0.7px" }}
                 className={otherStyles.labels}
               >
                 Create Password:
               </label>
               <input
-                style={{ border: "2px solid lightgray" }}
+                style={{ border: "2px solid white" }}
                 onKeyDown={this.setDirty}
                 onChange={this.getInstructorInput}
                 value={this.state.instructor.createPassword}
@@ -210,13 +207,12 @@ class InstructorRegisterForm extends React.Component {
             </div>
             <div className={otherStyles.divWidthControl}>
               <label
-                style={{ color: "lightgray" }}
                 className={otherStyles.labels}
               >
                 Password Confirm:
               </label>
               <input
-                style={{ border: "2px solid lightgray" }}
+                style={{ border: "2px solid white" }}
                 onKeyDown={this.setDirty}
                 onChange={this.getInstructorInput}
                 value={this.state.instructor.passwordConfirm}
@@ -241,7 +237,7 @@ class InstructorRegisterForm extends React.Component {
                 Go back to user signup form
               </p>
               <button
-                style={{ left: "-5px", backgroundColor: "transparent" }}
+                style={{backgroundColor: "transparent" }}
                 onClick={this.registerInstructor}
                 id={otherStyles.signUpButton}
               >

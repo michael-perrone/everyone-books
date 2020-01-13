@@ -1,7 +1,8 @@
 import React from 'react';
+import styles from './SubmitButton.module.css'
 
 const SubmitButton = (props) => {
-    return <button style={{padding:'6px 8px', boxShadow: '0px 0px 3px black', border: 'none', fontSize: '14px', marginLeft: '10px', marginTop: props.marginTop }} onClick={props.onClick}>{props.children}</button>
+    return <button id={styles.subButton} style={{marginTop: props.marginTop }} onClick={props.onClick}>{props.children}</button>
 }
 
 export default SubmitButton;

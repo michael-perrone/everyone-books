@@ -179,11 +179,7 @@ button {
   }
 
   #signUpButton {
-    height: 24px;
-    width: 60px;
-    border-radius: 6px;
-    font-size: 12px;
-    left: 0px;
+    left: 18px;
   }
 
   #instructorSignUpAndRegSignUp {

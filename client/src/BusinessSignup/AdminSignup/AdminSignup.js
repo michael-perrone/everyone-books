@@ -108,11 +108,11 @@ const AdminSignup = (props) => {
             {!validateEmail(email) && emailDirty === true && <Alert top={'25px'} alertPhrase={"Not a Valid Email"}/>}
             </div>
             <div className={styles.inputContainer}>
-            <input onBlur={passwordHandlerDirty} placeholder="Password" className={styles.adminInput} onChange={passwordHandler}/>
+            <input type="password" onBlur={passwordHandlerDirty} placeholder="Password" className={styles.adminInput} onChange={passwordHandler}/>
             {password.length < 7 && passwordDirty === true && <Alert top={'25px'} alertPhrase={"Must be eight characters or more"}/>}
             </div>
             <div className={styles.inputContainer}>
-            <input onFocus={confirmPasswordHandlerDirty} placeholder="Confirm Password" className={styles.adminInput} onChange={confirmPasswordHandler}/>
+            <input type='password' onFocus={confirmPasswordHandlerDirty} placeholder="Confirm Password" className={styles.adminInput} onChange={confirmPasswordHandler}/>
             {passwordConfirm !== password && passwordConfirmDirty === true && <Alert top={'25px'} alertPhrase={"Passwords do not match"}/>}
             </div>
             <SubmitButton onClick={storeAdminInfoInRedux}>This is my Info!</SubmitButton>

@@ -11,7 +11,7 @@ import StatementAppear from '../../Shared/StatementAppear/StatementAppear';
 const KindOfBusiness = (props) => {
     const [businessKindEntered, setBusinessKindEntered] = React.useState(false);
     const [nameOfBusiness, setNameOfBusiness] = React.useState('');
-    console.log(props)
+    
     function getKindOfBusinessFunction(e) {
         props.getKindOfBusiness(e.target.value);
         setBusinessKindEntered(true);
@@ -28,15 +28,16 @@ const KindOfBusiness = (props) => {
 
     return (
     <div id={styles.kindOfBusinessDiv}>
-        <p>First, select below what business you would like to set up. If not found, click "Other".</p>
+        <p>First, select below what business you would like to set up. If you don't see your type of business, please choose other or contact us.</p>
         <select onChange={getKindOfBusinessFunction} id={styles.inputOrSelectKindBusiness}>
             <option> </option>
-            <option>Skin Care Center</option>
+            <option>Wax Center</option>
+            <option>Beauty Center</option>
             <option>Fitness Center</option>
             <option>Medical Office</option>
-            <option>Dental Office</option>
             <option>Restaurant</option>
             <option>Hair Salon</option>
+            <option>Tanning Salon</option>
             <option>Barber Shop</option>
             <option>Tattoo Studio</option>
             <option>Tennis Club</option>

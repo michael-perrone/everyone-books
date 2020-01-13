@@ -6,6 +6,31 @@
     justify-content: space-around;
 }
 
+#backButton {
+    position: absolute;
+    top: -35px;
+    left: -10px;
+}
+
+.title {
+    font-size: 42px;
+    font-family: 'Permanent Marker';
+    position: relative;
+    left: 50px;
+    cursor: pointer;
+   
+}
+
+.home {
+    position: relative;
+    right: 50px;
+    font-family: 'Josefin Sans';
+    font-size: 32px;
+    top: 6px;
+    cursor: pointer;
+}
+
+
 .daySeparator{
     border-bottom: 1px solid gray;
     width: 95%;
@@ -55,4 +80,41 @@
     margin-top: 10px;
 }
 
+@media(max-width: 900px) {
+    .peopleContainer {
+        display: none;
+    }
+    #bSignupContainer {
+       
+        background: rgb(212,212,255);
+    }
+}
 
+@media(max-width: 600px) {
+    .title {
+        font-size: 32px;
+        left: 15px;
+    } 
+    .home {
+        right: 15px;
+        font-size: 24px;
+    }
+    #bSignupContainer {
+        height: 105vh;
+        background: rgb(212,212,255);
+    }
+}
+
+@media(max-width: 390px) {
+    .title {
+        font-size: 26px;
+        top: 10px;
+    }
+    .home {
+        font-size: 20px;
+        top: 15px;
+    }
+    #bSignupContainer {
+        height: 110vh;
+    }
+}
