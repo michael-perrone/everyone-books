@@ -12,7 +12,7 @@ const AdminDropDown = (props) => {
         console.log(props.kindOfBusiness)
         const allInfo = {
            adminInfo: props.adminInfo, businessInfo: props.businessInfo, schedule: props.businessSchedule,
-           businessName: props.nameOfBusiness, typeOfBusiness: props.kindOfBusiness
+           businessName: props.nameOfBusiness, typeOfBusiness: props.kindOfBusiness, bookingColumnNumber: props.bookingColumnNumber
         }
         axios.post('/api/adminSignup', allInfo).then(
             response => {
@@ -24,7 +24,7 @@ const AdminDropDown = (props) => {
     return (
         <div className={styles.adminDropDownHide}>
                 <p>Type of Business: {props.kindOfBusiness}</p>
-                <p>Name of Business: {props.nameOfbusiness}</p>
+                <p>Name of Business: {props.nameOfBusiness}</p>
                 <p>Name: {props.adminInfo.firstName} {props.adminInfo.lastName}</p>
                 <p>Email: {props.adminInfo.email}</p>
                 <p>Street: {props.businessInfo.address}</p>

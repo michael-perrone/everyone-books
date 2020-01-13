@@ -17,7 +17,7 @@ const AdminSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  clubName: {
+  businessName: {
     type: String,
     required: true
   },
