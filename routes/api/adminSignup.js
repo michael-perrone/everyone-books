@@ -31,12 +31,12 @@ router.post('/',
                 return (accum += element);
               }),
             typeOfBusiness: req.body.typeOfBusiness,
-            businessName: req.body.adminInfo.businessName,
+            businessName: req.body.businessName,
             address: req.body.businessInfo.address,
             city: req.body.businessInfo.city,
             zip: req.body.businessInfo.zip,
             state: req.body.businessInfo.state,
-            numberBookingColumns: req.body.numberBookingColumns,
+            bookingColumnNumber: req.body.bookingColumnNumber,
             schedule: req.body.schedule,
             website: req.body.businessInfo.website,
             phoneNumber: req.body.businessInfo.phoneNumber
@@ -80,7 +80,6 @@ router.post('/',
           );
           await newAdmin.save();
           await newBusiness.save();
-          return res.status(200).json({ success: "good shit bro" });
         } catch (error) {
           console.log(error);
         }

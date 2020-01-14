@@ -5,15 +5,15 @@ import axios from "axios";
 import { withRouter } from "react-router-dom";
 import otherStyles from "../UserRegisterForm/UserRegisterForm.module.css";
 import Alert from "../../../Alert/Alert";
-import styles from "./InstructorRegisterForm.module.css";
+import styles from "./EmployeeRegisterForm.module.css";
 import {
-  INSTRUCTOR_WANTS_TO_REGISTER,
-  INSTRUCTOR_REGISTER_SUCCESS
+  EMPLOYEE_WANTS_TO_REGISTER,
+  EMPLOYEE_REGISTER_SUCCESS
 } from "../../../actions/actions";
 
 // white
 
-class InstructorRegisterForm extends React.Component {
+class EmployeeRegisterForm extends React.Component {
   constructor(props) {
     super(props);
     this.registerInstructor = this.registerInstructor.bind(this);
@@ -26,6 +26,7 @@ class InstructorRegisterForm extends React.Component {
         email: "",
         createPassword: "",
         passwordConfirm: "",
+        profession: "",
       },
       dirty: {
         firstName: false,
@@ -33,6 +34,7 @@ class InstructorRegisterForm extends React.Component {
         email: false,
         createPassword: false,
         passwordConfirm: false,
+        profession: false,
       },
       showOptionals: false
     };
@@ -63,7 +65,7 @@ class InstructorRegisterForm extends React.Component {
   registerInstructor(event) {
     event.preventDefault();
     axios
-      .post("/api/instructorSignup", this.state.instructor)
+      .post("/api/employeeSignup", this.state.instructor)
       .then(response => {
         if (response.status === 200) {
           this.props.instructorRegisterSuccess(response.data.token);
@@ -85,14 +87,13 @@ class InstructorRegisterForm extends React.Component {
 
   render() {
     let id = "";
-    if (this.props.instructorRegister) {
+    if (this.props.employeeRegister) {
       id = styles.animation;
     }
     return (
       <div className={styles.registerFormContainer} id={id}>
         <p
-          className={otherStyles.registerP}
-          id={styles.instructorRegiste}>
+          className={otherStyles.registerP}>
           Register as an Employee
         </p>
         <div
@@ -100,7 +101,7 @@ class InstructorRegisterForm extends React.Component {
           onMouseLeave={this.hideOptionals}
           className={otherStyles.registerForm}
         >
-          <form id={otherStyles.form}>
+          <form id={otherStyles.form} style={{justifyContent: 'space-around', height: '350px'}}>
             <div
               style={{ marginTop: "8px" }}
               className={otherStyles.divWidthControl}
@@ -111,7 +112,6 @@ class InstructorRegisterForm extends React.Component {
                 First Name:
               </label>
               <input
-                style={{ border: "2px solid white" }}
                 onBlur={this.setDirty}
                 onChange={this.getInstructorInput}
                 value={this.state.instructor.firstName}
@@ -160,9 +160,7 @@ class InstructorRegisterForm extends React.Component {
                 Email Address:
               </label>
               <input
-                style={{
-                  border: "2px solid white"
-                }}
+                
                 onBlur={this.setDirty}
                 onChange={this.getInstructorInput}
                 value={this.state.instructor.email}
@@ -182,13 +180,12 @@ class InstructorRegisterForm extends React.Component {
 
             <div className={otherStyles.divWidthControl}>
               <label
-                style={{ color: "white", letterSpacing: "0.7px" }}
+                style={{ color: "white", letterSpacing: "1.0px" }}
                 className={otherStyles.labels}
               >
                 Create Password:
               </label>
               <input
-                style={{ border: "2px solid white" }}
                 onKeyDown={this.setDirty}
                 onChange={this.getInstructorInput}
                 value={this.state.instructor.createPassword}
@@ -207,12 +204,12 @@ class InstructorRegisterForm extends React.Component {
             </div>
             <div className={otherStyles.divWidthControl}>
               <label
+              style={{letterSpacing: '0.25px'}}
                 className={otherStyles.labels}
               >
                 Password Confirm:
               </label>
               <input
-                style={{ border: "2px solid white" }}
                 onKeyDown={this.setDirty}
                 onChange={this.getInstructorInput}
                 value={this.state.instructor.passwordConfirm}
@@ -226,6 +223,26 @@ class InstructorRegisterForm extends React.Component {
                 this.state.instructor.passwordConfirm !==
                   this.state.instructor.createPassword && (
                   <Alert alertPhrase={"Passwords must be matching"} />
+                )}
+            </div>
+            <div className={otherStyles.divWidthControl}>
+              <label
+                className={otherStyles.labels}
+              >
+                Current Profession:
+              </label>
+              <input 
+                onKeyDown={this.setDirty}
+                onChange={this.getInstructorInput}
+                value={this.state.instructor.profession}
+                name="profession"
+                placeholder="(Server, Waxer, Barber, etc)"
+                id={otherStyles.ml8}
+                className={otherStyles.inputs}
+              />
+              {this.state.dirty.profession === true &&
+                this.state.instructor.profession === "" && (
+                  <Alert alertPhrase={"This field is required"} />
                 )}
             </div>
             
@@ -254,7 +271,7 @@ class InstructorRegisterForm extends React.Component {
 const mapStateToProps = state => {
   return {
     instructor: state.authReducer.instructor,
-    instructorRegister: state.booleanReducers.instructorRegister
+    employeeRegister: state.booleanReducers.employeeRegister
   };
 };
 
@@ -262,14 +279,14 @@ const mapDispatchToProps = dispatch => {
   return {
     instructorRegisterSuccess: instructorToken =>
       dispatch({
-        type: INSTRUCTOR_REGISTER_SUCCESS,
+        type: EMPLOYEE_REGISTER_SUCCESS,
         payload: { instructorToken }
       }),
     instructorRegisterHandler: () =>
-      dispatch({ type: INSTRUCTOR_WANTS_TO_REGISTER })
+      dispatch({ type: EMPLOYEE_WANTS_TO_REGISTER })
   };
 };
 
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(InstructorRegisterForm)
+  connect(mapStateToProps, mapDispatchToProps)(EmployeeRegisterForm)
 );

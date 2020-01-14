@@ -5,7 +5,7 @@ import AdminNav from "../../AdminNav/AdminNav";
 import axios from "axios";
 import ServicesForm from "./ServicesForm/ServicesForm";
 import BioForm from "./BioForm/BioForm";
-import InstructorsAddForm from "./InstructorsAddForm/InstructorsAddForm";
+import EmployeeAddForm from "./InstructorsAddForm/EmployeeAddForm";
 
 const AdminProfileCreate = props => {
   const [resultsNumber, setResultsNumber] = useState(0);
@@ -103,24 +103,14 @@ const AdminProfileCreate = props => {
 
   return (
     <div>
-      {props.admin && <AdminNav />}
       <div id={styles.pTagAboveForm}>
         {!profileExists && (
           <p className={styles.pTag}>
-            Thanks for signing up your club on Tennis Mate. To finish up the
-            process, we ask that you add a bit more information about your club
-            so we can give our users an accurate depiction of your Tennis Club.
-            You can add the instructors at your tennis club, the services your
-            club provides, and a small bio about your club as well. If you have
-            any questions feel free to contact us.
+              Thanks for registering! On this page you can create your profile. Here you will add employees that work at your business, give infomation about services your business offers, and also provide a small Bio about your business.
           </p>
         )}
       </div>
       <div
-        style={{
-          height:
-            resultsNumber < 4 ? "640px" : `${640 + (resultsNumber - 3) * 68}px`
-        }}
         className={styles.mainContentHolder}
       >
         <div
@@ -143,7 +133,7 @@ const AdminProfileCreate = props => {
             className={styles.pTagsForSelection}
             id={showingInstructors ? styles.selectedPTag : ""}
           >
-            Instructors
+            Employees
           </p>
           <p
             onClick={setServices}
@@ -177,16 +167,9 @@ const AdminProfileCreate = props => {
           id={showingInstructors ? styles.divHolderAnimated : ""}
         >
           <p className={styles.pTag}>
-            You can add instructors in the form below. If they have made a
-            profile with us, you should be able to add them in no time. If they
-            haven't made a profile with us. Please have them do so and you will
-            then be able to register them as instructor of your club. Once you
-            add an instructor a message will be sent to this instructor
-            notifying them that you have registered them as an instructor. If
-            they accept your request, they will be registered as an instructor
-            at your club.
+            You can add the employees to your business in the form below. When an employee registers with Everyone Books, they are given a special unique ID. Enter the unique ID from the employee below to add that employee.
           </p>
-          <InstructorsAddForm
+          <EmployeeAddForm
             setNewDeletedPending={setNewDeletedPending}
             setNewDeletedCurrent={setNewDeletedAccepted}
             setNewPending={setNewPending}
@@ -202,12 +185,8 @@ const AdminProfileCreate = props => {
           id={showingServices ? styles.divHolderAnimated : ""}
         >
           <p className={styles.pTag}>
-            Add some services that your club provides. Below we have some
-            default services that most tennis clubs provide. These services are
-            tennis lessons, group clinics, racquet stringing, a summer program,
-            tournaments, and if your club offers a gym. You can check yes or no
-            depending on if your tennis club provides that service. You can also
-            add your own services below. You can always update these later on.{" "}
+            Below you can add a list of services that your business provides. Feel free to add any service that may appeal to your potential customers.
+            
           </p>
           <ServicesForm profile={profile} />
         </div>
@@ -216,12 +195,7 @@ const AdminProfileCreate = props => {
           id={showingBio ? styles.divHolderAnimated : ""}
         >
           <p className={styles.pTag}>
-            Here you can add a bio that describes your club. This bio will
-            provide more information to those interested in learning more about
-            your tennis club. You can also include any additional services,
-            activites, and other great things about your club. The bio will be
-            limited to 400 characters. You can always update your clubs bio
-            later.
+            Below you can add a small bio about your business. It is not required but it is reccomended.
           </p>
           <BioForm bio={profile.bio} />
         </div>

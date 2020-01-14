@@ -1,20 +1,19 @@
 import React from "react";
-import styles from "./InstructorsToSelectList.module.css";
+import styles from "./EmployeeToSelectList.module.css";
 
-const InstructorsToSelectList = props => {
+const EmployeeToSelectList = props => {
   return (
     <div id={styles.listContainer}>
-      {props.instructorsFound.map(instructor => {
+      {props.employeesFound.map(employee => {
         return (
           <div id={styles.mainList}>
             <div>
-              <p className={styles.listItem}>Name: {instructor.name}</p>
-              <p className={styles.listItem}>Club: {instructor.tennisClub}</p>
-              <p className={styles.listItem}>Age: 24</p>
+              <p className={styles.listItem}>Name: {employee.name}</p>
+              <p className={styles.listItem}>Profession: {employee.profession}</p>
             </div>
             {!props.viewInstead && (
               <button
-                onClick={props.addInstructorToList(instructor)}
+                onClick={props.addInstructorToList(employee)}
                 id={styles.addButton}
               >
                 Add
@@ -23,7 +22,7 @@ const InstructorsToSelectList = props => {
             {props.viewInstead && (
               <button
                 id={styles.addButton}
-                onClick={props.viewInstructor(instructor.id)}
+                onClick={props.viewInstructor(employee.id)}
               >
                 View
               </button>
@@ -35,4 +34,4 @@ const InstructorsToSelectList = props => {
   );
 };
 
-export default InstructorsToSelectList;
+export default EmployeeToSelectList;

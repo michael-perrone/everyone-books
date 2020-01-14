@@ -1,18 +1,18 @@
 import React from "react";
 import styles from "./InstructorSignup.module.css";
 import { connect } from "react-redux";
-import { INSTRUCTOR_WANTS_TO_REGISTER } from "../../../../actions/actions";
+import { EMPLOYEE_WANTS_TO_REGISTER } from "../../../../actions/actions";
 
 class InstuctorSignup extends React.Component {
   render() {
     return (
       <div id={styles.instructorSignupContainer}>
         <p
-          onClick={this.props.instructorRegisterHandler}
+          onClick={this.props.employeeRegisterHandler}
           id={styles.instructorSignup}
         >
           {" "}
-          OR register as instructor here
+          OR register as employee here
         </p>
       </div>
     );
@@ -21,8 +21,8 @@ class InstuctorSignup extends React.Component {
 
 const mapDispatchToProps = function(dispatch) {
   return {
-    instructorRegisterHandler: () =>
-      dispatch({ type: INSTRUCTOR_WANTS_TO_REGISTER })
+    employeeRegisterHandler: () =>
+      dispatch({ type: EMPLOYEE_WANTS_TO_REGISTER })
   };
 };
 

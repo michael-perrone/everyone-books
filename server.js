@@ -16,13 +16,13 @@ app.use("/api/courtBooked", require("./routes/api/courtBooked"));
 app.use("/api/club", require("./routes/api/club"));
 app.use("/api/usersSignup", require("./routes/api/usersSignup"));
 app.use("/api/auth", require("./routes/api/auth"));
-app.use("/api/instructorSignup", require("./routes/api/instructorSignup"));
+app.use("/api/employeeSignup", require("./routes/api/employeeSignup"));
 app.use("/api/instructorProfile", require("./routes/api/instructorProfile"));
 app.use("/api/userProfile", require("./routes/api/userProfile"));
 app.use("/api/adminSignup", require("./routes/api/adminSignup"));
 app.use("/api/clubsList", require("./routes/api/clubsList"));
 app.use("/api/clubProfile", require("./routes/api/clubProfile"));
-app.use("/api/instructorList", require("./routes/api/instructorList"));
+app.use("/api/employeeList", require("./routes/api/employeeList"));
 app.use("/api/getInstructors", require("./routes/api/getInstructors"));
 app.use("/api/saveLocation", require("./routes/api/saveLocation"));
 app.use(

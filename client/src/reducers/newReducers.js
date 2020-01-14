@@ -11,7 +11,7 @@ const initialState = {
     businessSchedule: [],
     businessScheduleComplete: false,
     businessInfoComplete: false,
-    bookingColumnNumber: undefined,
+    bookingColumnNumber: "",
     bookingColumnType: "",
     showDropDown: false,
 };
@@ -64,7 +64,7 @@ export default function (state = initialState, action) {
         case SET_BOOKING_NUMBER_AND_TYPE: 
         return {
             ...state,
-            bookingColumnNumber: action.payload.bookingColummNumber,
+            bookingColumnNumber: action.payload.bookingColumnNumber,
             bookingColumnType: action.payload.bookingColumnType
         }
         case ENTER_BUSINESS_SCHEDULE:

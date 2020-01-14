@@ -3,6 +3,8 @@ import styles from '../BusinessSignup.module.css';
 import {connect} from 'react-redux';
 import axios from 'axios';
 import SubmitButton from '../../Shared/SubmitButton/SubmitButton';
+import { ADMIN_REGISTER_SUCCESS } from '../../actions/actions';
+import {withRouter} from 'react-router-dom';
 
 
 const AdminDropDown = (props) => {
@@ -14,11 +16,18 @@ const AdminDropDown = (props) => {
            adminInfo: props.adminInfo, businessInfo: props.businessInfo, schedule: props.businessSchedule,
            businessName: props.nameOfBusiness, typeOfBusiness: props.kindOfBusiness, bookingColumnNumber: props.bookingColumnNumber
         }
+        console.log(allInfo)
         axios.post('/api/adminSignup', allInfo).then(
             response => {
-                console.log(response)
+                if (response.data.token) {
+                    props.adminRegister(response.data.token);
+                    console.log(props.admin)
+                    props.history.push(`/admin/${props.admin.admin.id}`)
+                }
             }
-        )
+        ).catch(error => {
+            console.log(error)
+        })
     }
 
     return (
@@ -48,6 +57,7 @@ const AdminDropDown = (props) => {
 
 const mapStateToProps = state => {
     return {
+        admin: state.authReducer.admin,
         kindOfBusiness: state.newReducers.kindOfBusiness,
         nameOfBusiness: state.newReducers.nameOfBusiness,
         adminInfo: state.newReducers.adminInfo,
@@ -58,4 +68,10 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(AdminDropDown);
+const mapDispatchToProps = dispatch => {
+    return {
+        adminRegister: (adminToken) => dispatch({type: ADMIN_REGISTER_SUCCESS, payload: {adminToken}})
+    }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AdminDropDown));

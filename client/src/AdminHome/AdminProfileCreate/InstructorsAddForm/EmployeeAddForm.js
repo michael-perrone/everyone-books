@@ -1,74 +1,75 @@
 import React, { useState, useEffect } from "react";
-import styles from "./InstructorsAddForm.module.css";
+import styles from "./EmployeeAddForm.module.css";
 import axios from "axios";
 import { connect } from "react-redux";
-import InstructorsToSelectList from "./InstructorsToSelectList/InstructorsToSelectList";
+import EmployeeToSelectList from "./InstructorsToSelectList/EmployeeToSelectList";
 import CurrentAddedPending from "./CurrentAddedPending/CurrentAddedPending";
 import OtherAlert from "../../../OtherAlerts/OtherAlerts";
 
-const InstructorsAddForm = props => {
+const EmployeeAddForm = props => {
   const [hideButton, setHideButton] = useState(false);
-  const [instructorInput, setInstructorInput] = useState("");
-  const [instructorsFoundList, setInstructorsFoundList] = useState("");
+  const [employeeInput, setEmployeeInput] = useState("");
+  const [employeesFoundList, setEmployeeFoundList] = useState("");
   const [error, setError] = useState("");
   const [doubleAddError, setDoubleAddError] = useState(false);
-  const [addedInstructors, setAddedInstructors] = useState([]);
+  const [addedEmployees, setAddedEmployees] = useState([]);
   const [showAddSelectPending, setShowAddSelectPending] = useState(false);
   const [switchToAdded, setSwitchToAdded] = useState(false);
 
-  function instructorInputHandler(event) {
+  function employeeInputHandler(event) {
     setHideButton(true);
-    setInstructorInput(event.target.value);
+    setEmployeeInput(event.target.value);
     setTimeout(() => setHideButton(false), 1200);
     setShowAddSelectPending(false);
   }
 
   function clearAdded() {
-    setAddedInstructors([]);
+    setAddedEmployees([]);
   }
 
   function hideAdded() {
     setSwitchToAdded(false);
   }
 
-  function instructorSearch(event) {
+  function employeeSearch(event) {
     event.preventDefault();
-    if (instructorInput.length > 2) {
+    if (employeeInput.length > 2) {
       axios
-        .post("/api/instructorList/instructorSearch", {
-          name: instructorInput
+        .post("/api/employeeList/employeeSearch", {
+          employeeId: employeeInput
         })
         .then(response => {
           if (response.status === 200) {
             setError("");
-            setInstructorsFoundList(response.data.instructors);
-            props.getAmountOfResults(response.data.instructors.length);
+            setEmployeeFoundList(response.data.instructors);
+            props.getAmountOfResults(response.data.instructors.length); // WATCH THIS
           }
-        })
-        .catch(error => {
-          if (error.response.status == 406) {
+          if (response.status == 204) {
             setError("No Instructors Found");
-            setInstructorsFoundList([]);
-          }
+            setEmployeeFoundList([]);
+        }
+      })
+        .catch(error => {
+          console.log(error)
         });
     } else {
-      setInstructorsFoundList([]);
+      setEmployeeFoundList([]);
       setError("Please fill out the name of the instructor");
     }
   }
 
-  function addInstructorToList(newInstructor) {
+  function addEmployeeToList(newEmployee) {
     return () => {
       setDoubleAddError(false);
       let newDoubleAddedError = [];
-      for (let i = 0; i < addedInstructors.length; i++) {
-        if (newInstructor.id === addedInstructors[i].id) {
+      for (let i = 0; i < addedEmployees.length; i++) {
+        if (newEmployee.id === addedEmployees[i].id) {
           newDoubleAddedError.push("You have already added this instructor.");
         }
       }
       if (newDoubleAddedError.length === 0) {
-        let newInstructorList = [...addedInstructors, newInstructor];
-        setAddedInstructors(newInstructorList);
+        let newEmployeeList = [...addedEmployees, newEmployee];
+        setAddedEmployees(newEmployeeList);
         setSwitchToAdded(true);
       } else {
         setTimeout(() => setDoubleAddError(true), 200);
@@ -78,10 +79,10 @@ const InstructorsAddForm = props => {
 
   function filterAdded(deletedPerson) {
     return () => {
-      const newAdded = addedInstructors.filter(element => {
+      const newAdded = addedEmployees.filter(element => {
         return element.id !== deletedPerson.id;
       });
-      setAddedInstructors(newAdded);
+      setAddedEmployees(newAdded);
     };
   }
 
@@ -95,7 +96,7 @@ const InstructorsAddForm = props => {
       }}
     >
       <OtherAlert
-        alertMessage={"You cannot add the same instructor twice"}
+        alertMessage={"You cannot add the same employee twice"}
         alertType={"Error"}
         showAlert={doubleAddError === true}
       />
@@ -107,7 +108,7 @@ const InstructorsAddForm = props => {
           hideAdded={hideAdded}
           showAddedOveride={switchToAdded}
           current={props.current}
-          added={addedInstructors}
+          added={addedEmployees}
           pending={props.pending}
           filterAdded={filterAdded}
           hideAlert={props.hideAlert}
@@ -118,8 +119,8 @@ const InstructorsAddForm = props => {
         <p
           className={styles.entryError}
           id={
-            (error !== "" && instructorInput.length < 3) ||
-            error === "No Instructors Found"
+            (error !== "" && employeeInput.length < 3) ||
+            error === "ID Not Found :("
               ? styles.entryErrorShow
               : ""
           }
@@ -127,23 +128,23 @@ const InstructorsAddForm = props => {
           {error}
         </p>
         <input
-          onChange={instructorInputHandler}
-          value={instructorInput}
-          placeholder="Instructor Search"
-          id={styles.instructorSearch}
+          onChange={employeeInputHandler}
+          value={employeeInput}
+          placeholder="Enter Unqiue Employee ID"
+          id={styles.employeeSearch}
         />
         <button
-          onClick={instructorSearch}
+          onClick={employeeSearch}
           id={hideButton ? styles.hideButton : ""}
           className={styles.searchButton}
         >
           Search
         </button>
       </form>
-      {instructorsFoundList.length > 0 && (
-        <InstructorsToSelectList
-          addInstructorToList={addInstructorToList}
-          instructorsFound={instructorsFoundList}
+      {employeesFoundList.length > 0 && (
+        <EmployeeToSelectList
+          addEmployeeToList={addEmployeeToList}
+          employeesFound={employeesFoundList}
         />
       )}
     </div>
@@ -156,4 +157,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(InstructorsAddForm);
+export default connect(mapStateToProps)(EmployeeAddForm);

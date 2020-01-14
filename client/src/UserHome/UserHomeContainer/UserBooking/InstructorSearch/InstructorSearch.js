@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import styles from "../../../../AdminHome/AdminProfileCreate/InstructorsAddForm/InstructorsAddForm.module.css";
+import styles from "../../../../AdminHome/AdminProfileCreate/InstructorsAddForm/EmployeeAddForm.module.css";
 import axios from "axios";
 import otherstyles from "./InstructorSearch.module.css";
-import InstructorsToSelectList from "../../../../AdminHome/AdminProfileCreate/InstructorsAddForm/InstructorsToSelectList/InstructorsToSelectList";
+import InstructorsToSelectList from "../../../../AdminHome/AdminProfileCreate/InstructorsAddForm/InstructorsToSelectList/EmployeeToSelectList";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 

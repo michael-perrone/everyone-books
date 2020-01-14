@@ -1,5 +1,5 @@
 import {
-  INSTRUCTOR_WANTS_TO_REGISTER,
+  EMPLOYEE_WANTS_TO_REGISTER,
   HIDE_SCHEDULE
 } from "../actions/actions";
 import { ADMIN_ENTERED } from "../actions/actions";
@@ -12,7 +12,7 @@ import {
 } from "../actions/actions";
 
 const initialState = {
-  instructorRegister: false,
+  employeeRegister: false,
   showDropDown: undefined,
   adminEntered: false,
   showNotifications: false,
@@ -41,10 +41,10 @@ export default function(state = initialState, action) {
         showSchedule: false,
         hideSchedule: true
       };
-    case INSTRUCTOR_WANTS_TO_REGISTER:
+    case EMPLOYEE_WANTS_TO_REGISTER:
       return {
         ...state,
-        instructorRegister: !state.instructorRegister
+        employeeRegister: !state.employeeRegister
       };
     case BOOK_A_COURT:
       return {

@@ -7,7 +7,7 @@ import {
   INSTRUCTOR_LOGOUT,
   USER_REGISTER_SUCCESS,
   ADMIN_REGISTER_SUCCESS,
-  INSTRUCTOR_REGISTER_SUCCESS,
+  EMPLOYEE_REGISTER_SUCCESS,
   GET_INSTRUCTOR_PROFILE
 } from "../actions/actions";
 import decoder from "jwt-decode";
@@ -69,14 +69,14 @@ export default function(state = initalState, action) {
         admin: decoder(localStorage.getItem("adminToken")),
         adminToken: localStorage.getItem("adminToken")
       };
-    case INSTRUCTOR_REGISTER_SUCCESS:
-      localStorage.setItem("instructorToken", action.payload.instructorToken);
+    case EMPLOYEE_REGISTER_SUCCESS:
+      localStorage.setItem("employeeToken", action.payload.instructorToken);
       return {
         ...state,
         isAuthenticated: true,
         isInstructorAuthenticated: true,
-        instructorToken: localStorage.getItem("instructorToken"),
-        instructor: decoder(localStorage.getItem("instructorToken"))
+        employeeToken: localStorage.getItem("employeeToken"),
+        employee: decoder(localStorage.getItem("employeeToken"))
       };
     case USER_REGISTER_SUCCESS:
       localStorage.setItem("token", action.payload.token);

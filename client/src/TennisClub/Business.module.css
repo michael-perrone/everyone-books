@@ -1,0 +1,190 @@
+#mainContainer {
+    background-color: rgb(202, 202, 202);
+    display: flex;
+    width: 95%;
+    justify-content: space-around;
+  }
+  
+  .eventDiv {
+    width: 160px;
+    font-size: 14px;
+    position: relative;
+  }
+  
+  #courtBookingPTag {
+    font-size: 32px;
+    align-self: center;
+    margin-bottom: 12px;
+  }
+  
+  #courtsShowingHeader {
+    width: 100%;
+    padding-top: 20px;
+    border-top: 2px solid black;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid black;
+    padding-bottom: 20px;
+    align-items: center;
+  }
+  
+  .fs18 {
+    font-size: 16px;
+    margin-top: 20px;
+  }
+  
+  .subContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 20px;
+  }
+  
+  .smallSeg {
+    font-size: 14px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  #showCourtsButton {
+    position: fixed;
+    bottom: 10px;
+    z-index: 999;
+    left: 43%;
+    font-size: 20px;
+    padding: 6px 12px;
+    border-radius: 14px;
+    background-color: white;
+    box-shadow: 0px 0px 10px black;
+    border: none;
+  }
+  
+  #bookingInstructions {
+    width: 100%;
+  }
+  
+  .smallGreenDiv {
+    position: relative;
+    background-color: rgb(240, 240, 240);
+    box-shadow: 0px 0px 3px black;
+    margin: 10px;
+    width: 440px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    height: 260px;
+    display: flex;
+    align-items: center;
+    border-radius: 2px;
+    justify-content: space-around;
+    margin-top: 3px;
+  }
+  
+  .eventDetailBox {
+    height: 320px;
+    position: absolute;
+    width: 370px;
+    background-color: rgba(0, 0, 0, 0.9);
+    clip-path: polygon(50% 0, 84% 0, 84% 57%, 100% 95%, 79% 59%, 14% 59%, 14% 0);
+    z-index: 100;
+    top: -290px;
+    left: -368px;
+    color: white;
+  }
+  
+  .flexWrapDiv {
+    display: flex;
+    height: 230px;
+    width: 345px;
+    margin-top: 70px;
+    flex-flow: column wrap;
+    align-content: space-around;
+  }
+  
+  .divHoldingItem {
+    height: 35px;
+    font-size: 14px;
+    margin-right: 11px;
+  }
+  
+  .subLocationContainer {
+    height: 90px;
+    width: 95%;
+    box-shadow: 0px 1px 3px black;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+  
+  .eventDateSubDiv {
+    display: flex;
+    margin-bottom: 7px;
+  }
+  
+  #addEventInput {
+    height: 18px;
+    width: 230px;
+    font-size: 14px;
+    padding-left: 8px;
+    margin-left: 4px;
+  }
+  
+  .largerPTag {
+    position: absolute;
+    color: black;
+    text-align: center;
+    background-color: lightgreen;
+    width: 100%;
+    font-size: 24px;
+    top: 0px;
+    padding: 5px 0px;
+  }
+  
+  #clubImage {
+    width: 100%;
+    border-radius: 2px;
+    height: 300px;
+  }
+  
+  @media (max-width: 1400px) {
+    .smallGreenDiv {
+      width: 400px;
+    }
+  }
+  
+  @media (max-width: 1275px) {
+    .smallGreenDiv {
+      width: 440px;
+    }
+    #mainContainer {
+      flex-direction: column;
+    }
+  
+    .subContainer {
+      flex-direction: row;
+      justify-content: space-around;
+    }
+  }
+  
+  @media (max-width: 750px) {
+    .subContainer {
+      flex-direction: column;
+    }
+  
+    .smallGreenDiv {
+      width: 80%;
+      margin-top: 10px;
+    }
+  
+    .subContainer {
+      padding: 0px;
+    }
+  }
+  
+  @media (max-width: 495px) {
+    .smallGreenDiv {
+      width: 97%;
+    }
+  }
+  

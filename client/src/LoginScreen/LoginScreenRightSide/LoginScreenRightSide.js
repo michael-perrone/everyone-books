@@ -3,19 +3,15 @@ import UserRegisterForm from "./UserRegisterForm/UserRegisterForm";
 import styles from "./LoginScreenRightSide.module.css";
 import ClubSignUpButton from "./ClubSignUp/ClubSignUpButton";
 import { connect } from "react-redux";
-import InstructorNotes from "./InstructorNotes/InstructorNotes";
-import InstructorRegisterForm from "./InstructorRegisterForm/InstructorRegisterForm";
+import EmployeeRegisterForm from "./InstructorRegisterForm/EmployeeRegisterForm";
 
 class LoginScreenRightSide extends React.Component {
   render() {
     return (
       <div id={styles.rightSideContainer}>
         <UserRegisterForm />
-        <InstructorRegisterForm />
-
-        {this.props.instructorRegister && <InstructorNotes />}
-
-        {!this.props.instructorRegister && <ClubSignUpButton />}
+        <EmployeeRegisterForm />
+        {!this.props.employeeRegister && <ClubSignUpButton />}
       </div>
     );
   }
@@ -24,7 +20,7 @@ class LoginScreenRightSide extends React.Component {
 const mapStateToProps = state => {
   return {
     alert: state.alert,
-    instructorRegister: state.instructorRegister
+    employeeRegister: state.employeeRegister
   };
 };
 

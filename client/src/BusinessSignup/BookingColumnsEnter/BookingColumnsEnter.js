@@ -69,7 +69,7 @@ const BookingColumnsEnter = (props) => {
         <StatementAppear appear={bookingColumnType !== ""}>
             <p style={{textAlign: 'left', padding: '8px'}}>Please enter the number of {bookingColumnType}'s here. Then hit finish and you will get a glimpse at your new scheduling software!</p>
             <select style={{width: '200px', marginLeft: '20px'}} className={styles.formInput} onChange={bookingColumnNumberHandler}>
-            <option onChange={bookingColumnNumberHandler}>Choose Number</option>
+            <option>Choose Number</option>
               <option>1</option>
               <option>2</option>
               <option>3</option>

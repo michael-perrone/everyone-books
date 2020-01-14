@@ -5,20 +5,20 @@ import {connect} from 'react-redux';
 import {ENTER_BUSINESS_SCHEDULE} from '../../actions/actions';
 
 const BusinessScheduleCreate = (props) => {
-   const [sundayOpen, setSundayOpen] = useState('');
-   const [sundayClose, setSundayClose] = useState('');
-   const [mondayOpen, setMondayOpen] = useState('');
-   const [mondayClose, setMondayClose] = useState('');
-   const [tuesdayOpen, setTuesdayOpen] = useState('');
-   const [tuesdayClose, setTuesdayClose] = useState('');
-   const [wednesdayOpen, setWednesdayOpen] = useState('');
-   const [wednesdayClose, setWednesdayClose] = useState('');
-   const [thursdayOpen, setThursdayOpen] = useState('');
-   const [thursdayClose, setThursdayClose] = useState('');
-   const [fridayOpen, setFridayOpen] = useState('');
-   const [fridayClose, setFridayClose] = useState('');
-   const [saturdayOpen, setSaturdayOpen] = useState('');
-   const [saturdayClose, setSaturdayClose] = useState('');
+   const [sundayOpen, setSundayOpen] = useState('Closed');
+   const [sundayClose, setSundayClose] = useState('Closed');
+   const [mondayOpen, setMondayOpen] = useState('Closed');
+   const [mondayClose, setMondayClose] = useState('Closed');
+   const [tuesdayOpen, setTuesdayOpen] = useState('Closed');
+   const [tuesdayClose, setTuesdayClose] = useState('Closed');
+   const [wednesdayOpen, setWednesdayOpen] = useState('Closed');
+   const [wednesdayClose, setWednesdayClose] = useState('Closed');
+   const [thursdayOpen, setThursdayOpen] = useState('Closed');
+   const [thursdayClose, setThursdayClose] = useState('Closed');
+   const [fridayOpen, setFridayOpen] = useState('Closed');
+   const [fridayClose, setFridayClose] = useState('Closed');
+   const [saturdayOpen, setSaturdayOpen] = useState('Closed');
+   const [saturdayClose, setSaturdayClose] = useState('Closed');
 
 
    function enterWholeBusinessArray() {
@@ -93,7 +93,7 @@ const BusinessScheduleCreate = (props) => {
 
 
     return (
-        <div style={{height: '452px', marginTop: '20px', position: 'relative'}} id={styles.formContainer}>
+        <div style={{height: '452px', marginTop: '8px', position: 'relative'}} id={styles.formContainer}>
         <div style={{position: 'absolute', bottom: '-42px'}}><SubmitButton onClick={enterWholeBusinessArray}>Continue On!</SubmitButton></div>
               <div className={styles.daySeparator} >
               <p style={{width: '100%', textAlign: 'center', marginBottom: '7px'}}>Sunday:</p>

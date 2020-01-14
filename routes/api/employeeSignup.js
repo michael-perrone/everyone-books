@@ -1,47 +1,19 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
-const { check, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const Admin = require("../../models/Admin");
 const User = require("../../models/User");
 
-const Instructor = require("../../models/Instructor");
+const Employee = require("../../models/Employee");
 
-router.post(
-  "/",
-  [
-    check("firstName", "Please enter your first name")
-      .not()
-      .isEmpty(),
-    check("lastName", "Please enter your last name")
-      .not()
-      .isEmpty(),
-    check("email", "Enter a Valid Email").isEmail(),
-    check("createPassword", "Password must be 6 characters long").isLength({
-      min: 6
-    }),
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (req.body.createPassword != req.body.passwordConfirm) {
-      const passConfirmError = {
-        msg: "Password's do not match",
-        param: "passwordConfirm",
-        location: "body"
-      };
-      const newErrors = [...errors.array(false), passConfirmError];
-      return res.status(400).json({ errors: newErrors });
-    } else {
-      if (errors.array().length !== 0) {
-        return res.status(400).json({ errors: errors.array() });
-      } else {
-        try {
+router.post('/', async (req, res) => {
+    try {
           let user = await User.findOne({ email: req.body.email });
           let admin = await Admin.findOne({ email: req.body.email });
-          let instructor = await Instructor.findOne({ email: req.body.email });
-          if (instructor || admin || user) {
+          let employee = await Employee.findOne({ email: req.body.email });
+          if (employee || admin || user) {
             return res
               .status(400)
               .json({ errors: [{ msg: "That email is already being used" }] });
@@ -55,28 +27,27 @@ router.post(
           realLastNameArray[0] = realLastNameArray[0].toUpperCase();
           let realLastName = realLastNameArray.join("");
 
-          let newInstructor = new Instructor({
+          let newEmployee = new Employee({
             firstName: realFirstName,
             lastName: realLastName,
             fullName: realFirstName + " " + realLastName,
             email: req.body.email,
-            password: req.body.createPassword,
             tennisClub: req.body.tennisClub,
+            profession: req.body.profession
           });
           const salt = await bcrypt.genSalt(10);
-          newInstructor.password = await bcrypt.hash(
+          newEmployee.password = await bcrypt.hash(
             req.body.createPassword,
             salt
           );
 
-          await newInstructor.save();
+          await newEmployee.save();
 
           const payload = {
-            instructor: {
-              fullName: newInstructor.fullName,
-              id: newInstructor.id,
-              instructor: true,
-              instructorName: `${newInstructor.firstName} ${newInstructor.lastName}`
+            employee: {
+              fullName: newEmployee.fullName,
+              id: newEmployee.id,
+              employeeName: `${newEmployee.firstName} ${newEmployee.lastName}`
             }
           };
 
@@ -97,8 +68,6 @@ router.post(
           res.status(500).send("Server Error");
         }
       }
-    }
-  }
 );
 
 module.exports = router;

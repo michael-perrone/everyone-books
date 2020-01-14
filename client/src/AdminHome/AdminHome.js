@@ -1,7 +1,7 @@
 import React from "react";
 import AdminNav from "../AdminNav/AdminNav";
 import axios from "axios";
-import TennisClub from "../TennisClub/TennisClub";
+import Business from '../TennisClub/Business';
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
@@ -35,7 +35,7 @@ class AdminHome extends React.Component {
     return (
       <div>
         <AdminNav />
-        {this.state.adminProfileCreated === true && <TennisClub />}
+        {this.state.adminProfileCreated === true && <Business />}
       </div>
     );
   }
