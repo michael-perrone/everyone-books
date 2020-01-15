@@ -27,7 +27,7 @@ const UserHome = props => {
   }
 
   return (
-    <div style={{ backgroundColor: "rgb(217,217,217)" }}>
+    <div style={{ backgroundColor: "rgb(229,229,229)" }}>
       {searching && (
         <div
           style={{

@@ -14,7 +14,6 @@ const SecondContainer = props => {
       {props.instructor && <InstructorSecondContainer />}
       {props.user && <UserSecondContainer />}
       <i
-      style={{right: props.user ? '-30px' : ""}}
         id={props.instructor ? styles.instructorBars : styles.bars}
         onClick={props.showDropDown}
         style={{

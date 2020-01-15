@@ -1,9 +1,9 @@
 import React from "react";
-import styles from "./InstructorSignup.module.css";
+import styles from "./EmployeeSignup.module.css";
 import { connect } from "react-redux";
 import { EMPLOYEE_WANTS_TO_REGISTER } from "../../../../actions/actions";
 
-class InstuctorSignup extends React.Component {
+class EmployeeSignup extends React.Component {
   render() {
     return (
       <div id={styles.instructorSignupContainer}>
@@ -26,4 +26,4 @@ const mapDispatchToProps = function(dispatch) {
   };
 };
 
-export default connect(null, mapDispatchToProps)(InstuctorSignup);
+export default connect(null, mapDispatchToProps)(EmployeeSignup);

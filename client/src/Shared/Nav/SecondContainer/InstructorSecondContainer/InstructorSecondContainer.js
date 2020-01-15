@@ -15,7 +15,6 @@ import NotificationNumber from "../NotificationNumber/NotificationNumber";
 
 const InstructorSecondContainer = props => {
   const [instructorProfile, setInstructorProfile] = React.useState(undefined);
-
   const [notifications, setNotifications] = React.useState([]);
   const [newNotifications, setNewNotificationsState] = React.useState([]);
  

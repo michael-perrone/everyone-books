@@ -4,7 +4,6 @@ import Axios from "axios";
 import { connect } from "react-redux";
 import ClubInsideUserHome from "./ClubInsideUserHome/ClubInsideUserHome";
 import UserBooking from "./UserBooking/UserBooking";
-import InstructorSearch from "./UserBooking/InstructorSearch/InstructorSearch";
 
 const UserHomeContainer = props => {
   const [clubs, setClubs] = useState([]);
@@ -55,10 +54,6 @@ const UserHomeContainer = props => {
           position: "absolute"
         }}
       >
-        <InstructorSearch
-          searching={props.searching}
-          searchingHandler={props.searchingHandler}
-        />
       </div>
       <div className={styles.half} id={styles.clubsSubscribedHalf}>
         <p
@@ -67,7 +62,7 @@ const UserHomeContainer = props => {
             fontFamily: '"Josefin Sans", sans-serif'
           }}
         >
-          Clubs you follow
+         Places you follow
         </p>
         {clubs.length > 0 &&
           clubs.map(individualClub => {

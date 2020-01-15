@@ -5,10 +5,10 @@
     width: 230px;
     border: 2px solid gray;
     border-top: none;
-    background-color: rgba(192, 253, 192, 0.77);
+    background-color: lavender;
     z-index: 450;
     top: 35px;
-    left: 50px;
+    left: -65px;
     transform: scaleY(0);
     transform-origin: top;
     flex-direction: column;

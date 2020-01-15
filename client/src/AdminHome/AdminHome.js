@@ -1,5 +1,4 @@
 import React from "react";
-import AdminNav from "../AdminNav/AdminNav";
 import axios from "axios";
 import Business from '../TennisClub/Business';
 import { connect } from "react-redux";
@@ -34,7 +33,6 @@ class AdminHome extends React.Component {
   render() {
     return (
       <div>
-        <AdminNav />
         {this.state.adminProfileCreated === true && <Business />}
       </div>
     );

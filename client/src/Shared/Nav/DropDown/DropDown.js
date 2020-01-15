@@ -13,7 +13,7 @@ const DropDown = props => {
       id={props.showDropDown ? styles.dropDownContainerAnimated : ""}
     >
       {props.user && <UserDropDown notiNum={props.notiNum} user={props.user} />}
-      {props.admin && <AdminDropDown notiNum={props.notiNum} />}
+      {props.admin && <AdminDropDown notiNum={props.notiNum} admin={props.admin}/>}
       {props.instructor && (
         <InstructorDropDown notiNum={props.notiNum} instructorProfile={props.instructorProfile} />
       )}

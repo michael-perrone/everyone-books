@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./UserRegisterForm.module.css";
 import axios from "axios";
 import { connect } from "react-redux";
-import InstructorSignup from "./InstructorSignup/InstructorSignup";
+import InstructorSignup from "./EmployeeSignup/EmployeeSignup";
 import { withRouter } from "react-router-dom";
 import { USER_REGISTER_SUCCESS } from "../../../actions/actions";
 import Alert from "../../../Alert/Alert";
@@ -217,7 +217,7 @@ class UserRegisterForm extends React.Component {
                 value={this.state.user.createPassword}
                 name="createPassword"
                 placeholder="Create Password"
-                id={styles.ml8}
+                id={styles.inputExtraW}
                 className={styles.inputs}
                 type="password"
               />
@@ -239,7 +239,7 @@ class UserRegisterForm extends React.Component {
                 value={this.state.user.passwordConfirm}
                 name="passwordConfirm"
                 placeholder="Password Confirm"
-                id={styles.ml8}
+                id={styles.inputExtraW}
                 className={styles.inputs}
                 type="password"
               />

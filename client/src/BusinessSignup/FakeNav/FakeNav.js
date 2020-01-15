@@ -9,7 +9,7 @@ const FakeNav = (props) => {
     }
 
     return (
-        <div style={{display: 'flex', alignItems:'center', justifyContent: 'space-between', width: '100%', height: '62px', backgroundColor: 'gray', color: 'lavender'}}>
+        <div style={{display: 'flex', alignItems:'center', justifyContent: 'space-between', width: '100%', height: '52px', backgroundColor: 'gray', borderBottom: '2px solid white', color: 'lavender'}}>
             <p onClick={goHome} className={styles.title}>Everyone Books</p>
             <p onClick={goHome} className={styles.home}><i style={{marginLeft: '5px'}} className="fas fa-home"></i></p>
         </div>

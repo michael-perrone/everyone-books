@@ -3,7 +3,7 @@ import UserRegisterForm from "./UserRegisterForm/UserRegisterForm";
 import styles from "./LoginScreenRightSide.module.css";
 import ClubSignUpButton from "./ClubSignUp/ClubSignUpButton";
 import { connect } from "react-redux";
-import EmployeeRegisterForm from "./InstructorRegisterForm/EmployeeRegisterForm";
+import EmployeeRegisterForm from "./EmployeeRegisterForm/EmployeeRegisterForm";
 
 class LoginScreenRightSide extends React.Component {
   render() {

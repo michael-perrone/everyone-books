@@ -7,13 +7,12 @@ import PeopleAnimation from './PeopleAnimation/PeopleAnimation';
 import BusinessInfoEnter from './BusinessInfoEnter/BusinessInfoEnter';
 import BusinessScheduleCreate from './BusinessScheduleCreate/BusinessScheduleCreate'
 import BookingColumnsEnter from './BookingColumnsEnter/BookingColumnsEnter';
-import AdminDropDown from './AdminDropDown/AdminDropDown';
+import AdminDropDown from './AdminConfirm/AdminConfirm';
 import FakeNav from './FakeNav/FakeNav'
 import BackButton from './BackButton/BackButton';
 
 
 const BusinessSignup = (props) => {
-
     return (
     <React.Fragment>
         <FakeNav/>

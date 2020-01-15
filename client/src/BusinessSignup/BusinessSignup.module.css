@@ -107,14 +107,6 @@
 }
 
 @media(max-width: 390px) {
-    .title {
-        font-size: 26px;
-        top: 10px;
-    }
-    .home {
-        font-size: 20px;
-        top: 15px;
-    }
     #bSignupContainer {
         height: 110vh;
     }

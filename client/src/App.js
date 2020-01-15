@@ -70,7 +70,7 @@ class App extends React.Component {
           }
         />
 
-        <Route path="/registerBusiness" exact component={BusinessSignup} />
+  {!instructorToken && !adminToken && !token && <Route path="/registerBusiness" exact component={BusinessSignup} /> }
         {instructorToken && (
           <Route
             path={`/instructor/${instructorToken.instructor.id}/createeditprofile`}

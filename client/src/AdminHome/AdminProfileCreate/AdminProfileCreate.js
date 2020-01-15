@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./AdminProfileCreate.module.css";
 import { connect } from "react-redux";
-import AdminNav from "../../AdminNav/AdminNav";
 import axios from "axios";
 import ServicesForm from "./ServicesForm/ServicesForm";
 import BioForm from "./BioForm/BioForm";
