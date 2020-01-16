@@ -15,8 +15,9 @@ class Notifications extends React.Component {
     console.log(this.props);
     return (
       <React.Fragment>
-        <div onClick={this.props.hideNotifications} id={styles.backDrop}></div>
+        <div onClick={this.props.hideNotifications} id={styles.backDrop}>
         <div className={styles.notificationsContainer}>
+        <p style={{fontSize: '28px', fontFamily: 'Josefin Sans'}}>Notifications</p>
           <i
             class="far fa-window-close"
             onClick={this.props.hideNotifications}
@@ -28,6 +29,7 @@ class Notifications extends React.Component {
               right: "10px"
             }}
           ></i>
+          <div id={styles.notiSubContainer}>
           {this.props.admin && <AdminNotifications />}
           {this.props.instructor && (
             <InstructorNotifications
@@ -40,6 +42,8 @@ class Notifications extends React.Component {
               userNotifications={this.props.userNotifications}
             />
           )}
+        </div>
+        </div>
         </div>
       </React.Fragment>
     );

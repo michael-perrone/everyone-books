@@ -9,12 +9,11 @@ module.exports = function(req, res, next) {
   }
 
   try {
-    const decodedToken = jwt.verify(token, config.get("instructorSecret"));
+    const decodedToken = jwt.verify(token, config.get("employeeSecret"));
     req.instructor = decodedToken.instructor;
     req.clubName = decodedToken.clubName;
     next();
   } catch (error) {
-    const decodedToken = jwt.verify(token, config.get("instructorSecret"));
     res.status(401).json({ msg: "Also not authorized" });
   }
 };
