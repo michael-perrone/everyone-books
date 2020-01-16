@@ -46,7 +46,6 @@
 
 @media (max-width: 800px) {
   .notificationsContainer {
-    width: 80%;
-    left: 2%;
+    width: 90%;
   }
 }

@@ -25,6 +25,7 @@ const Schedule = props => {
       <div
         className={styles.scheduleContainer}
       >
+        <p style={{textAlign: 'center'}}>Schedule</p>
         <div
           style={{
             marginTop: "10px",
@@ -49,7 +50,7 @@ const Schedule = props => {
         </div>
         <div
           style={{
-            height: "90%",
+            height: "85%",
             width: "100%",
             backgroundColor: "rgb(248, 248, 248)",
             border: '1px solid black',
