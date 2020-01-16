@@ -17,3 +17,9 @@
       width: 88%;
     }
   }
+
+  @media(min-height: 620px) {
+    .scheduleContainer {
+      height: 560px;
+    }
+  }
