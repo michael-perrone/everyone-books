@@ -1,6 +1,6 @@
 #employeeHome {
     background-color: rgb(243, 243, 243);
-    height: 100vh;
+    height: 95vh;
     display: flex;
     justify-content: center;
 }
@@ -8,6 +8,6 @@
 
 @media(max-height: 580px) {
     #employeeHome {
-        height: 530px;
+        height: 580px;
     }
 }

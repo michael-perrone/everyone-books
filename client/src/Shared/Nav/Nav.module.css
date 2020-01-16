@@ -70,13 +70,15 @@
 }
 
 @media (max-width: 775px) {
+  .links {
+    margin-left: 20px;
+  }
   #title {
     display: none;
   }
   #secondContainer {
     width: 100%;
     right: 0;
-    left: 20px;
   }
   .notiNum {
     right: 50px;

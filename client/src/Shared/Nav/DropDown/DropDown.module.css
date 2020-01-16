@@ -6,9 +6,9 @@
     border: 2px solid gray;
     border-top: none;
     background-color: lavender;
-    z-index: 450;
+    z-index:122020;
     top: 35px;
-    left: -65px;
+    right: -32px;
     transform: scaleY(0);
     transform-origin: top;
     flex-direction: column;
@@ -33,7 +33,7 @@
 }
 @media (max-width: 775px) {
     .dropDownContainer {
-        right: 10px;
+        right: -17px;
         left: auto;
     }
 }
