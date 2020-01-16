@@ -12,15 +12,18 @@ import {
 } from "../../../actions/actions";
 
 // white
+// employee
+// .employee
+
 
 class EmployeeRegisterForm extends React.Component {
   constructor(props) {
     super(props);
-    this.registerInstructor = this.registerInstructor.bind(this);
-    this.getInstructorInput = this.getInstructorInput.bind(this);
+    this.registerEmployee = this.registerEmployee.bind(this);
+    this.getEmployeeInput = this.getEmployeeInput.bind(this);
 
     this.state = {
-      instructor: {
+      employee: {
         firstName: "",
         lastName: "",
         email: "",
@@ -51,10 +54,10 @@ class EmployeeRegisterForm extends React.Component {
     this.setState({ dirty: newObject });
   }
 
-  getInstructorInput(event) {
-    const newInstructorStateObject = { ...this.state.instructor };
-    newInstructorStateObject[event.target.name] = event.target.value;
-    this.setState({ instructor: newInstructorStateObject });
+  getEmployeeInput(event) {
+    const newEmployeeStateObject = { ...this.state.employee };
+    newEmployeeStateObject[event.target.name] = event.target.value;
+    this.setState({ employee: newEmployeeStateObject });
   }
 
   validateEmail = email => {
@@ -62,14 +65,14 @@ class EmployeeRegisterForm extends React.Component {
     return re.test(email);
   };
 
-  registerInstructor(event) {
+  registerEmployee(event) {
     event.preventDefault();
     axios
-      .post("/api/employeeSignup", this.state.instructor)
+      .post("/api/employeeSignup", this.state.employee)
       .then(response => {
         if (response.status === 200) {
-          this.props.instructorRegisterSuccess(response.data.token);
-          this.props.history.push(`/instructor/${this.props.instructor.id}`);
+          this.props.employeeRegisterSuccess(response.data.token);
+          this.props.history.push(`/employee/${this.props.employee.id}`);
         }
       })
       .catch(error => {
@@ -113,8 +116,8 @@ class EmployeeRegisterForm extends React.Component {
               </label>
               <input
                 onBlur={this.setDirty}
-                onChange={this.getInstructorInput}
-                value={this.state.instructor.firstName}
+                onChange={this.getEmployeeInput}
+                value={this.state.employee.firstName}
                 name="firstName"
                 placeholder="First Name"
                 id={otherStyles.input1}
@@ -122,7 +125,7 @@ class EmployeeRegisterForm extends React.Component {
                 type="text"
               />
               {this.state.dirty.firstName === true &&
-                this.state.instructor.firstName === "" && (
+                this.state.employee.firstName === "" && (
                   <Alert alertPhrase={"Field cannot be blank"} />
                 )}
             </div>
@@ -138,8 +141,8 @@ class EmployeeRegisterForm extends React.Component {
                   border: "2px solid white"
                 }}
                 onBlur={this.setDirty}
-                onChange={this.getInstructorInput}
-                value={this.state.instructor.lastName}
+                onChange={this.getEmployeeInput}
+                value={this.state.employee.lastName}
                 name="lastName"
                 placeholder="Last Name"
                 id={otherStyles.input1}
@@ -147,7 +150,7 @@ class EmployeeRegisterForm extends React.Component {
                 type="text"
               />
               {this.state.dirty.lastName === true &&
-                this.state.instructor.lastName === "" && (
+                this.state.employee.lastName === "" && (
                   <Alert alertPhrase={"Field cannot be blank"} />
                 )}
             </div>
@@ -162,15 +165,15 @@ class EmployeeRegisterForm extends React.Component {
               <input
                 
                 onBlur={this.setDirty}
-                onChange={this.getInstructorInput}
-                value={this.state.instructor.email}
+                onChange={this.getEmployeeInput}
+                value={this.state.employee.email}
                 name="email"
                 placeholder="Email Address"
                 id={otherStyles.input2}
                 className={otherStyles.inputs}
                 type="text"
               />
-              {this.validateEmail(this.state.instructor.email) === false &&
+              {this.validateEmail(this.state.employee.email) === false &&
                 this.state.dirty.email === true && (
                   <Alert alertPhrase={"Please enter a valid email"} />
                 )}
@@ -187,8 +190,8 @@ class EmployeeRegisterForm extends React.Component {
               </label>
               <input
                 onKeyDown={this.setDirty}
-                onChange={this.getInstructorInput}
-                value={this.state.instructor.createPassword}
+                onChange={this.getEmployeeInput}
+                value={this.state.employee.createPassword}
                 name="createPassword"
                 placeholder="Create Password"
                 id={otherStyles.ml4}
@@ -196,7 +199,7 @@ class EmployeeRegisterForm extends React.Component {
                 type="password"
               />
               {this.state.dirty.createPassword === true &&
-                this.state.instructor.createPassword.length < 7 && (
+                this.state.employee.createPassword.length < 7 && (
                   <Alert
                     alertPhrase={"Password must be eight characters long"}
                   />
@@ -211,8 +214,8 @@ class EmployeeRegisterForm extends React.Component {
               </label>
               <input
                 onKeyDown={this.setDirty}
-                onChange={this.getInstructorInput}
-                value={this.state.instructor.passwordConfirm}
+                onChange={this.getEmployeeInput}
+                value={this.state.employee.passwordConfirm}
                 name="passwordConfirm"
                 placeholder="Password Confirm"
                 id={otherStyles.ml8}
@@ -220,8 +223,8 @@ class EmployeeRegisterForm extends React.Component {
                 type="password"
               />
               {this.state.dirty.passwordConfirm === true &&
-                this.state.instructor.passwordConfirm !==
-                  this.state.instructor.createPassword && (
+                this.state.employee.passwordConfirm !==
+                  this.state.employee.createPassword && (
                   <Alert alertPhrase={"Passwords must be matching"} />
                 )}
             </div>
@@ -233,15 +236,15 @@ class EmployeeRegisterForm extends React.Component {
               </label>
               <input 
                 onKeyDown={this.setDirty}
-                onChange={this.getInstructorInput}
-                value={this.state.instructor.profession}
+                onChange={this.getEmployeeInput}
+                value={this.state.employee.profession}
                 name="profession"
                 placeholder="(Server, Waxer, Barber, etc)"
                 id={otherStyles.ml8}
                 className={otherStyles.inputs}
               />
               {this.state.dirty.profession === true &&
-                this.state.instructor.profession === "" && (
+                this.state.employee.profession === "" && (
                   <Alert alertPhrase={"This field is required"} />
                 )}
             </div>
@@ -249,13 +252,13 @@ class EmployeeRegisterForm extends React.Component {
             <div style={{ display: "flex", justifyContent: "space-around" }}>
               <p
                 id={styles.headBack}
-                onClick={this.props.instructorRegisterHandler}
+                onClick={this.props.employeeRegisterHandler}
               >
                 Go back to user signup form
               </p>
               <button
                 style={{backgroundColor: "transparent" }}
-                onClick={this.registerInstructor}
+                onClick={this.registerEmployee}
                 id={otherStyles.signUpButton}
               >
                 Sign Up
@@ -270,19 +273,19 @@ class EmployeeRegisterForm extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    instructor: state.authReducer.instructor,
+    employee: state.authReducer.employee,
     employeeRegister: state.booleanReducers.employeeRegister
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    instructorRegisterSuccess: instructorToken =>
+    employeeRegisterSuccess: employeeToken =>
       dispatch({
         type: EMPLOYEE_REGISTER_SUCCESS,
-        payload: { instructorToken }
+        payload: { employeeToken }
       }),
-    instructorRegisterHandler: () =>
+    employeeRegisterHandler: () =>
       dispatch({ type: EMPLOYEE_WANTS_TO_REGISTER })
   };
 };

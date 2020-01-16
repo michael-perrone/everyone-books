@@ -1,9 +1,8 @@
 import React from "react";
 import styles from "../Nav.module.css";
-import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import AdminSecondContainer from "./AdminSecondContainer/AdminSecondContainer";
-import InstructorSecondContainer from "./InstructorSecondContainer/InstructorSecondContainer";
+import EmployeeSecondContainer from "./EmployeeSecondContainer/EmployeeSecondContainer";
 import UserSecondContainer from "./UserSecondContainer/UserSecondContainer";
 import { SHOW_DROP_DOWN } from "../../../actions/actions";
 
@@ -11,7 +10,7 @@ const SecondContainer = props => {
   return (
     <div id={styles.secondContainerActually}>
       {props.admin && <AdminSecondContainer />}
-      {props.instructor && <InstructorSecondContainer />}
+      {props.employee && <EmployeeSecondContainer />}
       {props.user && <UserSecondContainer />}
       <i
         id={props.instructor ? styles.instructorBars : styles.bars}
@@ -28,7 +27,7 @@ const SecondContainer = props => {
 const mapStateToProps = state => {
   return {
     admin: state.authReducer.admin,
-    instructor: state.authReducer.instructor,
+    employee: state.authReducer.employee,
     user: state.authReducer.user,
     showDropDownState: state.booleanReducers.showDropDown
   };

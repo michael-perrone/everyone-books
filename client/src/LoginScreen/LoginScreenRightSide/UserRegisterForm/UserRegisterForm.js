@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./UserRegisterForm.module.css";
 import axios from "axios";
 import { connect } from "react-redux";
-import InstructorSignup from "./EmployeeSignup/EmployeeSignup";
+import EmployeeSignup from "./EmployeeSignup/EmployeeSignup";
 import { withRouter } from "react-router-dom";
 import { USER_REGISTER_SUCCESS } from "../../../actions/actions";
 import Alert from "../../../Alert/Alert";
@@ -251,7 +251,7 @@ class UserRegisterForm extends React.Component {
             </div>
           </form>
           <div id={styles.instructorSignUpAndRegSignUp}>
-            <InstructorSignup />
+            <EmployeeSignup />
             <button onClick={this.registerUser} id={styles.signUpButton}>
               Sign Up
             </button>

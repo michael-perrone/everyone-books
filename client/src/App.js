@@ -7,14 +7,10 @@ import TennisClubsList from "./TennisClubsList/TennisClubsList";
 import UserHome from "./UserHome/UserHome";
 import AdminHome from "./AdminHome/AdminHome";
 import decoder from "jwt-decode";
-import InstructorHome from "./InstructorHome/InstructorHome";
-import InstructorProfileCreate from "./InstructorHome/InstructorProfileCreate/InstructorProfileCreate";
+import EmployeeHome from "./EmployeeHome/EmployeeHome";
 import AdminProfileCreate from "./AdminHome/AdminProfileCreate/AdminProfileCreate";
 import { connect } from "react-redux";
-import Notifications from "./Notifications/Notifications";
 import NeedToLoginPage from "./NeedToLoginPage/NeedToLoginPage";
-import InstructorProfile from "./InstructorHome/InstructorProfile/InstructorProfile";
-import Values from "./Values/Values";
 import Nav from './Shared/Nav/Nav';
 
 class App extends React.Component {
@@ -27,13 +23,13 @@ class App extends React.Component {
 
   render() {
     let token = false;
-    let instructorToken = false;
+    let employeeToken = false;
     let adminToken = false;
 
     if (localStorage.getItem("token")) {
       token = decoder(localStorage.getItem("token"));
-    } else if (localStorage.getItem("instructorToken")) {
-      instructorToken = decoder(localStorage.getItem("instructorToken"));
+    } else if (localStorage.getItem("employeeToken")) {
+      employeeToken = decoder(localStorage.getItem("employeeToken"));
     } else if (localStorage.getItem("adminToken")) {
       adminToken = decoder(localStorage.getItem("adminToken"));
     }
@@ -49,11 +45,10 @@ class App extends React.Component {
         .split(" ")
         .join("");
     }
-    console.log(instructorClubName, clubName)
 
     return (
       <React.Fragment>
-      {(token || instructorToken || adminToken) && <Nav/>}
+      {(token || employeeToken || adminToken) && <Nav/>}
       <Switch>
         <Route
           path="/clubs"
@@ -70,14 +65,8 @@ class App extends React.Component {
           }
         />
 
-  {!instructorToken && !adminToken && !token && <Route path="/registerBusiness" exact component={BusinessSignup} /> }
-        {instructorToken && (
-          <Route
-            path={`/instructor/${instructorToken.instructor.id}/createeditprofile`}
-            exact
-            component={InstructorProfileCreate}
-          />
-        )}
+  {!employeeToken && !adminToken && !token && <Route path="/registerBusiness" exact component={BusinessSignup} /> }
+
         {adminToken && (
           <Route
             path={`/admin/${adminToken.admin.id}/createeditprofile`}
@@ -88,11 +77,11 @@ class App extends React.Component {
         {token && (
           <Route path={`/user/${token.user.id}`} exact component={UserHome} />
         )}
-        {instructorToken && (
+        {employeeToken && (
           <Route
-            path={`/instructor/${instructorToken.instructor.id}`}
+            path={`/employee/${employeeToken.employee.id}`}
             exact
-            component={InstructorHome}
+            component={EmployeeHome}
           />
         )}
 
@@ -104,17 +93,17 @@ class App extends React.Component {
           />
         )}
         <Route
-          path="/instructor/:instructorId"
+          path="/employee/:employeeId"
           exact
-          component={InstructorHome}
+          component={EmployeeHome}
         />
         <Route
           exact
           path="/"
           render={() => {
-            if (instructorToken) {
+            if (employeeToken) {
               return (
-                <Redirect to={`/instructor/${instructorToken.instructor.id}`} />
+                <Redirect to={`/employee/${employeeToken.employee.id}`} />
               );
             } else if (token) {
               return <Redirect to={`/user/${token.user.id}`} />;
@@ -126,12 +115,12 @@ class App extends React.Component {
           }}
         />
 
-        {instructorToken.instructor && (
+        {employeeToken.employee && (
           <Redirect
             from="*"
             to={
-              localStorage.getItem("instructorToken") !== null
-                ? `/instructor/${instructorToken.instructor.id}`
+              localStorage.getItem("employeeToken") !== null
+                ? `/employee/${employeeToken.employee.id}`
                 : `/`
             }
           />
@@ -165,7 +154,7 @@ class App extends React.Component {
 const mapStateToProps = state => {
   return {
     user: state.authReducer.user,
-    instructor: state.authReducer.instructor,
+    employee: state.authReducer.employee,
     admin: state.authReducer.admin
   };
 };

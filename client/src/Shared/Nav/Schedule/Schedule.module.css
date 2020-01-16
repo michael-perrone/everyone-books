@@ -1,0 +1,13 @@
+.scheduleContainer {
+    position: relative;
+    top: 20px;
+    width: 450px;
+    height: 500px;
+    padding: 20px 10px 10px 20px;
+    z-index: 999;
+    background-color: rgb(238, 196, 255);
+    border: 1px solid black;
+    overflow: auto;
+    font-family: sans-serif;
+    font-size: 20px;
+  }

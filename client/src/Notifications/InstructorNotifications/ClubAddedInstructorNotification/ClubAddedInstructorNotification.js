@@ -4,7 +4,7 @@ import Axios from "axios";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import OtherAlert from "../../../OtherAlerts/OtherAlerts";
-import { INSTRUCTOR_LOGIN_SUCCESS } from "../../../actions/actions";
+import { EMPLOYEE_LOGIN_SUCCESS } from "../../../actions/actions";
 
 const ClubAddedInstructorNotification = props => {
   const [clubAccepted, setClubAccepted] = useState(false);
@@ -146,7 +146,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     instructorTokenChange: instructorToken =>
-      dispatch({ type: INSTRUCTOR_LOGIN_SUCCESS, payload: { instructorToken } })
+      dispatch({ type: EMPLOYEE_LOGIN_SUCCESS, payload: { instructorToken } })
   };
 };
 

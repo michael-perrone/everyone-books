@@ -4,8 +4,8 @@ import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   SHOW_SCHEDULE,
-  INSTRUCTOR_LOGOUT,
-  SHOW_NOTIFICATIONS
+  SHOW_NOTIFICATIONS,
+  ADMIN_LOGOUT
 } from "../../../../actions/actions";
 import Schedule from "../../Schedule/Schedule";
 import axios from "axios";
@@ -43,7 +43,7 @@ const AdminSecondContainer = props => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    instructorLogout: () => dispatch({ type: INSTRUCTOR_LOGOUT }),
+    adminLogout: () => dispatch({ type: ADMIN_LOGOUT }),
     showSchedule: () => dispatch({ type: SHOW_SCHEDULE }),
     showNotifications: () => dispatch({ type: SHOW_NOTIFICATIONS })
   };
@@ -53,7 +53,6 @@ const mapStateToProps = state => {
   return {
     showDropDownState: state.booleanReducers.showDropDown,
     showScheduleState: state.booleanReducers.showSchedule,
-    instructorToken: state.authReducer.instructorToken,
     showNotificationsState: state.booleanReducers.showNotifications
   };
 };

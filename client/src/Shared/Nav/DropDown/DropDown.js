@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./DropDown.module.css";
 import { connect } from "react-redux";
 import UserDropDown from "./UserDropDown/UserDropDown";
-import InstructorDropDown from "./InstructorDropDown/InstructorDropDown";
+import EmployeeDropDown from "./EmployeeDropDown/EmployeeDropDown";
 import AdminDropDown from "./AdminDropDown/AdminDropDown";
 
 const DropDown = props => {
@@ -14,8 +14,8 @@ const DropDown = props => {
     >
       {props.user && <UserDropDown notiNum={props.notiNum} user={props.user} />}
       {props.admin && <AdminDropDown notiNum={props.notiNum} admin={props.admin}/>}
-      {props.instructor && (
-        <InstructorDropDown notiNum={props.notiNum} instructorProfile={props.instructorProfile} />
+      {props.employee && (
+        <EmployeeDropDown notiNum={props.notiNum} employeeProfile={props.employeeProfile} />
       )}
     </div>
   );
@@ -24,7 +24,7 @@ const DropDown = props => {
 const mapStateToProps = state => {
   return {
     admin: state.authReducer.admin,
-    instructor: state.authReducer.instructor,
+    employee: state.authReducer.employee,
     user: state.authReducer.user,
     showDropDown: state.booleanReducers.showDropDown
   };

@@ -6,10 +6,10 @@ import { EMPLOYEE_WANTS_TO_REGISTER } from "../../../../actions/actions";
 class EmployeeSignup extends React.Component {
   render() {
     return (
-      <div id={styles.instructorSignupContainer}>
+      <div id={styles.employeeSignupContainer}>
         <p
           onClick={this.props.employeeRegisterHandler}
-          id={styles.instructorSignup}
+          id={styles.employeeSignup}
         >
           {" "}
           OR register as employee here
@@ -18,6 +18,7 @@ class EmployeeSignup extends React.Component {
     );
   }
 }
+
 
 const mapDispatchToProps = function(dispatch) {
   return {

@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import styles from "../../../Notifications/Notifications.module.css";
+import styles from "./Schedule.module.css";
 import { HIDE_SCHEDULE } from "../../../actions/actions";
 import axios from "axios";
 
@@ -22,27 +22,9 @@ const Schedule = props => {
 
   return (
     <React.Fragment>
-      <div onClick={props.hideSchedule} id={styles.backDrop}></div>
       <div
-        style={{
-          backgroundColor: "rgba(167, 245, 167)",
-          top: "25px",
-          height: "550px",
-          border: "none"
-        }}
-        className={styles.notificationsContainer}
+        className={styles.scheduleContainer}
       >
-       <i
-            class="far fa-window-close"
-            onClick={props.hideSchedule}
-            style={{
-              cursor: "pointer",
-              position: "absolute",
-              top: "4px",
-              fontSize: "28px",
-              right: "10px"
-            }}
-          ></i>
         <div
           style={{
             marginTop: "10px",
@@ -67,10 +49,10 @@ const Schedule = props => {
         </div>
         <div
           style={{
-            height: "89%",
+            height: "90%",
             width: "100%",
             backgroundColor: "rgb(248, 248, 248)",
-
+            border: '1px solid black',
             marginTop: "10px"
           }}
         >

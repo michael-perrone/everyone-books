@@ -4,7 +4,7 @@ import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   SHOW_SCHEDULE,
-  INSTRUCTOR_LOGOUT,
+  EMPLOYEE_LOGOUT,
   SHOW_NOTIFICATIONS
 } from "../../../../actions/actions";
 import Schedule from "../../Schedule/Schedule";
@@ -13,18 +13,19 @@ import Notifications from "../../../../Notifications/Notifications";
 import DropDown from "../../DropDown/DropDown";
 import NotificationNumber from "../NotificationNumber/NotificationNumber";
 
-const InstructorSecondContainer = props => {
-  const [instructorProfile, setInstructorProfile] = React.useState(undefined);
+
+const EmployeeSecondContainer = props => {
+  const [employeeProfile, setEmployeeProfile] = React.useState(undefined);
   const [notifications, setNotifications] = React.useState([]);
   const [newNotifications, setNewNotificationsState] = React.useState([]);
  
-  let newVar = "";
-  if (instructorProfile && instructorProfile.instructor && instructorProfile.instructor.tennisClub) {
-    newVar = `/clubs/${instructorProfile.instructor.tennisClub
+ /*  let newVar = "";
+  if (employeeProfile && employeeProfile.employee && employeeProfile.employee.tennisClub) {
+    newVar = `/clubs/${employeeProfile.employee.tennisClub
       .split(" ")
       .reduce((accum, element) => accum + element)}`;
   }
-
+ */
   function setNewNotifications(notificationsFromUpdate) {
     return () => {
       setNotifications(notificationsFromUpdate);
@@ -34,17 +35,17 @@ const InstructorSecondContainer = props => {
 
   React.useEffect(() => {
     axios
-      .get("/api/instructorProfile/myprofile", {
+      .get("/api/employeeProfile/myprofile", {
         headers: {
-          "x-auth-token": props.instructorToken
+          "x-auth-token": props.employeeToken
         }
       })
       .then(response => {
-        setInstructorProfile(response.data.instructorProfile);
+        setEmployeeProfile(response.data.employeeProfile);
       });
     axios
-      .get("/api/notifications/instructornotifications", {
-        headers: { "x-auth-token": props.instructorToken }
+      .get("/api/notifications/Employeenotifications", {
+        headers: { "x-auth-token": props.employeeToken }
       })
       .then(response => {
         let newNotifications = [];
@@ -62,33 +63,22 @@ const InstructorSecondContainer = props => {
 
   return (
     <React.Fragment>
-      <div id={styles.secondContainer}>
-        <p
-          onClick={props.showSchedule}
-          style={{ cursor: "pointer", marginRight: "30px" }}
-          className={styles.links}
-        >
-          Schedule
-        </p>
-        {props.newVar !== "" &&
-          instructorProfile &&
-          instructorProfile.instructor.clubAccepted === true && (
+      <div id={styles.secondContainer}>        
             <Link
               style={{ marginRight: "30px" }}
               className={styles.links}
-              to={newVar}
+              to={"/business"}
             >
-              My Club
+              Business
             </Link>
-          )}
           {newNotifications.length > 0 && !props.showDropDownState && <NotificationNumber num={newNotifications.length}/>}
-        <DropDown notiNum={newNotifications.length} instructorProfile={instructorProfile} />
+        <DropDown notiNum={newNotifications.length} employeeProfile={employeeProfile} />
       </div>
-      {props.showScheduleState && <Schedule instructor={props} />}
+      {props.showScheduleState && <Schedule employee={props} />}
       {props.showNotificationsState && (
         <Notifications
           setNew={setNewNotifications}
-          instructorNotifications={notifications}
+          employeeNotifications={notifications}
         />
       )}
     </React.Fragment>
@@ -97,8 +87,7 @@ const InstructorSecondContainer = props => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    instructorLogout: () => dispatch({ type: INSTRUCTOR_LOGOUT }),
-    showSchedule: () => dispatch({ type: SHOW_SCHEDULE }),
+    employeeLogout: () => dispatch({ type: EMPLOYEE_LOGOUT }),
     showNotifications: () => dispatch({ type: SHOW_NOTIFICATIONS })
   };
 };
@@ -106,12 +95,11 @@ const mapDispatchToProps = dispatch => {
 const mapStateToProps = state => {
   return {
     showDropDownState: state.booleanReducers.showDropDown,
-    showScheduleState: state.booleanReducers.showSchedule,
-    instructorToken: state.authReducer.instructorToken,
+    EmployeeToken: state.authReducer.employeeToken,
     showNotificationsState: state.booleanReducers.showNotifications
   };
 };
 
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(InstructorSecondContainer)
+  connect(mapStateToProps, mapDispatchToProps)(EmployeeSecondContainer)
 );

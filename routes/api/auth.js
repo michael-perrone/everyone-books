@@ -1,12 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const authUser = require("../../middleware/authUser");
-const authInstructor = require("../../middleware/authInstructor");
 const User = require("../../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const Instructor = require("../../models/Instructor");
-const { check, validationResult } = require("express-validator");
+const Employee = require("../../models/Employee");
 const config = require("config");
 const Admin = require("../../models/Admin");
 const TennisClub = require("../../models/TennisClub");
@@ -14,18 +11,7 @@ const TennisClub = require("../../models/TennisClub");
 //@route GET api/auth
 // desc test route
 // access public
-router.get("/user", authUser, async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id).select("-password");
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("Didnt Work");
-  }
-});
 
-router.get("/instructor", authInstructor, (req, res) => {
-  res.send("auth route");
-});
 
 router.post("/login", async (req, res) => {
   let adminLoggingIn = await Admin.findOne({ email: req.body.email });
@@ -97,17 +83,17 @@ router.post("/login", async (req, res) => {
     }
   }
   if (!userLoggingIn && !adminLoggingIn) {
-    let instructorLoggingIn = await Instructor.findOne({
+    let employeeLoggingIn = await Employee.findOne({
       email: req.body.email
     });
-    if (!instructorLoggingIn) {
+    if (!employeeLoggingIn) {
       res.status(400).json({
         error: "Email/Password Combination not recognized"
       });
     } else {
       const isPasswordMatching = await bcrypt.compare(
         req.body.password,
-        instructorLoggingIn.password
+        employeeLoggingIn.password
       );
 
       if (!isPasswordMatching) {
@@ -115,13 +101,11 @@ router.post("/login", async (req, res) => {
           .status(400)
           .json({ error: "Email/Password Combination not recognized" });
       }
-      console.log(instructorLoggingIn)
       const payload = {
-        instructor: {
-          instructorName: `${instructorLoggingIn.firstName} ${instructorLoggingIn.lastName}`,
-          isInstructor: true,
-          id: instructorLoggingIn.id,
-          clubName: instructorLoggingIn.tennisClub
+        employee: {
+          employeeName: `${employeeLoggingIn.firstName} ${employeeLoggingIn.lastName}`,
+          id: employeeLoggingIn.id,
+          // maybe add business here later
         }
       };
       jwt.sign(

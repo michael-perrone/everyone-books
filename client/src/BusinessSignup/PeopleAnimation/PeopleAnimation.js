@@ -4,7 +4,7 @@ import img from './d.png'
 const PeopleAnimation = (props) => {
     return (
         <div className={otherstyles.peopleContainer}>
-            <img style={{height: '400px', width: '400px'}} src={img}/> 
+            <img style={{position: 'relative', top: '100px'}} src={img}/> 
         </div>
     )
 }

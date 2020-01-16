@@ -3,8 +3,8 @@ import {
   USER_LOGOUT,
   ADMIN_LOGIN_SUCCESS,
   ADMIN_LOGOUT,
-  INSTRUCTOR_LOGIN_SUCCESS,
-  INSTRUCTOR_LOGOUT,
+  EMPLOYEE_LOGIN_SUCCESS,
+  EMPLOYEE_LOGOUT,
   USER_REGISTER_SUCCESS,
   ADMIN_REGISTER_SUCCESS,
   EMPLOYEE_REGISTER_SUCCESS,
@@ -15,41 +15,28 @@ import decoder from "jwt-decode";
 const initalState = {
   instructorProfile: {},
   token: localStorage.getItem("token"),
-  instructorToken: localStorage.getItem("instructorToken"),
+  employeeToken: localStorage.getItem("employeeToken"),
   adminToken: localStorage.getItem("adminToken"),
   isUserAuthenticated: localStorage.getItem("token") ? true : false,
-  isAdminAuthenticated: localStorage.getItem("adminToken") ? true : false,
-  isInstructorAuthenticated: localStorage.getItem("instructorToken")
-    ? true
-    : false,
-  loading: false,
-  isAuthenticated:
-    localStorage.getItem("token") ||
-    localStorage.getItem("instructorToken") ||
-    localStorage.getItem("adminToken")
-      ? true
-      : false,
   user: localStorage.getItem("token")
     ? decoder(localStorage.getItem("token"))
     : null,
   admin: localStorage.getItem("adminToken")
     ? decoder(localStorage.getItem("adminToken"))
     : null,
-  instructor: localStorage.getItem("instructorToken")
-    ? decoder(localStorage.getItem("instructorToken"))
+  employee: localStorage.getItem("employeeToken")
+    ? decoder(localStorage.getItem("employeeToken"))
     : null
 };
 
 export default function(state = initalState, action) {
   switch (action.type) {
-    case INSTRUCTOR_LOGIN_SUCCESS:
-      localStorage.setItem("instructorToken", action.payload.instructorToken);
+    case EMPLOYEE_LOGIN_SUCCESS:
+      localStorage.setItem("employeeToken", action.payload.employeeToken);
       return {
         ...state,
-        isAuthenticated: true,
-        isInstructorAuthenticated: true,
-        instructorToken: localStorage.getItem("instructorToken"),
-        instructor: decoder(localStorage.getItem("instructorToken"))
+        employeeToken: localStorage.getItem("employeeToken"),
+        employee: decoder(localStorage.getItem("employeeToken"))
       };
     case USER_LOGIN_SUCCESS:
       localStorage.setItem("token", action.payload.token);
@@ -70,11 +57,9 @@ export default function(state = initalState, action) {
         adminToken: localStorage.getItem("adminToken")
       };
     case EMPLOYEE_REGISTER_SUCCESS:
-      localStorage.setItem("employeeToken", action.payload.instructorToken);
+      localStorage.setItem("employeeToken", action.payload.employeeToken);
       return {
         ...state,
-        isAuthenticated: true,
-        isInstructorAuthenticated: true,
         employeeToken: localStorage.getItem("employeeToken"),
         employee: decoder(localStorage.getItem("employeeToken"))
       };
@@ -119,15 +104,13 @@ export default function(state = initalState, action) {
         admin: null,
         adminToken: null
       };
-    case INSTRUCTOR_LOGOUT:
-      localStorage.removeItem("instructorToken");
+    case EMPLOYEE_LOGOUT:
+      localStorage.removeItem("employeeToken");
       return {
         ...state,
         instructorProfile: {},
-        isAuthenticated: false,
-        isInstructorAuthenticated: false,
-        instructor: null,
-        instructorToken: null
+        employee: null,
+        employeeToken: null
       };
 
     /*    case REGISTER:

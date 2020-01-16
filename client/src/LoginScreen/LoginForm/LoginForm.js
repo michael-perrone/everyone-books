@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import {
   USER_LOGIN_SUCCESS,
   ADMIN_LOGIN_SUCCESS,
-  INSTRUCTOR_LOGIN_SUCCESS
+  EMPLOYEE_LOGIN_SUCCESS
 } from "../../actions/actions";
 
 class LoginForm extends React.Component {
@@ -42,10 +42,10 @@ class LoginForm extends React.Component {
         }
         const token = decoder(response.data.token);
 
-        if (token.instructor) {
-          this.props.instructorLoginSuccess(response.data.token);
+        if (token.employee) {
+          this.props.employeeLoginSuccess(response.data.token);
           this.props.history.push(
-            `/instructor/${this.props.instructor.instructor.id}`
+            `/employee/${this.props.employee.employee.id}`
           );
         } else if (token.user) {
           this.props.userLoginSuccess(response.data.token);
@@ -147,10 +147,10 @@ const mapDispatchToProps = dispatch => {
   return {
     userLoginSuccess: token =>
       dispatch({ type: USER_LOGIN_SUCCESS, payload: { token } }),
-    instructorLoginSuccess: instructorToken =>
+    employeeLoginSuccess: employeeToken =>
       dispatch({
-        type: INSTRUCTOR_LOGIN_SUCCESS,
-        payload: { instructorToken }
+        type: EMPLOYEE_LOGIN_SUCCESS,
+        payload: { employeeToken }
       }),
     adminLoginSuccess: adminToken =>
       dispatch({ type: ADMIN_LOGIN_SUCCESS, payload: { adminToken } })

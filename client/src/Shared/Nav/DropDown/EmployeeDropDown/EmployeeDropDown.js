@@ -1,24 +1,24 @@
 import React from 'react';
 import DropDownLink from '../DropDownLink/DropDownLink';
-import {SHOW_NOTIFICATIONS, INSTRUCTOR_LOGOUT} from '../../../../actions/actions'
+import {SHOW_NOTIFICATIONS, EMPLOYEE_LOGOUT} from '../../../../actions/actions'
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 
-const InstructorDropDown = (props) => {
+const EmployeeDropDown = (props) => {
   function editProfile() {
-    props.history.push(`/instructor/${props.instructorProfile.instructor._id}/createeditprofile`)
+    props.history.push(`/employee/${props.employeeProfile.employee._id}/createeditprofile`)
   }
 
   function goHome() {
-    props.history.push(`/instructor/${props.instructorProfile.instructor._id}`)
+    props.history.push(`/employee/${props.employeeProfile.employee._id}`)
   }
 
   function goToSettings() {
-    props.history.push(`/instructor/${props.instructorProfile.instructor._id}/settings`)
+    props.history.push(`/employee/${props.employeeProfile.employee._id}/settings`)
   }
 
-  function instructorLogout() {
-    props.logoutInstructor()
+  function employeeLogout() {
+    props.logoutEmployee()
     props.history.push('/')
   }
 
@@ -36,7 +36,7 @@ const InstructorDropDown = (props) => {
           <DropDownLink notiNum={props.notiNum} clickProp={props.showNotifications}>
             Notifications
           </DropDownLink>
-          <DropDownLink clickProp={instructorLogout}>
+          <DropDownLink clickProp={employeeLogout}>
             Logout
           </DropDownLink>
           </React.Fragment>
@@ -46,11 +46,11 @@ const InstructorDropDown = (props) => {
 const mapDispatchToProps = dispatch => {
   return {
     showNotifications: () => dispatch({type: SHOW_NOTIFICATIONS}),
-    logoutInstructor: () => dispatch({type: INSTRUCTOR_LOGOUT})
+    logoutEmployee: () => dispatch({type: EMPLOYEE_LOGOUT})
   }
 }
 
-export default withRouter(connect(null, mapDispatchToProps)(InstructorDropDown));
+export default withRouter(connect(null, mapDispatchToProps)(EmployeeDropDown));
 
 
 /*
