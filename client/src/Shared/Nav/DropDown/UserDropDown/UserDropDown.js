@@ -26,7 +26,6 @@ const UserDropDown = props => {
       <DropDownLink clickProp={props.showNotificationsFunction}>
         Notifications
       </DropDownLink>
-      <DropDownLink clickProps={"dwd"}>Booking History</DropDownLink>
       <DropDownLink clickProp={userLogoutFunction}>Logout</DropDownLink>
     </React.Fragment>
   );

@@ -15,7 +15,7 @@ const DropDown = props => {
       {props.user && <UserDropDown notiNum={props.notiNum} user={props.user} />}
       {props.admin && <AdminDropDown notiNum={props.notiNum} admin={props.admin}/>}
       {props.employee && (
-        <EmployeeDropDown notiNum={props.notiNum} employeeProfile={props.employeeProfile} />
+        <EmployeeDropDown notiNum={props.notiNum} employeeProfile={props.employee} />
       )}
     </div>
   );

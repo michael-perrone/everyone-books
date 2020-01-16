@@ -6,15 +6,15 @@ import {withRouter} from 'react-router-dom';
 
 const EmployeeDropDown = (props) => {
   function editProfile() {
-    props.history.push(`/employee/${props.employeeProfile.employee._id}/createeditprofile`)
+    props.history.push(`/employee/${props.employeeProfile.employee.id}/createeditprofile`)
   }
 
   function goHome() {
-    props.history.push(`/employee/${props.employeeProfile.employee._id}`)
+    props.history.push(`/employee/${props.employeeProfile.employee.id}`)
   }
 
   function goToSettings() {
-    props.history.push(`/employee/${props.employeeProfile.employee._id}/settings`)
+    props.history.push(`/employee/${props.employeeProfile.employee.id}/settings`)
   }
 
   function employeeLogout() {
@@ -29,9 +29,6 @@ const EmployeeDropDown = (props) => {
           </DropDownLink>
           <DropDownLink clickProps={goToSettings}>
             Settings
-          </DropDownLink>
-          <DropDownLink clickProp={editProfile}>
-            Edit Profile
           </DropDownLink>
           <DropDownLink notiNum={props.notiNum} clickProp={props.showNotifications}>
             Notifications

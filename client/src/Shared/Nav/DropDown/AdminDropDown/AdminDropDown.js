@@ -27,16 +27,13 @@ const AdminDropDown = (props) => {
     return (
         <React.Fragment>
           <DropDownLink clickProps={goToFinancials}>
-            Financials 
+            Analytics
           </DropDownLink>
           <DropDownLink clickProps={goToSettings}>
             Settings
           </DropDownLink>
           <DropDownLink clickProp={editProfile}>
             Edit Business
-          </DropDownLink>
-          <DropDownLink clickProp={props.showNotifications}>
-            Notifications
           </DropDownLink>
           <DropDownLink clickProp={adminLogout}>
             Logout
