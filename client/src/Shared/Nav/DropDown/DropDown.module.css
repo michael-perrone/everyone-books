@@ -38,8 +38,3 @@
     }
 }
 
-@media(max-width:540px) {
-    .dropDownContainer{ 
-        width: 190px;
-    }
-}

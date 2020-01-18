@@ -21,13 +21,6 @@ const AdminSecondContainer = props => {
             >
             Schedule
             </p>
-            <Link
-              style={{ marginRight: "30px" }}
-              className={styles.links}
-              to={'/dwdwd'}
-            >
-              Home
-            </Link> 
         <DropDown/>
       </div>
       {props.showScheduleState && <Schedule />}

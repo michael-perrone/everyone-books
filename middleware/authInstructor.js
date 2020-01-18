@@ -13,6 +13,7 @@ module.exports = function(req, res, next) {
     req.employee = decodedToken.employee;
     next();
   } catch (error) {
+    console.log(error)
     res.status(401).json({ msg: "Also not authorized" });
   }
 };

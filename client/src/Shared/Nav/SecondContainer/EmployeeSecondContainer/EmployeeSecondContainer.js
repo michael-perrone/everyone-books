@@ -35,16 +35,7 @@ const EmployeeSecondContainer = props => {
 
   React.useEffect(() => {
     axios
-      .get("/api/employeeProfile/myprofile", {
-        headers: {
-          "x-auth-token": props.employeeToken
-        }
-      })
-      .then(response => {
-        setEmployeeProfile(response.data.employeeProfile);
-      });
-    axios
-      .get("/api/notifications/Employeenotifications", {
+      .get("/api/notifications/employeenotifications", {
         headers: { "x-auth-token": props.employeeToken }
       })
       .then(response => {
@@ -95,7 +86,7 @@ const mapDispatchToProps = dispatch => {
 const mapStateToProps = state => {
   return {
     showDropDownState: state.booleanReducers.showDropDown,
-    EmployeeToken: state.authReducer.employeeToken,
+    employeeToken: state.authReducer.employeeToken,
     showNotificationsState: state.booleanReducers.showNotifications
   };
 };

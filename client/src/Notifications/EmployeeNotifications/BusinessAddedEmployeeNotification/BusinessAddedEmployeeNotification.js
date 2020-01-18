@@ -6,11 +6,11 @@ import { withRouter } from "react-router-dom";
 import OtherAlert from "../../../OtherAlerts/OtherAlerts";
 import { EMPLOYEE_LOGIN_SUCCESS } from "../../../actions/actions";
 
-const ClubAddedInstructorNotification = props => {
-  const [clubAccepted, setClubAccepted] = useState(false);
-  const [clubNameState, setClubNameState] = useState("");
-  function getClubName() {
-    const clubNameArray = [];
+const BusinessAddedEmployeeNotification = props => {
+  const [businessAccepted, setBusinessAccepted] = useState(false);
+  const [businessNameState, setBusinessNameState] = useState("");
+  function getBusinessName() {
+    const businessNameArray = [];
     let newArray = props.notification.notificationMessage.split("");
     let a;
     let b;
@@ -41,33 +41,30 @@ const ClubAddedInstructorNotification = props => {
 
     for (let z = c; z < d; z++) {
       c = z;
-      clubNameArray.push(newArray[z]);
+      businessNameArray.push(newArray[z]);
     }
-    clubNameArray.shift();
-    let clubName = clubNameArray.join("");
-    setClubNameState(clubName);
+    businessNameArray.shift();
+    let businessName = businessNameArray.join("");
+    setBusinessNameState(businessName);
   }
 
   function accept() {
-    getClubName();
-    console.log(clubNameState);
+    getBusinessName();
     const objectToSend = {
-      clubId: props.notification.notificationFromTennisClub,
-      clubName: clubNameState,
-      instructorId: props.instructor.instructor.id,
+      businessId: props.notification.notificationFromBusiness,
+      businessName: businessNameState,
+      employeeId: props.employee.employee.id,
       notificationId: props.notification._id,
-      instructorName: props.instructor.instructor.instructorName
+      employeeName: props.employee.employee.employeeName
     };
-    setClubAccepted(true);
-    Axios.post("/api/notifications/instructorclickedyes", objectToSend).then(
+    setBusinessAccepted(true);
+    Axios.post("/api/notifications/employeeclickedyes", objectToSend).then(
       response => {
-        console.log(response);
-        console.log(response.data.token);
         if ((response.status = 200)) {
           props.setNew(response.data.newNotifications)();
         }
         if (response.data.token) {
-          props.instructorTokenChange(response.data.token);
+         // CHECK ON THIS props.instructorTokenChange(response.data.token);
         }
       }
     );
@@ -86,7 +83,7 @@ const ClubAddedInstructorNotification = props => {
       >
         {props.notification.notificationMessage}
       </p>
-      {!props.notification.answer && !clubAccepted && (
+      {!props.notification.answer && !businessAccepted && (
         <div
           style={{
             width: "120px",
@@ -99,7 +96,7 @@ const ClubAddedInstructorNotification = props => {
           <button onClick={deny}>Deny</button>
         </div>
       )}
-      {(props.notification.answer === "Accepted" || clubAccepted) && (
+      {(props.notification.answer === "Accepted" || businessAccepted) && (
         <div
           style={{
             display: "flex",
@@ -129,7 +126,7 @@ const ClubAddedInstructorNotification = props => {
         alertType={clubAccepted ? "success" : "no-success"}
         alertMessage={
           clubAccepted === true
-            ? `You have joined ${clubNameState} as an instructor.`
+            ? `You have joined ${businessNameState} as an employee.`
             : "You have denied this request."
         }
       />
@@ -151,5 +148,5 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(ClubAddedInstructorNotification)
+  connect(mapStateToProps, mapDispatchToProps)(BusinessAddedEmployeeNotification)
 );

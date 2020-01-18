@@ -8,22 +8,23 @@
 }
 
 #secondContainerActually {
-  width: 300px;
+  width: 200px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-around;
   margin-right: 15px;
 }
 
 .notiNum {
+  font-family: monospace;
   box-shadow: 0px 0px 5px red;
   position: absolute;
   color: red;
   border-radius: 50%;
   top: 4px;
-  padding: 0px 6px 6px 6px;
+  padding: 0px 4px 6px 4px;
   height: 20px;
   right:-40px;
-  font-size: 16px;
+  font-size: 22px;
 }
 .notiNumI {
   right: -10px;
@@ -95,6 +96,10 @@
 @media (max-width: 540px) {
   #secondContainer {
     font-size: 20px;
-    top: 18px;
+    top: 12px;
+  }
+  .links {
+    position: relative;
+    top: 6px;
   }
 }

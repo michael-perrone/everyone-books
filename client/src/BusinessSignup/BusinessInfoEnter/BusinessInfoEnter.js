@@ -150,7 +150,7 @@ const BusinessInfoEnter = (props) => {
             </div>
             <div className={styles.inputContainer}>
             <input onBlur={zipHandlerDirty} placeholder="Zip Code" className={styles.adminInput} onChange={zipHandler}/>
-            {zip.length < 7 && zipDirty === true && <Alert top={'25px'} alertPhrase={"Must be eight characters or more"}/>}
+            {zip.length < 4 && zipDirty === true && <Alert top={'25px'} alertPhrase={"Not a valid Zip Code"}/>}
             </div>
             <div className={styles.inputContainer}>
             <input onBlur={phoneNumberHandlerDirty} placeholder="Phone Number" className={styles.adminInput} onChange={phoneNumberHandler}/>

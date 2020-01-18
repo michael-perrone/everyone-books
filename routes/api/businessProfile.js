@@ -209,6 +209,7 @@ router.post("/getEmployeesPendingAndAccepted", async (req, res) => {
 });
 
 router.post("/addEmployeeToBusiness", async (req, res) => {
+  console.log(req.body)
   try {
     let businessProfile = await BusinessProfile.findOne({
       business: req.body.business
@@ -253,13 +254,13 @@ router.post("/addEmployeeToBusiness", async (req, res) => {
           _id: req.body.business
         });
         let employeesForInstantAdd = [];
-        businessProfile.employeesToSendInvite.push(...req.body.instructors);
+        businessProfile.employeesToSendInvite.push(...req.body.employees);
         businessProfile.save();
         for (let z = 0; z < req.body.employees.length; z++) {
           let employee = await Employee.findOne({
             _id: req.body.employees[z]
           });
-          employeesForInstantAdd.push(instructor);
+          employeesForInstantAdd.push(employee);
           employee.requestFrom = req.body.business;
           employee.requestPending = true;
 

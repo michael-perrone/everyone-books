@@ -6,11 +6,12 @@ import {withRouter} from 'react-router-dom';
 
 const AdminDropDown = (props) => {
 
-   function goToFinancials() {
-       props.history.push(`/admin/${props.admin.admin.id}/financials`)
+   function goHome() {
+     console.log('HELLLOO')
+    console.log(`/admin/${props.admin.admin.id}`)
+    props.history.push(`/admin/${props.admin.admin.id}`)
    } 
 
-  
   function editProfile() {
     console.log(props.admin.admin.id)
     props.history.push(`/admin/${props.admin.admin.id}/createeditprofile`)
@@ -27,10 +28,10 @@ const AdminDropDown = (props) => {
 
     return (
         <React.Fragment>
-          <DropDownLink clickProps={goToFinancials}>
-            Analytics
+          <DropDownLink clickProp={goHome}>
+            Home
           </DropDownLink>
-          <DropDownLink clickProps={goToSettings}>
+          <DropDownLink clickProp={goToSettings}>
             Settings
           </DropDownLink>
           <DropDownLink clickProp={editProfile}>

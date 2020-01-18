@@ -1,5 +1,5 @@
 const express = require("express");
-const mongoose = require("mongoose");
+const Employee = require('../../models/Employee')
 const router = express.Router();
 const instructorAuth = require("../../middleware/authInstructor");
 const Instructor = require("../../models/Instructor");
@@ -86,18 +86,19 @@ router.get("/user", userAuth, async (req, res) => {
   }
 });
 
-router.get("/instructornotifications", instructorAuth, async (req, res) => {
+router.get("/employeenotifications", instructorAuth, async (req, res) => {
   try {
-    let instructor = await Instructor.findOne({ _id: req.instructor.id });
+    let employee = await Employee.findOne({ _id: req.employee.id });
     let notificationArray = [];
-    for (let i = 0; i < instructor.notifications.length; i++) {
+    for (let i = 0; i < employee.notifications.length; i++) {
       let notification = await Notification.findOne({
-        _id: instructor.notifications[i]
+        _id: employee.notifications[i]
       });
       if (notification) {
         notificationArray.push(notification);
       }
     }
+    console.log(notificationArray)
     res.status(200).json({ notifications: notificationArray });
   } catch (error) {
     console.log(error);
