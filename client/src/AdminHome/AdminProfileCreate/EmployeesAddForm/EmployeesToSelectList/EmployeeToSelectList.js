@@ -2,9 +2,10 @@ import React from "react";
 import styles from "./EmployeeToSelectList.module.css";
 
 const EmployeeToSelectList = props => {
+  console.log(props)
   return (
     <div id={styles.listContainer}>
-      {props.employeesFound.map(employee => {
+      {props.employeeFound.map(employee => {
         return (
           <div id={styles.mainList}>
             <div>
@@ -13,18 +14,10 @@ const EmployeeToSelectList = props => {
             </div>
             {!props.viewInstead && (
               <button
-                onClick={props.addInstructorToList(employee)}
+                onClick={props.addEmployeeToList(employee)}
                 id={styles.addButton}
               >
                 Add
-              </button>
-            )}
-            {props.viewInstead && (
-              <button
-                id={styles.addButton}
-                onClick={props.viewInstructor(employee.id)}
-              >
-                View
               </button>
             )}
           </div>

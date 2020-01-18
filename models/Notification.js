@@ -5,7 +5,7 @@ const notificationSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "user"
   },
-  instructorId: {
+  employeeId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "instructor"
   },
@@ -25,7 +25,7 @@ const notificationSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "user"
   },
-  notificationFromTennisClub: {
+  notificationFromBusiness: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "tennisClub"
   },

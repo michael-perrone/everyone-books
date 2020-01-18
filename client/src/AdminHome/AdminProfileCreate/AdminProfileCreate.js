@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import axios from "axios";
 import ServicesForm from "./ServicesForm/ServicesForm";
 import BioForm from "./BioForm/BioForm";
-import EmployeeAddForm from "./InstructorsAddForm/EmployeeAddForm";
+import EmployeeAddForm from "./EmployeesAddForm/EmployeeAddForm";
 
 const AdminProfileCreate = props => {
   const [resultsNumber, setResultsNumber] = useState(0);
@@ -26,24 +26,26 @@ const AdminProfileCreate = props => {
 
   useEffect(() => {
     axios
-      .get("/api/clubProfile/myclub", {
+      .get("/api/businessProfile/mybusiness", {
         headers: { "x-auth-token": props.adminToken }
       })
       .then(response => {
         if (response.status === 200) {
-          setProfile(response.data.clubProfile);
+          setProfile(response.data.businessProfile);
+          if (response.data.businessProfile.employeesToSendInvite.length > 0 || response.data.businessProfile.employeesWhoAccepted.length > 0) {
           axios
             .post(
-              "/api/clubProfile/getInstructorsPendingAndAccepted",
+              "/api/businessProfile/getEmployeesPendingAndAccepted",
               {
-                pending: response.data.clubProfile.instructorsToSendInvite,
-                accepted: response.data.clubProfile.instructorsWhoAccepted
+                pending: response.data.businessProfile.employeesToSendInvite,
+                accepted: response.data.businessProfile.employeesWhoAccepted
               }
             )
             .then(response => {
               setAccepted(response.data.accepted);
               setPending(response.data.pending);
             });
+          }
         }
       })
       .catch(error => {
@@ -105,7 +107,7 @@ const AdminProfileCreate = props => {
       <div id={styles.pTagAboveForm}>
         {!profileExists && (
           <p className={styles.pTag}>
-              Thanks for registering! On this page you can create your profile. Here you will add employees that work at your business, give infomation about services your business offers, and also provide a small Bio about your business.
+              Thanks for registering! On this page you can create your profile. Here you will add employees that work at your business, give infomation about services your business offers, and also provide a small bio about your business.
           </p>
         )}
       </div>

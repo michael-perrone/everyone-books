@@ -3,20 +3,19 @@ import axios from "axios";
 import { connect } from "react-redux";
 
 const AddedInstructor = props => {
-  function sendInstructorIds() {
-    if (props.addedInstructors) {
-      let instructors = [];
-      props.addedInstructors.forEach(instructor => {
-        instructors.push(instructor.id);
-      });
+  function sendEmployeeId() {
+    const employees = [];
+    props.added.forEach(employee => {
+      employees.push(employee.id)
+    })
       axios
-        .post("/api/clubProfile/addInstructorsToClub", {
-          tennisClub: props.admin.admin.clubId,
-          instructors
+        .post("/api/businessProfile/addEmployeeToBusiness", {
+          business: props.admin.admin.businessId,
+          employees
         })
         .then(response => {
           if (response.status === 200) {
-            props.setNewPending(props.addedInstructors);
+            props.setNewPending(props.added);
             props.clearAdded();
             props.instructorsSubmittedHandler();
           }
@@ -26,11 +25,10 @@ const AddedInstructor = props => {
             props.errorAddAlertHandler();
           }
         });
-    }
   }
 
   return (
-    props.addedInstructors.length > 0 && (
+    props.added.length > 0 && (
       <div
         style={{
           marginBottom: "12px",
@@ -41,9 +39,9 @@ const AddedInstructor = props => {
       >
         <div>
           <p style={{ textDecoration: "underline", marginBottom: "4px" }}>
-            Instructors Added
+            Employees Added
           </p>
-          {props.addedInstructors.map(instructorAdded => {
+          {props.added.map(instructorAdded => {
             return (
               <div style={{ display: "flex" }}>
                 <p>{instructorAdded.name}</p>
@@ -57,16 +55,14 @@ const AddedInstructor = props => {
           })}
         </div>
         <button
-          onClick={sendInstructorIds}
+          onClick={sendEmployeeId}
           style={{
-            width: props.addedInstructors.length === 1 ? "120px" : "75px",
+            width: props.added.length === 1 ? "120px" : "75px",
             height: "32px",
             backgroundColor: "white"
           }}
         >
-          {props.addedInstructors.length === 1
-            ? "Submit Instructor"
-            : "Submit All"}
+          Submit Employee
         </button>
       </div>
     )

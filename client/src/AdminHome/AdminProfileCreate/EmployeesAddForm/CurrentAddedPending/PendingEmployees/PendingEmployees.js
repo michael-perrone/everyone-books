@@ -8,39 +8,40 @@ const PendingInstructors = props => {
   const [pending, setPending] = React.useState(props.pending);
   const [pendingSuccess, setPendingSuccess] = React.useState(false);
 
-  function restore(instructorToBeRestored) {
+  function restore(employeeToBeRestored) {
     return () => {
       let newPendingToBeDeleted = pendingToDelete.filter(
-        instructorRestoring =>
-          instructorRestoring.id !== instructorToBeRestored.id
+        employeeRestoring =>
+          employeeRestoring.id !== employeeToBeRestored.id
       );
       setPendingToDelete(newPendingToBeDeleted);
-      let newPending = [...pending, instructorToBeRestored];
+      let newPending = [...pending, employeeToBeRestored];
       setPending(newPending);
     };
   }
 
-  function addToDeletePending(instructorToBeDeleted) {
+  function addToDeletePending(employeeToBeDeleted) {
     return () => {
       let newPending = pending.filter(
-        instructor => instructor.id !== instructorToBeDeleted.id
+        employee => employee.id !== employeeToBeDeleted.id
       );
       setPending(newPending);
 
-      const pendingToDeleteUpdate = [...pendingToDelete, instructorToBeDeleted];
+      const pendingToDeleteUpdate = [...pendingToDelete, employeeToBeDeleted];
       setPendingToDelete(pendingToDeleteUpdate);
     };
   }
 
   function removeFromPending() {
-    let instructors = [];
-    pendingToDelete.forEach(pendingInstructor => {
-      instructors.push(pendingInstructor.id);
+    let employees = [];
+    pendingToDelete.forEach(pendingEmployee => {
+      employees.push(pendingEmployee.id);
     });
-    Axios.post("/api/clubProfile/removeFromPending", {
-      instructors,
-      tennisClub: props.admin.admin.clubId
+    Axios.post("/api/businessProfile/removeFromPending", {
+      employees,
+      business: props.admin.admin.businessId
     }).then(response => {
+      // WATCH THIS RESPONSE HERE
       setPendingToDelete([]);
       setPendingSuccess(true);
       props.setNewDeletedPending(pending);
@@ -62,10 +63,10 @@ const PendingInstructors = props => {
             textDecoration: "underline"
           }}
         >
-          Pending Instructors
+          Pending Employees
         </p>
       )}
-      {pending.map(pendingInstructor => {
+      {pending.map(pendingEmployee => {
         return (
           <div
             style={{
@@ -74,16 +75,16 @@ const PendingInstructors = props => {
               justifyContent: "space-between"
             }}
           >
-            <p>{pendingInstructor.name}</p>
+            <p>{pendingEmployee.name}</p>
             <i
-              onClick={addToDeletePending(pendingInstructor)}
+              onClick={addToDeletePending(pendingEmployee)}
               style={{ color: "red", marginRight: "40px" }}
               className="fas fa-trash-alt"
             ></i>
           </div>
         );
       })}
-      {pendingToDelete.map(instructorDeleted => {
+      {pendingToDelete.map(employeeDeleted => {
         return (
           <div
             style={{
@@ -93,10 +94,10 @@ const PendingInstructors = props => {
             }}
           >
             <p style={{ textDecoration: "line-through", color: "gray" }}>
-              {instructorDeleted.name}
+              {employeeDeleted.name}
             </p>
             <i
-              onClick={restore(instructorDeleted)}
+              onClick={restore(employeeDeleted)}
               style={{ color: "green", marginRight: "40px" }}
               className="fas fa-trash-restore"
             ></i>

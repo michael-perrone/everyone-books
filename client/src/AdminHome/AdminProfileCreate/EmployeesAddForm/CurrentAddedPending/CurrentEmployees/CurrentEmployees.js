@@ -67,7 +67,7 @@ const CurrentInstructors = props => {
             textDecoration: "underline"
           }}
         >
-          Current Instructors
+          Current Employees
         </p>
       )}
       {current.map(currentInstructor => {

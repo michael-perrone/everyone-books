@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import styles from "./EmployeeAddForm.module.css";
 import axios from "axios";
 import { connect } from "react-redux";
-import EmployeeToSelectList from "./InstructorsToSelectList/EmployeeToSelectList";
+import EmployeeToSelectList from './EmployeesToSelectList/EmployeeToSelectList'
 import CurrentAddedPending from "./CurrentAddedPending/CurrentAddedPending";
 import OtherAlert from "../../../OtherAlerts/OtherAlerts";
 
 const EmployeeAddForm = props => {
   const [hideButton, setHideButton] = useState(false);
   const [employeeInput, setEmployeeInput] = useState("");
-  const [employeesFoundList, setEmployeeFoundList] = useState("");
+  const [employeeFound, setEmployeeFound] = useState("");
   const [error, setError] = useState("");
   const [doubleAddError, setDoubleAddError] = useState(false);
   const [addedEmployees, setAddedEmployees] = useState([]);
@@ -41,19 +41,18 @@ const EmployeeAddForm = props => {
         .then(response => {
           if (response.status === 200) {
             setError("");
-            setEmployeeFoundList(response.data.instructors);
-            props.getAmountOfResults(response.data.instructors.length); // WATCH THIS
+            setEmployeeFound(response.data.employee);
           }
           if (response.status == 204) {
             setError("No Instructors Found");
-            setEmployeeFoundList([]);
+            setEmployeeFound([]);
         }
       })
         .catch(error => {
           console.log(error)
         });
     } else {
-      setEmployeeFoundList([]);
+      setEmployeeFound([]);
       setError("Please fill out the name of the instructor");
     }
   }
@@ -141,10 +140,10 @@ const EmployeeAddForm = props => {
           Search
         </button>
       </form>
-      {employeesFoundList.length > 0 && (
+      {employeeFound.length &&  (
         <EmployeeToSelectList
           addEmployeeToList={addEmployeeToList}
-          employeesFound={employeesFoundList}
+          employeeFound={employeeFound}
         />
       )}
     </div>

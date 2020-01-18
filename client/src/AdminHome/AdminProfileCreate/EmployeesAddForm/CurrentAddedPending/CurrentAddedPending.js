@@ -1,8 +1,8 @@
 import React from "react";
 import styles from "./CurrentAddedPending.module.css";
-import CurrentInstructors from "./CurrentInstructors/CurrentInstructors";
-import AddedInstructors from "./AddedInstructors/AddedInstructors";
-import PendingInstructors from "./PendingInstructors/PendingInstructors";
+import CurrentEmployees from "./CurrentEmployees/CurrentEmployees";
+import AddedEmployees from "./AddedEmployees/AddedEmployees";
+import PendingInstructors from "./PendingEmployees/PendingEmployees";
 import OtherAlerts from "../../../../OtherAlerts/OtherAlerts";
 
 const CurrentAddedPending = props => {
@@ -117,7 +117,7 @@ const CurrentAddedPending = props => {
       {props.current.length > 0 &&
         currentSelected &&
         !props.showAddedOveride && (
-          <CurrentInstructors
+          <CurrentEmployees
             current={props.current}
             setNewDeletedCurrent={props.setNewDeletedCurrent}
           />
@@ -146,11 +146,11 @@ const CurrentAddedPending = props => {
       />
 
       {(addedSelected || props.showAddedOveride) && (
-        <AddedInstructors
+        <AddedEmployees
           errorAddAlertHandler={errorAddAlertHandler}
           clearAdded={props.clearAdded}
           filterAdded={props.filterAdded}
-          addedInstructors={props.added}
+          added={props.added}
           setNewPending={props.setNewPending}
           instructorsSubmittedHandler={instructorsSubmittedHandler}
         />

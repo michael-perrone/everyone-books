@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs");
 const Employee = require("../../models/Employee");
 const config = require("config");
 const Admin = require("../../models/Admin");
-const TennisClub = require("../../models/TennisClub");
+const Business = require('../../models/Business');
 
 //@route GET api/auth
 // desc test route
@@ -19,18 +19,21 @@ router.post("/login", async (req, res) => {
   let userLoggingIn = await User.findOne({ email: req.body.email });
 
   if (adminLoggingIn) {
+    try {
+
+    console.log(adminLoggingIn)
     const passwordsMatching = await bcrypt.compare(
       req.body.password,
       adminLoggingIn.password
     );
     if (passwordsMatching) {
-      const tennisClub = await TennisClub.findOne({
-        _id: adminLoggingIn.tennisClub
+      const business = await Business.findOne({
+        _id: adminLoggingIn.business
       });
       const payload = {
         admin: {
-          clubId: `${adminLoggingIn.tennisClub._id}`,
-          clubName: tennisClub.clubNameAllLower,
+          businessId: `${adminLoggingIn.business}`,
+          businessName: business.businessNameAllLower,
           id: `${adminLoggingIn.id}`,
           isAdmin: true,
           name: `${adminLoggingIn.firstName} ${adminLoggingIn.lastName}`
@@ -41,7 +44,7 @@ router.post("/login", async (req, res) => {
         config.get("adminSecret"),
         { expiresIn: 366000 },
         (error, token) => {
-          res.status(200).json({ token: token, tennisClub: tennisClub });
+          res.status(200).json({ token: token });
         }
       );
     } else {
@@ -49,6 +52,9 @@ router.post("/login", async (req, res) => {
         .status(400)
         .json({ error: "Email/Password Combination not recognized" });
     }
+  }catch(error ) {
+    console.log(error)
+  }
   }
   if (userLoggingIn) {
     const passwordsMatching = await bcrypt.compare(

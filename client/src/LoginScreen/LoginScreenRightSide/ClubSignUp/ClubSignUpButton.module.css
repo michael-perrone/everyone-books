@@ -6,7 +6,7 @@
   top: -40px;
   font-size: 28px;
   position: relative;
-  left: 40px;
+  left: 50px;
   background: transparent;
   outline: none;
   box-shadow: 2px 2px 10px lightgray;
@@ -20,13 +20,17 @@
 
 @media (max-width: 1100px) and (min-width: 0) {
   #signUpClubButton {
-    left: 0;
     margin-top: 40px;
   }
 }
+@media (max-width: 950px) {
+  #signUpClubButton {
+    left: 0px;
+  }
+}
+
 @media (max-width: 700px) and (min-width: 0) {
   #signUpClubButton {
-    width: 300px;
     font-size: 22px;
     top: -40px;
   }

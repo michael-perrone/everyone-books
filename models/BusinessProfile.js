@@ -17,9 +17,7 @@ const businessProfileSchema = new mongoose.Schema({
     }
   ],
   services: [],
-  events: [],
   bio: String,
-  otherServices: []
 });
 
 const BusinessProfile = mongoose.model("businessProfile", businessProfileSchema);

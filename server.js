@@ -21,7 +21,7 @@ app.use("/api/instructorProfile", require("./routes/api/instructorProfile"));
 app.use("/api/userProfile", require("./routes/api/userProfile"));
 app.use("/api/adminSignup", require("./routes/api/adminSignup"));
 app.use("/api/clubsList", require("./routes/api/clubsList"));
-app.use("/api/clubProfile", require("./routes/api/clubProfile"));
+app.use("/api/businessProfile", require("./routes/api/businessProfile"));
 app.use("/api/employeeList", require("./routes/api/employeeList"));
 app.use("/api/getInstructors", require("./routes/api/getInstructors"));
 app.use("/api/saveLocation", require("./routes/api/saveLocation"));
@@ -48,6 +48,7 @@ app.use("/api/rebooking", require("./routes/api/rebooking.js"));
 app.use("/api/rebooked", require("./routes/api/rebooked"));
 app.use("/api/iBookings", require("./routes/api/iBookings"));
 app.use("/api/addImage", require("./routes/api/addImage"));
+app.use('/api/getEmployeeId', require('./routes/api/getEmployeeId'));
 
 app.use(express.static("./client/build"));
 app.get("*", function(request, response) {

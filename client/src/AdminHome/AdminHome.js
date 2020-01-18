@@ -15,7 +15,7 @@ class AdminHome extends React.Component {
 
   componentDidMount() {
     axios
-      .get("/api/clubprofile/myclub", {
+      .get("/api/businessProfile/mybusiness", {
         headers: { "x-auth-token": this.props.adminToken }
       })
       .then(response => {

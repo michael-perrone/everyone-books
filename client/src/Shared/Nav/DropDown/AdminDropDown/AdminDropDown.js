@@ -12,11 +12,12 @@ const AdminDropDown = (props) => {
 
   
   function editProfile() {
-    props.history.push(`/instructor/${props.admin.admin.id}/createeditprofile`)
+    console.log(props.admin.admin.id)
+    props.history.push(`/admin/${props.admin.admin.id}/createeditprofile`)
   }
 
   function goToSettings() {
-    props.history.push(`/instructor/${props.instructorProfile.instructor._id}/settings`)
+    props.history.push(`/admin/${props.admin.admin.id}/settings`)
   }
 
   function adminLogout() {

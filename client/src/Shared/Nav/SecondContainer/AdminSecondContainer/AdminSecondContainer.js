@@ -8,17 +8,14 @@ import {
   ADMIN_LOGOUT
 } from "../../../../actions/actions";
 import Schedule from "../../Schedule/Schedule";
-import axios from "axios";
 import Notifications from "../../../../Notifications/Notifications";
 import DropDown from "../../DropDown/DropDown";
-import NotificationNumber from "../NotificationNumber/NotificationNumber";
 
 const AdminSecondContainer = props => {
   return (
     <React.Fragment>
       <div id={styles.secondContainer}>
             <p
-            onClick={props.showSchedule}
             style={{ cursor: "pointer", marginRight: "30px" }}
             className={styles.links}
             >
@@ -44,7 +41,6 @@ const AdminSecondContainer = props => {
 const mapDispatchToProps = dispatch => {
   return {
     adminLogout: () => dispatch({ type: ADMIN_LOGOUT }),
-    showSchedule: () => dispatch({ type: SHOW_SCHEDULE }),
     showNotifications: () => dispatch({ type: SHOW_NOTIFICATIONS })
   };
 };
@@ -52,7 +48,6 @@ const mapDispatchToProps = dispatch => {
 const mapStateToProps = state => {
   return {
     showDropDownState: state.booleanReducers.showDropDown,
-    showScheduleState: state.booleanReducers.showSchedule,
     showNotificationsState: state.booleanReducers.showNotifications
   };
 };

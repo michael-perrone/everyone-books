@@ -48,7 +48,7 @@ router.post('/',
             lastName: req.body.adminInfo.lastName,
             email: req.body.adminInfo.email,
             password: req.body.adminInfo.password,
-            business: newBusiness
+            business: newBusiness.id
           });
           const salt = await bcrypt.genSalt(10);
           newAdmin.password = await bcrypt.hash(

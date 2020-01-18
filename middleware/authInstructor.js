@@ -10,8 +10,7 @@ module.exports = function(req, res, next) {
 
   try {
     const decodedToken = jwt.verify(token, config.get("employeeSecret"));
-    req.instructor = decodedToken.instructor;
-    req.clubName = decodedToken.clubName;
+    req.employee = decodedToken.employee;
     next();
   } catch (error) {
     res.status(401).json({ msg: "Also not authorized" });

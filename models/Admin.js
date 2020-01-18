@@ -21,9 +21,9 @@ const AdminSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  tennisClub: {
+  business: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "tennisClub"
+    ref: "business"
   },
   notifications: {
     type: [mongoose.Schema.Types.ObjectId],
