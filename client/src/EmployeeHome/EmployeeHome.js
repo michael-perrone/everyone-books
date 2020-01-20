@@ -6,11 +6,13 @@ import {connect} from 'react-redux';
 
 const EmployeeHome = (props) => {
     const [employeeId, setEmployeeId] = React.useState('');
+    const [business, setBusiness] = React.useState('None');
     React.useEffect(() => {
-        Axios.get('/api/getEmployeeId', {headers: {'x-auth-token': props.employeeToken}}).then(
+        Axios.get('/api/getEmployee', {headers: {'x-auth-token': props.employeeToken}}).then(
             response => {
                 console.log(response)
-                setEmployeeId(response.data.employeeId)
+                setEmployeeId(response.data.employee._id)
+                setBusiness(response.data.employee.business)
             }
         )
     }, [])
@@ -18,7 +20,7 @@ const EmployeeHome = (props) => {
         <div id={styles.employeeHome}>
 
         <p>Your Unique Employee Id: {employeeId}</p>
-            <Schedule/>
+            {business !== "None" && <Schedule/>}
         </div>
     )
 }

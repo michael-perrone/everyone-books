@@ -6,7 +6,6 @@ import EmployeeDropDown from "./EmployeeDropDown/EmployeeDropDown";
 import AdminDropDown from "./AdminDropDown/AdminDropDown";
 
 const DropDown = props => {
-  console.log(props);
   return (
     <div
       className={styles.dropDownContainer}
@@ -15,7 +14,7 @@ const DropDown = props => {
       {props.user && <UserDropDown notiNum={props.notiNum} user={props.user} />}
       {props.admin && <AdminDropDown notiNum={props.notiNum} admin={props.admin}/>}
       {props.employee && (
-        <EmployeeDropDown notiNum={props.notiNum} employeeProfile={props.employee} />
+        <EmployeeDropDown clearNotis={props.clearNotis} notiNum={props.notiNum} employeeProfile={props.employee} />
       )}
     </div>
   );

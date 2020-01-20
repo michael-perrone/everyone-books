@@ -3,45 +3,45 @@ import Axios from "axios";
 import { connect } from "react-redux";
 import OtherAlert from "../../../../../OtherAlerts/OtherAlerts";
 
-const CurrentInstructors = props => {
+const CurrentEmployees = props => {
   const [currentToDelete, setCurrentToDelete] = React.useState([]);
   const [current, setCurrent] = React.useState(props.current);
   const [deleteAlert, setDeleteAlert] = React.useState(false);
 
-  function restore(instructorToBeRestored) {
+  function restore(employeeToBeRestored) {
     return () => {
       let newCurrentToBeDeleted = currentToDelete.filter(
-        instructorRestoring =>
-          instructorRestoring.id !== instructorToBeRestored.id
+        employeeRestoring =>
+          employeeRestoring.id !== employeeToBeRestored.id
       );
       setCurrentToDelete(newCurrentToBeDeleted);
-      let newCurrent = [...current, instructorToBeRestored];
+      let newCurrent = [...current, employeeToBeRestored];
       setCurrent(newCurrent);
     };
   }
 
-  function addToDeleteCurrent(instructorToBeDeleted) {
+  function addToDeleteCurrent(employeeToBeDeleted) {
     return () => {
       let newCurrent = current.filter(
-        instructor => instructor.id !== instructorToBeDeleted.id
+        employee => employee.id !== employeeToBeDeleted.id
       );
       setCurrent(newCurrent);
 
-      const currentToDeleteUpdate = [...currentToDelete, instructorToBeDeleted];
+      const currentToDeleteUpdate = [...currentToDelete, employeeToBeDeleted];
       setCurrentToDelete(currentToDeleteUpdate);
     };
   }
 
   function removeFromCurrent() {
-    let instructors = [];
+    let employees = [];
     currentToDelete.forEach(instructor => {
-      instructors.push(instructor.id);
+      employees.push(instructor.id);
     });
     Axios.post(
-      "/api/clubProfile/instructorDeleteFromClub",
+      "/api/businessProfile/employeeDeleteFromBusiness",
       {
-        instructors,
-        tennisClub: props.admin.admin.clubId
+        employees,
+        business: props.admin.admin.businessId
       }
     ).then(response => {
       if (response.status === 200) {
@@ -55,7 +55,7 @@ const CurrentInstructors = props => {
   return (
     <div style={{ marginBottom: "10px" }}>
       <OtherAlert
-        alertMessage={"Instructors successfully removed"}
+        alertMessage={"Employees successfully removed"}
         showAlert={deleteAlert}
         alertType={"success"}
       />
@@ -70,7 +70,7 @@ const CurrentInstructors = props => {
           Current Employees
         </p>
       )}
-      {current.map(currentInstructor => {
+      {current.map(currentEmployee => {
         return (
           <div
             style={{
@@ -79,16 +79,16 @@ const CurrentInstructors = props => {
               justifyContent: "space-between"
             }}
           >
-            <p>{currentInstructor.name}</p>
+            <p>{currentEmployee.name}</p>
             <i
-              onClick={addToDeleteCurrent(currentInstructor)}
+              onClick={addToDeleteCurrent(currentEmployee)}
               style={{ color: "red", marginRight: "40px" }}
               className="fas fa-trash-alt"
             ></i>
           </div>
         );
       })}
-      {currentToDelete.map(instructorDeleted => {
+      {currentToDelete.map(employeDeleted => {
         return (
           <div
             style={{
@@ -98,10 +98,10 @@ const CurrentInstructors = props => {
             }}
           >
             <p style={{ textDecoration: "line-through", color: "gray" }}>
-              {instructorDeleted.name}
+              {employeDeleted.name}
             </p>
             <i
-              onClick={restore(instructorDeleted)}
+              onClick={restore(employeDeleted)}
               style={{ color: "green", marginRight: "40px" }}
               className="fas fa-trash-restore"
             ></i>
@@ -132,4 +132,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(CurrentInstructors);
+export default connect(mapStateToProps)(CurrentEmployees);

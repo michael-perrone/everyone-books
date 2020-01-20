@@ -12,18 +12,18 @@ class AdminBooking extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      instructorSelected: "",
+      employeeSelected: "",
       timeChosen: "",
       bookingType: ""
     };
-    this.selectInstructorWithClick = this.selectInstructorWithClick.bind(this);
+    this.selectEmployeeWithClick = this.selectEmployeeWithClick.bind(this);
     this.selectTime = this.selectTime.bind(this);
   }
 
-  selectInstructorWithClick(instructorSelected) {
+  selectEmployeeWithClick(employeeSelected) {
     return () => {
-      this.setState({ instructorSelected });
-      this.props.getInstructorChosen(instructorSelected);
+      this.setState({ employeeSelected });
+      this.props.getInstructorChosen(employeeSelected);
     };
   }
 
@@ -51,27 +51,24 @@ class AdminBooking extends React.Component {
             justifyContent: "space-around"
           }}
         >
-          <Calendar
-            date={this.props.date}
-            onDateClick={this.props.onDateClick}
-          />
+          <Calendar/>
           <div className={styles.bookingHolderContainer}>
-            <p style={{ marginBottom: "-8px" }}>Choose Instructor</p>
+            <p style={{ marginBottom: "-8px" }}>Choose Employee</p>
             <div className={styles.bookingHolderSubContainer}>
-              {this.props.instructors.map(element => {
+              {this.props.employees && this.props.employees.map(element => {
                 return (
                   <p
                     style={{
                       backgroundColor:
-                        this.state.instructorSelected._id === element._id
+                        this.state.employeeSelected._id === element._id
                           ? "navy"
                           : "",
                       color:
-                        this.state.instructorSelected._id === element._id
+                        this.state.employeeSelected._id === element._id
                           ? "white"
                           : ""
                     }}
-                    onClick={this.selectInstructorWithClick(element)}
+                    onClick={this.selectEmployeeWithClick(element)}
                     className={styles.itemPTag}
                   >
                     {element.fullName}

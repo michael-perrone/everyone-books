@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { HIDE_NOTIFICATIONS } from "../actions/actions";
 import AdminNotifications from "./AdminNotifications/AdminNotifications";
 import UserNotifications from "./UserNotifications/UserNotifications";
-import InstructorNotifications from "./InstructorNotifications/InstructorNotifications";
+import EmployeeNotifications from "./EmployeeNotifications/EmployeeNotifications";
 import styles from "./Notifications.module.css";
 
 class Notifications extends React.Component {
@@ -31,10 +31,10 @@ class Notifications extends React.Component {
           ></i>
           <div id={styles.notiSubContainer}>
           {this.props.admin && <AdminNotifications />}
-          {this.props.instructor && (
-            <InstructorNotifications
+          {this.props.employee && (
+            <EmployeeNotifications
               setNew={this.props.setNew}
-              instructorNotifications={this.props.instructorNotifications}
+              employeeNotifications={this.props.employeeNotifications}
             />
           )}
           {this.props.user && (
@@ -53,7 +53,7 @@ class Notifications extends React.Component {
 const mapStateToProps = state => {
   return {
     admin: state.authReducer.admin,
-    instructor: state.authReducer.instructor,
+    employee: state.authReducer.employee,
     user: state.authReducer.user
   };
 };

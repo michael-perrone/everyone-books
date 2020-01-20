@@ -23,10 +23,6 @@ const EmployeeSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  businessAccepted: {
-    type: Boolean,
-    default: false
-  },
   bookings: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -36,6 +32,10 @@ const EmployeeSchema = new mongoose.Schema({
   businessWorkingAt: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "business"
+  },
+  business: {
+    type: String,
+    default: 'None'
   },
   notifications: {
     type: [mongoose.Schema.Types.ObjectId],

@@ -4,12 +4,8 @@ const Employee = require('../../models/Employee');
 const instructorAuth = require('../../middleware/authInstructor')
 
 router.get('/', instructorAuth, async (req, res) => {
-    console.log(req.employee)
-    const employee = await Employee.findOne({_id: req.employee.id});
-    console.log(employee)
-    const employeeId = employee.id;
-    console.log(employeeId)
-    res.status(200).json({employeeId})
+    const employee = await Employee.findOne({_id: req.employee.id}).select(['business', 'businessWorkingAt', '_id']);
+    res.status(200).json({employee})
 })
 
 module.exports = router;

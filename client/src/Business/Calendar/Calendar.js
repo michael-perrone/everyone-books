@@ -1,6 +1,8 @@
 import React from "react";
 import dateFns from "date-fns";
 import "./Calendar.css";
+import {connect} from 'react-redux';
+import {CHOOSE_DATE} from '../../actions/actions';
 
 class Calendar extends React.Component {
   state = {
@@ -103,7 +105,7 @@ class Calendar extends React.Component {
                 : ""
             }`}
             key={day}
-            onClick={this.props.onDateClick(dateFns.parse(cloneDay))}
+            onClick={this.props.chooseDate(dateFns.parse(cloneDay))}
           >
             <span className="number">{formattedDate}</span>
             <span className="bg">{formattedDate}</span>
@@ -152,4 +154,10 @@ class Calendar extends React.Component {
   }
 }
 
-export default Calendar;
+const mapDispatchToProps = dispatch => {
+  return {
+    chooseDate: (dateChosen) => dispatch({type: CHOOSE_DATE, payload: {dateChosen}}) 
+  }
+}
+
+export default connect(null, mapDispatchToProps)(Calendar);

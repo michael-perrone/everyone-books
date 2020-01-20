@@ -8,7 +8,8 @@ import {
   USER_REGISTER_SUCCESS,
   ADMIN_REGISTER_SUCCESS,
   EMPLOYEE_REGISTER_SUCCESS,
-  GET_INSTRUCTOR_PROFILE
+  GET_INSTRUCTOR_PROFILE,
+  CHANGE_TOKENS
 } from "../actions/actions";
 import decoder from "jwt-decode";
 
@@ -31,6 +32,14 @@ const initalState = {
 
 export default function(state = initalState, action) {
   switch (action.type) {
+    case CHANGE_TOKENS:
+      localStorage.removeItem('employeeToken')
+      localStorage.setItem('employeeToken', action.payload.employeeToken)
+      return {
+        ...state,
+        employeeToken: action.payload.employeeToken,
+        employee: decoder(action.payload.employeeToken)
+      }
     case EMPLOYEE_LOGIN_SUCCESS:
       localStorage.setItem("employeeToken", action.payload.employeeToken);
       return {

@@ -4,7 +4,7 @@ import Axios from "axios";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import OtherAlert from "../../../OtherAlerts/OtherAlerts";
-import { EMPLOYEE_LOGIN_SUCCESS } from "../../../actions/actions";
+import { EMPLOYEE_LOGIN_SUCCESS, CHANGE_TOKENS } from "../../../actions/actions";
 
 const BusinessAddedEmployeeNotification = props => {
   const [businessAccepted, setBusinessAccepted] = useState(false);
@@ -57,10 +57,12 @@ const BusinessAddedEmployeeNotification = props => {
       notificationId: props.notification._id,
       employeeName: props.employee.employee.employeeName
     };
-    setBusinessAccepted(true);
+    
     Axios.post("/api/notifications/employeeclickedyes", objectToSend).then(
       response => {
         if ((response.status = 200)) {
+          props.changeToken(response.data.token)
+          setBusinessAccepted(true);
           props.setNew(response.data.newNotifications)();
         }
         if (response.data.token) {
@@ -86,13 +88,14 @@ const BusinessAddedEmployeeNotification = props => {
       {!props.notification.answer && !businessAccepted && (
         <div
           style={{
+            marginLeft: '40px',
             width: "120px",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center"
           }}
         >
-          <button onClick={accept}>Accept</button>
+          <button style={{marginBottom: '10px'}} onClick={accept}>Accept</button>
           <button onClick={deny}>Deny</button>
         </div>
       )}
@@ -108,7 +111,7 @@ const BusinessAddedEmployeeNotification = props => {
             fontSize: "18px"
           }}
         >
-          <i className="far fa-check-square"></i>
+          <i style={{marginLeft: '30px'}} className="far fa-check-square"></i>
           <p
             style={{
               marginLeft: "4px",
@@ -122,10 +125,10 @@ const BusinessAddedEmployeeNotification = props => {
         </div>
       )}
       <OtherAlert
-        showAlert={clubAccepted ? true : false}
-        alertType={clubAccepted ? "success" : "no-success"}
+        showAlert={businessAccepted ? true : false}
+        alertType={businessAccepted ? "success" : "no-success"}
         alertMessage={
-          clubAccepted === true
+          businessAccepted === true
             ? `You have joined ${businessNameState} as an employee.`
             : "You have denied this request."
         }
@@ -136,14 +139,13 @@ const BusinessAddedEmployeeNotification = props => {
 
 const mapStateToProps = state => {
   return {
-    instructor: state.authReducer.instructor
+    employee: state.authReducer.employee
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    instructorTokenChange: instructorToken =>
-      dispatch({ type: EMPLOYEE_LOGIN_SUCCESS, payload: { instructorToken } })
+    changeToken: (employeeToken) => dispatch({type: CHANGE_TOKENS, payload: {employeeToken}})
   };
 };
 

@@ -4,10 +4,10 @@ const router = express.Router();
 const instructorAuth = require("../../middleware/authInstructor");
 const Instructor = require("../../models/Instructor");
 const Notification = require("../../models/Notification");
-const ClubProfile = require("../../models/ClubProfile");
+const Business = require('../../models/Business');
 const CourtBooked = require("../../models/CourtBooked");
 const User = require("../../models/User");
-const TennisClub = require("../../models/TennisClub");
+const BusinessProfile = require('../../models/BusinessProfile')
 const userAuth = require("../../middleware/authUser");
 const jwt = require("jsonwebtoken");
 const config = require("config");
@@ -98,7 +98,6 @@ router.get("/employeenotifications", instructorAuth, async (req, res) => {
         notificationArray.push(notification);
       }
     }
-    console.log(notificationArray)
     res.status(200).json({ notifications: notificationArray });
   } catch (error) {
     console.log(error);
@@ -124,64 +123,63 @@ router.post("/updateread", async (req, res) => {
   }
 });
 
-router.post("/instructorclickedyes", async (req, res) => {
+router.post("/employeeclickedyes", async (req, res) => {
   try {
-    const instructor = await Instructor.findOne({ _id: req.body.instructorId });
+    const employee = await Employee.findOne({ _id: req.body.employeeId });
     let notification = await Notification.findOne({
       _id: req.body.notificationId
     });
-    const tennisClubProfile = await ClubProfile.findOne({
-      tennisClub: notification.notificationFromTennisClub
-    }).populate("tennisClub", ["clubName"]);
-    instructor.tennisClub = tennisClubProfile.tennisClub.clubName;
-    instructor.clubAccepted = true;
-    instructor.tennisClubTeachingAt = notification.notificationFromTennisClub;
-    await instructor.save();
+    const businessProfile = await BusinessProfile.findOne({
+      business: notification.notificationFromBusiness
+    }).populate("business", ["businessName"]);
+    employee.business = businessProfile.business.businessName;
+    employee.businessWorkingAt = businessProfile.business._id; 
+    await employee.save();
 
-    if (tennisClubProfile && instructor) {
-      const newInstructorsAfterOneTakenOut = tennisClubProfile.instructorsToSendInvite.filter(
+    if (businessProfile && employee) {
+      const newEmployeesAfterOneTakenOut = businessProfile.employeesToSendInvite.filter(
         element => {
-          return element != req.body.instructorId;
+          return element != req.body.employeeId;
         }
       );
-      tennisClubProfile.instructorsToSendInvite = newInstructorsAfterOneTakenOut;
-      tennisClubProfile.instructorsWhoAccepted = [
-        ...tennisClubProfile.instructorsWhoAccepted,
-        instructor._id
+      businessProfile.employeesToSendInvite = newEmployeesAfterOneTakenOut;
+      businessProfile.employeesWhoAccepted = [
+        ...businessProfile.employeesWhoAccepted,
+        employee._id
       ];
-      await tennisClubProfile.save();
+      await businessProfile.save();
     }
     notification.answer = "Accepted";
     await notification.save();
     let notifications = await Notification.find({
-      _id: instructor.notifications
+      _id: employee.notifications
     });
     notifications.sort(function(a, b) {
       return b.notificationDate - a.notificationDate;
     });
 
-    const tennisClub = await TennisClub.findOne({
-      _id: notification.notificationFromTennisClub
+    const business = await Business.findOne({
+      _id: notification.notificationFromBusiness
     });
+    console.log(business)
 
     const payload = {
-      instructor: {
-        instructorName: req.body.instructorName,
-        id: req.body.instructorId,
-        clubName: tennisClub.clubName
+      employee: {
+        employeeName: req.body.employeeName,
+        id: req.body.employeeId,
+        businessName: business.businessName
       }
     };
-    console.log(payload, "dwdwd");
-    console.log("dwdwddwd");
+    
     jwt.sign(
       payload,
-      config.get("instructorSecret"),
+      config.get("employeeSecret"),
       { expiresIn: 360000 },
       (error, token) => {
         if (error) {
           throw error;
         } else {
-          res.status(200).json({ token, newNotifications: notifications });
+          res.status(200).json({ token, newNotifications: notifications, employee });
         }
       }
     );

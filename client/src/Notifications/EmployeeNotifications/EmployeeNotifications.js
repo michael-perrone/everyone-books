@@ -3,7 +3,7 @@ import styles from "../Notifications.module.css";
 import axios from "axios";
 import { connect } from "react-redux";
 import UserBookedCourtWithInstructor from "./UserBookedCourtWithInstructor/UserBookedCourtWithInstructor";
-import ClubAddedInstructorNotification from "./ClubAddedInstructorNotification/ClubAddedInstructorNotification";
+import BusinessAddedEmployeeNotification from "./BusinessAddedEmployeeNotification/BusinessAddedEmployeeNotification";
 
 class InstructorNotifications extends React.Component {
   constructor(props) {
@@ -37,22 +37,23 @@ class InstructorNotifications extends React.Component {
   render() {
     return (
       <React.Fragment>
-        {this.props.instructorNotifications &&
-          this.props.instructorNotifications.map(element => {
+        {this.props.employeeNotifications &&
+          this.props.employeeNotifications.map(element => {
             console.log(element.notificationType);
             if (element.notificationType === "instructorBookedUser") {
               return <UserBookedCourtWithInstructor notification={element} />;
             }
-            if (element.notificationType === "Club Added Instructor") {
+            if (element.notificationType === "Business Added Employee") {
+              console.log('HOIWIDW')
               return (
-                <ClubAddedInstructorNotification
+                <BusinessAddedEmployeeNotification
                   setNew={this.props.setNew}
                   notification={element}
                 />
               );
             }
           })}
-        {this.props.instructorNotifications.length === 0 && (
+        {this.props.employeeNotifications.length === 0 && (
           <p style={{ padding: "20px" }}>
             You do not have any notifications yet. When you get one, we will be
             sure to let you know!

@@ -1,4 +1,5 @@
 // pretty mUch all auth stuff for redux rn, maybe add some more later
+export const CHANGE_TOKENS = 'CHANGE_TOKENS';
 export const SET_BUSINESS_INFO_COMPLETE = 'SET_BUSINESS_INFO_COMPLETE';
 export const HIDE_SCHEDULE = "HIDE_SCHEDULE";
 export const SHOW_SCHEDULE = "SHOW_SCHEDULE";
@@ -33,3 +34,4 @@ export const ENTER_BUSINESS_SCHEDULE = "ENTER_BUSINESS_SCHEDULE";
 export const SET_BOOKING_NUMBER_AND_TYPE = "SET_BOOKING_NUMBER_AND_TYPE";
 export const ADMIN_DROP_DOWN = "ADMIN_DROP_DOWN";
 export const BACK_FUNCTION = "BACK_FUNCTION";
+export const CHOOSE_DATE = "CHOOSE_DATE"

@@ -8,27 +8,22 @@
 }
 
 #secondContainerActually {
-  width: 200px;
   display: flex;
-  justify-content: space-around;
-  margin-right: 15px;
 }
 
 .notiNum {
-  font-family: monospace;
-  box-shadow: 0px 0px 5px red;
-  position: absolute;
+  font-family: none;
+  border: 2px solid red;
+  position: relative;
+  top: 4px;
   color: red;
   border-radius: 50%;
-  top: 4px;
-  padding: 0px 4px 6px 4px;
+  padding: 0px 4px 2px 4px;
   height: 20px;
-  right:-40px;
-  font-size: 22px;
+  font-size: 18px;
+  margin-right: 10px;
 }
-.notiNumI {
-  right: -10px;
-}
+
 
 #title {
   font-size: 34px;
@@ -38,18 +33,10 @@
   color: gray;
 }
 
-#instructorBars {
-  font-size: 20px;
-  position: relative;
-  top: 23px;
-  right: 4px;
-  cursor: pointer;
-}
-
 #bars {
   font-size: 20px;
   position: relative;
-  top: 23px;
+  top: 22px;
   cursor: pointer;
 }
 
@@ -71,21 +58,18 @@
 }
 
 @media (max-width: 775px) {
-  .links {
-    margin-left: 20px;
+  .notiNum {
+    position: absolute;
+    right: 5px;
   }
+
+
   #title {
     display: none;
   }
   #secondContainer {
     width: 100%;
     right: 0;
-  }
-  .notiNum {
-    right: 50px;
-  }
-  #bars {
-    right: 20px;
   }
   #secondContainerActually {
     width: 100%;

@@ -3,7 +3,6 @@ import styles from "../../Nav.module.css";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import {
-  SHOW_SCHEDULE,
   EMPLOYEE_LOGOUT,
   SHOW_NOTIFICATIONS
 } from "../../../../actions/actions";
@@ -17,21 +16,30 @@ import NotificationNumber from "../NotificationNumber/NotificationNumber";
 const EmployeeSecondContainer = props => {
   const [employeeProfile, setEmployeeProfile] = React.useState(undefined);
   const [notifications, setNotifications] = React.useState([]);
-  const [newNotifications, setNewNotificationsState] = React.useState([]);
- 
- /*  let newVar = "";
-  if (employeeProfile && employeeProfile.employee && employeeProfile.employee.tennisClub) {
-    newVar = `/clubs/${employeeProfile.employee.tennisClub
-      .split(" ")
-      .reduce((accum, element) => accum + element)}`;
-  }
- */
+  const [newNotificationsState, setNewNotificationsState] = React.useState([]);
+  const [clubName, setClubName] = React.useState('None');
+
   function setNewNotifications(notificationsFromUpdate) {
     return () => {
       setNotifications(notificationsFromUpdate);
       setNewNotifications([]);
     };
   }
+
+  function clearNotis() {
+    setNewNotificationsState([])
+  }
+
+   React.useEffect(() => {
+    axios.get('/api/getEmployee', {headers: {'x-auth-token': props.employeeToken}}).then(
+      response => {
+        let apple = response.data.employee.business.split(" ")
+        .reduce((accum, element) => accum + element)
+      if (props.employee.employee.businessName && apple === props.employee.employee.businessName) {
+        setClubName(props.employee.employee.businessName)
+      }
+  })
+}, [props.employeeToken] )
 
   React.useEffect(() => {
     axios
@@ -55,15 +63,15 @@ const EmployeeSecondContainer = props => {
   return (
     <React.Fragment>
       <div id={styles.secondContainer}>        
-            <Link
-              style={{ marginRight: "30px" }}
-              className={styles.links}
-              to={"/business"}
-            >
-              Business
-            </Link>
-          {newNotifications.length > 0 && !props.showDropDownState && <NotificationNumber num={newNotifications.length}/>}
-        <DropDown notiNum={newNotifications.length} employeeProfile={employeeProfile} />
+      {clubName !== "None" &&       
+        <Link
+          className={styles.links}
+          to={`/businesses/${clubName}`}
+          >
+          {clubName}
+        </Link> }
+          {1 && !props.showDropDownState && <NotificationNumber num={1}/>}
+        <DropDown clearNotis={clearNotis} notiNum={1} employeeProfile={employeeProfile} />
       </div>
       {props.showScheduleState && <Schedule employee={props} />}
       {props.showNotificationsState && (
@@ -87,7 +95,8 @@ const mapStateToProps = state => {
   return {
     showDropDownState: state.booleanReducers.showDropDown,
     employeeToken: state.authReducer.employeeToken,
-    showNotificationsState: state.booleanReducers.showNotifications
+    showNotificationsState: state.booleanReducers.showNotifications,
+    employee: state.authReducer.employee
   };
 };
 

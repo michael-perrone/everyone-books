@@ -12,6 +12,7 @@ const SecondContainer = props => {
       {props.admin && <AdminSecondContainer />}
       {props.employee && <EmployeeSecondContainer />}
       {props.user && <UserSecondContainer />}
+      <div style={{marginRight: '40px'}}>
       <i
         id={props.instructor ? styles.instructorBars : styles.bars}
         onClick={props.showDropDown}
@@ -20,6 +21,7 @@ const SecondContainer = props => {
         }}
         className="fas fa-bars"
       />
+      </div>
     </div>
   );
 };

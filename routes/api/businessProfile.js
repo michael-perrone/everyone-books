@@ -13,30 +13,7 @@ router.get("/mybusiness", adminAuth, async (req, res) => {
       business: req.admin.businessId
     });
     if (businessProfile) {
-      const employees = await Employee.find({
-        _id: businessProfile.instructorsToSendInvite
-      });
-
-      let employeesToSendBack = [];
-
-      for (let i = 0; i < employees.length; i++) {
-        let newObject = {
-          id: employees[i]._id,
-          name: employees[i].fullName
-        };
-        employeesToSendBack.push(newObject);
-      }
-
-      const employeesAlreadyHere = await Employee.find({
-        _id: businessProfile.employeesWhoAccepted
-      });
-
-      businessProfile.employeesWhoAccepted = employeesAlreadyHere;
-      return res.status(200).json({
-        businessProfile,
-        profileCreated: true,
-        idAndName: employeesToSendBack
-      });
+      return res.status(200).json({profileCreated: true});
     }
     if (!businessProfile) {
       return res.status(406).json({ profileCreated: false });
@@ -94,28 +71,27 @@ router.post("/", adminAuth, async (req, res) => {
   }
 });
 
-router.post("/instructorDeleteFromClub", async (req, res) => {
+router.post("/employeeDeleteFromBusiness", async (req, res) => {
   try {
-    let tennisClubProfile = await ClubProfile.findOne({
-      tennisClub: req.body.tennisClub
+    let businessProfile = await BusinessProfile.findOne({
+      business: req.body.business
     });
-    const newInstructors = tennisClubProfile.instructorsWhoAccepted.filter(
-      instructor => {
-        return !req.body.instructors.includes(instructor.toString());
+    const newEmployees = businessProfile.employeesWhoAccepted.filter(
+      employee => {
+        return !req.body.employees.includes(employee.toString());
       }
     );
 
-    tennisClubProfile.instructorsWhoAccepted = newInstructors;
+    businessProfile.employeesWhoAccepted = newEmployees;
 
-    for (let i = 0; i < req.body.instructors.length; i++) {
-      let instructor = await Instructor.findOne({
-        _id: req.body.instructors[i]
+    for (let i = 0; i < req.body.employees.length; i++) {
+      let employee = await Employee.findOne({
+        _id: req.body.employees[i]
       });
-      instructor.tennisClub = "No Current Club";
-      instructor.clubAccepted = false;
-      await instructor.save();
+      employee.business = "None";
+      await employee.save();
     }
-    await tennisClubProfile.save();
+    await businessProfile.save();
     res.status(200).send();
   } catch (error) {
     console.log(error);

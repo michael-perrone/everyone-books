@@ -3,11 +3,17 @@ import DropDownLink from '../DropDownLink/DropDownLink';
 import {SHOW_NOTIFICATIONS, EMPLOYEE_LOGOUT} from '../../../../actions/actions'
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
+import Axios from 'axios';
 
 const EmployeeDropDown = (props) => {
-  function editProfile() {
-    props.history.push(`/employee/${props.employeeProfile.employee.id}/createeditprofile`)
-  }
+
+  function goToNotifications() {
+    if (props.notiNum > 0 ) {
+      Axios.post('/api/employeeNotificationsRead', {id: props.employeeProfile.employee.id})
+    }
+    props.clearNotis();
+    props.showNotifications()
+   }
 
   function goHome() {
     props.history.push(`/employee/${props.employeeProfile.employee.id}`)
@@ -30,7 +36,7 @@ const EmployeeDropDown = (props) => {
           <DropDownLink clickProps={goToSettings}>
             Settings
           </DropDownLink>
-          <DropDownLink notiNum={props.notiNum} clickProp={props.showNotifications}>
+          <DropDownLink notiNum={props.notiNum} clickProp={goToNotifications}>
             Notifications
           </DropDownLink>
           <DropDownLink clickProp={employeeLogout}>

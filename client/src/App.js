@@ -2,7 +2,7 @@ import React from "react";
 import LoginScreen from "./LoginScreen/LoginScreen";
 import { Route, Redirect, Switch, withRouter } from "react-router-dom";
 import BusinessSignup from "./BusinessSignup/BusinessSignup";
-import TennisClub from "./TennisClub/TennisClub";
+import Business from "./Business/Business";
 import TennisClubsList from "./TennisClubsList/TennisClubsList";
 import UserHome from "./UserHome/UserHome";
 import AdminHome from "./AdminHome/AdminHome";
@@ -34,17 +34,19 @@ class App extends React.Component {
       adminToken = decoder(localStorage.getItem("adminToken"));
     }
 
-    let clubName = this.props.location.pathname.split("/")[2];
+    let businessName = this.props.location.pathname.split("/")[2];
+    console.log(businessName)
 
-    let instructorClubName;
+    let employeeBusinessName;
     if (
-      this.props.instructor &&
-      this.props.instructor.instructor.clubName !== undefined
+      this.props.employee &&
+      this.props.employee.employee.businessName !== undefined
     ) {
-      instructorClubName = this.props.instructor.instructor.clubName
+      employeeBusinessName = this.props.employee.employee.businessName
         .split(" ")
         .join("");
     }
+    console.log(this.props.employee)
 
     return (
       <React.Fragment>
@@ -56,11 +58,11 @@ class App extends React.Component {
           component={this.props.user ? TennisClubsList : NeedToLoginPage}
         />
         <Route
-          path="/clubs/:clubName"
+          path="/businesses/:businessId"
           exact
           component={
-            this.props.user || clubName === instructorClubName
-              ? TennisClub
+            this.props.user || businessName === employeeBusinessName
+              ? Business
               : NeedToLoginPage
           }
         />

@@ -16,7 +16,7 @@ const AdminSecondContainer = props => {
     <React.Fragment>
       <div id={styles.secondContainer}>
             <p
-            style={{ cursor: "pointer", marginRight: "30px" }}
+            style={{ cursor: "pointer" }}
             className={styles.links}
             >
             Schedule

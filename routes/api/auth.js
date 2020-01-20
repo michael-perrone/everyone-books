@@ -15,9 +15,7 @@ const Business = require('../../models/Business');
 
 router.post("/login", async (req, res) => {
   let adminLoggingIn = await Admin.findOne({ email: req.body.email });
-
   let userLoggingIn = await User.findOne({ email: req.body.email });
-
   if (adminLoggingIn) {
     try {
 
@@ -107,16 +105,20 @@ router.post("/login", async (req, res) => {
           .status(400)
           .json({ error: "Email/Password Combination not recognized" });
       }
+      const business = await Business.findOne({_id: employeeLoggingIn.businessWorkingAt});
+      console.log(business)
+      console.log(employeeLoggingIn)
       const payload = {
         employee: {
           employeeName: `${employeeLoggingIn.firstName} ${employeeLoggingIn.lastName}`,
           id: employeeLoggingIn.id,
-          // maybe add business here later
-        }
+          businessName: business ? business.businessNameAllLower : undefined
+        }   
       };
+      console.log(payload)
       jwt.sign(
         payload,
-        config.get("instructorSecret"),
+        config.get("employeeSecret"),
         { expiresIn: 360000 },
         (error, token) => {
           if (error) {

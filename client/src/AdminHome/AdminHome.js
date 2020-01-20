@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import Business from '../TennisClub/Business';
+import Business from '../Business/Business';
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 

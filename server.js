@@ -9,6 +9,7 @@ connectedDatabase();
 
 app.use(express.json({ extended: false }));
 
+app.use('/api/business', require('./routes/api/business'));
 app.use("/api/getInstructor", require("./routes/api/getInstructor"));
 app.use("/api/getBookings", require("./routes/api/getBookings"));
 app.use("/api/notifications", require("./routes/api/notifications"));
@@ -48,7 +49,8 @@ app.use("/api/rebooking", require("./routes/api/rebooking.js"));
 app.use("/api/rebooked", require("./routes/api/rebooked"));
 app.use("/api/iBookings", require("./routes/api/iBookings"));
 app.use("/api/addImage", require("./routes/api/addImage"));
-app.use('/api/getEmployeeId', require('./routes/api/getEmployeeId'));
+app.use('/api/getEmployee', require('./routes/api/getEmployee'));
+app.use('/api/employeeNotificationsRead', require('./routes/api/employeeNotificationsRead'))
 
 app.use(express.static("./client/build"));
 app.get("*", function(request, response) {

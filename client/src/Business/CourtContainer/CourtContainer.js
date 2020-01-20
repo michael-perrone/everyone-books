@@ -23,10 +23,10 @@ class CourtContainer extends React.Component {
     this.state = {
       blockBooking: false,
       showDeleteSuccess: false,
-      courtsClicked: false,
+      slotsClicked: false,
       firstSlotInArray: {},
       lastSlotInArray: {},
-      bookedCourts: [],
+      bookedThings: [],
       bookingArray: [],
       bookingError: "",
       booking: false,
@@ -38,7 +38,7 @@ class CourtContainer extends React.Component {
       bookingSuccess: false,
       newBooking: {},
       playersComingBack: [],
-      courtHoverNumber: null,
+      thingHoverNumber: null,
       doubleBookError: false
     };
   }
@@ -46,15 +46,15 @@ class CourtContainer extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (
       prevProps.date !== this.props.date ||
-      prevProps.clubName !== this.props.clubName
+      prevProps.businessName !== this.props.businessName
     ) {
       axios
-        .post("/api/courtBooked/getcourts", {
-          clubName: this.props.clubName,
+        .post("/api/thingBooked/getthings", {
+          businessName: this.props.businessName,
           date: this.props.date
         })
         .then(response => {
-          this.setState({ bookedCourts: response.data.bookings });
+          this.setState({ bookedThings: response.data.bookings });
         });
     }
   }
@@ -69,13 +69,13 @@ class CourtContainer extends React.Component {
   deleteBooking(bookingId) {
     return () => {
       axios
-        .post("/api/courtBooked/delete", {
+        .post("/api/thingBooked/delete", {
           bookingId,
-          clubName: this.props.clubName,
-          date: this.props.date
+          businessName: this.props.businessName,
+          date: this.props.date // LOL
         })
         .then(response => {
-          this.setState({ bookedCourts: response.data.bookings });
+          this.setState({ bookedThings: response.data.bookings });
           if (response.status === 200) {
             this.setState({ showBookingModalState: false });
             this.setShowDeleteSuccess();
@@ -86,7 +86,7 @@ class CourtContainer extends React.Component {
 
   courtClicked() {
     this.setState(prevState => {
-      return { courtsClicked: !prevState.courtsClicked };
+      return { slotsClicked: !prevState.slotsClicked };
     });
   }
 
@@ -98,8 +98,8 @@ class CourtContainer extends React.Component {
     this.setState({ showBookingModalState: false });
   };
 
-  courtArray = (topOfArray, courtsToLoopOver) => {
-    if (this.state.courtsClicked === false) {
+  thingArray = (topOfArray, courtsToLoopOver) => {
+    if (this.state.slotsClicked === false) {
       let numToAdd = "";
       if (this.props.timeChosen.timeSelected === "30 Minutes") {
         numToAdd = 1;
@@ -116,31 +116,31 @@ class CourtContainer extends React.Component {
       }
       const newArray = [];
       for (
-        let i = topOfArray.courtId;
-        i <= topOfArray.courtId + numToAdd;
+        let i = topOfArray.thingId;
+        i <= topOfArray.thingId + numToAdd;
         i++
       ) {
-        let courtIdArray = i.toString().split("");
+        let thingIdArray = i.toString().split("");
 
-        courtIdArray.shift();
+        thingIdArray.shift();
 
-        let stringNeeded = courtIdArray.join("");
+        let stringNeeded = thingIdArray.join("");
 
         let numberNeeded = parseInt(stringNeeded);
 
         newArray.push({
-          court: courtsToLoopOver[numberNeeded],
-          courtId: i
+          thing: thingsToLoopOver[numberNeeded],
+          thingId: i
         });
       }
 
       let bookingIdsArray = [];
       newArray.forEach(element => {
-        bookingIdsArray.push(element.courtId);
+        bookingIdsArray.push(element.thingId);
       });
       let bookedIdsArray = [];
-      this.state.bookedCourts.forEach(element => {
-        bookedIdsArray.push(...element.courtIds);
+      this.state.bookedThings.forEach(element => {
+        bookedIdsArray.push(...element.thingIds);
       });
       const found = bookingIdsArray.some(id => {
         return bookedIdsArray.includes(id.toString());
@@ -151,7 +151,7 @@ class CourtContainer extends React.Component {
         this.setState({
           lastSlotInArray: newArray[newArray.length - 1]
         });
-        this.setState({ courtHoverNumber: newArray[0].courtId });
+        this.setState({ thingHoverNumber: newArray[0].courtId });
       }
     }
   };
@@ -167,7 +167,7 @@ class CourtContainer extends React.Component {
     this.setState({ playersComingBack: players });
   };
 
-  bookCourtArray = () => {
+  bookThingArray = () => {
     if (this.state.bookingToSend !== null) {
       let playerIds = [];
       if (this.state.playersComingBack.length > 0) {
@@ -223,12 +223,12 @@ class CourtContainer extends React.Component {
               clubsMatchArray.push(element);
             }
           });
-          this.setState({ bookedCourts: clubsMatchArray });
+          this.setState({ bookedThings: clubsMatchArray });
         });
     }
     this.setState({ bookingArray: [] });
     this.setState({ tryingToBookModalState: false });
-    this.setState({ courtsClicked: false });
+    this.setState({ slotsClicked: false });
   };
 
   courtNumbersToCourtColumns() {
@@ -461,7 +461,7 @@ class CourtContainer extends React.Component {
 
   cancelBooking = () => {
     this.setState({ tryingToBookModalState: false });
-    this.setState({ courtsClicked: false });
+    this.setState({ slotsClicked: false });
     this.setState({ bookingArray: [] });
   };
 
@@ -505,7 +505,7 @@ class CourtContainer extends React.Component {
             clubName={this.props.clubName}
           />
           <BookingButtons
-            courtsClicked={this.state.courtsClicked}
+            slotsClicked={this.state.slotsClicked}
             cancelBooking={this.cancelBooking}
             showTryingToBookModal={this.showTryingToBookModal}
           />
@@ -526,15 +526,15 @@ class CourtContainer extends React.Component {
             {this.courtNumbersToCourtColumns().map((element, index) => {
               return (
                 <CourtColumns
-                  hoverNumber={this.state.courtHoverNumber}
+                  hoverNumber={this.state.thingHoverNumber}
                   courtClicked={this.courtClicked}
                   numberCourts={parseInt(this.props.numberCourts)}
                   cancelModal={this.cancelBookingModal}
                   bookingArray={this.state.bookingArray}
                   getModalObject={this.showBookingModal}
-                  getCourt={this.courtArray}
-                  clubName={this.props.clubName}
-                  bookedCourts={this.state.bookedCourts}
+                  getCourt={this.thingArray}
+                  businessName={this.props.businessName}
+                  bookedThings={this.state.bookedThings}
                   clubOpenNumber={this.convertTimeToCourts(
                     this.props.clubOpenTime
                   )}
