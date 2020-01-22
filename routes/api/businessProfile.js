@@ -7,6 +7,23 @@ const Employee = require('../../models/Employee');
 const Notification = require("../../models/Notification");
 const TennisClub = require("../../models/TennisClub");
 
+router.get("/mybusinessForProfile", adminAuth, async (req, res) => {
+  try {
+    let businessProfile = await BusinessProfile.findOne({
+      business: req.admin.businessId
+    });
+    if (businessProfile) {
+      return res.status(200).json({businessProfile, profileCreated: true,});
+    }
+    if (!businessProfile) {
+      return res.status(406).json({ profileCreated: false });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+
 router.get("/mybusiness", adminAuth, async (req, res) => {
   try {
     let businessProfile = await BusinessProfile.findOne({

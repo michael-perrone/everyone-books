@@ -18,7 +18,7 @@ class BookingIntro extends React.Component {
               class="fas fa-arrow-circle-left"
             ></i>
           </div>
-          <p id={styles.courtP}>Court Schedule</p>
+          <p id={styles.courtP}>Booking Schedule</p>
           <div
             className={styles.moveButtons}
             id={styles.rightButton}
@@ -32,14 +32,6 @@ class BookingIntro extends React.Component {
             ></i>
           </div>
         </div>
-        <p id={styles.bookingP}>
-          You may book a court anytime from {this.props.openTime} to{" "}
-          {this.props.closeTime}. To book a court, please select your preferred
-          date for the booking on the calendar above. You can also choose the
-          time limit of your booking, what you would like to book, and if
-          needed, which instructor will be on that booking. Click on your
-          selected time slot to continue.
-        </p>
       </div>
     );
   }

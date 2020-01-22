@@ -25,6 +25,7 @@ router.post('/',
           }
 
           let newBusiness = new Business({
+            bookingColumnType: req.body.bookingColumnType,
             businessNameAllLower: req.body.businessName
               .split(" ")
               .reduce((accum, element) => {

@@ -2,20 +2,25 @@ import React from "react";
 import styles from "./CourtColumns.module.css";
 import CourtSlot from "./CourtSlot/CourtSlot";
 
+
+//business
 class CourtColumns extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.turnNumberIntoCourts = this.turnNumberIntoCourts.bind(this);
+    this.turnNumberIntoThings = this.turnNumberIntoThings.bind(this);
     this.convertNumberBackToTime = this.convertNumberBackToTime.bind(this);
     this.state = {
-      courtsInColumn: [],
-      bookedCourts: this.props.bookedCourts,
+      thingsInColumn: [],
+      bookedThings: this.props.bookedThings,
       bookingArray: []
     };
   }
 
-  componentDidMount() {
-    this.turnNumberIntoCourts();
+  componentDidUpdate(prevProps) {
+    if (prevProps.businessOpenNumber !== this.props.businessOpenNumber || prevProps.businessCloseNumber !== this.props.businessCloseNumber || prevProps.date !== this.props.date) {
+      console.log('HI')
+      this.turnNumberIntoThings();
+    }
   }
 
   convertNumberBackToTime(number) {
@@ -216,37 +221,42 @@ class CourtColumns extends React.PureComponent {
     return timeFromNumber;
   }
 
-  turnNumberIntoCourts() {
-    const newCourtsArray = [];
+  turnNumberIntoThings() {
+    const newThingsArray = [];
     for (
-      let i = this.props.clubOpenNumber;
-      i < this.props.clubCloseNumber;
+      let i = this.props.businessOpenNumber;
+      i < this.props.businessCloseNumber;
       i++
     ) {
-      newCourtsArray.push({
+      newThingsArray.push({
         timeStart: this.convertNumberBackToTime(i),
         timeEnd: this.convertNumberBackToTime(i + 1)
       });
     }
-    this.setState({ courtsInColumn: newCourtsArray });
+    this.setState({ thingsInColumn: newThingsArray });
+    
   }
 
-  sendBookingInfo = courtId => {
+  // club
+
+  sendBookingInfo = thingId => {
     let objectSending = null;
-    this.props.bookedCourts.forEach(element => {
-      if (courtId == element.courtIds[element.courtIds.length / 2 - 1]) {
+    this.props.bookedThings.forEach(element => {
+      if (thingId == element.thingIds[element.thingIds.length / 2 - 1]) {
         objectSending = element;
       }
     });
     return objectSending;
   };
 
-  borderDivEnd = courtId => {
+  // thing 
+
+  borderDivEnd = thingId => {
     let getLastElement = "";
-    this.props.bookedCourts.forEach(element => {
+    this.props.bookedThings.forEach(element => {
       if (
-        courtId == element.courtIds[element.courtIds.length - 1] &&
-        element.courtIds.length > 1
+        thingId == element.thingIds[element.thingIds.length - 1] &&
+        element.thingIds.length > 1
       ) {
         getLastElement = true;
       }
@@ -256,18 +266,18 @@ class CourtColumns extends React.PureComponent {
 
   //
 
-  checkBooked = courtId => {
+  checkBooked = thingId => {
     let booked = [];
     let checkingVar = false;
-    if (this.props.bookedCourts.length > 0) {
-      this.props.bookedCourts.forEach(element1 => {
-        element1.courtIds.forEach(element => {
+    if (this.props.bookedThings.length > 0) {
+      this.props.bookedThings.forEach(element1 => {
+        element1.thingIds.forEach(element => {
           booked.push(element);
         });
       });
 
       booked.forEach(element => {
-        if (courtId == element) {
+        if (thingId == element) {
           checkingVar = true;
         }
       });
@@ -277,56 +287,56 @@ class CourtColumns extends React.PureComponent {
     }
   };
 
-  beingBooked = courtId => {
+  beingBooked = thingId => {
     let beingBooked = false;
     this.props.bookingArray.forEach(element => {
-      if (element.courtId == courtId) {
+      if (element.thingId == thingId) {
         beingBooked = true;
       }
     });
     return beingBooked;
   };
 
-  getCourts = court => () => {
-    this.props.getCourt(court, this.state.courtsInColumn);
+  getThings = thing => () => {
+    this.props.getThing(thing, this.state.thingsInColumn);
   };
 
   render() {
     return (
       <div>
-        <p style={{ textAlign: "center" }}>Court: {this.props.courtNumber}</p>
+        <p style={{ textAlign: "center" }}>{this.props.bookingColumnType}: {this.props.thingNumber}</p>
         <div
-          className={styles.courtColumn}
+          className={styles.thingColumn}
           style={{
             width: "170px"
           }}
         >
-          {this.state.courtsInColumn.map((element, index) => {
+          {this.state.thingsInColumn.map((element, index) => {
             return (
               <CourtSlot
                 hoverNumber={this.props.hoverNumber}
-                courtClicked={this.props.courtClicked}
+                thingClicked={this.props.thingClicked}
                 bookingArray={this.props.bookingArray}
                 date={this.props.date}
                 firstSlotInArray={this.props.firstSlotInArray}
                 lastSlotInArray={this.props.lastSlotInArray}
                 cancelModal={this.props.cancelModal}
                 beingBooked={this.beingBooked(
-                  this.props.courtNumber * 100 + index
+                  this.props.thingNumber * 100 + index
                 )}
                 getModalObject={this.props.getModalObject}
-                isLast={this.borderDivEnd(this.props.courtNumber * 100 + index)}
-                booked={this.checkBooked(this.props.courtNumber * 100 + index)}
+                isLast={this.borderDivEnd(this.props.thingNumber * 100 + index)}
+                booked={this.checkBooked(this.props.thingNumber * 100 + index)}
                 bookingInfo={this.sendBookingInfo(
-                  this.props.courtNumber * 100 + index
+                  this.props.thingNumber * 100 + index
                 )}
-                getCourt={this.getCourts}
+                getThings={this.getThings}
                 clubName={this.props.clubName}
-                courtNumber={this.props.courtNumber}
+                thingNumber={this.props.thingNumber}
                 timeStart={element.timeStart}
                 timeEnd={element.timeEnd}
-                key={this.props.courtNumber * 100 + index}
-                courtId={this.props.courtNumber * 100 + index}
+                key={this.props.thingNumber * 100 + index}
+                thingId={this.props.thingNumber * 100 + index}
               />
             );
           })}

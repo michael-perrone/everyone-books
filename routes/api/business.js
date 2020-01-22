@@ -5,7 +5,7 @@ const Employee = require('../../models/Employee');
 
 
 router.post('/', async (req, res) => {
-    const business = await Business.findOne({_id: req.body.businessId}).select(['schedule', 'typeOfBusiness', 'address', 'city', 'zip', 'state', 'bookingColumnNumber', 'website', 'phoneNumber']);
+    const business = await Business.findOne({_id: req.body.businessId}).select(['schedule', 'businessName', 'bookingColumnType', 'typeOfBusiness', 'address', 'city', 'zip', 'state', 'bookingColumnNumber', 'website', 'phoneNumber']);
     const profile = await BusinessProfile.findOne({business: req.body.businessId})
     if (profile && business) {
        let employees = await Employee.find({_id: profile.employeesWhoAccepted}).select(['_id', "fullName"]);

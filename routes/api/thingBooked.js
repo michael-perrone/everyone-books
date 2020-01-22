@@ -1,38 +1,38 @@
 const express = require("express");
 const router = express.Router();
-const CourtBooked = require("../../models/CourtBooked");
+const Booking = require("../../models/Booking");
 const Instructor = require("../../models/Instructor");
 const User = require("../../models/User");
 
 router.post("/", async (req, res) => {
   try {
-    let newCourtBooked = new CourtBooked({
+    let newThingBooked = new Booking({
       bookingType: req.body.booking.bookingType,
-      instructorBooked: req.body.booking.instructorId,
-      instructorName: req.body.booking.instructorName,
+      employeeBooked: req.body.booking.employeeId,
+      employeeName: req.body.booking.employeeName,
       bookedBy: req.body.booking.bookedBy,
-      clubName: req.body.booking.clubName,
-      courtIds: req.body.booking.courtIds,
+      businessName: req.body.booking.clubName,
+      thingIds: req.body.booking.thingIds,
       timeStart: req.body.booking.timeStart,
       timeEnd: req.body.booking.timeEnd,
       minutes: req.body.booking.minutes,
       date: req.body.booking.date,
-      players: req.body.players
+      customers: req.body.customers
     });
-    if (req.body.players.length > 0) {
-      const players = await User.find({ _id: newCourtBooked.players });
-      for (let i = 0; i < players.length; i++) {
-        let previousPlayersBookings = [...players[i].bookings];
-        previousPlayersBookings.push(newCourtBooked._id);
-        players[i].bookings = previousPlayersBookings;
-        players[i].save();
+    if (req.body.customers.length > 0) {
+      const customers = await User.find({ _id: newCourtBooked.players });
+      for (let i = 0; i < customers.length; i++) {
+        let previousCustomersBookings = [...customers[i].bookings];
+        previousCustomersBookings.push(newCourtBooked._id);
+        customers[i].bookings = previousCustomersBookings;
+        customers[i].save();
       }
     }
-    await newCourtBooked.save();
+    await newThingBooked.save();
 
-    if (newCourtBooked) {
-      const bookings = await CourtBooked.find({
-        clubName: req.body.booking.clubName,
+    if (newThingBooked) {
+      const bookings = await Bookings.find({
+        businessId: req.body.booking.businessId,
         date: req.body.date
       });
       res.status(200).json({ newBooking: newCourtBooked, bookings });
@@ -42,10 +42,10 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.post("/getcourts", async (req, res) => {
+router.post("/getthings", async (req, res) => {
   try {
-    const bookings = await CourtBooked.find({
-      clubName: req.body.clubName,
+    const bookings = await Booking.find({
+      businessId: req.body.businessId,
       date: req.body.date
     });
     res.status(200).json({ bookings });

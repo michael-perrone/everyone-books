@@ -1,11 +1,11 @@
 const express = require("express");
 const Instructor = require("../../models/Instructor");
-const CourtBooked = require("../../models/CourtBooked");
+const Booking = require("../../models/Booking");
 const router = express.Router();
 
 router.post("/", async (req, res) => {
   const instructor = await Instructor.findOne({ _id: req.body.instructorId });
-  let instructorBookings = await CourtBooked.find({
+  let instructorBookings = await Booking.find({
     instructorBooked: req.body.instructorId,
     date: req.body.date
   });

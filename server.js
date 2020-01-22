@@ -13,7 +13,7 @@ app.use('/api/business', require('./routes/api/business'));
 app.use("/api/getInstructor", require("./routes/api/getInstructor"));
 app.use("/api/getBookings", require("./routes/api/getBookings"));
 app.use("/api/notifications", require("./routes/api/notifications"));
-app.use("/api/courtBooked", require("./routes/api/courtBooked"));
+app.use("/api/thingBooked", require("./routes/api/thingBooked"));
 app.use("/api/club", require("./routes/api/club"));
 app.use("/api/usersSignup", require("./routes/api/usersSignup"));
 app.use("/api/auth", require("./routes/api/auth"));

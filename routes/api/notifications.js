@@ -5,7 +5,7 @@ const instructorAuth = require("../../middleware/authInstructor");
 const Instructor = require("../../models/Instructor");
 const Notification = require("../../models/Notification");
 const Business = require('../../models/Business');
-const CourtBooked = require("../../models/CourtBooked");
+const Booking = require("../../models/Booking");
 const User = require("../../models/User");
 const BusinessProfile = require('../../models/BusinessProfile')
 const userAuth = require("../../middleware/authUser");
@@ -14,7 +14,7 @@ const config = require("config");
 
 router.post("/userBookedInstructor", async (req, res) => {
   try {
-    let booking = await CourtBooked.findOne({ _id: req.body.bookingId });
+    let booking = await Booking.findOne({ _id: req.body.bookingId });
     let instructor = await Instructor.findOne({ _id: req.body.instructorId });
     let bookingDateArray = booking.date.split(" ");
     let bookingDate = bookingDateArray.join("-");
@@ -48,7 +48,7 @@ router.post('/allReadUser', userAuth, async (req, res) => {
 router.post("/instructorBookedUser", async (req, res) => {
   try {
     let instructor = await Instructor.findOne({ _id: req.body.instructorId });
-    let booking = await CourtBooked.findOne({ _id: req.body.bookingId });
+    let booking = await Booking.findOne({ _id: req.body.bookingId });
     let players = await User.find({ _id: req.body.users });
     let newNotification = new Notification({
       notificationType: "InstructorBookedUser",

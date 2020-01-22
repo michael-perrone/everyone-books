@@ -4,9 +4,13 @@ const CourtBookedSchema = new mongoose.Schema({
   timeStart: String,
   timeEnd: String,
   bookedBy: String,
-  courtIds: [String],
+  thingIds: [String],
   minutes: String,
-  clubName: String,
+  businessName: String,
+  businessId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'business'
+  },
   date: String,
   instructorName: {
     type: String,
@@ -20,7 +24,7 @@ const CourtBookedSchema = new mongoose.Schema({
     required: true,
     type: String
   },
-  players: {
+  customers: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: "user"
   }

@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const CourtBooked = require("../../models/CourtBooked");
+const Booking = require("../../models/Booking");
 const instructorAuth = require("../../middleware/authInstructor");
 
 router.post("/", async (req, res) => {
-  let allBookings = await CourtBooked.find({
+  let allBookings = await Booking.find({
     instructorBooked: req.body.instructorId
   });
 
@@ -35,7 +35,7 @@ router.get("/instructor", instructorAuth, async (req, res) => {
 
   let dateFormatted = `${month.toString()} ${day.toString()} ${year.toString()}`;
 
-  let instructorsBookings = await CourtBooked.find({
+  let instructorsBookings = await Booking.find({
     instructorBooked: req.instructor.id,
     date: dateFormatted
   });
@@ -61,7 +61,7 @@ router.post("/schedule", async (req, res) => {
 
   let dateToUse = [month, day, year].join(" ");
 
-  let bookings = await CourtBooked.find({
+  let bookings = await Booking.find({
     instructorBooked: req.body.instructorId,
     date: dateToUse
   });

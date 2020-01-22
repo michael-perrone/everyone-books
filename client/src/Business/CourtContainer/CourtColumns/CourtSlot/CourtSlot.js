@@ -7,12 +7,14 @@ class CourtSlot extends React.Component {
 
     // this.bookCourt = this.bookCourt.bind(this);
     this.state = {
-      bookedCourts: [],
       booking: false
     };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.timeStart !== nextProps.timeStart) {
+      return true;
+    }
     if (this.props.booked && this.props.hoverNumber === nextProps.hoverNumber) {
       return true;
     }
@@ -32,10 +34,10 @@ class CourtSlot extends React.Component {
 
     if (this.props.beingBooked == nextProps.beingBooked) {
       if (
-        this.props.courtId == nextProps.firstSlotInArray.courtId ||
-        this.props.courtId == nextProps.lastSlotInArray.courtId ||
-        this.props.courtId == this.props.lastSlotInArray.courtId ||
-        this.props.courtId == this.props.firstSlotInArray.courtId
+        this.props.thingId == nextProps.firstSlotInArray.thingId ||
+        this.props.thingId == nextProps.lastSlotInArray.thingId ||
+        this.props.thingId == this.props.lastSlotInArray.thingId ||
+        this.props.thingId == this.props.firstSlotInArray.thingId
       ) {
         return true;
       } else {
@@ -50,8 +52,8 @@ class CourtSlot extends React.Component {
     this.setState({ clicked: true });
     let peacock = true;
     if (this.props.bookingArray.length === 0 || this.state.clicked || peacock) {
-      this.props.getCourt({
-        courtId: this.props.courtId,
+      this.props.getThings({
+        thingId: this.props.thingId,
         timeStart: this.props.timeStart,
         endTime: this.props.timeEnd,
         clubName: this.props.clubName
@@ -62,7 +64,6 @@ class CourtSlot extends React.Component {
   };
 
   render() {
-    console.log(this.props.hoverNumber);
 
     let color = "";
 
@@ -125,8 +126,8 @@ class CourtSlot extends React.Component {
         }}
         id={
           !this.props.booked
-            ? styles.courtSlotNotBooked
-            : styles.courtSlotBooked
+            ? styles.thingSlotNotBooked
+            : styles.thingSlotBooked
         }
       >
         {this.props.booked && this.props.isLast && (
@@ -168,8 +169,8 @@ class CourtSlot extends React.Component {
               justifyContent: "center"
             }}
             onClick={this.phoneClick}
-            onMouseEnter={this.props.getCourt({
-              courtId: this.props.courtId,
+            onMouseEnter={this.props.getThings({
+              thingId: this.props.thingId,
               timeStart: this.props.timeStart,
               endTime: this.props.timeEnd,
               clubName: this.props.clubName
@@ -180,9 +181,9 @@ class CourtSlot extends React.Component {
         )}
         {!this.props.booked &&
           this.props.beingBooked &&
-          this.props.courtId == this.props.firstSlotInArray.courtId &&
-          this.props.firstSlotInArray.courtId !=
-            this.props.lastSlotInArray.courtId && (
+          this.props.thingId == this.props.firstSlotInArray.thingId &&
+          this.props.firstSlotInArray.thingId !=
+            this.props.lastSlotInArray.thingId && (
             <div
               style={{
                 borderTop: "1px solid black",
@@ -197,9 +198,9 @@ class CourtSlot extends React.Component {
 
                 zIndex: "2"
               }}
-              onClick={this.props.courtClicked}
-              onMouseEnter={this.props.getCourt({
-                courtId: this.props.courtId,
+              onClick={this.props.thingClicked}
+              onMouseEnter={this.props.getThings({
+                thingId: this.props.thingId,
                 timeStart: this.props.timeStart,
                 endTime: this.props.timeEnd,
                 clubName: this.props.clubName
@@ -210,11 +211,11 @@ class CourtSlot extends React.Component {
           )}
         {!this.props.booked &&
           this.props.beingBooked &&
-          this.props.courtId == this.props.lastSlotInArray.courtId &&
-          this.props.lastSlotInArray.courtId !=
-            this.props.firstSlotInArray.courtId && (
+          this.props.thingId == this.props.lastSlotInArray.thingId &&
+          this.props.lastSlotInArray.thingId !=
+            this.props.firstSlotInArray.thingId && (
             <div
-              onClick={this.props.courtClicked}
+              onClick={this.props.thingClicked}
               style={{
                 borderBottom: "1px solid black",
                 borderLeft: "1px solid black",
@@ -228,8 +229,8 @@ class CourtSlot extends React.Component {
                 alignItems: "center",
                 zIndex: "2"
               }}
-              onMouseEnter={this.props.getCourt({
-                courtId: this.props.courtId,
+              onMouseEnter={this.props.getThings({
+                thingId: this.props.thingId,
                 timeStart: this.props.timeStart,
                 endTime: this.props.timeEnd,
                 clubName: this.props.clubName
@@ -240,11 +241,11 @@ class CourtSlot extends React.Component {
           )}
         {!this.props.booked &&
           this.props.beingBooked &&
-          this.props.courtId != this.props.firstSlotInArray.courtId &&
-          this.props.courtId != this.props.lastSlotInArray.courtId &&
+          this.props.thingId != this.props.firstSlotInArray.thingId &&
+          this.props.thingId != this.props.lastSlotInArray.thingId &&
           this.props.bookingArray.length > 1 && (
             <div
-              onClick={this.props.courtClicked}
+              onClick={this.props.thingClicked}
               style={{
                 height: "100%",
                 borderLeft: "1px solid black",
@@ -257,16 +258,16 @@ class CourtSlot extends React.Component {
 
                 zIndex: "2"
               }}
-              onMouseEnter={this.props.getCourt({
-                courtId: this.props.courtId,
+              onMouseEnter={this.props.getThings({
+                thingId: this.props.thingId,
                 timeStart: this.props.timeStart,
                 endTime: this.props.timeEnd,
                 clubName: this.props.clubName
               })}
             ></div>
           )}
-        {this.props.firstSlotInArray.courtId ==
-          this.props.lastSlotInArray.courtId &&
+        {this.props.firstSlotInArray.thingId ==
+          this.props.lastSlotInArray.thingId &&
           this.props.beingBooked &&
           !this.props.booked && (
             <div
@@ -280,8 +281,8 @@ class CourtSlot extends React.Component {
                 alignItems: "center",
                 zIndex: "2"
               }}
-              onMouseEnter={this.props.getCourt({
-                courtId: this.props.courtId,
+              onMouseEnter={this.props.getThings({
+                thingId: this.props.thingId,
                 timeStart: this.props.timeStart,
                 endTime: this.props.timeEnd,
                 clubName: this.props.clubName

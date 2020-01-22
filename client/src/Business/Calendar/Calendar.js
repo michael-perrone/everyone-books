@@ -156,7 +156,7 @@ class Calendar extends React.Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    chooseDate: (dateChosen) => dispatch({type: CHOOSE_DATE, payload: {dateChosen}}) 
+    chooseDate: (dateChosen) => () => dispatch({type: CHOOSE_DATE, payload: {dateChosen}}) 
   }
 }
 

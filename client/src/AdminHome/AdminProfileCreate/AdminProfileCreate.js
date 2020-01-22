@@ -26,7 +26,7 @@ const AdminProfileCreate = props => {
 
   useEffect(() => {
     axios
-      .get("/api/businessProfile/mybusiness", {
+      .get("/api/businessProfile/mybusinessForProfile", {
         headers: { "x-auth-token": props.adminToken }
       })
       .then(response => {

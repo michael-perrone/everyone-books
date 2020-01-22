@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const TennisClub = require("../../models/TennisClub");
 const User = require("../../models/User");
-const CourtBooked = require("../../models/CourtBooked");
+const Booking = require("../../models/Booking");
 
 router.post("/", async (req, res) => {
   const tennisClub = await TennisClub.findOne({
@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
 });
 
 router.post("/saveNewPlayers", async (req, res) => {
-  const booking = await CourtBooked.findOne({ _id: req.body.bookingId });
+  const booking = await Booking.findOne({ _id: req.body.bookingId });
   let oldPlayers = booking.players;
   booking.players = req.body.newPlayers;
   await booking.save();

@@ -10,11 +10,22 @@ class Business extends React.Component {
     super(props);
     this.state = {
       business: "",
-      showCourts: false,
+      showThings: false,
       businessProfile: "",
       profileComplete: null,
-      employees: ""
+      employees: "",
+      timeOpen: "",
+      timeClose: ""
     }; 
+  }
+
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.dateChosen !== prevProps.dateChosen || this.state.business.businessName !== prevState.business.businessName) {
+      console.log(this.state.business.schedule[this.props.dateChosen.getDay()].open)
+      this.setState({timeOpen: this.state.business.schedule[this.props.dateChosen.getDay()].open})
+      this.setState({timeClose: this.state.business.schedule[this.props.dateChosen.getDay()].close})
+    }
   }
 
   componentDidMount() {
@@ -52,6 +63,9 @@ class Business extends React.Component {
   }
 
   render() {
+    console.log(this.state.employees)
+    console.log(this.state.business)
+    console.log(this.props.dateChosen.getDay())
     return (
       <React.Fragment>
         {this.state.profileComplete && (
@@ -59,12 +73,15 @@ class Business extends React.Component {
             <div>
               <div style={{ overflow: "auto" }}>
                 <AdminBooking
-                  date={this.state.dateChosenForCourts}
+                  date={this.state.dateChosenForThings}
                   onDateClick={this.onDateClick}
                   employees={this.state.employees}
                 />
               </div>
               <CourtContainer
+                openTime={this.state.timeOpen}
+                closeTime={this.state.timeClose}
+                bookingColumnType={this.state.business.bookingColumnType}
                 businessNameAllLower={this.state.business.businessNameAllLower}
                 numberColumns={this.state.business.bookingColumnNumber}
                 businessName={this.state.business.businessName}
@@ -99,7 +116,7 @@ const mapStateToProps = state => {
     admin: state.authReducer.admin,
     adminToken: state.authReducer.adminToken,
     instructor: state.authReducer.instructor,
-    bookACourt: state.booleanReducers.bookACourt,
+    bookAThing: state.booleanReducers.bookAThing,
     user: state.authReducer.user,
     dateChosen: state.dateReducer.dateChosen
   };

@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../../models/User");
-const CourtBooked = require("../../models/CourtBooked");
+const Booking = require("../../models/Booking");
 
 router.post("/", async (req, res) => {
-  let booking = await CourtBooked.findOne({ _id: req.body.bookingId });
+  let booking = await Booking.findOne({ _id: req.body.bookingId });
   let players = await User.find({ _id: booking.players });
   let playersToSendBack = [];
   if (players.length > 0) {

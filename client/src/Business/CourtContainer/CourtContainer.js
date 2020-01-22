@@ -10,16 +10,20 @@ import OtherAlert from "../../OtherAlerts/OtherAlerts";
 import { HOVER_NUMBER } from "../../actions/actions";
 import BookingButtons from "./BookingButtons/BookingButtons";
 
+
+
+
 class CourtContainer extends React.Component {
+  
   constructor(props) {
     super(props);
-    this.courtNumbersToCourtColumns = this.courtNumbersToCourtColumns.bind(
+    this.thingNumbersToThingColumns = this.thingNumbersToThingColumns.bind(
       this
     );
     this.deleteBooking = this.deleteBooking.bind(this);
-    this.convertTimeToCourts = this.convertTimeToCourts.bind(this);
+    this.convertTimeToThings = this.convertTimeToThings.bind(this);
     this.setShowDeleteSuccess = this.setShowDeleteSuccess.bind(this);
-    this.courtClicked = this.courtClicked.bind(this);
+    this.thingClicked = this.thingClicked.bind(this);
     this.state = {
       blockBooking: false,
       showDeleteSuccess: false,
@@ -59,12 +63,13 @@ class CourtContainer extends React.Component {
     }
   }
 
+
+
   setShowDeleteSuccess() {
     this.setState({ showDeleteSuccess: false });
     setTimeout(() => this.setState({ showDeleteSuccess: true }), 200);
   }
-
-  //dwd
+  
 
   deleteBooking(bookingId) {
     return () => {
@@ -84,11 +89,13 @@ class CourtContainer extends React.Component {
     };
   }
 
-  courtClicked() {
+  thingClicked() {
     this.setState(prevState => {
       return { slotsClicked: !prevState.slotsClicked };
     });
   }
+
+
 
   showBookingModal = objectToModal => () => {
     this.setState({ objectToModal, showBookingModalState: true });
@@ -98,7 +105,7 @@ class CourtContainer extends React.Component {
     this.setState({ showBookingModalState: false });
   };
 
-  thingArray = (topOfArray, courtsToLoopOver) => {
+  thingArray = (topOfArray, thingsToLoopOver) => {
     if (this.state.slotsClicked === false) {
       let numToAdd = "";
       if (this.props.timeChosen.timeSelected === "30 Minutes") {
@@ -151,7 +158,7 @@ class CourtContainer extends React.Component {
         this.setState({
           lastSlotInArray: newArray[newArray.length - 1]
         });
-        this.setState({ thingHoverNumber: newArray[0].courtId });
+        this.setState({ thingHoverNumber: newArray[0].thingId });
       }
     }
   };
@@ -176,7 +183,7 @@ class CourtContainer extends React.Component {
         }
       }
       axios
-        .post("/api/courtBooked", {
+        .post("/api/thingBooked", {
           booking: this.state.bookingToSend,
           players: playerIds,
           date: this.props.date
@@ -231,132 +238,135 @@ class CourtContainer extends React.Component {
     this.setState({ slotsClicked: false });
   };
 
-  courtNumbersToCourtColumns() {
-    const newCourtsArray = [];
-    for (let i = 1; i <= this.props.numberCourts; i++) {
-      newCourtsArray.push({ courtNumber: i });
+  thingNumbersToThingColumns() {
+    const newThingsArray = [];
+    for (let i = 1; i <= parseInt(this.props.numberColumns); i++) {
+      newThingsArray.push({ thingNumber: i });
     }
-    return newCourtsArray;
+    return newThingsArray;
+  }
+  // court
+
+  convertTimeToThings(numberTime) {
+    let thingTimeNumber = null;
+    if (numberTime === "12:00 AM") {
+      thingTimeNumber = 0;
+    } else if (numberTime === "12:30 AM") {
+      thingTimeNumber = 2;
+    } else if (numberTime === "1:00 AM") {
+      thingTimeNumber = 4;
+    } else if (numberTime === "1:30 AM") {
+      thingTimeNumber = 6;
+    } else if (numberTime === "2:00 AM") {
+      thingTimeNumber = 8;
+    } else if (numberTime === "2:30 AM") {
+      thingTimeNumber = 10;
+    } else if (numberTime === "3:00 AM") {
+      thingTimeNumber = 12;
+    } else if (numberTime === "3:30 AM") {
+      thingTimeNumber = 14;
+    } else if (numberTime === "4:00 AM") {
+      thingTimeNumber = 16;
+    } else if (numberTime === "4:30 AM") {
+      thingTimeNumber = 18;
+    } else if (numberTime === "5:00 AM") {
+      thingTimeNumber = 20;
+    } else if (numberTime === "5:30 AM") {
+      thingTimeNumber = 22;
+    } else if (numberTime === "6:00 AM") {
+      thingTimeNumber = 24;
+    } else if (numberTime === "6:30 AM") {
+      thingTimeNumber = 26;
+    } else if (numberTime === "7:00 AM") {
+      thingTimeNumber = 28;
+    } else if (numberTime === "7:30 AM") {
+      thingTimeNumber = 30;
+    } else if (numberTime === "8:00 AM") {
+      thingTimeNumber = 32;
+    } else if (numberTime === "8:30 AM") {
+      thingTimeNumber = 34;
+    } else if (numberTime === "9:00 AM") {
+      thingTimeNumber = 36;
+    } else if (numberTime === "9:30 AM") {
+      thingTimeNumber = 38;
+    } else if (numberTime === "10:00 AM") {
+      thingTimeNumber = 40;
+    } else if (numberTime === "10:30 AM") {
+      thingTimeNumber = 42;
+    } else if (numberTime === "11:00 AM") {
+      thingTimeNumber = 44;
+    } else if (numberTime === "11:30 AM") {
+      thingTimeNumber = 46;
+    } else if (numberTime === "12:00 PM") {
+      thingTimeNumber = 48;
+    } else if (numberTime === "12:30 PM") {
+      thingTimeNumber = 50;
+    } else if (numberTime === "1:00 PM") {
+      thingTimeNumber = 52;
+    } else if (numberTime === "1:30 PM") {
+      thingTimeNumber = 54;
+    } else if (numberTime === "2:00 PM") {
+      thingTimeNumber = 56;
+    } else if (numberTime === "2:30 PM") {
+      thingTimeNumber = 58;
+    } else if (numberTime === "3:00 PM") {
+      thingTimeNumber = 60;
+    } else if (numberTime === "3:30 PM") {
+      thingTimeNumber = 62;
+    } else if (numberTime === "4:00 PM") {
+      thingTimeNumber = 64;
+    } else if (numberTime === "4:30 PM") {
+      thingTimeNumber = 66;
+    } else if (numberTime === "5:00 PM") {
+      thingTimeNumber = 68;
+    } else if (numberTime === "5:30 PM") {
+      thingTimeNumber = 70;
+    } else if (numberTime === "6:00 PM") {
+      thingTimeNumber = 72;
+    } else if (numberTime === "6:30 PM") {
+      thingTimeNumber = 74;
+    } else if (numberTime === "7:00 PM") {
+      thingTimeNumber = 76;
+    } else if (numberTime === "7:30 PM") {
+      thingTimeNumber = 78;
+    } else if (numberTime === "8:00 PM") {
+      thingTimeNumber = 80;
+    } else if (numberTime === "8:30 PM") {
+      thingTimeNumber = 82;
+    } else if (numberTime === "9:00 PM") {
+      thingTimeNumber = 84;
+    } else if (numberTime === "9:30 PM") {
+      thingTimeNumber = 86;
+    } else if (numberTime === "10:00 PM") {
+      thingTimeNumber = 88;
+    } else if (numberTime === "10:30 PM") {
+      thingTimeNumber = 90;
+    } else if (numberTime === "11:00 PM") {
+      thingTimeNumber = 92;
+    } else if (numberTime === "11:30 PM") {
+      thingTimeNumber = 94;
+    }
+    return thingTimeNumber;
   }
 
-  convertTimeToCourts(numberTime) {
-    let courtTimeNumber = null;
-    if (numberTime === "12:00 AM") {
-      courtTimeNumber = 0;
-    } else if (numberTime === "12:30 AM") {
-      courtTimeNumber = 2;
-    } else if (numberTime === "1:00 AM") {
-      courtTimeNumber = 4;
-    } else if (numberTime === "1:30 AM") {
-      courtTimeNumber = 6;
-    } else if (numberTime === "2:00 AM") {
-      courtTimeNumber = 8;
-    } else if (numberTime === "2:30 AM") {
-      courtTimeNumber = 10;
-    } else if (numberTime === "3:00 AM") {
-      courtTimeNumber = 12;
-    } else if (numberTime === "3:30 AM") {
-      courtTimeNumber = 14;
-    } else if (numberTime === "4:00 AM") {
-      courtTimeNumber = 16;
-    } else if (numberTime === "4:30 AM") {
-      courtTimeNumber = 18;
-    } else if (numberTime === "5:00 AM") {
-      courtTimeNumber = 20;
-    } else if (numberTime === "5:30 AM") {
-      courtTimeNumber = 22;
-    } else if (numberTime === "6:00 AM") {
-      courtTimeNumber = 24;
-    } else if (numberTime === "6:30 AM") {
-      courtTimeNumber = 26;
-    } else if (numberTime === "7:00 AM") {
-      courtTimeNumber = 28;
-    } else if (numberTime === "7:30 AM") {
-      courtTimeNumber = 30;
-    } else if (numberTime === "8:00 AM") {
-      courtTimeNumber = 32;
-    } else if (numberTime === "8:30 AM") {
-      courtTimeNumber = 34;
-    } else if (numberTime === "9:00 AM") {
-      courtTimeNumber = 36;
-    } else if (numberTime === "9:30 AM") {
-      courtTimeNumber = 38;
-    } else if (numberTime === "10:00 AM") {
-      courtTimeNumber = 40;
-    } else if (numberTime === "10:30 AM") {
-      courtTimeNumber = 42;
-    } else if (numberTime === "11:00 AM") {
-      courtTimeNumber = 44;
-    } else if (numberTime === "11:30 AM") {
-      courtTimeNumber = 46;
-    } else if (numberTime === "12:00 PM") {
-      courtTimeNumber = 48;
-    } else if (numberTime === "12:30 PM") {
-      courtTimeNumber = 50;
-    } else if (numberTime === "1:00 PM") {
-      courtTimeNumber = 52;
-    } else if (numberTime === "1:30 PM") {
-      courtTimeNumber = 54;
-    } else if (numberTime === "2:00 PM") {
-      courtTimeNumber = 56;
-    } else if (numberTime === "2:30 PM") {
-      courtTimeNumber = 58;
-    } else if (numberTime === "3:00 PM") {
-      courtTimeNumber = 60;
-    } else if (numberTime === "3:30 PM") {
-      courtTimeNumber = 62;
-    } else if (numberTime === "4:00 PM") {
-      courtTimeNumber = 64;
-    } else if (numberTime === "4:30 PM") {
-      courtTimeNumber = 66;
-    } else if (numberTime === "5:00 PM") {
-      courtTimeNumber = 68;
-    } else if (numberTime === "5:30 PM") {
-      courtTimeNumber = 70;
-    } else if (numberTime === "6:00 PM") {
-      courtTimeNumber = 72;
-    } else if (numberTime === "6:30 PM") {
-      courtTimeNumber = 74;
-    } else if (numberTime === "7:00 PM") {
-      courtTimeNumber = 76;
-    } else if (numberTime === "7:30 PM") {
-      courtTimeNumber = 78;
-    } else if (numberTime === "8:00 PM") {
-      courtTimeNumber = 80;
-    } else if (numberTime === "8:30 PM") {
-      courtTimeNumber = 82;
-    } else if (numberTime === "9:00 PM") {
-      courtTimeNumber = 84;
-    } else if (numberTime === "9:30 PM") {
-      courtTimeNumber = 86;
-    } else if (numberTime === "10:00 PM") {
-      courtTimeNumber = 88;
-    } else if (numberTime === "10:30 PM") {
-      courtTimeNumber = 90;
-    } else if (numberTime === "11:00 PM") {
-      courtTimeNumber = 92;
-    } else if (numberTime === "11:30 PM") {
-      courtTimeNumber = 94;
-    }
-    return courtTimeNumber;
-  }
+  
 
   showTryingToBookModal = () => {
     this.setState({ doubleBookError: false });
     let blockBooking;
     if (this.props.instructorChosen) {
-      let courtIds = [];
+      let thingIds = [];
       this.state.bookingArray.forEach(element => {
-        let courtIdArray = element.courtId.toString().split("");
-        courtIdArray.shift();
-        let realId = courtIdArray.join("");
+        let thingIdArray = element.thingId.toString().split("");
+        thingIdArray.shift();
+        let realId = thingIdArray.join("");
         console.log(realId);
-        courtIds.push(realId);
+        thingIds.push(realId);
       });
       axios
         .post("/api/checkInstructorAvailability", {
           instructorId: this.props.instructorChosen.instructorChosen._id,
-          courtIds,
+          thingIds,
           date: this.props.date
         })
         .then(response => {
@@ -382,25 +392,27 @@ class CourtContainer extends React.Component {
               instructorId = this.props.instructorChosen.instructorChosen._id;
             }
             if (this.state.bookingArray.length > 1) {
-              const courtIdsArray = [];
+              const thingIdsArray = [];
               this.state.bookingArray.forEach(element => {
-                courtIdsArray.push(element.courtId);
+                thingIdsArray.push(element.thingId);
+              
               });
-              let courtNumberComing = courtIdsArray[0].toString();
-              let courtNumberString = courtNumberComing.split("");
-              let courtNumber = parseInt(courtNumberString[0]);
+              let thingNumberComing = thingIdsArray[0].toString();
+              let thingNumberString = thingNumberComing.split("");
+              let thingNumber = parseInt(thingNumberString[0]);
+              
               const bookingToSend = {
                 bookingType: this.props.bookingType.bookingType,
                 instructorName,
                 instructorId,
                 bookedBy: nameForBooking,
-                timeStart: this.state.firstSlotInArray.court.timeStart,
-                timeEnd: this.state.lastSlotInArray.court.timeEnd,
-                courtIds: courtIdsArray,
+                timeStart: this.state.firstSlotInArray.thing.timeStart,
+                timeEnd: this.state.lastSlotInArray.thing.timeEnd,
+                thingIds: thingIdsArray,
                 minutes: this.state.bookingArray.length * 15,
                 clubName: this.props.clubName,
                 date: this.props.date,
-                courtNumber
+                thingNumber
               };
               this.setState({ bookingToSend });
 
@@ -428,25 +440,25 @@ class CourtContainer extends React.Component {
         instructorId = this.props.instructorChosen.instructorChosen._id;
       }
       if (this.state.bookingArray.length > 1) {
-        const courtIdsArray = [];
+        const thingIdsArray = [];
         this.state.bookingArray.forEach(element => {
-          courtIdsArray.push(element.courtId);
+          thingIdsArray.push(element.thingId);
         });
-        let courtNumberComing = courtIdsArray[0].toString();
-        let courtNumberString = courtNumberComing.split("");
-        let courtNumber = parseInt(courtNumberString[0]);
+        let thingNumberComing = thingIdsArray[0].toString();
+        let thingNumberString = thingNumberComing.split("");
+        let thingNumber = parseInt(thingNumberString[0]);
         const bookingToSend = {
           bookingType: this.props.bookingType.bookingType,
           instructorName,
           instructorId,
           bookedBy: nameForBooking,
-          timeStart: this.state.firstSlotInArray.court.timeStart,
-          timeEnd: this.state.lastSlotInArray.court.timeEnd,
-          courtIds: courtIdsArray,
+          timeStart: this.state.firstSlotInArray.thing.timeStart,
+          timeEnd: this.state.lastSlotInArray.thing.timeEnd,
+          thingIds: thingIdsArray,
           minutes: this.state.bookingArray.length * 15,
           clubName: this.props.clubName,
           date: this.props.date,
-          courtNumber
+          thingNumber
         };
         this.setState({ bookingToSend });
 
@@ -477,9 +489,10 @@ class CourtContainer extends React.Component {
         )}
         <OtherAlert
           alertType="success"
-          alertMessage="Court Deleted"
+          alertMessage="Booking Deleted"
           showAlert={this.state.showDeleteSuccess}
         />
+        
         <OtherAlert
           alertType="error"
           alertMessage="This instructor is already booked at this time."
@@ -493,7 +506,7 @@ class CourtContainer extends React.Component {
               clubNameAllLower={this.props.clubNameAllLower}
               booking={this.state.bookingToSend}
               cancelBooking={this.cancelBooking}
-              bookCourt={this.bookCourtArray}
+              bookThing={this.bookThingArray}
               setPlayersComingBack={this.setPlayersComingBack}
             />
           </div>
@@ -515,34 +528,35 @@ class CourtContainer extends React.Component {
           style={{
             overflow: "auto"
           }}
-          onClick={this.courtClickedOn}
+          onClick={this.thingClickedOn}
         >
           <div
-            id={styles.courtContainer}
+            id={styles.thingContainer}
             style={{
-              width: `${this.props.numberCourts * 178}px`
+              width: `${this.props.numberColumns * 178}px`
             }}
           >
-            {this.courtNumbersToCourtColumns().map((element, index) => {
+            {this.thingNumbersToThingColumns().map((element, index) => {
               return (
                 <CourtColumns
+                  bookingColumnType={this.props.bookingColumnType}
                   hoverNumber={this.state.thingHoverNumber}
-                  courtClicked={this.courtClicked}
-                  numberCourts={parseInt(this.props.numberCourts)}
+                  thingClicked={this.thingClicked}
+                  numberThings={parseInt(this.props.numberThings)}
                   cancelModal={this.cancelBookingModal}
                   bookingArray={this.state.bookingArray}
                   getModalObject={this.showBookingModal}
-                  getCourt={this.thingArray}
+                  getThing={this.thingArray}
                   businessName={this.props.businessName}
                   bookedThings={this.state.bookedThings}
-                  clubOpenNumber={this.convertTimeToCourts(
-                    this.props.clubOpenTime
+                  businessOpenNumber={this.convertTimeToThings(
+                    this.props.openTime
                   )}
-                  clubCloseNumber={this.convertTimeToCourts(
-                    this.props.clubCloseTime
+                  businessCloseNumber={this.convertTimeToThings(
+                    this.props.closeTime
                   )}
-                  key={element.courtNumber}
-                  courtNumber={element.courtNumber}
+                  key={element.thingNumber}
+                  thingNumber={element.thingNumber}
                   firstSlotInArray={this.state.firstSlotInArray}
                   lastSlotInArray={this.state.lastSlotInArray}
                   date={this.props.date}
