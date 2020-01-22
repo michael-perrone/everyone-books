@@ -503,7 +503,7 @@ class CourtContainer extends React.Component {
             style={{ width: "100%", display: "flex", justifyContent: "center" }}
           >
             <TryingToBookModal
-              clubNameAllLower={this.props.clubNameAllLower}
+              businessNameAllLower={this.props.businessNameAllLower}
               booking={this.state.bookingToSend}
               cancelBooking={this.cancelBooking}
               bookThing={this.bookThingArray}
@@ -515,10 +515,9 @@ class CourtContainer extends React.Component {
           <BookingIntro
             openTime={this.props.clubOpenTime}
             closeTime={this.props.clubCloseTime}
-            clubName={this.props.clubName}
           />
           <BookingButtons
-            slotsClicked={this.state.slotsClicked}
+            thingsClicked={this.state.slotsClicked}
             cancelBooking={this.cancelBooking}
             showTryingToBookModal={this.showTryingToBookModal}
           />
