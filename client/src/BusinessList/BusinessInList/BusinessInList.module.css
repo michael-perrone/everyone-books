@@ -1,8 +1,16 @@
 #businessContainer {
-  width: 450px;
+  width: 480px;
   height: 200px;
   background-color: white;
   box-shadow: 0px 0px 3px black;
   margin-top: 20px;
   margin-bottom: 20px;
+}
+
+
+@media(max-width: 530px) {
+  #businessContainer {
+    width: 330px;
+    height: 400px;
+  }
 }
