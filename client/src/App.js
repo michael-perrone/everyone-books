@@ -3,7 +3,7 @@ import LoginScreen from "./LoginScreen/LoginScreen";
 import { Route, Redirect, Switch, withRouter } from "react-router-dom";
 import BusinessSignup from "./BusinessSignup/BusinessSignup";
 import Business from "./Business/Business";
-import TennisClubsList from "./TennisClubsList/TennisClubsList";
+import BusinessList from "./BusinessList/BusinessList";
 import UserHome from "./UserHome/UserHome";
 import AdminHome from "./AdminHome/AdminHome";
 import decoder from "jwt-decode";
@@ -47,9 +47,9 @@ class App extends React.Component {
       {(token || employeeToken || adminToken) && <Nav/>}
       <Switch>
         <Route
-          path="/clubs"
+          path="/businesslist"
           exact
-          component={this.props.user ? TennisClubsList : NeedToLoginPage}
+          component={this.props.user ? BusinessList : NeedToLoginPage}
         />
         <Route
           path="/businesses/:businessId"

@@ -1,0 +1,25 @@
+#clubsContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+}
+
+#clubListHeader {
+  height: 70px;
+  font-size: 44px;
+}
+
+
+.actualClubsContainer {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  background: linear-gradient(to bottom, rgb(212,212,255), white);
+}
+
+
+#defaultHeight {
+  height: 80vh;
+}

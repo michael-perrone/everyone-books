@@ -5,7 +5,7 @@ const AdvancedSearch = props => {
   const [zip, setZip] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
-  const [clubName, setClubName] = useState("");
+  const [businessName, setBusinessName] = useState("");
 
   function handleCity(event) {
     event.preventDefault();
@@ -16,15 +16,14 @@ const AdvancedSearch = props => {
     event.preventDefault();
     setState(event.target.value);
   }
-
   function handleZip(event) {
     event.preventDefault();
     setZip(event.target.value);
   }
 
-  function handleClubName(event) {
+  function handleBusinessName(event) {
     event.preventDefault();
-    setClubName(event.target.value);
+    setBusinessName(event.target.value);
   }
 
   return (
@@ -39,20 +38,20 @@ const AdvancedSearch = props => {
           textShadow: "1px 1px white"
         }}
       >
-        Club Search
+        Business Search
       </p>
       <form id={styles.inputContainer}>
         <div id={styles.extraSizeDiv} className={styles.sizeDiv}>
           <input
             onChange={handleCity}
             value={city}
-            placeholder="Club City"
+            placeholder="Business City"
             className={styles.searchInput}
           />
           <input
             onChange={handleZip}
             value={zip}
-            placeholder="Club Zipcode"
+            placeholder="Business Zip Code"
             className={styles.searchInput}
           />
         </div>
@@ -60,18 +59,18 @@ const AdvancedSearch = props => {
           <input
             onChange={handleState}
             value={state}
-            placeholder="Club State"
+            placeholder="Business State"
             className={styles.searchInput}
           />
           <input
-            onChange={handleClubName}
-            value={clubName}
-            placeholder="Club Name"
+            onChange={handleBusinessName}
+            value={businessName}
+            placeholder="Business Name"
             className={styles.searchInput}
           />
         </div>
         <button
-          onClick={props.advancedSearchFunction(city, state, zip, clubName)}
+          onClick={props.advancedSearchFunction(city, state, zip, businessName)}
           id={styles.searchButton}
         >
           Search

@@ -32,14 +32,14 @@ const UserSecondContainer = props => {
   }, []);
 
   function viewClubs() {
-    props.history.push('/clubs')
+    props.history.push('/businesslist')
   }
 
   console.log(notifications)
 
   return (
     <div id={styles.secondContainer}>
-      <p onClick={viewClubs} className={styles.links}>View Clubs</p>
+      <p onClick={viewClubs} className={styles.links}>View Businesses</p>
       {newNotifications.length > 0 && !props.showDropDownState && <NotificationNumber user={true} num={newNotifications.length}/>}
       {props.showNotifications && (
         <Notifications notifications={notifications} />

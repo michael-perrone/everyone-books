@@ -21,11 +21,10 @@ app.use("/api/employeeSignup", require("./routes/api/employeeSignup"));
 app.use("/api/instructorProfile", require("./routes/api/instructorProfile"));
 app.use("/api/userProfile", require("./routes/api/userProfile"));
 app.use("/api/adminSignup", require("./routes/api/adminSignup"));
-app.use("/api/clubsList", require("./routes/api/clubsList"));
+app.use("/api/businessList", require("./routes/api/businessList"));
 app.use("/api/businessProfile", require("./routes/api/businessProfile"));
 app.use("/api/employeeList", require("./routes/api/employeeList"));
-app.use("/api/getInstructors", require("./routes/api/getInstructors"));
-app.use("/api/saveLocation", require("./routes/api/saveLocation"));
+
 app.use(
   "/api/checkInstructorAvailability",
   require("./routes/api/checkInstructorAvailability")

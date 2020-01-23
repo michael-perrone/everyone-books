@@ -62,8 +62,10 @@
     position: absolute;
     right: 5px;
   }
-
-
+  .links {
+    position: relative;
+    left: 20px;
+  }
   #title {
     display: none;
   }
@@ -83,7 +85,6 @@
     top: 12px;
   }
   .links {
-    position: relative;
     top: 6px;
   }
 }
