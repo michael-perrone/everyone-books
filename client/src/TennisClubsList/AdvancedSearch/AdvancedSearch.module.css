@@ -24,7 +24,7 @@
 
 .searchInput {
   width: 170px;
-  background-color: rgb(203, 255, 203);
+  background-color: white;
   border: none;
   box-shadow: 0px 0px 4px black;
   height: 26px;
@@ -32,6 +32,7 @@
   font-family: "Josefin Sans", sans-serif;
   font-size: 14px;
   padding-top: 4px;
+  color: black;
 }
 
 .searchInput:focus {
