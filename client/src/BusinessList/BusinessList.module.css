@@ -16,7 +16,8 @@
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  background: linear-gradient(to bottom, rgb(212,212,255), white);
+  background: linear-gradient(to bottom, rgb(212,212,255), rgb(230, 230, 230));
+  justify-content: space-around;
 }
 
 

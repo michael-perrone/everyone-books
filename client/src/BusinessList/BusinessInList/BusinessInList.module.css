@@ -1,5 +1,8 @@
 #businessContainer {
-  width: 80%;
-  height: 300px;
-  border: 1px solid black;
+  width: 450px;
+  height: 200px;
+  background-color: white;
+  box-shadow: 0px 0px 3px black;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
