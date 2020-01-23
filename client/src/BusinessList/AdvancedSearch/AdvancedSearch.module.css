@@ -48,7 +48,7 @@
 .searchContainer {
   display: flex;
   flex-direction: column;
-  background-color: rgb(212,212,255);
+  background-color: black;
   height: 110px;
   width: 100%;
 }
