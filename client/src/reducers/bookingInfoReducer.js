@@ -1,13 +1,13 @@
 import {
   BOOKING_TYPE,
   TIME_SELECTED,
-  INSTRUCTOR_CHOSEN
+  EMPLOYEE_CHOSEN
 } from "../actions/actions";
 
 const initialState = {
   bookingType: "",
   timeSelected: "",
-  instructorChosen: ""
+  employeeChosen: ""
 };
 
 export default function(state = initialState, action) {
@@ -16,8 +16,8 @@ export default function(state = initialState, action) {
       return { ...state, bookingType: action.payload };
     case TIME_SELECTED:
       return { ...state, timeSelected: action.payload };
-    case INSTRUCTOR_CHOSEN:
-      return { ...state, instructorChosen: action.payload };
+    case EMPLOYEE_CHOSEN:
+      return { ...state, employeeChosen: action.payload };
     default:
       return state;
   }

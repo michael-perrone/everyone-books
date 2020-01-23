@@ -34,19 +34,13 @@ class App extends React.Component {
       adminToken = decoder(localStorage.getItem("adminToken"));
     }
 
-    let businessName = this.props.location.pathname.split("/")[2];
-    console.log(businessName)
+    let businessId = this.props.location.pathname.split("/")[2];
 
-    let employeeBusinessName;
-    if (
-      this.props.employee &&
-      this.props.employee.employee.businessName !== undefined
-    ) {
-      employeeBusinessName = this.props.employee.employee.businessName
-        .split(" ")
-        .join("");
+    let okayToView = false;
+    if (this.props.employee && this.props.employee.employee.businessId === businessId) {
+      okayToView = true;
     }
-    console.log(this.props.employee)
+
 
     return (
       <React.Fragment>
@@ -61,7 +55,7 @@ class App extends React.Component {
           path="/businesses/:businessId"
           exact
           component={
-            this.props.user || businessName === employeeBusinessName
+            this.props.user || okayToView
               ? Business
               : NeedToLoginPage
           }

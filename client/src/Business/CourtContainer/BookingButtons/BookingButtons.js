@@ -11,7 +11,7 @@ const BookingButtons = props => {
         className={styles.thingButton}
         onClick={props.showTryingToBookModal}
       >
-        Book Court
+        Book {props.bookingColumnType}
       </button>
       <button className={styles.thingButton} onClick={props.cancelBooking}>
         Cancel Booking

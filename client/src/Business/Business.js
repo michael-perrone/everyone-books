@@ -63,9 +63,6 @@ class Business extends React.Component {
   }
 
   render() {
-    console.log(this.state.employees)
-    console.log(this.state.business)
-    console.log(this.props.dateChosen.getDay())
     return (
       <React.Fragment>
         {this.state.profileComplete && (
@@ -76,6 +73,7 @@ class Business extends React.Component {
                   date={this.state.dateChosenForThings}
                   onDateClick={this.onDateClick}
                   employees={this.state.employees}
+                  services={this.state.businessProfile.services}
                 />
               </div>
               <CourtContainer
@@ -85,8 +83,6 @@ class Business extends React.Component {
                 businessNameAllLower={this.state.business.businessNameAllLower}
                 numberColumns={this.state.business.bookingColumnNumber}
                 businessName={this.state.business.businessName}
-               /* clubOpenTime={this.state.club.clubOpenTime} */
-               /* clubCloseTime={this.state.club.clubCloseTime} */ 
               />
             </div>
           </div>

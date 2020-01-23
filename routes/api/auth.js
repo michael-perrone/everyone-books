@@ -110,9 +110,10 @@ router.post("/login", async (req, res) => {
       console.log(employeeLoggingIn)
       const payload = {
         employee: {
+          businessId: employeeLoggingIn.businessWorkingAt,
           employeeName: `${employeeLoggingIn.firstName} ${employeeLoggingIn.lastName}`,
           id: employeeLoggingIn.id,
-          businessName: business ? business.businessNameAllLower : undefined
+          businessName: business ? business.businessName : undefined
         }   
       };
       console.log(payload)

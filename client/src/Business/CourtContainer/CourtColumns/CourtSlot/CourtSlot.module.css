@@ -21,12 +21,12 @@
   width: 95%;
   height: 18px;
   color: black;
-  background-color: lightgray;
+  background-color: white;
   border: none;
 }
 
 #bookedCheckButton:hover {
-  border: 1px solid black;
+  box-shadow:1px 1px 4px black;
 }
 
 #thingSlotBooked {

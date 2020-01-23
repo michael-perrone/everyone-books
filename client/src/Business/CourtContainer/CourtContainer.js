@@ -10,11 +10,7 @@ import OtherAlert from "../../OtherAlerts/OtherAlerts";
 import { HOVER_NUMBER } from "../../actions/actions";
 import BookingButtons from "./BookingButtons/BookingButtons";
 
-
-
-
 class CourtContainer extends React.Component {
-  
   constructor(props) {
     super(props);
     this.thingNumbersToThingColumns = this.thingNumbersToThingColumns.bind(
@@ -377,8 +373,8 @@ class CourtContainer extends React.Component {
           if (!blockBooking) {
             console.log("HELLLO");
             let nameForBooking = "";
-            let instructorName = "None";
-            let instructorId;
+            let employeeName = "None";
+            let employeeId;
             if (this.props.admin) {
               nameForBooking = this.props.admin.admin.name;
             } else if (this.props.instructor) {
@@ -386,10 +382,10 @@ class CourtContainer extends React.Component {
             } else if (this.props.user) {
               nameForBooking = this.props.user.user.userName;
             }
-            if (this.props.instructorChosen) {
-              instructorName = this.props.instructorChosen.instructorChosen
+            if (this.props.employeeChosen) {
+              employeeName = this.props.employeeChosen.employeeChosen
                 .fullName;
-              instructorId = this.props.instructorChosen.instructorChosen._id;
+              employeeId = this.props.employeeChosen.employeeChosen._id;
             }
             if (this.state.bookingArray.length > 1) {
               const thingIdsArray = [];
@@ -403,8 +399,8 @@ class CourtContainer extends React.Component {
               
               const bookingToSend = {
                 bookingType: this.props.bookingType.bookingType,
-                instructorName,
-                instructorId,
+                employeeName,
+                employeeId,
                 bookedBy: nameForBooking,
                 timeStart: this.state.firstSlotInArray.thing.timeStart,
                 timeEnd: this.state.lastSlotInArray.thing.timeEnd,
@@ -426,18 +422,18 @@ class CourtContainer extends React.Component {
         });
     } else {
       let nameForBooking = "";
-      let instructorName = "None";
-      let instructorId;
+      let employeeName = "None";
+      let employeeId;
       if (this.props.admin) {
         nameForBooking = this.props.admin.admin.name;
-      } else if (this.props.instructor) {
+      } else if (this.props.employee) {
         nameForBooking = this.props.instructor.instructor.instructorName;
       } else if (this.props.user) {
         nameForBooking = this.props.user.user.userName;
       }
-      if (this.props.instructorChosen) {
-        instructorName = this.props.instructorChosen.instructorChosen.fullName;
-        instructorId = this.props.instructorChosen.instructorChosen._id;
+      if (this.props.employeeChosen) {
+        employeeName = this.props.employeeChosen.employeeChosen.fullName;
+        employeeId = this.props.employeeChosen.employeeChosen._id;
       }
       if (this.state.bookingArray.length > 1) {
         const thingIdsArray = [];
@@ -449,8 +445,8 @@ class CourtContainer extends React.Component {
         let thingNumber = parseInt(thingNumberString[0]);
         const bookingToSend = {
           bookingType: this.props.bookingType.bookingType,
-          instructorName,
-          instructorId,
+          employeeName,
+          employeeId,
           bookedBy: nameForBooking,
           timeStart: this.state.firstSlotInArray.thing.timeStart,
           timeEnd: this.state.lastSlotInArray.thing.timeEnd,
@@ -503,6 +499,7 @@ class CourtContainer extends React.Component {
             style={{ width: "100%", display: "flex", justifyContent: "center" }}
           >
             <TryingToBookModal
+              bookingColumnType={this.props.bookingColumnType}
               businessNameAllLower={this.props.businessNameAllLower}
               booking={this.state.bookingToSend}
               cancelBooking={this.cancelBooking}
@@ -517,6 +514,7 @@ class CourtContainer extends React.Component {
             closeTime={this.props.clubCloseTime}
           />
           <BookingButtons
+            bookingColumnType={this.props.bookingColumnType}
             thingsClicked={this.state.slotsClicked}
             cancelBooking={this.cancelBooking}
             showTryingToBookModal={this.showTryingToBookModal}
@@ -576,7 +574,7 @@ const mapStateToProps = state => {
     user: state.authReducer.user,
     timeChosen: state.bookingInfoReducer.timeSelected,
     bookingType: state.bookingInfoReducer.bookingType,
-    instructorChosen: state.bookingInfoReducer.instructorChosen
+    employeeChosen: state.bookingInfoReducer.employeeChosen
   };
 };
 

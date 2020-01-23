@@ -17,7 +17,8 @@ const EmployeeSecondContainer = props => {
   const [employeeProfile, setEmployeeProfile] = React.useState(undefined);
   const [notifications, setNotifications] = React.useState([]);
   const [newNotificationsState, setNewNotificationsState] = React.useState([]);
-  const [clubName, setClubName] = React.useState('None');
+  const [businessName, setBusinessName] = React.useState('None');
+  const [businessWorkingAt, setBusinessWorkingAt] = React.useState('')
 
   function setNewNotifications(notificationsFromUpdate) {
     return () => {
@@ -33,10 +34,10 @@ const EmployeeSecondContainer = props => {
    React.useEffect(() => {
     axios.get('/api/getEmployee', {headers: {'x-auth-token': props.employeeToken}}).then(
       response => {
-        let apple = response.data.employee.business.split(" ")
-        .reduce((accum, element) => accum + element)
+        let apple = response.data.employee.business;
+        setBusinessWorkingAt(response.data.employee.businessWorkingAt)
       if (props.employee.employee.businessName && apple === props.employee.employee.businessName) {
-        setClubName(props.employee.employee.businessName)
+        setBusinessName(props.employee.employee.businessName)
       }
   })
 }, [props.employeeToken] )
@@ -63,12 +64,12 @@ const EmployeeSecondContainer = props => {
   return (
     <React.Fragment>
       <div id={styles.secondContainer}>        
-      {clubName !== "None" &&       
+      {businessName !== "None" &&       
         <Link
           className={styles.links}
-          to={`/businesses/${clubName}`}
+          to={`/businesses/${businessWorkingAt}`}
           >
-          {clubName}
+          {businessName}
         </Link> }
           {1 && !props.showDropDownState && <NotificationNumber num={1}/>}
         <DropDown clearNotis={clearNotis} notiNum={1} employeeProfile={employeeProfile} />

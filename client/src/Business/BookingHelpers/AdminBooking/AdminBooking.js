@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import {
   BOOKING_TYPE,
   TIME_SELECTED,
-  INSTRUCTOR_CHOSEN
+  EMPLOYEE_CHOSEN
 } from "../../../actions/actions";
 import Calendar from "../../Calendar/Calendar";
 
@@ -23,7 +23,7 @@ class AdminBooking extends React.Component {
   selectEmployeeWithClick(employeeSelected) {
     return () => {
       this.setState({ employeeSelected });
-      this.props.getInstructorChosen(employeeSelected);
+      this.props.getEmployeeChosen(employeeSelected);
     };
   }
 
@@ -101,19 +101,7 @@ class AdminBooking extends React.Component {
           <div className={styles.bookingHolderContainer}>
             <p style={{ marginBottom: "-8px" }}>Choose Booking Type</p>
             <div className={styles.bookingHolderSubContainer}>
-              {this.props.bookingTypes.map(element => {
-                if (
-                  this.props.user &&
-                  (element === "Open Clinic" ||
-                    element === "Employee Court Time" ||
-                    element === "Tournament")
-                ) {
-                  return "";
-                } else if (
-                  this.props.admin ||
-                  this.props.instructor ||
-                  this.props.user
-                ) {
+              {this.props.services && this.props.services.map(element => {
                   return (
                     <p
                       style={{
@@ -128,7 +116,7 @@ class AdminBooking extends React.Component {
                     </p>
                   );
                 }
-              })}
+              )}
             </div>
           </div>
         </div>
@@ -150,25 +138,15 @@ AdminBooking.defaultProps = {
     "4 Hours 30 Minutes",
     "5 Hours"
   ],
-  bookingTypes: [
-    "Open Clinic",
-    "Group Lesson",
-    "Private Clinic",
-    "Private Lesson",
-    "Court Time",
-    "Employee Time",
-    "Tournament",
-    "Other"
-  ]
 };
 
 const mapStateToProps = state => {
   return {
     user: state.authReducer.user,
-    instructor: state.authReducer.instructor,
+    employee: state.authReducer.employee,
     admin: state.authReducer.admin,
     bookingType: state.bookingInfoReducer.bookingType,
-    instructorChosen: state.bookingInfoReducer.instructorChosen,
+    employeeChosen: state.bookingInfoReducer.employeeChosen,
     timeChosen: state.bookingInfoReducer.timeSelected
   };
 };
@@ -179,8 +157,8 @@ const mapDispatchToProps = dispatch => {
       dispatch({ type: BOOKING_TYPE, payload: { bookingType } }),
     getTimeChosen: timeChosen =>
       dispatch({ type: TIME_SELECTED, payload: { timeSelected: timeChosen } }),
-    getInstructorChosen: instructorChosen =>
-      dispatch({ type: INSTRUCTOR_CHOSEN, payload: { instructorChosen } })
+    getEmployeeChosen: employeeChosen =>
+      dispatch({ type: EMPLOYEE_CHOSEN, payload: { employeeChosen } })
   };
 };
 

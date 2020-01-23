@@ -69,11 +69,11 @@ class TryingToBookModal extends React.Component {
                   <p>Start Time: {this.props.booking.timeStart}</p>
                   <p>End Time: {this.props.booking.timeEnd}</p>
                   {this.props.booking.instructorName !== "None" && (
-                    <p>Instructor Name: {this.props.booking.instructorName}</p>
+                    <p>Employee Name: {this.props.booking.employeeName}</p>
                   )}
-                  <p>Booking Type: {this.props.booking.bookingType}</p>
+                  <p>Service: {this.props.booking.bookingType}</p>
                   <p>Time Amount: {howLong}</p>
-                  <p>Court Number: {this.props.booking.courtNumber}</p>
+                  <p>{this.props.bookingColumnType} Number: {this.props.booking.thingNumber}</p>
                 </div>
                 <div
                   style={{
@@ -95,7 +95,7 @@ class TryingToBookModal extends React.Component {
                   {this.state.finish && (
                     <button
                       className={styles.cancelConfirm}
-                      onClick={this.props.bookCourt}
+                      onClick={this.props.bookThing}
                     >
                       Confirm
                     </button>
@@ -133,7 +133,7 @@ class TryingToBookModal extends React.Component {
               clubNameAllLower={this.props.clubNameAllLower}
               setFinish={this.setFinish}
               finish={this.state.finish}
-              bookCourt={this.props.bookCourt}
+              bookThing={this.props.bookThing}
             />
           )}
         </div>

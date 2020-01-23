@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Booking = require("../../models/Booking");
-const Instructor = require("../../models/Instructor");
+const Employee = require('../../models/Employee');
 const User = require("../../models/User");
 
 router.post("/", async (req, res) => {
@@ -19,7 +19,7 @@ router.post("/", async (req, res) => {
       date: req.body.booking.date,
       customers: req.body.customers
     });
-    if (req.body.customers.length > 0) {
+    if (req.body.customers && req.body.customers.length > 0) {
       const customers = await User.find({ _id: newCourtBooked.players });
       for (let i = 0; i < customers.length; i++) {
         let previousCustomersBookings = [...customers[i].bookings];
@@ -31,11 +31,11 @@ router.post("/", async (req, res) => {
     await newThingBooked.save();
 
     if (newThingBooked) {
-      const bookings = await Bookings.find({
+      const bookings = await Booking.find({
         businessId: req.body.booking.businessId,
         date: req.body.date
       });
-      res.status(200).json({ newBooking: newCourtBooked, bookings });
+      res.status(200).json({ newBooking: newThingBooked, bookings });
     }
   } catch (error) {
     console.log(error);
@@ -56,16 +56,16 @@ router.post("/getthings", async (req, res) => {
 
 router.post("/delete", async (req, res) => {
   try {
-    let booking = await CourtBooked.findOne({ _id: req.body.bookingId });
+    let booking = await Booking.findOne({ _id: req.body.bookingId });
     if (booking) {
-      let instructor = await Instructor.findOne({
-        _id: CourtBooked.instructorBooked
+      let employee = await Employee.findOne({
+        _id: booking.instructorBooked
       });
-      if (instructor) {
-        let newInstructorBookings = instructor.bookings.filter(
+      if (employee) {
+        let newEmployeeBookings = employee.bookings.filter(
           eachBooking => eachBooking._id !== booking.id
         );
-        instructor.bookings = newInstructorBookings;
+        employee.bookings = newEmployeeBookings;
         instructor.save();
       }
       let players = await User.find({ _id: booking.players });
@@ -79,8 +79,8 @@ router.post("/delete", async (req, res) => {
         }
       }
     }
-    await CourtBooked.findOneAndDelete({ _id: req.body.bookingId });
-    let bookings = await CourtBooked.find({
+    await Booking.findOneAndDelete({ _id: req.body.bookingId });
+    let bookings = await Booking.find({
       clubName: req.body.clubName,
       date: req.body.date
     });

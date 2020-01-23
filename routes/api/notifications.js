@@ -165,6 +165,7 @@ router.post("/employeeclickedyes", async (req, res) => {
 
     const payload = {
       employee: {
+        businessId: notification.notificationFromBusiness,
         employeeName: req.body.employeeName,
         id: req.body.employeeId,
         businessName: business.businessName
