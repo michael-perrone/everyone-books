@@ -70,14 +70,16 @@ class TennisClubsList extends React.Component {
           />
           <div id={this.state.businesses.length > 2 ? "" : styles.defaultHeight} className={styles.actualClubsContainer}>
           {this.state.businesses.map(element => {
+            if (element.profile) {
             return (
               <BusinessInList
                 business={element.business}
-                profileInfo={element.profile}
+                profile={element.profile}
                 push={this.props.history.push}
                 key={element._id}
               />
             );
+            }
           })}
           </div>
         </div>

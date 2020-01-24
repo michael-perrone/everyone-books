@@ -1,10 +1,44 @@
 #businessContainer {
-  width: 480px;
-  height: 200px;
+  width: 520px;
+  height: 240px;
   background-color: white;
-  box-shadow: 0px 0px 3px black;
-  margin-top: 20px;
+  border: 1px solid gray;
+  margin-top: 40px;
   margin-bottom: 20px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.businessName {
+  border-top: 1px solid gray;
+  border-left: 1px solid gray;
+  border-right: 1px solid gray;
+  position: absolute;
+  z-index: 0;
+  top: -22px;
+  width: 100%;
+  text-align: center;
+  background-color: white;
+  font-size: 20px;
+}
+
+.boxHeader {
+  text-align: center;
+  width: 85%;
+  padding-bottom: 2px;
+  border-bottom: 1px solid gray;
+}
+
+.section {
+  height: 220px;
+  width: 30%;
+  border: 1px solid gray;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 

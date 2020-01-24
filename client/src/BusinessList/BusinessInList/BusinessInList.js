@@ -52,9 +52,18 @@ class TennisClub extends React.Component {
               alertMessage={element.alertMessage}
             />
           );
-        })}  
+        })} 
         <div id={styles.businessContainer}>
-          
+        <p className={styles.businessName}>{this.props.business.businessName}</p>
+          <div className={styles.section}>
+          <p className={styles.boxHeader}>Contact:</p>
+          </div>
+          <div className={styles.section}>
+          <p className={styles.boxHeader}>Hours:</p>
+          </div>
+          <div className={styles.section}>
+          <p className={styles.boxHeader}>Services:</p>
+          </div>
         </div>       
   </React.Fragment>
     )
