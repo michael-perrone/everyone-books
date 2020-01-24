@@ -1,5 +1,5 @@
 #businessContainer {
-  width: 520px;
+  width: 600px;
   height: 240px;
   background-color: white;
   border: 1px solid gray;
@@ -9,7 +9,25 @@
   justify-content: space-around;
   align-items: center;
   position: relative;
-  z-index: 2;
+}
+
+#buttonContainer {
+  position: absolute;
+  bottom: 5px;
+  left: 60px;
+}
+
+#shortenedHeightSection {
+  height: 185px;
+  position: relative;
+  top: -18px;
+}
+
+.sectionContent {
+  align-self: flex-start;
+  font-size: 14px;
+  margin-left: 8px;
+  margin-top: 6px;
 }
 
 .businessName {
@@ -17,7 +35,6 @@
   border-left: 1px solid gray;
   border-right: 1px solid gray;
   position: absolute;
-  z-index: 0;
   top: -22px;
   width: 100%;
   text-align: center;
@@ -28,6 +45,7 @@
 .boxHeader {
   text-align: center;
   width: 85%;
+  font-size: 16px;
   padding-bottom: 2px;
   border-bottom: 1px solid gray;
 }

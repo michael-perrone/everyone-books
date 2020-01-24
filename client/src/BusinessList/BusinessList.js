@@ -21,7 +21,36 @@ class TennisClubsList extends React.Component {
       townLocation: "",
       searchError: ""
     };
+    this.followClub = this.followClub.bind(this);
     this.advancedSearchFunction = this.advancedSearchFunction.bind(this);
+  }
+
+  followClub(tennisClubId) {
+    return () => {
+      const objectToSend = {
+        tennisClubId,
+        userId: this.props.user.user.id
+      };
+      axios.post("/api/userSubscribe", objectToSend)
+        .then(response => {
+          if (response.status === 200) {
+            this.setState({ subscribeHit: true });
+          }
+        })
+        .catch(error => {
+          const emptyArray = [];
+          this.setState({ errorArray: emptyArray });
+          const comingError = error.response.data.error;
+          let newError = {
+            alertType: "failure",
+            showAlert: comingError !== "" ? true : false,
+            alertMessage: comingError
+          };
+          const newErrorArray = [];
+          newErrorArray.push(newError);
+          this.setState({ errorArray: newErrorArray });
+        });
+    };
   }
 
  
@@ -73,6 +102,7 @@ class TennisClubsList extends React.Component {
             if (element.profile) {
             return (
               <BusinessInList
+                follow={this.followClub}
                 business={element.business}
                 profile={element.profile}
                 push={this.props.history.push}

@@ -1,45 +1,16 @@
 import React from "react";
 import styles from "./BusinessInList.module.css";
-import Axios from "axios";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import OtherAlert from "../../OtherAlerts/OtherAlerts";
+import SubmitButton from '../../Shared/SubmitButton/SubmitButton'
 
 class TennisClub extends React.Component {
   constructor(props) {
     super(props);
     this.state = { errorArray: [], subscribeHit: false };
-    this.subscribeToClub = this.subscribeToClub.bind(this);
   }
   
-  subscribeToClub(tennisClubId) {
-    return () => {
-      const objectToSend = {
-        tennisClubId,
-        userId: this.props.user.user.id
-      };
-      Axios.post("/api/userSubscribe", objectToSend)
-        .then(response => {
-          if (response.status === 200) {
-            this.setState({ subscribeHit: true });
-          }
-        })
-        .catch(error => {
-          const emptyArray = [];
-          this.setState({ errorArray: emptyArray });
-          const comingError = error.response.data.error;
-          let newError = {
-            alertType: "failure",
-            showAlert: comingError !== "" ? true : false,
-            alertMessage: comingError
-          };
-          const newErrorArray = [];
-          newErrorArray.push(newError);
-          this.setState({ errorArray: newErrorArray });
-        });
-    };
-  }
-
   render() {
     console.log(this.props)
     return (
@@ -55,15 +26,55 @@ class TennisClub extends React.Component {
         })} 
         <div id={styles.businessContainer}>
         <p className={styles.businessName}>{this.props.business.businessName}</p>
-          <div className={styles.section}>
+          <div id={styles.shortenedHeightSection} className={styles.section}>
           <p className={styles.boxHeader}>Contact:</p>
+          <p className={styles.sectionContent}>{this.props.business.phoneNumber}</p>
+          {this.props.business.website && <p className={styles.sectionContent}>{this.props.business.website}</p>}
+          <p className={styles.sectionContent}>{this.props.business.address}</p>
+          <p className={styles.sectionContent}>{this.props.business.city}</p>
+          <p className={styles.sectionContent}>{this.props.business.state}</p>
+          <p className={styles.sectionContent}>{this.props.business.zip}</p>
           </div>
-          <div className={styles.section}>
+          <div id={styles.shortenedHeightSection} className={styles.section}>
           <p className={styles.boxHeader}>Hours:</p>
+           {this.props.business.schedule.map((element,index) => {
+             let day;
+              if (index === 0) {
+               day = 'Sun';
+              }
+              else if (index === 1) {
+               day = "Mon"
+              }
+              else if (index === 2) {
+               day = "Tue"
+              }
+              else if (index === 3) {
+                day = "Wed"
+              }
+              else if (index === 4) {
+                day = "Thu"
+              }
+              else if (index === 5) {
+                day = "Fri"
+              }
+              else if (index === 6) {
+                day = "Sat"
+              }
+             if (element.open !== "Closed" && element.close !== 'Closed') {
+                return <p className={styles.sectionContent}>{day}: {element.open}-{element.close}</p>
+             }
+             else {
+               return <p className={styles.sectionContent}>{day}: Closed</p>
+             }
+           })}
           </div>
           <div className={styles.section}>
           <p className={styles.boxHeader}>Services:</p>
+          {this.props.profile.services.map(element => {
+          return <p className={styles.sectionContent}>{element}</p>
+          })}
           </div>
+          <div id={styles.buttonContainer}><SubmitButton>Follow Business</SubmitButton> <SubmitButton>View Business</SubmitButton> </div>
         </div>       
   </React.Fragment>
     )

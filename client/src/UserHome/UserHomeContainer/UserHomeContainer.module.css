@@ -14,7 +14,7 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-top: 80px;
+  margin-top: 30px;
   padding-bottom: 40px;
 }
 
@@ -34,7 +34,7 @@
   height: 93vh;
 }
 
-@media (max-width: 740px) {
+@media (max-width: 850px) {
   #userHomeContainer {
     flex-direction: column;
   }
@@ -60,14 +60,3 @@
   }
 }
 
-@media (max-width: 600px) {
-  .half {
-    margin-top: 0px;
-  }
-  #bookingsHalf {
-    margin-top: 80px;
-  }
-  #clubsSubscribedHalf {
-    margin-top: 0px;
-  }
-}
