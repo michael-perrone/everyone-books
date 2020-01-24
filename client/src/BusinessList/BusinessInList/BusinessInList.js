@@ -3,7 +3,6 @@ import styles from "./BusinessInList.module.css";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import OtherAlert from "../../OtherAlerts/OtherAlerts";
-import SubmitButton from '../../Shared/SubmitButton/SubmitButton'
 
 class TennisClub extends React.Component {
   constructor(props) {
@@ -74,7 +73,7 @@ class TennisClub extends React.Component {
           return <p className={styles.sectionContent}>{element}</p>
           })}
           </div>
-          <div id={styles.buttonContainer}><SubmitButton>Follow Business</SubmitButton> <SubmitButton>View Business</SubmitButton> </div>
+          <div id={styles.buttonContainer}><button className={styles.sectionButton}>Follow Business</button> <button className={styles.sectionButton} id={styles.marginLeft}>View Business</button></div>
         </div>       
   </React.Fragment>
     )

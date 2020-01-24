@@ -14,7 +14,23 @@
 #buttonContainer {
   position: absolute;
   bottom: 5px;
-  left: 60px;
+  left: 91px;
+}
+
+#marginLeft {
+  position: relative;
+  left: 108px;
+}
+
+.sectionButton {
+  padding: 6px 4px;
+  box-shadow: 0px 0px 4px black;
+  border: none;
+  background-color: white;
+}
+
+.sectionButton:hover {
+  box-shadow: 0px 0px 2px black;
 }
 
 #shortenedHeightSection {
