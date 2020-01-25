@@ -17,7 +17,7 @@
 
 #buttonContainer {
   position: absolute;
-  left: 96px;
+  left: 98px;
   width: 297px;
   bottom: 7px;
   display: flex;
@@ -48,8 +48,8 @@
   border-left: 1px solid gray;
   border-right: 1px solid gray;
   position: absolute;
-  top: -16px;
-  padding-top: 6px;
+  top: -17px;
+  padding-top: 4px;
   width: 100%;
   text-align: center;
   background-color: white;
