@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/static/css/main.7ad7d05b.chunk.css",
+    "main.css": "/static/css/main.2d760c43.chunk.css",
     "main.js": "/static/js/main.bab48ab2.chunk.js",
     "main.js.map": "/static/js/main.bab48ab2.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.be67de96.js",
@@ -8,9 +8,9 @@
     "static/js/2.4b17dc0b.chunk.js": "/static/js/2.4b17dc0b.chunk.js",
     "static/js/2.4b17dc0b.chunk.js.map": "/static/js/2.4b17dc0b.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.bca9a936e21df79c4ad70b931f8f5903.js": "/precache-manifest.bca9a936e21df79c4ad70b931f8f5903.js",
+    "precache-manifest.de9a487851b9fe02aa6c02a55978d94b.js": "/precache-manifest.de9a487851b9fe02aa6c02a55978d94b.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/main.7ad7d05b.chunk.css.map": "/static/css/main.7ad7d05b.chunk.css.map",
+    "static/css/main.2d760c43.chunk.css.map": "/static/css/main.2d760c43.chunk.css.map",
     "static/js/2.4b17dc0b.chunk.js.LICENSE": "/static/js/2.4b17dc0b.chunk.js.LICENSE",
     "static/media/TennisnetCropped.jpg": "/static/media/TennisnetCropped.6cd8d483.jpg",
     "static/media/d.png": "/static/media/d.ebc66d4e.png",
@@ -19,7 +19,7 @@
   "entrypoints": [
     "static/js/runtime-main.be67de96.js",
     "static/js/2.4b17dc0b.chunk.js",
-    "static/css/main.7ad7d05b.chunk.css",
+    "static/css/main.2d760c43.chunk.css",
     "static/js/main.bab48ab2.chunk.js"
   ]
 }
