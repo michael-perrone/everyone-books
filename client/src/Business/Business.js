@@ -83,6 +83,7 @@ class Business extends React.Component {
                 businessNameAllLower={this.state.business.businessNameAllLower}
                 numberColumns={this.state.business.bookingColumnNumber}
                 businessName={this.state.business.businessName}
+                businessId={this.state.business._id}
               />
             </div>
           </div>

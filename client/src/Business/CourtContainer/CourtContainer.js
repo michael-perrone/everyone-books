@@ -45,13 +45,14 @@ class CourtContainer extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (
-      prevProps.date !== this.props.date ||
+      prevProps.dateChosen !== this.props.dateChosen ||
       prevProps.businessName !== this.props.businessName
     ) {
+      console.log('hi')
       axios
         .post("/api/thingBooked/getthings", {
-          businessName: this.props.businessName,
-          date: this.props.date
+          businessId: this.props.businessId,
+          date: this.props.dateChosen
         })
         .then(response => {
           this.setState({ bookedThings: response.data.bookings });
@@ -574,7 +575,8 @@ const mapStateToProps = state => {
     user: state.authReducer.user,
     timeChosen: state.bookingInfoReducer.timeSelected,
     bookingType: state.bookingInfoReducer.bookingType,
-    employeeChosen: state.bookingInfoReducer.employeeChosen
+    employeeChosen: state.bookingInfoReducer.employeeChosen,
+    dateChosen: state.dateReducer.dateChosen
   };
 };
 

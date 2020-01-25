@@ -44,10 +44,13 @@ router.post("/", async (req, res) => {
 
 router.post("/getthings", async (req, res) => {
   try {
+    console.log(req.body.businessId);
+    console.log(req.body.date)
     const bookings = await Booking.find({
       businessId: req.body.businessId,
       date: req.body.date
     });
+    console.log(bookings)
     res.status(200).json({ bookings });
   } catch (error) {
     console.log(error);

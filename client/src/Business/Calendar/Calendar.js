@@ -10,6 +10,8 @@ class Calendar extends React.Component {
     selectedDate: new Date()
   };
 
+  //selected
+
   renderHeader() {
     const dateFormat = "MMMM YYYY";
 
@@ -100,12 +102,12 @@ class Calendar extends React.Component {
             className={`col cell ${
               !dateFns.isSameMonth(day, monthStart)
                 ? "disabled"
-                : dateFns.isSameDay(day, this.props.date)
+                : dateFns.isSameDay(day, this.props.dateChosen)
                 ? "selected"
                 : ""
             }`}
             key={day}
-            onClick={this.props.chooseDate(dateFns.parse(cloneDay))}
+            onClick={this.props.chooseDate(dateFns.parse(cloneDay).toDateString())}
           >
             <span className="number">{formattedDate}</span>
             <span className="bg">{formattedDate}</span>
@@ -160,4 +162,10 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(null, mapDispatchToProps)(Calendar);
+const mapStateToProps = (state) => {
+  return {
+    dateChosen: state.dateReducer.dateChosen
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Calendar);
