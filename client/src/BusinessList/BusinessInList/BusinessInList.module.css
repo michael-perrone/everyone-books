@@ -87,7 +87,7 @@
 @media(max-width: 600px) {
   #businessContainer {
     width: 300px;
-    height: 495px;
+    height: 490px;
     flex-direction: column;
     justify-content: flex-start;
   }
