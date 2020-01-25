@@ -29,10 +29,6 @@ app.use(
   "/api/checkInstructorAvailability",
   require("./routes/api/checkInstructorAvailability")
 );
-app.use(
-  "/api/getUserLocationInfo",
-  require("./routes/api/getUserLocationInfo")
-);
 app.use("/api/clubProfileEvents", require("./routes/api/clubProfileEvents"));
 app.use(
   "/api/instructorCourtsBooked",

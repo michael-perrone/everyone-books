@@ -3,12 +3,61 @@ import styles from "./BusinessInList.module.css";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import OtherAlert from "../../OtherAlerts/OtherAlerts";
+import axios from 'axios';
 
 class TennisClub extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { errorArray: [], subscribeHit: false };
+    this.state = { errorArray: [], following: props.following};
+    this.viewBusiness = this.viewBusiness.bind(this);
+    this.follow = this.follow.bind(this)
+    this.unfollow = this.unfollow.bind(this)
   }
+
+  viewBusiness() {
+    this.props.history.push(`/businesses/${this.props.business._id}`)
+  }
+
+  follow(businessId) {
+    return () => {
+      const objectToSend = {
+        businessId,
+        userId: this.props.user.user.id
+      };
+      axios.post("/api/userSubscribe", objectToSend)
+        .then(response => {
+          if (response.status === 200) {
+            this.setState({following: true})
+          }
+        })
+        .catch(error => {
+          const emptyArray = [];
+          this.setState({ errorArray: emptyArray });
+          const comingError = error.response.data.error;
+          let newError = {
+            alertType: "failure",
+            showAlert: comingError !== "" ? true : false,
+            alertMessage: comingError
+          };
+          const newErrorArray = [];
+          newErrorArray.push(newError);
+          this.setState({ errorArray: newErrorArray });
+        });
+    };
+  }
+
+  unfollow(businessId) {
+    return () => {
+      axios.post('/api/userSubscribe/unfollow', {businessId, userId: this.props.user.user.id}).then(
+        response => {
+          if (response.status === 200) {
+            this.setState({following: false})
+          }
+        }
+      )
+    }
+}
+
   
   render() {
     console.log(this.props)
@@ -25,16 +74,16 @@ class TennisClub extends React.Component {
         })} 
         <div id={styles.businessContainer}>
         <p className={styles.businessName}>{this.props.business.businessName}</p>
-          <div id={styles.shortenedHeightSection} className={styles.section}>
+          <div className={styles.shortenedSection}>
           <p className={styles.boxHeader}>Contact:</p>
-          <p className={styles.sectionContent}>{this.props.business.phoneNumber}</p>
-          {this.props.business.website && <p className={styles.sectionContent}>{this.props.business.website}</p>}
           <p className={styles.sectionContent}>{this.props.business.address}</p>
           <p className={styles.sectionContent}>{this.props.business.city}</p>
           <p className={styles.sectionContent}>{this.props.business.state}</p>
-          <p className={styles.sectionContent}>{this.props.business.zip}</p>
+          <p style={{width: '91%', paddingBottom: '5px', borderBottom: '1px solid gray'}} className={styles.sectionContent}>{this.props.business.zip}</p>
+          <p className={styles.sectionContent}>{this.props.business.phoneNumber}</p>
+          {this.props.business.website && <p className={styles.sectionContent}>{this.props.business.website}</p>}
           </div>
-          <div id={styles.shortenedHeightSection} className={styles.section}>
+          <div id={styles.hours} className={styles.shortenedSection}>
           <p className={styles.boxHeader}>Hours:</p>
            {this.props.business.schedule.map((element,index) => {
              let day;
@@ -73,7 +122,11 @@ class TennisClub extends React.Component {
           return <p className={styles.sectionContent}>{element}</p>
           })}
           </div>
-          <div id={styles.buttonContainer}><button className={styles.sectionButton}>Follow Business</button> <button className={styles.sectionButton} id={styles.marginLeft}>View Business</button></div>
+          <div id={styles.buttonContainer}>
+            {!this.state.following && <button onClick={this.follow(this.props.business._id)} className={styles.sectionButton}>Follow Business</button>}
+            {this.state.following &&  <button onClick={this.unfollow(this.props.business._id)} className={styles.sectionButton} id={styles.unfollow}>Unfollow Business</button>}
+            <button onClick={this.viewBusiness} className={styles.sectionButton} id={styles.marginLeft}>View Business</button>
+          </div>
         </div>       
   </React.Fragment>
     )

@@ -5,9 +5,9 @@ const User = require("../../models/User");
 
 router.get("/myprofile", authUser, async (req, res) => {
   try {
-    const profile = await User.findOne({ _id: req.user.id });
-    if (profile) {
-      res.status(200).json({ profile });
+    const user = await User.findOne({ _id: req.user.id });
+    if (user) {
+      res.status(200).json({ user });
     }
   } catch (err) {
     console.error(err.message);

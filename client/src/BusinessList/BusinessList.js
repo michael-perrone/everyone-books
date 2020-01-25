@@ -3,8 +3,6 @@ import axios from "axios";
 import BusinessInList from "./BusinessInList/BusinessInList";
 import styles from "./BusinessList.module.css";
 import { withRouter } from "react-router-dom";
-
-import LocationModal from "./LocationModal/LocationModal";
 import { connect } from "react-redux";
 import AdvancedSearch from "./AdvancedSearch/AdvancedSearch";
 import OtherAlert from "../OtherAlerts/OtherAlerts";
@@ -14,46 +12,19 @@ class TennisClubsList extends React.Component {
     super();
     this.state = {
       businesses: [],
-      stateLocation: "",
-      locationGiven: false,
-      showLocationModal: false,
-      locationDenied: false,
-      townLocation: "",
-      searchError: ""
+      searchError: "",
+      user: {}
     };
-    this.followClub = this.followClub.bind(this);
     this.advancedSearchFunction = this.advancedSearchFunction.bind(this);
   }
 
-  followClub(tennisClubId) {
-    return () => {
-      const objectToSend = {
-        tennisClubId,
-        userId: this.props.user.user.id
-      };
-      axios.post("/api/userSubscribe", objectToSend)
-        .then(response => {
-          if (response.status === 200) {
-            this.setState({ subscribeHit: true });
-          }
-        })
-        .catch(error => {
-          const emptyArray = [];
-          this.setState({ errorArray: emptyArray });
-          const comingError = error.response.data.error;
-          let newError = {
-            alertType: "failure",
-            showAlert: comingError !== "" ? true : false,
-            alertMessage: comingError
-          };
-          const newErrorArray = [];
-          newErrorArray.push(newError);
-          this.setState({ errorArray: newErrorArray });
-        });
-    };
-  }
-
- 
+  componentDidMount() {
+    axios.get('/api/userprofile/myprofile',
+     {headers: {'x-auth-token': this.props.token}})
+     .then(response => {
+        this.setState({user: response.data.user})
+    })
+  } 
 
   advancedSearchFunction(city, state, zip, businessName) {
     return event => {
@@ -85,12 +56,6 @@ class TennisClubsList extends React.Component {
   render() {
     return (
       <div id={styles.clubsContainer}>
-        {this.state.showLocationModal === true && (
-          <LocationModal
-            getLocation={this.getLocation}
-            locationDenied={this.locationDenied}
-          />
-        )}
         <AdvancedSearch advancedSearchFunction={this.advancedSearchFunction} />
           <OtherAlert
             showAlert={this.state.searchError !== "" ? true : false}
@@ -99,10 +64,19 @@ class TennisClubsList extends React.Component {
           />
           <div id={this.state.businesses.length > 2 ? "" : styles.defaultHeight} className={styles.actualClubsContainer}>
           {this.state.businesses.map(element => {
+            let following = false;
             if (element.profile) {
+              for (let i = 0; i < this.state.user.businessesFollowing.length; i++) {
+                console.log(element.business._id, this.state.user.businessesFollowing[i])
+                if (element.business._id === this.state.user.businessesFollowing[i]) {
+                  following = true;
+                }
+              }
             return (
               <BusinessInList
-                follow={this.followClub}
+                following={following}
+                unfollow={this.unfollow}
+                follow={this.followBusiness}
                 business={element.business}
                 profile={element.profile}
                 push={this.props.history.push}

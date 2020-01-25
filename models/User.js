@@ -29,25 +29,9 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  locationState: {
-    type: String,
-    default: "No Location Saved"
-  },
-  locationTown: {
-    type: String,
-    default: "No Location Saved"
-  },
-  locationSaved: {
-    type: Boolean,
-    default: false
-  },
-  locationDenied: {
-    type: Boolean,
-    default: false
-  },
-  clubsFollowing: {
+  businessesFollowing: {
     type: [mongoose.Schema.Types.ObjectId],
-    ref: "tennisClub"
+    ref: "business"
   },
   notifications: {
     type: [mongoose.Schema.Types.ObjectId],

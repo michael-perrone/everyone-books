@@ -11,16 +11,19 @@
   position: relative;
 }
 
-#buttonContainer {
-  position: absolute;
-  bottom: 5px;
-  left: 91px;
+#unfollow {
+  background-color: rgb(255, 130, 130);
 }
 
-#marginLeft {
-  position: relative;
-  left: 108px;
+#buttonContainer {
+  position: absolute;
+  left: 95px;
+  width: 297px;
+  bottom: 4px;
+  display: flex;
+  justify-content: space-between;
 }
+
 
 .sectionButton {
   padding: 6px 4px;
@@ -31,12 +34,6 @@
 
 .sectionButton:hover {
   box-shadow: 0px 0px 2px black;
-}
-
-#shortenedHeightSection {
-  height: 185px;
-  position: relative;
-  top: -18px;
 }
 
 .sectionContent {
@@ -68,7 +65,7 @@
 
 .section {
   height: 220px;
-  width: 30%;
+  width: 190px;
   border: 1px solid gray;
   display: flex;
   flex-direction: column;
@@ -76,9 +73,37 @@
 }
 
 
-@media(max-width: 530px) {
+.shortenedSection {
+  height: 190px;
+  width: 190px;
+  border: 1px solid gray;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  top: -15px;
+}
+
+@media(max-width: 600px) {
   #businessContainer {
     width: 330px;
-    height: 400px;
+    height: 480px;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .section {
+    width: 240px;
+    margin-top: 10px;
+  }
+  #hours {
+    display: none;
+  }
+  .shortenedSection {
+    margin-top: 10px;
+    width: 240px;
+  }
+  #buttonContainer {
+    width: 240px;
+    left: 45px;
   }
 }

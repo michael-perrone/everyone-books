@@ -1,18 +1,18 @@
 const express = require("express");
 const router = express.Router();
-const TennisClub = require("../../models/TennisClub");
+const Business = require("../../models/Business");
 const User = require("../../models/User");
 
 router.post("/", async (req, res) => {
   try {
-    let subscriberExists = await TennisClub.find({
+    let subscriberExists = await Business.find({
       followers: req.body.userId
     });
     let doesExist = false;
     for (let i = 0; i < subscriberExists.length; i++) {
       if (
         subscriberExists.length > 0 &&
-        subscriberExists[i]._id == req.body.tennisClubId
+        subscriberExists[i]._id == req.body.businessId
       ) {
         doesExist = true;
       }
@@ -22,19 +22,19 @@ router.post("/", async (req, res) => {
         .status(406)
         .json({ error: "You have already subscribed to this club" });
     }
-    let tennisClub = await TennisClub.findOne({ _id: req.body.tennisClubId });
-    if (tennisClub) {
-      tennisClub.followers.unshift(req.body.userId);
-      await tennisClub.save();
+    let business = await Business.findOne({ _id: req.body.businessId });
+    if (business) {
+      business.followers.unshift(req.body.userId);
+      await business.save();
     }
     let user = await User.findOne({ _id: req.body.userId });
     if (user) {
-      user.clubsFollowing.unshift(req.body.tennisClubId);
+      user.businessesFollowing.unshift(req.body.businessId);
       await user.save();
     }
 
-    if (user && tennisClub) {
-      res.status(200).json({ user, tennisClub });
+    if (user && business) {
+      res.status(200).send()
     }
   } catch (error) {
     console.log(error);
@@ -44,22 +44,23 @@ router.post("/", async (req, res) => {
 router.post("/unfollow", async (req, res) => {
   try {
     let user = await User.findOne({ _id: req.body.userId });
-    let newClubsFollowing = user.clubsFollowing.filter(
-      clubId => clubId != req.body.tennisClubId
+    console.log(user)
+    let newBusinessesFollowing = user.businessesFollowing.filter(
+      businessId => businessId != req.body.businessId
     );
-    let tennisClub = await TennisClub.findOne({ _id: req.body.tennisClubId });
-    let newTennisClubFollowers = tennisClub.followers.filter(
+    let business = await Business.findOne({ _id: req.body.businessId });
+    let newBusinessFollowers = business.followers.filter(
       userId => userId != req.body.userId
     );
-    if (user && tennisClub) {
-      user.clubsFollowing = newClubsFollowing;
+    if (user && business) {
+      user.businessesFollowing = newBusinessesFollowing;
       await user.save();
-      tennisClub.followers = newTennisClubFollowers;
-      await tennisClub.save();
-      let tennisClubsAfterFilter = await TennisClub.find({
+      business.followers = newBusinessFollowers;
+      await business.save();
+      let businessAfterFilter = await Business.find({
         followers: user._id
       });
-      return res.status(200).json({ tennisClubsAfterFilter });
+      return res.status(200).send()
     }
   } catch (error) {
     console.log(error);
