@@ -17,8 +17,8 @@
 
 #buttonContainer {
   position: absolute;
-  left: 98px;
-  width: 297px;
+  left: 90px;
+  width: 304px;
   bottom: 7px;
   display: flex;
   justify-content: space-between;
@@ -30,6 +30,7 @@
   box-shadow: 0px 0px 4px black;
   border: none;
   background-color: white;
+  font-size: 14px;
 }
 
 .sectionButton:hover {
@@ -65,7 +66,7 @@
 }
 
 .section {
-  height: 220px;
+  height: 208px;
   width: 190px;
   border: 1px solid gray;
   display: flex;
@@ -104,6 +105,6 @@
   }
   #buttonContainer {
     width: 240px;
-    left: 28px;
+    left: 29px;
   }
 }
