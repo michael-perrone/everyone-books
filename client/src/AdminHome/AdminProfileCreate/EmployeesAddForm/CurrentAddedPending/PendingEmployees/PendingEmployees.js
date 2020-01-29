@@ -78,7 +78,7 @@ const PendingInstructors = props => {
             <p>{pendingEmployee.name}</p>
             <i
               onClick={addToDeletePending(pendingEmployee)}
-              style={{ color: "red", marginRight: "40px" }}
+              style={{ color: "red", marginRight: "40px", cursor: 'pointer' }}
               className="fas fa-trash-alt"
             ></i>
           </div>
@@ -98,7 +98,7 @@ const PendingInstructors = props => {
             </p>
             <i
               onClick={restore(employeeDeleted)}
-              style={{ color: "green", marginRight: "40px" }}
+              style={{ color: "green", marginRight: "40px", cursor: 'pointer' }}
               className="fas fa-trash-restore"
             ></i>
           </div>

@@ -18,4 +18,11 @@ router.post('/', async (req, res) => {
     }
 })
 
+router.post('/schedule', async (req, res) => {
+    const schedule = await Business.findOne({_id: req.body.businessId}).select(['schedule'])
+    if (schedule) {
+        res.json({schedule})
+    }
+})
+
 module.exports = router;

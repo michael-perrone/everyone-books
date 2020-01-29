@@ -48,7 +48,6 @@ class CourtContainer extends React.Component {
       prevProps.dateChosen !== this.props.dateChosen ||
       prevProps.businessName !== this.props.businessName
     ) {
-      console.log('hi')
       axios
         .post("/api/thingBooked/getthings", {
           businessId: this.props.businessId,
@@ -74,7 +73,7 @@ class CourtContainer extends React.Component {
         .post("/api/thingBooked/delete", {
           bookingId,
           businessName: this.props.businessName,
-          date: this.props.date // LOL
+          date: this.props.dateChosen
         })
         .then(response => {
           this.setState({ bookedThings: response.data.bookings });
@@ -183,7 +182,7 @@ class CourtContainer extends React.Component {
         .post("/api/thingBooked", {
           booking: this.state.bookingToSend,
           players: playerIds,
-          date: this.props.date
+          date: this.props.dateChosen
         })
         .then(firstResponse => {
           if (firstResponse.status === 200) {
@@ -223,7 +222,7 @@ class CourtContainer extends React.Component {
           }
           let clubsMatchArray = [];
           firstResponse.data.bookings.forEach(element => {
-            if (this.props.date === element.date) {
+            if (this.props.dateChosen === element.date) {
               clubsMatchArray.push(element);
             }
           });
@@ -242,7 +241,6 @@ class CourtContainer extends React.Component {
     }
     return newThingsArray;
   }
-  // court
 
   convertTimeToThings(numberTime) {
     let thingTimeNumber = null;
@@ -357,14 +355,13 @@ class CourtContainer extends React.Component {
         let thingIdArray = element.thingId.toString().split("");
         thingIdArray.shift();
         let realId = thingIdArray.join("");
-        console.log(realId);
         thingIds.push(realId);
       });
       axios
         .post("/api/checkInstructorAvailability", {
           instructorId: this.props.instructorChosen.instructorChosen._id,
           thingIds,
-          date: this.props.date
+          date: this.props.dateChosen
         })
         .then(response => {
           if (response.data.bookingNotOkay === true) {
@@ -399,6 +396,7 @@ class CourtContainer extends React.Component {
               let thingNumber = parseInt(thingNumberString[0]);
               
               const bookingToSend = {
+                businessId: this.props.businessId,
                 bookingType: this.props.bookingType.bookingType,
                 employeeName,
                 employeeId,
@@ -408,7 +406,7 @@ class CourtContainer extends React.Component {
                 thingIds: thingIdsArray,
                 minutes: this.state.bookingArray.length * 15,
                 clubName: this.props.clubName,
-                date: this.props.date,
+                date: this.props.dateChosen,
                 thingNumber
               };
               this.setState({ bookingToSend });
@@ -446,6 +444,7 @@ class CourtContainer extends React.Component {
         let thingNumber = parseInt(thingNumberString[0]);
         const bookingToSend = {
           bookingType: this.props.bookingType.bookingType,
+          businessId: this.props.businessId,
           employeeName,
           employeeId,
           bookedBy: nameForBooking,
@@ -454,7 +453,7 @@ class CourtContainer extends React.Component {
           thingIds: thingIdsArray,
           minutes: this.state.bookingArray.length * 15,
           clubName: this.props.clubName,
-          date: this.props.date,
+          date: this.props.dateChosen,
           thingNumber
         };
         this.setState({ bookingToSend });
@@ -475,6 +474,7 @@ class CourtContainer extends React.Component {
   };
 
   render() {
+    if (this.props.openTime !== "Closed" || this.props.closeTime !== "Closed") {
     return (
       <div style={{ position: "relative" }}>
         {this.state.showBookingModalState && (
@@ -557,7 +557,7 @@ class CourtContainer extends React.Component {
                   thingNumber={element.thingNumber}
                   firstSlotInArray={this.state.firstSlotInArray}
                   lastSlotInArray={this.state.lastSlotInArray}
-                  date={this.props.date}
+                  date={this.props.dateChosen}
                 />
               );
             })}
@@ -565,6 +565,10 @@ class CourtContainer extends React.Component {
         </div>
       </div>
     );
+  }
+  else {
+    return <p>Sorry we are closed on the day you have selected!!</p>
+  }
   }
 }
 
@@ -576,7 +580,7 @@ const mapStateToProps = state => {
     timeChosen: state.bookingInfoReducer.timeSelected,
     bookingType: state.bookingInfoReducer.bookingType,
     employeeChosen: state.bookingInfoReducer.employeeChosen,
-    dateChosen: state.dateReducer.dateChosen
+    dateChosen: state.dateReducer.dateChosen.toDateString()
   };
 };
 

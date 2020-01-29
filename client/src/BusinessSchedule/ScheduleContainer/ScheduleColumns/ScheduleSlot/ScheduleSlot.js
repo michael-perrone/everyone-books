@@ -1,17 +1,17 @@
 import React from "react";
-import styles from "./CourtSlot.module.css";
+import styles from "../../../../Business/CourtContainer/CourtColumns/CourtSlot/CourtSlot.module.css";
 
-class CourtSlot extends React.Component {
+class ScheduleSlot extends React.Component {
   constructor(props) {
     super(props);
-
-    // 
+  
     this.state = {
       booking: false,
     };
   }
+  //firstSlot
 
- 
+ // color
   shouldComponentUpdate(nextProps, nextState) {
     if (this.props.timeStart !== nextProps.timeStart) {
       return true;
@@ -35,10 +35,10 @@ class CourtSlot extends React.Component {
 
     if (this.props.beingBooked == nextProps.beingBooked) {
       if (
-        this.props.thingId == nextProps.firstSlotInArray.thingId ||
-        this.props.thingId == nextProps.lastSlotInArray.thingId ||
-        this.props.thingId == this.props.lastSlotInArray.thingId ||
-        this.props.thingId == this.props.firstSlotInArray.thingId
+        this.props.slotId == nextProps.firstSlotInArray.slotId ||
+        this.props.slotId == nextProps.lastSlotInArray.slotId ||
+        this.props.slotId == this.props.lastSlotInArray.slotId ||
+        this.props.slotId == this.props.firstSlotInArray.slotId
       ) {
         return true;
       } else {
@@ -53,8 +53,8 @@ class CourtSlot extends React.Component {
     this.setState({ clicked: true });
     let peacock = true;
     if (this.props.bookingArray.length === 0 || this.state.clicked || peacock) {
-      this.props.getThings({
-        thingId: this.props.thingId,
+      this.props.getSlots({
+        slotId: this.props.slotId,
         timeStart: this.props.timeStart,
         endTime: this.props.timeEnd,
         clubName: this.props.clubName
@@ -65,56 +65,6 @@ class CourtSlot extends React.Component {
   };
 
   render() {
-
-    let color = "";
-
-    if (
-      this.props.bookingInfo &&
-      this.props.bookingInfo.bookingType === "Employee Time"
-    ) {
-      color = "#faff73";
-    }
-    if (
-      this.props.bookingInfo &&
-      this.props.bookingInfo.bookingType === "Open Clinic"
-    ) {
-      color = "#c5ffa1";
-    } else if (
-      this.props.bookingInfo &&
-      this.props.bookingInfo.bookingType === "Employee Court Time"
-    ) {
-      color = "#faff73";
-    } else if (
-      this.props.bookingInfo &&
-      this.props.bookingInfo.bookingType === "Private Lesson"
-    ) {
-      color = "#82fff3";
-    } else if (
-      this.props.bookingInfo &&
-      this.props.bookingInfo.bookingType === "Private Clinic"
-    ) {
-      color = "#fd66ff  ";
-    } else if (
-      this.props.bookingInfo &&
-      this.props.bookingInfo.bookingType === "Group Lesson"
-    ) {
-      color = "white";
-    } else if (
-      this.props.bookingInfo &&
-      this.props.bookingInfo.bookingType === "Other"
-    ) {
-      color = "pink";
-    } else if (
-      this.props.bookingInfo &&
-      this.props.bookingInfo.bookingType === "Tournament"
-    ) {
-      color = "#cda1ff";
-    } else if (
-      this.props.bookingInfo &&
-      this.props.bookingInfo.bookingType === "Court Time"
-    ) {
-      color = "lightsalmon";
-    }
     return (
       <div
         style={{
@@ -151,7 +101,7 @@ class CourtSlot extends React.Component {
               style={{
                 position: "relative",
                 top: "7px",
-                backgroundColor: color
+                backgroundColor: 'green'
               }}
               id={styles.bookedCheckButton}
             >
@@ -170,8 +120,8 @@ class CourtSlot extends React.Component {
               justifyContent: "center"
             }}
             onClick={this.phoneClick}
-            onMouseEnter={this.props.getThings({
-              thingId: this.props.thingId,
+            onMouseEnter={this.props.getSlots({
+              slotId: this.props.slotId,
               timeStart: this.props.timeStart,
               endTime: this.props.timeEnd,
               clubName: this.props.clubName
@@ -182,9 +132,9 @@ class CourtSlot extends React.Component {
         )}
         {!this.props.booked &&
           this.props.beingBooked &&
-          this.props.thingId == this.props.firstSlotInArray.thingId &&
-          this.props.firstSlotInArray.thingId !=
-            this.props.lastSlotInArray.thingId && (
+          this.props.slotId == this.props.firstSlotInArray.slotId &&
+          this.props.firstSlotInArray.slotId !=
+            this.props.lastSlotInArray.slotId && (
             <div
               style={{
                 borderTop: "1px solid black",
@@ -200,8 +150,8 @@ class CourtSlot extends React.Component {
                 zIndex: "2"
               }}
               onClick={this.props.thingClicked}
-              onMouseEnter={this.props.getThings({
-                thingId: this.props.thingId,
+              onMouseEnter={this.props.getSlots({
+                slotId: this.props.slotId,
                 timeStart: this.props.timeStart,
                 endTime: this.props.timeEnd,
                 clubName: this.props.clubName
@@ -212,9 +162,9 @@ class CourtSlot extends React.Component {
           )}
         {!this.props.booked &&
           this.props.beingBooked &&
-          this.props.thingId == this.props.lastSlotInArray.thingId &&
-          this.props.lastSlotInArray.thingId !=
-            this.props.firstSlotInArray.thingId && (
+          this.props.slotId == this.props.lastSlotInArray.slotId &&
+          this.props.lastSlotInArray.slotId !=
+            this.props.firstSlotInArray.slotId && (
             <div
               onClick={this.props.thingClicked}
               style={{
@@ -230,8 +180,8 @@ class CourtSlot extends React.Component {
                 alignItems: "center",
                 zIndex: "2"
               }}
-              onMouseEnter={this.props.getThings({
-                thingId: this.props.thingId,
+              onMouseEnter={this.props.getSlots({
+                slotId: this.props.slotId,
                 timeStart: this.props.timeStart,
                 endTime: this.props.timeEnd,
                 clubName: this.props.clubName
@@ -242,8 +192,8 @@ class CourtSlot extends React.Component {
           )}
         {!this.props.booked &&
           this.props.beingBooked &&
-          this.props.thingId != this.props.firstSlotInArray.thingId &&
-          this.props.thingId != this.props.lastSlotInArray.thingId &&
+          this.props.slotId != this.props.firstSlotInArray.slotId &&
+          this.props.slotId != this.props.lastSlotInArray.slotId &&
           this.props.bookingArray.length > 1 && (
             <div
               onClick={this.props.thingClicked}
@@ -259,16 +209,16 @@ class CourtSlot extends React.Component {
 
                 zIndex: "2"
               }}
-              onMouseEnter={this.props.getThings({
-                thingId: this.props.thingId,
+              onMouseEnter={this.props.getSlots({
+                slotId: this.props.slotId,
                 timeStart: this.props.timeStart,
                 endTime: this.props.timeEnd,
                 clubName: this.props.clubName
               })}
             ></div>
           )}
-        {this.props.firstSlotInArray.thingId ==
-          this.props.lastSlotInArray.thingId &&
+        {this.props.firstSlotInArray.slotId ==
+          this.props.lastSlotInArray.slotId &&
           this.props.beingBooked &&
           !this.props.booked && (
             <div
@@ -282,8 +232,8 @@ class CourtSlot extends React.Component {
                 alignItems: "center",
                 zIndex: "2"
               }}
-              onMouseEnter={this.props.getThings({
-                thingId: this.props.thingId,
+              onMouseEnter={this.props.getSlots({
+                slotId: this.props.slotId,
                 timeStart: this.props.timeStart,
                 endTime: this.props.timeEnd,
                 clubName: this.props.clubName
@@ -297,4 +247,4 @@ class CourtSlot extends React.Component {
   }
 }
 
-export default CourtSlot;
+export default ScheduleSlot;

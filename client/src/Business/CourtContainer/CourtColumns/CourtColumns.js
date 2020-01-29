@@ -2,22 +2,25 @@ import React from "react";
 import styles from "./CourtColumns.module.css";
 import CourtSlot from "./CourtSlot/CourtSlot";
 
-
-//business
 class CourtColumns extends React.PureComponent {
   constructor(props) {
     super(props);
     this.turnNumberIntoThings = this.turnNumberIntoThings.bind(this);
     this.convertNumberBackToTime = this.convertNumberBackToTime.bind(this);
     this.state = {
+      show: false,
       thingsInColumn: [],
       bookedThings: this.props.bookedThings,
       bookingArray: []
     };
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.businessOpenNumber !== this.props.businessOpenNumber || prevProps.businessCloseNumber !== this.props.businessCloseNumber || prevProps.date !== this.props.date) {
+  componentDidMount() {
+    this.setState({show: true})
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.businessOpenNumber !== this.props.businessOpenNumber || this.state.show !== prevState.show || prevProps.businessCloseNumber !== this.props.businessCloseNumber || prevProps.date !== this.props.date || (prevProps.timeOpen === "Closed" && this.props.timeOpen !== "Closed")) {
       console.log('HI')
       this.turnNumberIntoThings();
     }

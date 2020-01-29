@@ -9,7 +9,7 @@ import { SHOW_DROP_DOWN } from "../../../actions/actions";
 const SecondContainer = props => {
   return (
     <div id={styles.secondContainerActually}>
-      {props.admin && <AdminSecondContainer />}
+      {props.admin && <AdminSecondContainer businessId={props.admin.admin.businessId}/>}
       {props.employee && <EmployeeSecondContainer />}
       {props.user && <UserSecondContainer />}
       <div style={{marginRight: '40px'}}>

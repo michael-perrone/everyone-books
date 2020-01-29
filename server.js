@@ -24,6 +24,7 @@ app.use("/api/adminSignup", require("./routes/api/adminSignup"));
 app.use("/api/businessList", require("./routes/api/businessList"));
 app.use("/api/businessProfile", require("./routes/api/businessProfile"));
 app.use("/api/employeeList", require("./routes/api/employeeList"));
+app.use('/api/getEmployees', require('./routes/api/getEmployees'));
 
 app.use(
   "/api/checkInstructorAvailability",

@@ -107,7 +107,7 @@ class Calendar extends React.Component {
                 : ""
             }`}
             key={day}
-            onClick={this.props.chooseDate(dateFns.parse(cloneDay).toDateString())}
+            onClick={this.props.chooseDate(dateFns.parse(cloneDay))}
           >
             <span className="number">{formattedDate}</span>
             <span className="bg">{formattedDate}</span>

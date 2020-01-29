@@ -15,7 +15,7 @@ class Notifications extends React.Component {
     console.log(this.props);
     return (
       <React.Fragment>
-        <div onClick={this.props.hideNotifications} id={styles.backDrop}>
+        <div id={styles.backDrop}>
         <div className={styles.notificationsContainer}>
         <p style={{fontSize: '28px', fontFamily: 'Josefin Sans'}}>Notifications</p>
           <i
@@ -33,7 +33,6 @@ class Notifications extends React.Component {
           {this.props.admin && <AdminNotifications />}
           {this.props.employee && (
             <EmployeeNotifications
-              setNew={this.props.setNew}
               employeeNotifications={this.props.employeeNotifications}
             />
           )}

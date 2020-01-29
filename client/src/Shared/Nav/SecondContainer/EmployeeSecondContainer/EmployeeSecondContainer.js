@@ -71,8 +71,8 @@ const EmployeeSecondContainer = props => {
           >
           {businessName}
         </Link> }
-          {1 && !props.showDropDownState && <NotificationNumber num={1}/>}
-        <DropDown clearNotis={clearNotis} notiNum={1} employeeProfile={employeeProfile} />
+          {newNotificationsState.length > 0 && !props.showDropDownState && <NotificationNumber num={newNotificationsState.length}/>}
+        <DropDown clearNotis={clearNotis} notiNum={newNotificationsState.length} employeeProfile={employeeProfile} />
       </div>
       {props.showScheduleState && <Schedule employee={props} />}
       {props.showNotificationsState && (

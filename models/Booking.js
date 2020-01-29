@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const CourtBookedSchema = new mongoose.Schema({
+const BookingSchema = new mongoose.Schema({
   timeStart: String,
   timeEnd: String,
   bookedBy: String,
@@ -12,7 +12,7 @@ const CourtBookedSchema = new mongoose.Schema({
     ref: 'business'
   },
   date: String,
-  instructorName: {
+  employeeName: {
     type: String,
     default: "None"
   },
@@ -30,6 +30,6 @@ const CourtBookedSchema = new mongoose.Schema({
   }
 });
 
-const CourtBooked = mongoose.model("courtBooked", CourtBookedSchema);
+const Booking = mongoose.model("booking", BookingSchema);
 
-module.exports = CourtBooked;
+module.exports = Booking;

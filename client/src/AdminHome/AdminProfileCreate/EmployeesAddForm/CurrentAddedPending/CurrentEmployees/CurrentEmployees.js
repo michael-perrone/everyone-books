@@ -82,7 +82,7 @@ const CurrentEmployees = props => {
             <p>{currentEmployee.name}</p>
             <i
               onClick={addToDeleteCurrent(currentEmployee)}
-              style={{ color: "red", marginRight: "40px" }}
+              style={{ color: "red", marginRight: "40px", cursor: 'pointer' }}
               className="fas fa-trash-alt"
             ></i>
           </div>
@@ -102,7 +102,7 @@ const CurrentEmployees = props => {
             </p>
             <i
               onClick={restore(employeDeleted)}
-              style={{ color: "green", marginRight: "40px" }}
+              style={{ color: "green", marginRight: "40px", cursor: 'pointer' }}
               className="fas fa-trash-restore"
             ></i>
           </div>

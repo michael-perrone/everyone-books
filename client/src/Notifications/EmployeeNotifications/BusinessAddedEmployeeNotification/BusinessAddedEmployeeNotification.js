@@ -61,16 +61,13 @@ const BusinessAddedEmployeeNotification = props => {
     Axios.post("/api/notifications/employeeclickedyes", objectToSend).then(
       response => {
         if ((response.status = 200)) {
-          props.changeToken(response.data.token)
           setBusinessAccepted(true);
-          props.setNew(response.data.newNotifications)();
-        }
-        if (response.data.token) {
-         // CHECK ON THIS props.instructorTokenChange(response.data.token);
+          props.changeToken(response.data.token)
         }
       }
     );
   }
+
   function deny() {
     // DONT KNOW YET
   }

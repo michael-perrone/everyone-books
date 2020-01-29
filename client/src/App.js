@@ -12,6 +12,7 @@ import AdminProfileCreate from "./AdminHome/AdminProfileCreate/AdminProfileCreat
 import { connect } from "react-redux";
 import NeedToLoginPage from "./NeedToLoginPage/NeedToLoginPage";
 import Nav from './Shared/Nav/Nav';
+import BusinessSchedule from './BusinessSchedule/BusinessSchedule';
 
 class App extends React.Component {
   constructor(props) {
@@ -46,6 +47,7 @@ class App extends React.Component {
       <React.Fragment>
       {(token || employeeToken || adminToken) && <Nav/>}
       <Switch>
+        <Route path="/admin/:businessId/businessSchedule" exact component={BusinessSchedule}></Route>
         <Route
           path="/businesslist"
           exact

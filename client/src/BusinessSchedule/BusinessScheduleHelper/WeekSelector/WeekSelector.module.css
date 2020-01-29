@@ -1,0 +1,43 @@
+#weekSelectorContainer {
+    width: 300px;
+    height: 239px;
+    border: 1px solid black;
+    margin-right: 10px;
+}
+
+.hide {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: none;
+}
+
+.day {
+    width: 30px;
+    margin-top: 2px;
+    padding: 4px;
+    border: 1px solid black;
+}
+
+#days {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+}
+
+#calHeader {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.hoverWeek {
+    position: absolute;
+    width: 99%;
+    height: 28px;
+    cursor: pointer;
+}
+.hoverWeek:hover {
+    border: 2px solid gray;
+}

@@ -3,6 +3,7 @@ import authReducer from "./authReducer";
 import bookingInfoReducer from "./bookingInfoReducer";
 import newReducers from './newReducers';
 import dateReducer from './dateReducer';
+import scheduleReducer from './scheduleReducer';
 import { combineReducers } from "redux";
 
 export default combineReducers({
@@ -10,5 +11,6 @@ export default combineReducers({
   authReducer,
   bookingInfoReducer,
   newReducers,
+  scheduleReducer,
   dateReducer
 });

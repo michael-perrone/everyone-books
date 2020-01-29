@@ -11,7 +11,7 @@ router.post("/", async (req, res) => {
       employeeBooked: req.body.booking.employeeId,
       employeeName: req.body.booking.employeeName,
       bookedBy: req.body.booking.bookedBy,
-      businessName: req.body.booking.clubName,
+      businessId: req.body.booking.businessId,
       thingIds: req.body.booking.thingIds,
       timeStart: req.body.booking.timeStart,
       timeEnd: req.body.booking.timeEnd,
@@ -19,6 +19,7 @@ router.post("/", async (req, res) => {
       date: req.body.booking.date,
       customers: req.body.customers
     });
+    console.log(newThingBooked)
     if (req.body.customers && req.body.customers.length > 0) {
       const customers = await User.find({ _id: newCourtBooked.players });
       for (let i = 0; i < customers.length; i++) {
@@ -35,6 +36,7 @@ router.post("/", async (req, res) => {
         businessId: req.body.booking.businessId,
         date: req.body.date
       });
+      console.log(bookings)
       res.status(200).json({ newBooking: newThingBooked, bookings });
     }
   } catch (error) {
