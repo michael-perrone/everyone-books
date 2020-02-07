@@ -1,0 +1,27 @@
+
+
+.blueShow {
+    font-size: 20px;
+    color: navy;
+    opacity: 0;
+    transition-duration: 0.7s;
+    width: 200px;
+    position: absolute;
+    top: 130px;
+    right: 5px;
+}
+
+.redShow {
+    font-size: 20px;
+    color: darkred;
+    opacity: 0;
+    transition-duration: 0.7s;
+    width: 180px;
+    position: absolute;
+    top: 130px;
+    left: 42px;
+}
+
+#show {
+    opacity: 1;
+}

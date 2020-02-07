@@ -18,11 +18,14 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.post('/schedule', async (req, res) => {
-    const schedule = await Business.findOne({_id: req.body.businessId}).select(['schedule'])
-    if (schedule) {
-        res.json({schedule})
+router.post('/businessschedule', async (req, res) => {
+    const businessForEmployees = await BusinessProfile.findOne({business: req.body.businessId}).select(['employeesWhoAccepted']);
+    const employees = await Employee.find({_id: businessForEmployees.employeesWhoAccepted}).select(['fullName', '_id'])
+    const businessSchedule = await Business.findOne({_id: req.body.businessId}).select(['schedule']);
+    if (businessSchedule) {
+        res.status(200).json({employees, schedule: businessSchedule.schedule})
     }
+
 })
 
 module.exports = router;

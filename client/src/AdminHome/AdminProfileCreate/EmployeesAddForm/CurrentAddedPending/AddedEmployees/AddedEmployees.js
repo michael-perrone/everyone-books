@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 
-const AddedInstructor = props => {
+const AddedEmployees = props => {
   function sendEmployeeId() {
     const employees = [];
     props.added.forEach(employee => {
@@ -17,7 +17,7 @@ const AddedInstructor = props => {
           if (response.status === 200) {
             props.setNewPending(props.added);
             props.clearAdded();
-            props.instructorsSubmittedHandler();
+            props.employeesSubmittedHandler();
           }
         })
         .catch(error => {
@@ -75,4 +75,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(AddedInstructor);
+export default connect(mapStateToProps)(AddedEmployees);

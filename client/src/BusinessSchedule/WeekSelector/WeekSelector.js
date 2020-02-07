@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './WeekSelector.module.css';
-import {CHOOSE_WEEK_SELECTOR} from '../../../actions/actions';
 import {connect} from 'react-redux';
+import {CHOOSE_DATE_SELECTOR} from '../../actions/actions'
 
 const WeekSelector = (props) => {
     const [monthIndex, setMonthIndex] = React.useState(new Date().getMonth());
@@ -14,14 +14,23 @@ const WeekSelector = (props) => {
     const [thursday, setThursday] = React.useState([])
     const [friday, setFriday] = React.useState([])
     const [saturday, setSaturday] = React.useState([])
-    const [weekSelected, setWeekSelected] = React.useState([]);
+    const [dateObtained, setDateObtained] = React.useState(new Date());
+    const [dayNum, setDayNum] = React.useState('')
 
-   function selectWeek(num) {
-        return () => {
-            setWeekSelected(num);
-            props.chooseWeek(num);
+   function getDate(dayNumber, type) {
+       return () => {  
+           if (type === "postmonth") {
+               addMonth();
+           }
+           else if (type === "premonth") {
+               subMonth()
+           }
+           else {
+                setDayNum(dayNumber)
+                setDateObtained(new Date(`${props.months[monthIndex]} ${dayNumber}, ${year}`).toDateString())
+            }
         }
-   }
+    }   
 
    function addYear() {
        setDaysOfMonth(new Date(year + 1, monthIndex + 1, 0).getDate())
@@ -167,6 +176,8 @@ const WeekSelector = (props) => {
         
     }, [monthIndex, year, daysOfMonth])
 
+    console.log(dateObtained)
+
     return (
         <div id={styles.weekSelectorContainer}>
             <div id={styles.calHeader}>
@@ -178,21 +189,13 @@ const WeekSelector = (props) => {
             </div>
         </div>
         <div id={styles.days}>
-           <div><p style={{marginBottom: '8px'}}>Sun</p>{sunday.map(element => <p style={{color: element.type === "premonth" || element.type === "postmonth" ? 'rgb(156,156,156)' : 'black', height: element === " " ? "18px" : "" }} className={styles.day}>{element.day}</p>)}</div>
-           <div><p style={{marginBottom: '8px'}}>Mon</p>{monday.map(element => <p style={{color: element.type === "premonth" || element.type === "postmonth" ? 'rgb(156,156,156)' : 'black',height: element === " " ? "18px" : "" }} className={styles.day}>{element.day}</p>)}</div>
-           <div><p style={{marginBottom: '8px'}}>Tue</p>{tuesday.map(element => <p style={{color: element.type === "premonth" || element.type === "postmonth" ? 'rgb(156,156,156)' : 'black',height: element === " " ? "18px" : "" }} className={styles.day}>{element.day}</p>)}</div>
-           <div><p style={{marginBottom: '8px'}}>Wed</p>{wednesday.map(element => <p style={{color: element.type === "premonth" || element.type === "postmonth" ? 'rgb(156,156,156)' : 'black',height: element === " " ? "18px" : "" }} className={styles.day}>{element.day}</p>)}</div>
-           <div><p style={{marginBottom: '8px'}}>Thu</p>{thursday.map(element => <p style={{color: element.type === "premonth" || element.type === "postmonth" ? 'rgb(156,156,156)' : 'black',height: element === " " ? "18px" : "" }} className={styles.day}>{element.day}</p>)}</div>
-           <div><p style={{marginBottom: '8px'}}>Fri</p>{friday.map(element => <p style={{color: element.type === "premonth" || element.type === "postmonth" ? 'rgb(156,156,156)' : 'black',height: element === " " ? "18px" : "" }} className={styles.day}>{element.day}</p>)}</div>
-           <div><p style={{marginBottom: '8px'}}>Sat</p>{saturday.map(element => <p style={{color: element.type === "premonth" || element.type === "postmonth" ? 'rgb(156,156,156)' : 'black',height: element === " " ? "18px" : "" }} className={styles.day}>{element.day}</p>)}</div>
-           <div onClick={selectWeek(1)} style={{top: '24px', border: weekSelected === 1 ? '2px solid black' : ""}} className={styles.hoverWeek}></div>
-           <div onClick={selectWeek(2)} style={{top: '54px', border: weekSelected === 2 ? '2px solid black' : ""}} className={styles.hoverWeek}></div>
-           <div onClick={selectWeek(3)} style={{top: '84px', border: weekSelected === 3 ? '2px solid black' : ""}} className={styles.hoverWeek}></div>
-           <div onClick={selectWeek(4)} style={{top: '114px',border: weekSelected === 4 ? '2px solid black' : ""}} className={styles.hoverWeek}></div>
-           <div onClick={selectWeek(5)} style={{top: '144px', border: weekSelected === 5 ? '2px solid black' : ""}} className={(daysOfMonth === 28 && new Date(`${props.months[monthIndex]} 1, ${year}`).getDay() === 0) ? styles.hide : styles.hoverWeek}></div>
-           <div onClick={selectWeek(6)} style={{top: '174px', border: weekSelected === 6 ? '2px solid black' : ""}}
-            className={(daysOfMonth === 30 && new Date(`${props.months[monthIndex]} 1, ${year}`).getDay() === 6) || (daysOfMonth === 31 && new Date(`${props.months[monthIndex]} 1, ${year}`).getDay() === 6) || (daysOfMonth === 31 && new Date(`${props.months[monthIndex]} 1, ${year}`).getDay() === 5) ? 
-            styles.hoverWeek : styles.hide}></div>
+           <div><p style={{marginBottom: '8px'}}>Sun</p>{sunday.map(element => <p onClick={getDate(element.day, element.type)} style={{color: element.type === "premonth" || element.type === "postmonth" ? 'rgb(156,156,156)' : 'black', height: element === " " ? "18px" : "", background: dayNum === element.day ? 'lavender' : ''  }} className={styles.day}>{element.day}</p>)}</div>
+           <div><p style={{marginBottom: '8px'}}>Mon</p>{monday.map(element => <p onClick={getDate(element.day, element.type)} style={{color: element.type === "premonth" || element.type === "postmonth" ? 'rgb(156,156,156)' : 'black',height: element === " " ? "18px" : "", background: dayNum === element.day ? 'lavender' : ''  }} className={styles.day}>{element.day}</p>)}</div>
+           <div><p style={{marginBottom: '8px'}}>Tue</p>{tuesday.map(element => <p onClick={getDate(element.day, element.type)} style={{color: element.type === "premonth" || element.type === "postmonth" ? 'rgb(156,156,156)' : 'black',height: element === " " ? "18px" : "", background: dayNum === element.day ? 'lavender' : ''  }} className={styles.day}>{element.day}</p>)}</div>
+           <div><p style={{marginBottom: '8px'}}>Wed</p>{wednesday.map(element => <p onClick={getDate(element.day, element.type)} style={{color: element.type === "premonth" || element.type === "postmonth" ? 'rgb(156,156,156)' : 'black',height: element === " " ? "18px" : "", background: dayNum === element.day ? 'lavender' : ''  }} className={styles.day}>{element.day}</p>)}</div>
+           <div><p style={{marginBottom: '8px'}}>Thu</p>{thursday.map(element => <p onClick={getDate(element.day, element.type)} style={{color: element.type === "premonth" || element.type === "postmonth" ? 'rgb(156,156,156)' : 'black',height: element === " " ? "18px" : "", background: dayNum === element.day ? 'lavender' : ''  }} className={styles.day}>{element.day}</p>)}</div>
+           <div><p style={{marginBottom: '8px'}}>Fri</p>{friday.map(element => <p onClick={getDate(element.day, element.type)} style={{color: element.type === "premonth" || element.type === "postmonth" ? 'rgb(156,156,156)' : 'black',height: element === " " ? "18px" : "", background: dayNum === element.day ? 'lavender' : ''  }} className={styles.day}>{element.day}</p>)}</div>
+           <div><p style={{marginBottom: '8px'}}>Sat</p>{saturday.map(element => <p onClick={getDate(element.day, element.type)} style={{color: element.type === "premonth" || element.type === "postmonth" ? 'rgb(156,156,156)' : 'black',height: element === " " ? "18px" : "", background: dayNum === element.day ? 'lavender' : ''  }} className={styles.day}>{element.day}</p>)}</div>
         </div>
     </div>
     )
@@ -217,7 +220,7 @@ WeekSelector.defaultProps = {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        chooseWeek: (num) => () => dispatch({type: CHOOSE_WEEK_SELECTOR, payload: num}) 
+        chooseDate: (date) => () => dispatch({type: CHOOSE_DATE_SELECTOR, payload: date}) 
     }
 }
 

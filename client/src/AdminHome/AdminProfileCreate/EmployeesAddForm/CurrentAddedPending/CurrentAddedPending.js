@@ -18,7 +18,7 @@ const CurrentAddedPending = props => {
     setTimeout(() => setErrorAddAlert(false), 4200);
   }
 
-  function instructorsSubmittedHandler() {
+  function employeesSubmittedHandler() {
     setAddedSelected(false);
     setPendingSelected(true);
     setShowAlert(true);
@@ -134,14 +134,14 @@ const CurrentAddedPending = props => {
       <OtherAlerts
         showAlert={showAlert}
         alertType={"success"}
-        alertMessage={"You have successfully invited these instructors."}
+        alertMessage={"You have successfully invited these employees."}
       />
 
       <OtherAlerts
         showAlert={errorAddAlert}
         alertType={"failure"}
         alertMessage={
-          "This instructor is already current or pending at your club."
+          "This employee is already current or pending at your club."
         }
       />
 
@@ -152,7 +152,7 @@ const CurrentAddedPending = props => {
           filterAdded={props.filterAdded}
           added={props.added}
           setNewPending={props.setNewPending}
-          instructorsSubmittedHandler={instructorsSubmittedHandler}
+          employeesSubmittedHandler={employeesSubmittedHandler}
         />
       )}
     </div>

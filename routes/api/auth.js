@@ -40,7 +40,7 @@ router.post("/login", async (req, res) => {
       jwt.sign(
         payload,
         config.get("adminSecret"),
-        { expiresIn: 366000 },
+        { expiresIn: 366000000000000000000000 },
         (error, token) => {
           res.status(200).json({ token: token });
         }
@@ -75,7 +75,7 @@ router.post("/login", async (req, res) => {
       jwt.sign(
         payload,
         config.get("userSecret"),
-        { expiresIn: 360000 },
+        { expiresIn: 3600000000000000000000000000 },
         (error, token) => {
           if (error) {
             throw error;
@@ -120,7 +120,7 @@ router.post("/login", async (req, res) => {
       jwt.sign(
         payload,
         config.get("employeeSecret"),
-        { expiresIn: 360000 },
+        { expiresIn: 3600000000000000000000000000000 },
         (error, token) => {
           if (error) {
             throw error;

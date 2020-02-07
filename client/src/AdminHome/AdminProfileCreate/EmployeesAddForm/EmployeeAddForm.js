@@ -53,7 +53,7 @@ const EmployeeAddForm = props => {
         });
     } else {
       setEmployeeFound([]);
-      setError("Please fill out the name of the instructor");
+      setError("Please fill out the name of the employee");
     }
   }
 
@@ -63,7 +63,7 @@ const EmployeeAddForm = props => {
       let newDoubleAddedError = [];
       for (let i = 0; i < addedEmployees.length; i++) {
         if (newEmployee.id === addedEmployees[i].id) {
-          newDoubleAddedError.push("You have already added this instructor.");
+          newDoubleAddedError.push("You have already added this employee.");
         }
       }
       if (newDoubleAddedError.length === 0) {

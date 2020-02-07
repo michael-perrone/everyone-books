@@ -6,6 +6,8 @@
     justify-content: space-around;
 }
 
+
+
 #backButton {
     position: absolute;
     top: 58px;
@@ -67,6 +69,10 @@
     padding: 5px;
     left: 50px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.peopleContainer {
+    position: relative;
 }
 
 

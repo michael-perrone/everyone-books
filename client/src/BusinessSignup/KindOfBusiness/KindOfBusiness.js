@@ -20,6 +20,7 @@ const KindOfBusiness = (props) => {
 
     function getNameOfBusinessFunction(e) {
         setNameOfBusiness(e.target.value)
+        props.getNameOfBusiness("");
     }
 
     function submitName() {

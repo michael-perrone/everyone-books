@@ -10,11 +10,12 @@ const AdminProfileCreate = props => {
   const [resultsNumber, setResultsNumber] = useState(0);
   const [profile, setProfile] = useState({});
   const [profileExists, setProfileExists] = useState(true);
-  const [showingInstructors, setShowingInstructors] = useState(true);
+  const [showingEmployees, setShowingEmployees] = useState(true);
   const [showingServices, setShowingServices] = useState(false);
   const [showingBio, setShowingBio] = useState(false);
   const [accepted, setAccepted] = useState([]);
   const [pending, setPending] = useState([]);
+  
 
   function setNewDeletedPending(newPending) {
     setPending(newPending);
@@ -58,17 +59,17 @@ const AdminProfileCreate = props => {
   function setBio() {
     setShowingBio(true);
     setShowingServices(false);
-    setShowingInstructors(false);
+    setShowingEmployees(false);
   }
 
   function setServices() {
     setShowingServices(true);
-    setShowingInstructors(false);
+    setShowingEmployees(false);
     setShowingBio(false);
   }
 
-  function setInstructors() {
-    setShowingInstructors(true);
+  function setEmployees() {
+    setShowingEmployees(true);
     setShowingBio(false);
     setShowingServices(false);
   }
@@ -78,7 +79,7 @@ const AdminProfileCreate = props => {
       setShowingServices(true);
       setShowingBio(false);
     } else if (showingServices) {
-      setShowingInstructors(true);
+      setShowingEmployees(true);
       setShowingServices(false);
     }
   };
@@ -89,9 +90,9 @@ const AdminProfileCreate = props => {
   }
 
   const rightArrowClick = () => {
-    if (showingInstructors) {
+    if (showingEmployees) {
       setShowingServices(true);
-      setShowingInstructors(false);
+      setShowingEmployees(false);
     } else if (showingServices) {
       setShowingBio(true);
       setShowingServices(false);
@@ -130,9 +131,9 @@ const AdminProfileCreate = props => {
             className="fas fa-chevron-left"
           ></i>
           <p
-            onClick={setInstructors}
+            onClick={setEmployees}
             className={styles.pTagsForSelection}
-            id={showingInstructors ? styles.selectedPTag : ""}
+            id={showingEmployees ? styles.selectedPTag : ""}
           >
             Employees
           </p>
@@ -156,16 +157,16 @@ const AdminProfileCreate = props => {
               fontSize: "22px",
               marginTop: "4px",
               marginLeft: "8px",
-              cursor: showingInstructors || showingServices ? "pointer" : "",
+              cursor: showingEmployees || showingServices ? "pointer" : "",
               color:
-                showingInstructors || showingServices ? "black" : "lightgray"
+                showingEmployees || showingServices ? "black" : "lightgray"
             }}
             className="fas fa-chevron-right"
           ></i>
         </div>
         <div
           className={styles.divHolderNotAnimated}
-          id={showingInstructors ? styles.divHolderAnimated : ""}
+          id={showingEmployees ? styles.divHolderAnimated : ""}
         >
           <p className={styles.pTag}>
             You can add the employees to your business in the form below. When an employee registers with Everyone Books, they are given a special unique ID. Enter the unique ID from the employee below to add that employee.
@@ -177,7 +178,7 @@ const AdminProfileCreate = props => {
             getAmountOfResults={getAmountOfResults}
             current={accepted}
             pending={pending}
-            hideAlert={showingInstructors}
+            hideAlert={showingEmployees}
           />
         </div>
 
