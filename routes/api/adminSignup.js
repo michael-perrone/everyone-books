@@ -11,6 +11,22 @@ const Employee = require('../../models/Employee');
 const Business = require('../../models/Business');
 
 
+router.post('/check', async (req, res) => {
+  console.log(req.body.email)
+  const admin = await Admin.findOne({email: req.body.email})
+  const user = await User.findOne({email: req.body.email})
+  const employee = await Employee.findOne({email: req.body.email})
+  console.log(admin)
+  console.log(user)
+  console.log(employee)
+  if (!admin && !user && !employee) {
+    res.status(200).send();
+  }
+  else {
+    res.status(406).send();
+  }
+})
+
 router.post('/',
   async (req, res) => {
         try {

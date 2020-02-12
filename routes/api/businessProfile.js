@@ -6,6 +6,7 @@ const Business = require('../../models/Business');
 const Employee = require('../../models/Employee');
 const Notification = require("../../models/Notification");
 const TennisClub = require("../../models/TennisClub");
+const ServiceType = require('../../models/ServiceType')
 
 router.get("/mybusinessForProfile", adminAuth, async (req, res) => {
   try {
@@ -48,14 +49,18 @@ router.post("/", adminAuth, async (req, res) => {
 
     if (req.body.services && req.body.services.length > 0) {
       for (let i = 0; i < req.body.services.length; i++) {
-        servicesArray.push(req.body.services[i]);
+        let newServiceType = new ServiceType({
+          cost: req.body.services[i].cost,
+          serviceName: req.body.services[i].serviceName
+        })
+        await newServiceType.save();
+        servicesArray.push(newServiceType._id)
       }
-      businessProfileFields.services = servicesArray;
-      console.log(servicesArray)
+      businessProfileFields.serviceTypes = [...servicesArray];
     }
 
     if (servicesArray.length > 0) {
-      businessProfileFields.services = servicesArray;
+      businessProfileFields.serviceTypes = [...servicesArray];
     }
 
     if (req.body.bio) {
@@ -74,14 +79,18 @@ router.post("/", adminAuth, async (req, res) => {
         { $set: businessProfileFields },
         { new: true }
       );
+      console.log(businessProfile)
       return res.json({
         businessProfile,
         // instructorsForInstantAdd: instructorsBeingCurrentlyAdded
       });
+      
     } else {
       businessProfile = new BusinessProfile(businessProfileFields);
       await businessProfile.save();
+      console.log(businessProfile)
       res.status(201).json(businessProfile);
+      
     }
   } catch (error) {
     console.log(error);
@@ -109,6 +118,7 @@ router.post("/employeeDeleteFromBusiness", async (req, res) => {
       await employee.save();
     }
     await businessProfile.save();
+    
     res.status(200).send();
   } catch (error) {
     console.log(error);

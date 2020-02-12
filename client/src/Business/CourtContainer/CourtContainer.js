@@ -43,6 +43,18 @@ class CourtContainer extends React.Component {
     };
   }
 
+  componentDidMount() {
+   
+    axios
+      .post("/api/thingBooked/getthings", {
+        businessId: this.props.businessId,
+        date: this.props.dateChosen
+      })
+      .then(response => {
+        this.setState({ bookedThings: response.data.bookings });
+      });
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (
       prevProps.dateChosen !== this.props.dateChosen ||
@@ -86,9 +98,11 @@ class CourtContainer extends React.Component {
   }
 
   thingClicked() {
-    this.setState(prevState => {
-      return { slotsClicked: !prevState.slotsClicked };
-    });
+    if (this.props.timeChosen.timeSelected) { 
+        this.setState(prevState => {
+        return { slotsClicked: !prevState.slotsClicked };
+        });
+    }
   }
 
 
@@ -104,13 +118,22 @@ class CourtContainer extends React.Component {
   thingArray = (topOfArray, thingsToLoopOver) => {
     if (this.state.slotsClicked === false) {
       let numToAdd = "";
-      if (this.props.timeChosen.timeSelected === "30 Minutes") {
+      if (this.props.timeChosen.timeSelected === "15 Minutes") {
+        numToAdd = 0;
+      } else if (this.props.timeChosen.timeSelected === "30 Minutes") {
         numToAdd = 1;
+      } else if (this.props.timeChosen.timeSelected === "45 Minutes") {
+        numToAdd = 2;
       } else if (this.props.timeChosen.timeSelected === "1 Hour") {
         numToAdd = 3;
+      }  else if (this.props.timeChosen.timeSelected === "1 Hour 15 Minutes") {
+        numToAdd = 4;
       } else if (this.props.timeChosen.timeSelected === "1 Hour 30 Minutes") {
         numToAdd = 5;
-      } else if (this.props.timeChosen.timeSelected === "2 Hours") {
+      } else if (this.props.timeChosen.timeSelected === "1 Hour 45 Minutes") {
+        numToAdd = 6;
+      } 
+      else if (this.props.timeChosen.timeSelected === "2 Hours") {
         numToAdd = 7;
       } else if (this.props.timeChosen.timeSelected === "2 Hours 30 Minutes") {
         numToAdd = 9;
@@ -385,7 +408,7 @@ class CourtContainer extends React.Component {
                 .fullName;
               employeeId = this.props.employeeChosen.employeeChosen._id;
             }
-            if (this.state.bookingArray.length > 1) {
+            if (this.state.bookingArray.length > 1 || this.props.timeChosen.timeSelected === "15 Minutes") {
               const thingIdsArray = [];
               this.state.bookingArray.forEach(element => {
                 thingIdsArray.push(element.thingId);
@@ -404,7 +427,7 @@ class CourtContainer extends React.Component {
                 timeStart: this.state.firstSlotInArray.thing.timeStart,
                 timeEnd: this.state.lastSlotInArray.thing.timeEnd,
                 thingIds: thingIdsArray,
-                minutes: this.state.bookingArray.length * 15,
+                minutes: this.props.timeChosen.timeSelected === "15 Minutes" ? 15 : this.state.bookingArray.length * 15,
                 clubName: this.props.clubName,
                 date: this.props.dateChosen,
                 thingNumber
@@ -434,7 +457,8 @@ class CourtContainer extends React.Component {
         employeeName = this.props.employeeChosen.employeeChosen.fullName;
         employeeId = this.props.employeeChosen.employeeChosen._id;
       }
-      if (this.state.bookingArray.length > 1) {
+      if (this.state.bookingArray.length > 1 || this.props.timeChosen.timeSelected === "15 Minutes") {
+        console.log('WHY AM I N OT RUNNING')
         const thingIdsArray = [];
         this.state.bookingArray.forEach(element => {
           thingIdsArray.push(element.thingId);
@@ -451,7 +475,7 @@ class CourtContainer extends React.Component {
           timeStart: this.state.firstSlotInArray.thing.timeStart,
           timeEnd: this.state.lastSlotInArray.thing.timeEnd,
           thingIds: thingIdsArray,
-          minutes: this.state.bookingArray.length * 15,
+          minutes: this.props.timeChosen.timeSelected === "15 Minutes" ? 15 : this.state.bookingArray.length * 15,
           clubName: this.props.clubName,
           date: this.props.dateChosen,
           thingNumber
@@ -580,7 +604,7 @@ const mapStateToProps = state => {
     timeChosen: state.bookingInfoReducer.timeSelected,
     bookingType: state.bookingInfoReducer.bookingType,
     employeeChosen: state.bookingInfoReducer.employeeChosen,
-    dateChosen: state.dateReducer.dateChosen.toDateString()
+    
   };
 };
 

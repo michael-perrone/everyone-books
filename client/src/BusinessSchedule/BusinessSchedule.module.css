@@ -1,3 +1,13 @@
 #container {
-    position: relative;
+    display: flex;
+    width: 80%;
+    justify-content: space-around;
 }
+
+
+@media(max-width: 900px) {
+    #container {
+        width: 100%;
+    }
+}
+

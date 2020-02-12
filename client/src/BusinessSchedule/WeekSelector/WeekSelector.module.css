@@ -1,14 +1,15 @@
 #weekSelectorContainer {
-    width: 300px;
+    margin-top: 20px;
+    margin-left: 8px;
+    width: 314px;
     height: 239px;
     border: 1px solid black;
-    position: absolute;
     top: 5px;
     left: 5px;
 }
 
 .day {
-    width: 30px;
+    width: 32px;
     margin-top: 2px;
     padding: 4px;
     border: 1px solid black;

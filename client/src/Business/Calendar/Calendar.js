@@ -164,7 +164,7 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = (state) => {
   return {
-    dateChosen: state.dateReducer.dateChosen
+    dateChosen: state.dateReducer.dateChosen.toDateString()
   }
 }
 

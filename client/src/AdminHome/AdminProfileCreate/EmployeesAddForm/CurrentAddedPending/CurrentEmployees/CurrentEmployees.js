@@ -74,6 +74,8 @@ const CurrentEmployees = props => {
         return (
           <div
             style={{
+              width: '280px',
+              marginLeft: '58px',
               marginTop: "6px",
               display: "flex",
               justifyContent: "space-between"
@@ -92,6 +94,8 @@ const CurrentEmployees = props => {
         return (
           <div
             style={{
+              marginLeft: '58px',
+              width: '280px',
               marginTop: "6px",
               display: "flex",
               justifyContent: "space-between"

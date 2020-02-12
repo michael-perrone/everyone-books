@@ -213,11 +213,11 @@ class CheckBookingModal extends React.Component {
                 Booking ends: {this.props.objectToModal.timeEnd}
               </p>
               <p style={{ padding: "5px" }}>
-                Booking Type: {this.props.objectToModal.bookingType}
+                Service: {this.props.objectToModal.serviceName}
               </p>
               {this.props.objectToModal.instructorName !== "None" && (
                 <p style={{ padding: "5px" }}>
-                  Instructor: {this.props.objectToModal.instructorName}
+                  Employee: {this.props.objectToModal.employeeName}
                 </p>
               )}
             </div>

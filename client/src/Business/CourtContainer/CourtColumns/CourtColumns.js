@@ -245,7 +245,7 @@ class CourtColumns extends React.PureComponent {
   sendBookingInfo = thingId => {
     let objectSending = null;
     this.props.bookedThings.forEach(element => {
-      if (thingId == element.thingIds[element.thingIds.length / 2 - 1]) {
+      if (thingId == element.thingIds[Math.ceil(element.thingIds.length / 2 - 1)]) {
         objectSending = element;
       }
     });
@@ -259,7 +259,7 @@ class CourtColumns extends React.PureComponent {
     this.props.bookedThings.forEach(element => {
       if (
         thingId == element.thingIds[element.thingIds.length - 1] &&
-        element.thingIds.length > 1
+        element.thingIds.length > 0
       ) {
         getLastElement = true;
       }
@@ -303,6 +303,8 @@ class CourtColumns extends React.PureComponent {
   getThings = thing => () => {
     this.props.getThing(thing, this.state.thingsInColumn);
   };
+
+  //this.props.getModalObject
 
   render() {
     return (

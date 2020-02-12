@@ -24,7 +24,21 @@ const AdminSignup = (props) => {
     const [emailDirty, setEmailDirty] = React.useState(false);
     const [passwordDirty, setPasswordDirty] = React.useState(false);
     const [passwordConfirmDirty, setPasswordConfirmDirty] = React.useState(false);
+    const [emailError, setEmailError] = React.useState(false);
 
+
+    function checkEmail() {
+        axios.post('api/adminsignup/check', {email}).then(response => {
+            if (response.status === 200) {
+                storeAdminInfoInRedux()
+            }
+        }
+        ).catch(error => {
+            if (error.response.status === 406) {
+                setEmailError(true)
+            }
+        })
+    }
 
     function firstNameHandler(e) {
         setFirstName(e.target.value)
@@ -72,7 +86,7 @@ const AdminSignup = (props) => {
             setTimeout(() => setFormError(true), 200)
             
         }
-        else { */
+        else { DONT FORGET THIs */
         const admin = {
             firstName,
             lastName,
@@ -104,7 +118,7 @@ const AdminSignup = (props) => {
             {lastName === "" && lastNameDirty === true && <Alert top={'25px'} alertPhrase={"Field Cannot Be Blank"}/>}
             </div>
             <div className={styles.inputContainer}>
-            <input onBlur={emailHandlerDirty} placeholder="Email" className={styles.adminInput} onChange={emailHandler}/>
+            <input onBlur={emailHandlerDirty} onClick={() => setEmailError(false)} style={{backgroundColor: emailError ? "black": "", color: emailError ? '#ff6666' : ""}} value={emailError ? "Email is already being used" : email} placeholder="Email" className={styles.adminInput} onChange={emailHandler}/>
             {!validateEmail(email) && emailDirty === true && <Alert top={'25px'} alertPhrase={"Not a Valid Email"}/>}
             </div>
             <div className={styles.inputContainer}>
@@ -115,7 +129,7 @@ const AdminSignup = (props) => {
             <input type='password' onFocus={confirmPasswordHandlerDirty} placeholder="Confirm Password" className={styles.adminInput} onChange={confirmPasswordHandler}/>
             {passwordConfirm !== password && passwordConfirmDirty === true && <Alert top={'25px'} alertPhrase={"Passwords do not match"}/>}
             </div>
-            <SubmitButton onClick={storeAdminInfoInRedux}>This is my Info!</SubmitButton>
+            <SubmitButton onClick={checkEmail}>This is my Info!</SubmitButton>
         </div>
         </React.Fragment>
     )

@@ -99,7 +99,7 @@ class AdminBooking extends React.Component {
             </div>
           </div>
           <div className={styles.bookingHolderContainer}>
-            <p style={{ marginBottom: "-8px" }}>Choose Booking Type</p>
+            <p style={{ marginBottom: "-8px" }}>Choose Service Type</p>
             <div className={styles.bookingHolderSubContainer}>
               {this.props.services && this.props.services.map(element => {
                   return (
@@ -112,7 +112,7 @@ class AdminBooking extends React.Component {
                       onClick={this.selectBookingType(element)}
                       className={styles.itemPTag}
                     >
-                      {element}
+                      {element.serviceName}
                     </p>
                   );
                 }
@@ -127,9 +127,13 @@ class AdminBooking extends React.Component {
 
 AdminBooking.defaultProps = {
   times: [
+    "15 Minutes",
     "30 Minutes",
+    "45 Minutes",
     "1 Hour",
+    "1 Hour 15 Minutes",
     "1 Hour 30 Minutes",
+    "1 Hour 45 Minutes",
     "2 Hours",
     "2 Hours 30 Minutes",
     "3 Hours",

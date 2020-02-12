@@ -30,8 +30,14 @@ class TryingToBookModal extends React.Component {
   render() {
     let howLong = "";
     if (this.props.booking !== null) {
-      if (this.props.booking.minutes === 30) {
+      if (this.props.booking.minutes === 15) {
+        howLong = "15 Minutes"
+      }
+      else if (this.props.booking.minutes === 30) {
         howLong = "1/2 Hour";
+      }
+      else if (this.props.booking.minutes === 45) {
+        howLong = "45 Minutes";
       } else if (this.props.booking.minutes === 60) {
         howLong = "1 Hour";
       } else if (this.props.booking.minutes === 90) {
@@ -71,7 +77,8 @@ class TryingToBookModal extends React.Component {
                   {this.props.booking.instructorName !== "None" && (
                     <p>Employee Name: {this.props.booking.employeeName}</p>
                   )}
-                  <p>Service: {this.props.booking.bookingType}</p>
+                  <p>Service: {this.props.booking.bookingType.serviceName}</p>
+                  <p>Price: ${this.props.booking.bookingType.cost}</p>
                   <p>Time Amount: {howLong}</p>
                   <p>{this.props.bookingColumnType} Number: {this.props.booking.thingNumber}</p>
                 </div>

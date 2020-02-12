@@ -28,6 +28,7 @@ const WeekSelector = (props) => {
            else {
                 setDayNum(dayNumber)
                 setDateObtained(new Date(`${props.months[monthIndex]} ${dayNumber}, ${year}`).toDateString())
+                props.chooseDate(new Date(`${props.months[monthIndex]} ${dayNumber}, ${year}`).toDateString())
             }
         }
     }   
@@ -217,10 +218,9 @@ WeekSelector.defaultProps = {
         "December"
     ]
 }
-
 const mapDispatchToProps = (dispatch) => {
     return {
-        chooseDate: (date) => () => dispatch({type: CHOOSE_DATE_SELECTOR, payload: date}) 
+        chooseDate: (date) => dispatch({type: CHOOSE_DATE_SELECTOR, payload: date}) 
     }
 }
 

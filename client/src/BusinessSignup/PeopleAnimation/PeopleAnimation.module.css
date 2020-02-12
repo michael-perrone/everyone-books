@@ -12,6 +12,8 @@
 }
 
 .redShow {
+    position: relative;
+    z-index: 600;
     font-size: 20px;
     color: darkred;
     opacity: 0;
@@ -24,4 +26,9 @@
 
 #show {
     opacity: 1;
+}
+
+#bye {
+    transform: rotate(-40deg) translate(-100px, -1500px);
+    transition-duration: 3s;
 }

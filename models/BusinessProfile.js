@@ -16,8 +16,11 @@ const businessProfileSchema = new mongoose.Schema({
       ref: "employee"
     }
   ],
-  services: [],
   bio: String,
+  serviceTypes: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'serviceType'
+  }
 });
 
 const BusinessProfile = mongoose.model("businessProfile", businessProfileSchema);

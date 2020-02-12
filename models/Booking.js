@@ -1,10 +1,13 @@
 const mongoose = require("mongoose");
 
 const BookingSchema = new mongoose.Schema({
+  serviceName: String,
+  cost: Number,
   timeStart: String,
   timeEnd: String,
   bookedBy: String,
   thingIds: [String],
+  serviceName: String,
   minutes: String,
   businessName: String,
   businessId: {
@@ -16,13 +19,14 @@ const BookingSchema = new mongoose.Schema({
     type: String,
     default: "None"
   },
-  instructorBooked: {
+  employeeBooked: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "instructor"
   },
-  bookingType: {
+  serviceType: {
     required: true,
-    type: String
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'serviceType'
   },
   customers: {
     type: [mongoose.Schema.Types.ObjectId],

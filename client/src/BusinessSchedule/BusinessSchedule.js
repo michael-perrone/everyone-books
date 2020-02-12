@@ -4,10 +4,12 @@ import WeekSelector from './WeekSelector/WeekSelector';
 import axios from 'axios';
 import styles from './BusinessSchedule.module.css';
 import {connect} from 'react-redux';
+import ShiftSchedule from './ShiftSchedule/ShiftSchedule';
 
 function BusinessSchedule(props) {
     const [schedule, setSchedule] = React.useState('');
     const [employees, setEmployees] = React.useState('');
+    const [shifts, setShifts] = React.useState([])
 
 
 React.useEffect(() => {
@@ -30,16 +32,34 @@ React.useEffect(() => {
     )
 }, [])
 
+ React.useEffect(() => {
+    axios.post('api/shifts/get',
+     {shiftDate: props.shiftDate, businessId: props.admin.admin.businessId})
+     .then(response => {
+         if (response.status === 204) {
+             setShifts([])
+         }
+         if (response.data.shifts && response.data.shifts.length > 0) {
+            setShifts(response.data.shifts)
+         }
+     }
+    )
+}, [props.shiftDate]) 
+
     return (
         <div id={styles.container}>
-            <WeekSelector/>
-            <ShiftCreator admin={props.admin.admin} employees={employees}/>
+            <div id={styles.leftHolder}>
+                <WeekSelector/>
+                <ShiftCreator admin={props.admin.admin} employees={employees}/>
+            </div>
+            <ShiftSchedule shiftDate={props.shiftDate} shifts={shifts}/>
         </div>
     )
 }
 
 const mapStateToProps = state => {
     return {
+        shiftDate: state.scheduleReducer.dateChosen,
         admin: state.authReducer.admin
     }
 }

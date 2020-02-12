@@ -3,26 +3,38 @@ import styles from "./ServicesForm.module.css";
 import Axios from "axios";
 import { connect } from "react-redux";
 import OtherAlert from "../../../OtherAlerts/OtherAlerts";
+import SubmitButton from '../../../Shared/SubmitButton/SubmitButton';
 
 class ServicesForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      cost: "",
       servicesError: false,
       service: "",
-      serviceArray: [],
+      servicesArray: [],
       empty: "",
       successAlert: false,
-      newProfileAlert: false
+      newProfileAlert: false,
+      deletingArray: []
     };
+    this.costHandler = this.costHandler.bind(this);
     this.addServices = this.addServices.bind(this);
     this.submitServices = this.submitServices.bind(this);
     this.serviceInputHandler = this.serviceInputHandler.bind(this);
+    this.sendDeletes = this.sendDeletes.bind(this)
   }
+  // parseInt
 
   componentDidUpdate(prevProps) {
-    if (this.props.profile.services && this.props.profile.services !== prevProps.profile.services) {
-      this.setState({serviceArray: [...this.props.profile.services]})
+    if (this.props.profile.serviceTypes && this.props.profile.serviceTypes.length && this.props.profile.serviceTypes !== prevProps.profile.serviceTypes) {
+      Axios.post('/api/getServiceTypes', {serviceTypesArray: this.props.profile.serviceTypes}).then(
+        response => {
+          if (response.status === 200) {   
+          this.setState({servicesArray: response.data.serviceTypesArray})
+        }
+       }
+      )
     }
   }
 
@@ -30,13 +42,18 @@ class ServicesForm extends React.Component {
     this.setState({service: event.target.value });
   }
 
+  costHandler(e) {
+    this.setState({cost: e.target.value})
+  }
+
   addServices(event) {
     event.preventDefault();
     if (this.state.service !== "") {
-      const newArray = [...this.state.serviceArray];
-      newArray.push(this.state.service);
-      this.setState({serviceArray: newArray });
+      const newArray = [...this.state.servicesArray];
+      newArray.push({serviceName: this.state.service, cost: parseFloat(this.state.cost)});
+      this.setState({servicesArray: newArray });
       this.setState({service: "" });
+      this.setState({cost: ""});
     } else {
       this.setState({ servicesError: true });
       setTimeout(() => this.setState({ servicesError: false }), 4400);
@@ -48,7 +65,7 @@ class ServicesForm extends React.Component {
     this.setState({newProfileAlert: false})
     event.preventDefault();
     const objectToSend = {
-     services: this.state.serviceArray
+     services: this.state.servicesArray
     };
     Axios.post("/api/businessProfile", objectToSend, {
       headers: { "x-auth-token": this.props.adminToken }
@@ -62,7 +79,21 @@ class ServicesForm extends React.Component {
     });
   }
 
+  deleteService(id) {
+   return () => {
+      const newServicesArray = this.state.servicesArray.filter(service => service._id !== id);
+      this.setState({servicesArray: newServicesArray})
+      const newDeletingArray = [...this.state.deletingArray, id];
+      this.setState({deletingArray: newDeletingArray})
+    }
+  }
+
+  sendDeletes() {
+    Axios.post('/api/getServiceTypes/delete', {deletedServices: this.state.deletingArray})
+  }
+
   render() {
+    console.log(this.state.servicesArray)
     console.log(this.props.profile)
     return (
       <div style={{ marginTop: "-5px" }}>
@@ -79,12 +110,14 @@ class ServicesForm extends React.Component {
           showAlert={this.state.servicesError}
           alertMessage={"Please enter a service your business offers."}
         />
+        
         <input
           onChange={this.serviceInputHandler}
           id={styles.otherServiceInput}
-          placeholder="Enter Service"
+          placeholder="Service Name"
           value={this.state.service}
         />
+        <input onChange={this.costHandler} style={{width:'50px', marginLeft: '10px', height: '28px', paddingLeft: '5px'}} placeHolder='Cost' value={this.state.cost}/>
         <button
           onClick={this.addServices}
           style={{
@@ -101,7 +134,7 @@ class ServicesForm extends React.Component {
             style={{
               width: "130px",
               height: "27px",
-              marginLeft: "50px",
+              marginLeft: "70px",
               marginTop: "20px"
             }}
           >
@@ -109,14 +142,17 @@ class ServicesForm extends React.Component {
           </button>
         </div>
         <ul style={{marginTop: '20px'}}>
-        {this.state.serviceArray && this.state.serviceArray.map(serviceAdded => {
-        return <li style={{listStyleType: 'disc', height: '24px' , paddingLeft: '10px'}}>{serviceAdded}</li>
+        {this.state.servicesArray && this.state.servicesArray.length > 0 && this.state.servicesArray.map(serviceAdded => {
+        return <li style={{listStyleType: 'disc', height: '24px' , paddingLeft: '10px'}}>{serviceAdded.serviceName} - ${serviceAdded.cost} <i style={{marginLeft: '6px', color: 'darkred', cursor: 'pointer'}} onClick={this.deleteService(serviceAdded._id)} class="fas fa-trash"></i></li>
         })}
         </ul>
+        {this.state.deletingArray.length > 0 && <SubmitButton onClick={this.sendDeletes}>Update</SubmitButton>}
       </div>
     );
   }
 }
+
+
 
 const mapStateToProps = state => {
   return {

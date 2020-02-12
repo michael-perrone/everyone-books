@@ -7,7 +7,9 @@ const User = require("../../models/User");
 router.post("/", async (req, res) => {
   try {
     let newThingBooked = new Booking({
-      bookingType: req.body.booking.bookingType,
+      serviceType: req.body.booking.bookingType._id,
+      cost: req.body.booking.bookingType.cost,
+      serviceName: req.body.booking.bookingType.serviceName,
       employeeBooked: req.body.booking.employeeId,
       employeeName: req.body.booking.employeeName,
       bookedBy: req.body.booking.bookedBy,

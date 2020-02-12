@@ -5,20 +5,33 @@ import { HIDE_SCHEDULE } from "../../../actions/actions";
 import axios from "axios";
 
 const Schedule = props => {
-  const [instructorsBookings, setInstructorBookings] = React.useState([]);
+  const [employeeBookings, setEmployeeBookings] = React.useState([]);
+  const [dateFromPicker, setDateFromPicker] = React.useState();
+  const [dateNeeded, setDateNeeded] = React.useState(new Date().toDateString());
 
-  function getBookings(event) {
+  function datePickerHandler(e) {
+    setDateFromPicker(e.target.value)
+  }
+  React.useEffect(() => {
+    if (dateFromPicker) {
+      let dateArray = dateFromPicker.split('-');
+      setDateNeeded(new Date(dateArray[0], parseInt(dateArray[1]) - 1, dateArray[2]).toDateString())
+    }
+  },[dateFromPicker])
+  
+
+  React.useEffect(() => {
     axios
-      .post("/api/iBookings/schedule", {
-        date: event.target.value,
-        instructorId: props.instructor.instructor.id
+      .post("/api/eBookings/schedule", {
+        date: dateNeeded,
+        employeeId: props.employee.employee.id
       })
       .then(response => {
         if (response.status === 200) {
-          setInstructorBookings(response.data.bookings);
+          setEmployeeBookings(response.data.bookings);
         }
       });
-  }
+}, [dateNeeded])
 
   return (
     <React.Fragment>
@@ -43,7 +56,7 @@ const Schedule = props => {
             Choose Date:
           </p>
           <input
-            onChange={getBookings}
+            onChange={datePickerHandler}
             style={{ height: "22px" }}
             type="date"
           />
@@ -78,12 +91,12 @@ const Schedule = props => {
                   textDecoration: "underline"
                 }}
               >
-                Booking Type
+                Service
               </p>
-              {instructorsBookings.map((booking, index) => {
+              {employeeBookings.map((booking, index) => {
                 if (index < 9) {
                   return (
-                    <p style={{ marginTop: "8px" }}>{booking.bookingType}</p>
+                    <p style={{ marginTop: "8px" }}>{booking.serviceName}</p>
                   );
                 }
               })}
@@ -105,7 +118,7 @@ const Schedule = props => {
               >
                 Time
               </p>
-              {instructorsBookings.map((booking, index) => {
+              {employeeBookings.map((booking, index) => {
                 if (index < 9) {
                   return (
                     <p style={{ marginTop: "8px" }}>
@@ -129,13 +142,13 @@ const Schedule = props => {
                   textDecoration: "underline"
                 }}
               >
-                Court
+                Room
               </p>
-              {instructorsBookings.map((booking, index) => {
+              {employeeBookings.map((booking, index) => {
                 if (index < 9) {
                   return (
                     <p style={{ marginTop: "8px" }}>
-                      {booking.courtIds[0].split("")[0]}
+                      {booking.thingIds[0].split("")[0]}
                     </p>
                   );
                 }
@@ -150,7 +163,7 @@ const Schedule = props => {
 
 const mapStateToProps = state => {
   return {
-    instructor: state.authReducer.instructor
+    employee: state.authReducer.employee
   };
 };
 

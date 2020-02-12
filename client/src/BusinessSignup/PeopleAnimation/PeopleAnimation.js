@@ -1,9 +1,10 @@
 import React from 'react';
 import otherstyles from '../BusinessSignup.module.css';
-import img from './d.png';
+import redguy from './redguyimagereal.png';
 import styles from './PeopleAnimation.module.css';
-const PeopleAnimation = (props) => {
+import blueguy from './blueguyimagereal.png';   
 
+const PeopleAnimation = (props) => {
 const [firstBlueShow, setFirstBlueShow] = React.useState(false);
 const [firstRedShow, setFirstRedShow ] = React.useState(false);
 const [secondBlueShow, setSecondBlueShow] = React.useState(false);
@@ -15,7 +16,7 @@ const [fourthRedShow, setFourthRedShow ] = React.useState(false);
 const [fifthBlueShow, setFifthBlueShow] = React.useState(false);
 const [fifthRedShow, setFifthRedShow ] = React.useState(false);
 const [sixthBlueShow, setSixthBlueShow] = React.useState(false);
-const [sixthRedShow, setSixthRedShow ] = React.useState(false);
+const [bye, setBye] = React.useState(false)
 
     React.useEffect(() => {
         setTimeout(() => setFirstBlueShow(true) ,1000);
@@ -38,12 +39,14 @@ const [sixthRedShow, setSixthRedShow ] = React.useState(false);
         setTimeout(() => setFourthRedShow(false) ,26500);
         setTimeout(() => setSixthBlueShow(true), 28000);
         setTimeout(() => setFifthRedShow(true), 29500);  
+        setTimeout(() => setBye(true), 32000);
     }, [])
 
     
     return (
         <div className={otherstyles.peopleContainer}>
-            <img style={{position: 'relative', top: '100px'}} src={img}/> 
+            <img style={{position: 'absolute', top: '100px', left: '-10px', zIndex:444}} id={bye ? styles.bye : ""} src={redguy}/> 
+            <img style={{position: 'relative', top: '100px'}}  src={blueguy}/> 
             <p id={firstBlueShow ? styles.show : ""} className={styles.blueShow}>Hey did you hear about Everyone Books?</p>
             <p id={firstRedShow ? styles.show : ""} className={styles.redShow}>Nope. What is it?</p>
             <p id={secondBlueShow ? styles.show : ""} className={styles.blueShow}>Only the best website ever!!!</p>
@@ -52,9 +55,9 @@ const [sixthRedShow, setSixthRedShow ] = React.useState(false);
             <p id={thirdRedShow ? styles.show : ""} className={styles.redShow}>How does it work?</p>
             <p id={fourthBlueShow ? styles.show : ""} className={styles.blueShow}>Enter a small amount of info about your business...</p>
             <p id={fifthBlueShow ? styles.show : ""} className={styles.blueShow}>And booking software will be created instantly!</p>
-            <p id={fourthRedShow ? styles.show : ""} className={styles.redShow}>How much is it?</p>
+            <p id={fourthRedShow ? styles.show : ""} className={styles.redShow}>WOW, how much is it?</p>
             <p id={sixthBlueShow ? styles.show : ""} className={styles.blueShow}>It's FREE!</p>
-            <p id={fifthRedShow ? styles.show : ""} className={styles.redShow}>I gotta go check this out!</p>
+            <p id={fifthRedShow ? styles.show : ""} style={{display: bye ? 'none' : ""}} className={styles.redShow}>I gotta go check this out!</p>
         </div>
     )
 }

@@ -70,6 +70,8 @@ const PendingInstructors = props => {
         return (
           <div
             style={{
+              marginLeft: '58px',
+              width: '280px',
               marginTop: "6px",
               display: "flex",
               justifyContent: "space-between"
@@ -88,6 +90,8 @@ const PendingInstructors = props => {
         return (
           <div
             style={{
+              marginLeft: '58px',
+              width: '280px',
               marginTop: "6px",
               display: "flex",
               justifyContent: "space-between"
@@ -107,6 +111,7 @@ const PendingInstructors = props => {
       {pendingToDelete.length > 0 && (
         <button
           style={{
+            marginTop: '30px',
             width: "60px",
             height: "32px",
             backgroundColor: "white",

@@ -10,6 +10,7 @@ class CourtSlot extends React.Component {
       booking: false,
     };
   }
+  // getModalObject
 
  
   shouldComponentUpdate(nextProps, nextState) {
@@ -131,7 +132,7 @@ class CourtSlot extends React.Component {
             : styles.thingSlotBooked
         }
       >
-        {this.props.booked && this.props.isLast && (
+        {this.props.booked && this.props.isLast && !this.props.bookingInfo && (
           <div
             style={{
               borderTop: "none",
@@ -142,23 +143,63 @@ class CourtSlot extends React.Component {
           />
         )}
 
-        {this.props.booked && this.props.bookingInfo !== null && (
+        {this.props.booked && this.props.bookingInfo !== null && 
+        this.props.bookingInfo && this.props.bookingInfo.thingIds.length !== 1 && this.props.bookingInfo.thingIds.length % 2 === 0 &&(
           <div
             onClick={this.props.getModalObject(this.props.bookingInfo)}
             id={styles.bookingInfo}
           >
             <button
               style={{
-                position: "relative",
-                top: "7px",
+                position: 'relative',
+                top: '7px',
                 backgroundColor: color
               }}
               id={styles.bookedCheckButton}
             >
-              {this.props.bookingInfo.bookingType}
+              {this.props.bookingInfo.serviceName}
             </button>
           </div>
         )}
+         {this.props.booked && this.props.bookingInfo !== null && 
+        this.props.bookingInfo && this.props.bookingInfo.thingIds.length !== 1 && this.props.bookingInfo.thingIds.length % 2 === 1 &&(
+          <div
+            onClick={this.props.getModalObject(this.props.bookingInfo)}
+            id={styles.bookingInfo}
+          >
+            <button
+              style={{
+                position: 'relative',
+                top: '-7px',
+                backgroundColor: color
+              }}
+              id={styles.bookedCheckButton}
+            >
+              {this.props.bookingInfo.serviceName}
+            </button>
+          </div>
+        )}
+        
+        {this.props.booked && this.props.bookingInfo !== null &&
+         this.props.bookingInfo && this.props.bookingInfo.thingIds.length === 1 &&(
+          <div
+            onClick={this.props.getModalObject(this.props.bookingInfo)}
+            id={styles.bookingInfo}
+            style={{borderBottom: '2px solid black'}}
+          >
+            <button
+              style={{
+                position: 'relative',
+                top: '-7px',
+                backgroundColor: color,
+              }}
+              id={styles.bookedCheckButton}
+            >
+              {this.props.bookingInfo.serviceName}
+            </button>
+          </div>
+        )}
+
         {!this.props.booked && !this.props.beingBooked && (
           <div
             style={{
@@ -244,7 +285,7 @@ class CourtSlot extends React.Component {
           this.props.beingBooked &&
           this.props.thingId != this.props.firstSlotInArray.thingId &&
           this.props.thingId != this.props.lastSlotInArray.thingId &&
-          this.props.bookingArray.length > 1 && (
+          this.props.bookingArray.length > 0 && (
             <div
               onClick={this.props.thingClicked}
               style={{
@@ -282,6 +323,7 @@ class CourtSlot extends React.Component {
                 alignItems: "center",
                 zIndex: "2"
               }}
+              onClick={this.props.thingClicked}
               onMouseEnter={this.props.getThings({
                 thingId: this.props.thingId,
                 timeStart: this.props.timeStart,

@@ -27,43 +27,23 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/instructor", instructorAuth, async (req, res) => {
-  let todaysDate = new Date();
-  let month = todaysDate.getMonth() + 1;
-  let day = todaysDate.getDate();
-  let year = todaysDate.getFullYear();
-
-  let dateFormatted = `${month.toString()} ${day.toString()} ${year.toString()}`;
-
-  let instructorsBookings = await Booking.find({
-    instructorBooked: req.instructor.id,
-    date: dateFormatted
+router.get("/employee", instructorAuth, async (req, res) => {
+  let employeesBookings = await Booking.find({
+    employeeBooked: req.employee.id,
+    date: req.body.date
   });
 
-  res.status(200).json({ instructorsBookings });
+  res.status(200).json({ employeesBookings });
 });
 
 router.post("/schedule", async (req, res) => {
   // month day year
 
-  let dateChosen = req.body.date.split("-");
-  let month = dateChosen[1];
-
-  let day = dateChosen[2];
-  let checkingDay = day.split("");
-  if (checkingDay[0] == 0) {
-    checkingDay.shift();
-    day = checkingDay;
-  } else {
-    day = checkingDay.join("");
-  }
-  let year = dateChosen[0];
-
-  let dateToUse = [month, day, year].join(" ");
+  
 
   let bookings = await Booking.find({
-    instructorBooked: req.body.instructorId,
-    date: dateToUse
+    employeeBooked: req.body.employeeId,
+    date: req.body.date
   });
 
   res.status(200).json({ bookings });

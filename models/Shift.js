@@ -13,7 +13,10 @@ const ShiftSchema = new mongoose.Schema({
     businessId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'business'
-    }
+    },
+    isBreak: Boolean,
+    breakStart: String,
+    breakEnd: String,
 })
 
 const Shift = mongoose.model('shift', ShiftSchema);
