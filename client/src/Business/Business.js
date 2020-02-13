@@ -4,6 +4,7 @@ import styles from "./Business.module.css";
 import CourtContainer from "./CourtContainer/CourtContainer";
 import AdminBooking from "./BookingHelpers/AdminBooking/AdminBooking";
 import { connect } from "react-redux";
+import {withRouter} from 'react-router-dom';
 import Spinner from '../Spinner/Spinner';
 
 class Business extends React.Component {
@@ -33,10 +34,16 @@ class Business extends React.Component {
   }
 
   componentDidMount() {
+    let businessId
     if (this.props.admin) {
+      businessId = this.props.admin.admin.businessId
+    }
+    else if (this.props.employee) {
+      businessId = this.props.match.params.businessId
+    }
       axios
         .post("/api/business", {
-          businessId: this.props.admin.admin.businessId
+          businessId
         })
         .then(response => {
           if (response.status === 200) {
@@ -55,23 +62,6 @@ class Business extends React.Component {
             this.setState({profileComplete: false})
           }
         });
-    } else {
-      axios
-        .post("/api/business", {
-          businessId: this.props.match.params.businessId
-        })
-        .then(response => {
-          if (response.status === 200) {
-            this.setState({ profileComplete: true });
-            this.setState({ businessProfile: response.data.profile });
-            this.setState({ business: response.data.business });
-            this.setState({ employees: response.data.employees})
-          } else {
-            this.setState({ profileComplete: false });
-          }
-        });   
-    }
-    
   }
 
   render() {
@@ -126,11 +116,11 @@ const mapStateToProps = state => {
   return {
     admin: state.authReducer.admin,
     adminToken: state.authReducer.adminToken,
-    instructor: state.authReducer.instructor,
+    employee: state.authReducer.employee,
     bookAThing: state.booleanReducers.bookAThing,
     user: state.authReducer.user,
     dateChosen: state.dateReducer.dateChosen
   };
 };
 
-export default connect(mapStateToProps)(Business);
+export default withRouter(connect(mapStateToProps)(Business));
