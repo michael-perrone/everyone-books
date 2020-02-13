@@ -458,7 +458,6 @@ class CourtContainer extends React.Component {
         employeeId = this.props.employeeChosen.employeeChosen._id;
       }
       if (this.state.bookingArray.length > 1 || this.props.timeChosen.timeSelected === "15 Minutes") {
-        console.log('WHY AM I N OT RUNNING')
         const thingIdsArray = [];
         this.state.bookingArray.forEach(element => {
           thingIdsArray.push(element.thingId);

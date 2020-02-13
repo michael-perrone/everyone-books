@@ -74,7 +74,7 @@ const Schedule = props => {
             style={{
               display: "flex",
               justifyContent: "space-around",
-              fontSize: "14px"
+              fontSize: "16px"
             }}
           >
             <div
@@ -88,7 +88,9 @@ const Schedule = props => {
               <p
                 style={{
                   marginTop: "5px",
-                  textDecoration: "underline"
+                  textDecoration: "underline",
+                  width: '100%',
+                  textAlign: 'center'
                 }}
               >
                 Service
@@ -112,7 +114,8 @@ const Schedule = props => {
               <p
                 style={{
                   marginTop: "5px",
-                  marginLeft: "42px",
+                  width: '100%',
+                  textAlign: 'center',
                   textDecoration: "underline"
                 }}
               >
@@ -128,6 +131,7 @@ const Schedule = props => {
                 }
               })}
             </div>
+            {/*
             <div
               style={{
                 marginLeft: "8px",
@@ -153,7 +157,7 @@ const Schedule = props => {
                   );
                 }
               })}
-            </div>
+            </div>*/}
           </div>
         </div>
       </div>
