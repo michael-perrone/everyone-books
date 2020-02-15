@@ -5,11 +5,22 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-right: 15px;
+  background-color: white;
+}
+
+#coolContainer {
+  padding: 18px;
+  border: 2px solid black;
+  background-color: lavender;
+}
+
+#divWhereWidthChanges {
+  width: 1200px;
+  display: flex;
 }
 
 #bookingHolder {
-  display: flex;
+  width: 100%;
 }
 
 .bookingHolderSubContainer {
@@ -28,4 +39,20 @@
 
 .itemPTag:hover {
   background-color: rgb(157, 217, 255);
+}
+
+
+@media (min-width: 1200px) {
+  #coolContainer {
+   flex: 1;
+   display: flex;
+   justify-content: center;
+  }
+  #bookingHolder {
+    width: 100%;
+  }
+  #divWhereWidthChanges {
+    width: 100%;
+
+  }
 }

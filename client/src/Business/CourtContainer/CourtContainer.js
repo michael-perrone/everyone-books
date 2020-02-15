@@ -4,11 +4,13 @@ import axios from "axios";
 import CourtColumns from "./CourtColumns/CourtColumns";
 import CheckBookingModal from "./CheckBookingModal/CheckBookingModal";
 import TryingToBookModal from "./TryingToBookModal/TryingToBookModal";
-import BookingIntro from "./BookingIntro/BookingIntro";
+
 import { connect } from "react-redux";
 import OtherAlert from "../../OtherAlerts/OtherAlerts";
 import { HOVER_NUMBER } from "../../actions/actions";
 import BookingButtons from "./BookingButtons/BookingButtons";
+
+// BookingIntro
 
 class CourtContainer extends React.Component {
   constructor(props) {
@@ -476,52 +478,7 @@ class CourtContainer extends React.Component {
           })
           }
         });
-    } /* else {
-      let nameForBooking = "";
-      let employeeName = "None";
-      let employeeId;
-      if (this.props.admin) {
-        nameForBooking = this.props.admin.admin.name;
-      } else if (this.props.employee) {
-        nameForBooking = this.props.instructor.instructor.instructorName;
-      } else if (this.props.user) {
-        nameForBooking = this.props.user.user.userName;
-      }
-      if (this.props.employeeChosen) {
-        employeeName = this.props.employeeChosen.employeeChosen.fullName;
-        employeeId = this.props.employeeChosen.employeeChosen._id;
-      }
-      if (this.state.bookingArray.length > 1 || this.props.timeChosen.timeSelected === "15 Minutes") {
-        const thingIdsArray = [];
-        this.state.bookingArray.forEach(element => {
-          thingIdsArray.push(element.thingId);
-        });
-        let thingNumberComing = thingIdsArray[0].toString();
-        let thingNumberString = thingNumberComing.split("");
-        let thingNumber = parseInt(thingNumberString[0]);
-        const bookingToSend = {
-          bookingType: this.props.bookingType.bookingType,
-          businessId: this.props.businessId,
-          employeeName,
-          employeeId,
-          bookedBy: nameForBooking,
-          timeStart: this.state.firstSlotInArray.thing.timeStart,
-          timeEnd: this.state.lastSlotInArray.thing.timeEnd,
-          thingIds: thingIdsArray,
-          minutes: this.props.timeChosen.timeSelected === "15 Minutes" ? 15 : this.state.bookingArray.length * 15,
-          clubName: this.props.clubName,
-          date: this.props.dateChosen,
-          thingNumber
-        };
-        this.setState({ bookingToSend });
-
-        this.setState(prevState => {
-          return {
-            tryingToBookModalState: !prevState.tryingToBookModalState
-          };
-        });
-      }
-    } */
+    }
     else {
       setTimeout(() => this.setState({employeeChosenError: true}), 300);
       this.setState({slotsClicked: false})
@@ -587,10 +544,6 @@ class CourtContainer extends React.Component {
           </div>
         )}
         <div id={styles.bookingIntroDiv}>
-          <BookingIntro
-            openTime={this.props.clubOpenTime}
-            closeTime={this.props.clubCloseTime}
-          />
           <BookingButtons
             bookingColumnType={this.props.bookingColumnType}
             thingsClicked={this.state.slotsClicked}
@@ -599,10 +552,7 @@ class CourtContainer extends React.Component {
           />
         </div>
         <div
-          id="hello"
-          style={{
-            overflow: "auto"
-          }}
+          id={styles.courtContainerParent}
           onClick={this.thingClickedOn}
         >
           <div

@@ -45,13 +45,12 @@ class AdminBooking extends React.Component {
     return (
       <div id={styles.bookingHolder}>
         <div
-          style={{
-            width: "1100px",
-            display: "flex",
-            justifyContent: "space-around"
-          }}
+         id={styles.divWhereWidthChanges}
         >
+          <div id={styles.coolContainer}>
           <Calendar/>
+          </div>
+          <div id={styles.coolContainer}>
           <div className={styles.bookingHolderContainer}>
             <p style={{ marginBottom: "-8px" }}>Choose Employee</p>
             <div className={styles.bookingHolderSubContainer}>
@@ -77,6 +76,8 @@ class AdminBooking extends React.Component {
               })}
             </div>
           </div>
+          </div>
+          <div id={styles.coolContainer}>
           <div className={styles.bookingHolderContainer}>
             <p style={{ marginBottom: "-8px" }}>Choose Time Amount</p>
             <div className={styles.bookingHolderSubContainer}>
@@ -97,6 +98,8 @@ class AdminBooking extends React.Component {
               })}
             </div>
           </div>
+          </div>
+          <div id={styles.coolContainer}>
           <div className={styles.bookingHolderContainer}>
             <p style={{ marginBottom: "-8px" }}>Choose Service Type</p>
             <div className={styles.bookingHolderSubContainer}>
@@ -118,6 +121,7 @@ class AdminBooking extends React.Component {
               )}
             </div>
           </div>
+        </div>
         </div>
       </div>
     );
