@@ -10,6 +10,7 @@ function BusinessSchedule(props) {
     const [schedule, setSchedule] = React.useState('');
     const [employees, setEmployees] = React.useState('');
     const [shifts, setShifts] = React.useState([])
+    const [loading, setLoading] = React.useState(true);
 
 
 React.useEffect(() => {
@@ -38,12 +39,15 @@ React.useEffect(() => {
      .then(response => {
          if (response.status === 204) {
              setShifts([])
+             setLoading(false)
          }
          if (response.data.shifts && response.data.shifts.length > 0) {
             setShifts(response.data.shifts)
+            setLoading(false)
          }
      }
     )
+    
 }, [props.shiftDate]) 
 
     return (
@@ -52,7 +56,7 @@ React.useEffect(() => {
                 <WeekSelector/>
                 <ShiftCreator admin={props.admin.admin} employees={employees}/>
             </div>
-            <ShiftSchedule shiftDate={props.shiftDate} shifts={shifts}/>
+            <ShiftSchedule loading={loading} shiftDate={props.shiftDate} shifts={shifts}/>
         </div>
     )
 }

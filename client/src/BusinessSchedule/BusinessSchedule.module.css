@@ -1,13 +1,7 @@
 #container {
     display: flex;
-    width: 80%;
+    width: 100%;
     justify-content: space-around;
 }
 
-
-@media(max-width: 900px) {
-    #container {
-        width: 100%;
-    }
-}
 

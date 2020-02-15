@@ -1,6 +1,7 @@
 import React from 'react';
 import Axios from 'axios';
 import styles from './ShiftCreator.module.css';
+import {connect} from 'react-redux';
 
 
 function ShiftCreator(props)  {
@@ -519,7 +520,6 @@ function ShiftCreator(props)  {
     return time;
 }
 
-console.log(isBreak)
 
     React.useEffect(() => {
         setEndOfShift(shiftCalcTime(shiftCalcNum(shiftStart) + turnShiftDurationIntoNum(shiftDuration)))
@@ -529,6 +529,7 @@ console.log(isBreak)
         let dateArray = date.split('-');
          setDateNeeded(new Date(dateArray[0], parseInt(dateArray[1]) - 1, dateArray[2]).toDateString())
     },[date])
+
 
     function addShift() {
         const obSending = {
@@ -545,7 +546,7 @@ console.log(isBreak)
         }
         
         Axios.post('/api/shifts/create', obSending).then(res => {
-              console.log('hi')
+            
            }
         )
     }
@@ -760,7 +761,7 @@ console.log(isBreak)
                 {endOfShift && 
                 <div>
                 <span>Shift End: {endOfShift}</span>
-                <button  disabled={!readyToGo} onClick={addShift} style={{cursor: !readyToGo ? "not-allowed" : 'pointer' ,marginLeft: '80px', backgroundColor: 'white', border: 'none', boxShadow: '0px 0px 3px black', padding: '6px'}}>Add Shift</button>
+                <button disabled={!readyToGo} onClick={addShift} style={{cursor: !readyToGo ? "not-allowed" : 'pointer' ,marginLeft: '80px', backgroundColor: 'white', border: 'none', boxShadow: '0px 0px 3px black', padding: '6px'}}>Add Shift</button>
                 </div>}   
             </div>
     )
@@ -797,4 +798,11 @@ ShiftCreator.defaultProps = {
     ]
 }
 
-export default ShiftCreator;
+
+const mapStateToProps = state => {
+    return {
+        dateChosen: state.scheduleReducer.dateChosen
+    }
+}
+
+export default connect(mapStateToProps)(ShiftCreator);

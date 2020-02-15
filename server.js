@@ -28,8 +28,8 @@ app.use('/api/getEmployees', require('./routes/api/getEmployees'));
 app.use('/api/shifts', require('./routes/api/shifts'));
 app.use('/api/getServiceTypes', require('./routes/api/getServiceTypes'))
 app.use(
-  "/api/checkInstructorAvailability",
-  require("./routes/api/checkInstructorAvailability")
+  "/api/checkEmployeeAvailability",
+  require("./routes/api/checkEmployeeAvailability")
 );
 app.use("/api/clubProfileEvents", require("./routes/api/clubProfileEvents"));
 app.use(

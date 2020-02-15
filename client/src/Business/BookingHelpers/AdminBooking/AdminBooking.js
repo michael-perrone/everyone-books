@@ -42,7 +42,6 @@ class AdminBooking extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     return (
       <div id={styles.bookingHolder}>
         <div

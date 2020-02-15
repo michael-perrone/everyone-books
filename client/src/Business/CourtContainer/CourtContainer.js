@@ -39,12 +39,14 @@ class CourtContainer extends React.Component {
       newBooking: {},
       playersComingBack: [],
       thingHoverNumber: null,
-      doubleBookError: false
+      doubleBookError: false,
+      employeeChosenError: false,
+      chooseServiceError: false,
+      employeeNotWorking: ""
     };
   }
 
   componentDidMount() {
-   
     axios
       .post("/api/thingBooked/getthings", {
         businessId: this.props.businessId,
@@ -96,7 +98,6 @@ class CourtContainer extends React.Component {
         });
     };
   }
-
   thingClicked() {
     if (this.props.timeChosen.timeSelected) { 
         this.setState(prevState => {
@@ -104,9 +105,6 @@ class CourtContainer extends React.Component {
         });
     }
   }
-
-
-
   showBookingModal = objectToModal => () => {
     this.setState({ objectToModal, showBookingModalState: true });
   };
@@ -147,13 +145,9 @@ class CourtContainer extends React.Component {
         i++
       ) {
         let thingIdArray = i.toString().split("");
-
         thingIdArray.shift();
-
         let stringNeeded = thingIdArray.join("");
-
         let numberNeeded = parseInt(stringNeeded);
-
         newArray.push({
           thing: thingsToLoopOver[numberNeeded],
           thingId: i
@@ -370,9 +364,11 @@ class CourtContainer extends React.Component {
   
 
   showTryingToBookModal = () => {
+    this.setState({employeeNotWorking: ""});
+    this.setState({employeeChosenError: false});
     this.setState({ doubleBookError: false });
     let blockBooking;
-    if (this.props.instructorChosen) {
+    if (this.props.employeeChosen) {
       let thingIds = [];
       this.state.bookingArray.forEach(element => {
         let thingIdArray = element.thingId.toString().split("");
@@ -380,21 +376,62 @@ class CourtContainer extends React.Component {
         let realId = thingIdArray.join("");
         thingIds.push(realId);
       });
+      console.log(thingIds)
       axios
-        .post("/api/checkInstructorAvailability", {
-          instructorId: this.props.instructorChosen.instructorChosen._id,
+        .post("/api/checkEmployeeAvailability", {
+          employeeId: this.props.employeeChosen.employeeChosen._id,
           thingIds,
           date: this.props.dateChosen
         })
         .then(response => {
           if (response.data.bookingNotOkay === true) {
             setTimeout(() => this.setState({ doubleBookError: true }), 200);
+            this.setState({slotsClicked: false})
             blockBooking = true;
+            return;
           }
-          if (!blockBooking) {
-            console.log("HELLLO");
+          if (!this.props.bookingType) {
+            this.setState({chooseServiceError: false})
+            setTimeout(() => this.setState({chooseServiceError: true}), 200)
+            this.setState({slotsClicked: false})
+            return;
+          }
+
+          if (!blockBooking && this.props.bookingType) {
+            let shiftError = false;
+            axios.post('api/shifts/employee', {date: this.props.dateChosen, employeeId: this.props.employeeChosen.employeeChosen._id}).then(
+              response => {
+                if (response.data.scheduled) {
+                  let shiftStartDate = new Date(`${this.props.dateChosen}, ${response.data.shift.timeStart}`);
+                  let shiftEndDate = new Date(`${this.props.dateChosen}, ${response.data.shift.timeEnd}`)
+                  let requestedTimeStart = new Date(`${this.props.dateChosen}, ${this.state.firstSlotInArray.thing.timeStart}`)
+                  let requestedTimeEnd = new Date(`${this.props.dateChosen}, ${this.state.lastSlotInArray.thing.timeEnd}`)
+
+                  if (shiftStartDate > requestedTimeEnd || shiftStartDate > requestedTimeStart) {
+                    setTimeout(() => this.setState({employeeNotWorking: "This employees shift does not start until later"}), 200)
+                    shiftError = true;
+                    return;
+                  }
+                  else if (shiftEndDate < requestedTimeStart) {
+                    setTimeout(() =>this.setState({employeeNotWorking: "This employees shift has aleady concluded"}), 200)
+                    shiftError = true;
+                    return;
+                  }
+                  else if (shiftEndDate > requestedTimeStart && shiftEndDate < requestedTimeEnd) {
+                    setTimeout(() => this.setState({employeeNotWorking: "This employees shift will end before the estimated service conclusion"}), 200)
+                    shiftError = true
+                    return;
+                  }
+                }
+                else {
+                  setTimeout(() => this.setState({employeeNotWorking: "This employee is not working today."}), 200)
+                  shiftError = true
+                  return;
+                }
+              
+              console.log(shiftError)
             let nameForBooking = "";
-            let employeeName = "None";
+            let employeeName;
             let employeeId;
             if (this.props.admin) {
               nameForBooking = this.props.admin.admin.name;
@@ -404,20 +441,17 @@ class CourtContainer extends React.Component {
               nameForBooking = this.props.user.user.userName;
             }
             if (this.props.employeeChosen) {
-              employeeName = this.props.employeeChosen.employeeChosen
-                .fullName;
+              employeeName = this.props.employeeChosen.employeeChosen.fullName;
               employeeId = this.props.employeeChosen.employeeChosen._id;
             }
             if (this.state.bookingArray.length > 1 || this.props.timeChosen.timeSelected === "15 Minutes") {
               const thingIdsArray = [];
               this.state.bookingArray.forEach(element => {
                 thingIdsArray.push(element.thingId);
-              
               });
               let thingNumberComing = thingIdsArray[0].toString();
               let thingNumberString = thingNumberComing.split("");
               let thingNumber = parseInt(thingNumberString[0]);
-              
               const bookingToSend = {
                 businessId: this.props.businessId,
                 bookingType: this.props.bookingType.bookingType,
@@ -433,16 +467,16 @@ class CourtContainer extends React.Component {
                 thingNumber
               };
               this.setState({ bookingToSend });
-
               this.setState(prevState => {
                 return {
                   tryingToBookModalState: !prevState.tryingToBookModalState
                 };
               });
             }
+          })
           }
         });
-    } else {
+    } /* else {
       let nameForBooking = "";
       let employeeName = "None";
       let employeeId;
@@ -487,6 +521,11 @@ class CourtContainer extends React.Component {
           };
         });
       }
+    } */
+    else {
+      setTimeout(() => this.setState({employeeChosenError: true}), 300);
+      this.setState({slotsClicked: false})
+      
     }
   };
 
@@ -508,14 +547,29 @@ class CourtContainer extends React.Component {
           />
         )}
         <OtherAlert
+        alertType="error"
+        alertMessage={this.state.employeeNotWorking}
+        showAlert={this.state.employeeNotWorking !== ""}
+        />
+        <OtherAlert
           alertType="success"
           alertMessage="Booking Deleted"
           showAlert={this.state.showDeleteSuccess}
         />
+          <OtherAlert
+          alertType="error"
+          alertMessage="Please Choose A Service"
+          showAlert={this.state.chooseServiceError}
+        />
+        <OtherAlert
+          alertType="error"
+          alertMessage="You must choose an employee."
+          showAlert={this.state.employeeChosenError}
+          />
         
         <OtherAlert
           alertType="error"
-          alertMessage="This instructor is already booked at this time."
+          alertMessage="This employee is already booked at this time."
           showAlert={this.state.doubleBookError}
         />
         {this.state.tryingToBookModalState && (

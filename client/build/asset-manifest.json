@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.20be804d.chunk.css",
-    "main.js": "/static/js/main.9ca6b6da.chunk.js",
-    "main.js.map": "/static/js/main.9ca6b6da.chunk.js.map",
+    "main.css": "/static/css/main.e054d371.chunk.css",
+    "main.js": "/static/js/main.8faba13c.chunk.js",
+    "main.js.map": "/static/js/main.8faba13c.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.be67de96.js",
     "runtime-main.js.map": "/static/js/runtime-main.be67de96.js.map",
-    "static/js/2.883ec4d6.chunk.js": "/static/js/2.883ec4d6.chunk.js",
-    "static/js/2.883ec4d6.chunk.js.map": "/static/js/2.883ec4d6.chunk.js.map",
+    "static/js/2.07c07ed5.chunk.js": "/static/js/2.07c07ed5.chunk.js",
+    "static/js/2.07c07ed5.chunk.js.map": "/static/js/2.07c07ed5.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.5a3546223ccb39e82eb3f007e188a877.js": "/precache-manifest.5a3546223ccb39e82eb3f007e188a877.js",
+    "precache-manifest.d62daa379b7f381c059b76011a34d98c.js": "/precache-manifest.d62daa379b7f381c059b76011a34d98c.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/main.20be804d.chunk.css.map": "/static/css/main.20be804d.chunk.css.map",
-    "static/js/2.883ec4d6.chunk.js.LICENSE": "/static/js/2.883ec4d6.chunk.js.LICENSE",
+    "static/css/main.e054d371.chunk.css.map": "/static/css/main.e054d371.chunk.css.map",
+    "static/js/2.07c07ed5.chunk.js.LICENSE": "/static/js/2.07c07ed5.chunk.js.LICENSE",
     "static/media/TennisnetCropped.jpg": "/static/media/TennisnetCropped.6cd8d483.jpg",
     "static/media/blueguyimagereal.png": "/static/media/blueguyimagereal.b53930cb.png",
     "static/media/LoginScreen.module.css": "/static/media/image.b3d004f9.png",
@@ -19,8 +19,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.be67de96.js",
-    "static/js/2.883ec4d6.chunk.js",
-    "static/css/main.20be804d.chunk.css",
-    "static/js/main.9ca6b6da.chunk.js"
+    "static/js/2.07c07ed5.chunk.js",
+    "static/css/main.e054d371.chunk.css",
+    "static/js/main.8faba13c.chunk.js"
   ]
 }

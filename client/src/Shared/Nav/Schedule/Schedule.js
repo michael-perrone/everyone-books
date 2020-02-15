@@ -8,6 +8,8 @@ const Schedule = props => {
   const [employeeBookings, setEmployeeBookings] = React.useState([]);
   const [dateFromPicker, setDateFromPicker] = React.useState();
   const [dateNeeded, setDateNeeded] = React.useState(new Date().toDateString());
+  const [scheduled, setScheduled] = React.useState('');
+  const [shiftInfo, setShiftInfo] = React.useState('')
 
   function datePickerHandler(e) {
     setDateFromPicker(e.target.value)
@@ -18,7 +20,6 @@ const Schedule = props => {
       setDateNeeded(new Date(dateArray[0], parseInt(dateArray[1]) - 1, dateArray[2]).toDateString())
     }
   },[dateFromPicker])
-  
 
   React.useEffect(() => {
     axios
@@ -31,6 +32,18 @@ const Schedule = props => {
           setEmployeeBookings(response.data.bookings);
         }
       });
+      axios.post('/api/shifts/employee', {
+        date: dateNeeded,
+        employeeId: props.employee.employee.id
+      }).then(response => {
+        setScheduled(response.data.scheduled)
+        if (response.data.scheduled) {
+          setShiftInfo(response.data.shift)
+        }
+        else {
+          setShiftInfo('')
+        }
+      })
 }, [dateNeeded])
 
   return (
@@ -70,6 +83,8 @@ const Schedule = props => {
             marginTop: "10px"
           }}
         >
+          {shiftInfo && <p style={{fontSize: '14px', paddingTop: '10px', paddingBottom: '10px', width: '100%', textAlign: 'center', borderBottom: '1px solid black'}}>You are scheduled to work on this day from {shiftInfo.timeStart} - {shiftInfo.timeEnd}.</p>}
+          {!shiftInfo && <p style={{fontSize: '14px', paddingTop: '10px', paddingBottom: '10px', width: '100%', textAlign: 'center', borderBottom: '1px solid black'}}>You are not scheduled to work today.</p>}
           <div
             style={{
               display: "flex",

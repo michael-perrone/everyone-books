@@ -170,7 +170,7 @@ class CourtSlot extends React.Component {
             <button
               style={{
                 position: 'relative',
-                top: '-7px',
+                top: '-11px',
                 backgroundColor: color
               }}
               id={styles.bookedCheckButton}
@@ -190,7 +190,7 @@ class CourtSlot extends React.Component {
             <button
               style={{
                 position: 'relative',
-                top: '-7px',
+                top: '-9px',
                 backgroundColor: color,
               }}
               id={styles.bookedCheckButton}
