@@ -47,25 +47,35 @@ const AdvancedSearch = props => {
         Business Search
       </p>
       <form id={styles.inputContainer}>
-        <div id={styles.extraSizeDiv} className={styles.sizeDiv}>
+      <div className={styles.threeRowDiv}>
+         <select style={{height: '30px', width: '176px'}} onChange={handleTypeOfBusiness} placeholder="cute" className={styles.searchInput}>
+            <option style={{color: 'lightgray'}} disabeled>Type Of Business</option>
+            <option>Wax Center</option>
+            <option>Beauty Center</option>
+            <option>Fitness Center</option>
+            <option>Medical Office</option>
+            <option>Restaurant</option>
+            <option>Hair Salon</option>
+            <option>Tanning Salon</option>
+            <option>Barber Shop</option>
+            <option>Tattoo Studio</option>
+            <option>Tennis Club</option>
+            <option>Other</option>
+          </select>
           <input
             onChange={handleCity}
             value={city}
             placeholder="Business City"
             className={styles.searchInput}
           />
-          <select onChange={handleTypeOfBusiness} placeholder="cute" className={styles.searchInput}>
-            <option disabeled>Type Of Business</option>
-            <option>Potato</option>
-          </select>
           <input
             onChange={handleZip}
             value={zip}
             placeholder="Business Zip Code"
             className={styles.searchInput}
           />
-        </div>
-        <div className={styles.sizeDiv}>
+          </div>
+          <div className={styles.threeRowDiv}>
           <input
             onChange={handleState}
             value={state}
@@ -78,13 +88,13 @@ const AdvancedSearch = props => {
             placeholder="Business Name"
             className={styles.searchInput}
           />
-        </div>
         <button
-          onClick={props.advancedSearchFunction(city, state, zip, businessName)}
+          onClick={props.advancedSearchFunction(city, state, zip, businessName, typeOfBusiness)}
           id={styles.searchButton}
         >
           Search
         </button>
+        </div>
       </form>
     </div>
   );

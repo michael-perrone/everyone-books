@@ -98,7 +98,6 @@ const UserHomeContainer = props => {
         </p>
         {noBookings && (
           <p
-            style={{ backgroundColor: "white" }}
             className={styles.noClubsBookingsContainer}
           >
             You are currently not scheduled for any bookings. If you would like
