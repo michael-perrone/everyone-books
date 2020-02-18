@@ -4,9 +4,11 @@ import bookingInfoReducer from "./bookingInfoReducer";
 import newReducers from './newReducers';
 import dateReducer from './dateReducer';
 import scheduleReducer from './scheduleReducer';
+import alertReducer from './alertReducer';
 import { combineReducers } from "redux";
 
 export default combineReducers({
+  alertReducer,
   booleanReducers,
   authReducer,
   bookingInfoReducer,

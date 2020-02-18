@@ -5,14 +5,14 @@
   position: relative;
   padding-bottom: 20px;
   transform: rotate(-180deg);
+  margin-bottom: 75px;
+  margin-right: 10px;
 }
 
 #courtContainerParent {
   overflow: auto;
   transform: rotate(180deg);
-  display: flex;
-  justify-content: center;
-  background-color: lavenderblush;
+  background-color: rgb(245, 245, 245);
 }
 
 #bookingIntroDiv {
@@ -55,4 +55,11 @@
   border: 2px ridge lightgreen;
   color: rgb(190, 255, 190);
   font-weight: bold;
+}
+
+@media (min-width: 1000px) {
+  #courtContainerParent {
+  display: flex;
+  justify-content: center;
+  }
 }

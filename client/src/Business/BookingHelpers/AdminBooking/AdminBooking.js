@@ -4,9 +4,13 @@ import { connect } from "react-redux";
 import {
   BOOKING_TYPE,
   TIME_SELECTED,
-  EMPLOYEE_CHOSEN
+  EMPLOYEE_CHOSEN,
+  EMPLOYEE_SHIFT_ERROR,
+  HIDE_DROP_DOWN,
+  BREAK_ALERT
 } from "../../../actions/actions";
 import Calendar from "../../Calendar/Calendar";
+import Axios from "axios";
 
 class AdminBooking extends React.Component {
   constructor(props) {
@@ -24,6 +28,23 @@ class AdminBooking extends React.Component {
     return () => {
       this.setState({ employeeSelected });
       this.props.getEmployeeChosen(employeeSelected);
+      if (this.props.date && employeeSelected) {
+        Axios.post('/api/shifts/employee', {date: this.props.date.toDateString(), employeeId: employeeSelected._id}).then(
+          response => {
+            if (response.data.scheduled === false ) {
+              console.log('cooked')
+              this.props.setEmployeeShiftError(true)
+              this.props.setBreakAlert("");
+            }
+            if (response.data.scheduled === true ) {
+              this.props.setEmployeeShiftError(false)
+              if (response.data.shift.breakStart && response.data.shift.breakEnd) {
+                this.props.setBreakAlert({breakStart: response.data.shift.breakStart, breakEnd: response.data.shift.breakEnd})
+              }
+            }
+          }
+        )
+      }
     };
   }
 
@@ -43,7 +64,7 @@ class AdminBooking extends React.Component {
 
   render() {
     return (
-      <div id={styles.bookingHolder}>
+      <div id={styles.bookingHolder} onClick={this.props.hideDropDown}>
         <div
          id={styles.divWhereWidthChanges}
         >
@@ -59,11 +80,11 @@ class AdminBooking extends React.Component {
                   <p
                     style={{
                       backgroundColor:
-                        this.state.employeeSelected._id === element._id
+                       this.props.employeeChosen && this.props.employeeChosen.employeeChosen._id === element._id
                           ? "navy"
                           : "",
                       color:
-                        this.state.employeeSelected._id === element._id
+                       this.props.employeeChosen &&  this.props.employeeChosen.employeeChosen._id === element._id
                           ? "white"
                           : ""
                     }}
@@ -154,12 +175,15 @@ const mapStateToProps = state => {
     admin: state.authReducer.admin,
     bookingType: state.bookingInfoReducer.bookingType,
     employeeChosen: state.bookingInfoReducer.employeeChosen,
-    timeChosen: state.bookingInfoReducer.timeSelected
+    timeChosen: state.bookingInfoReducer.timeSelected,
+    date: state.dateReducer.dateChosen
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
+    setBreakAlert: (obj) => dispatch({type: BREAK_ALERT, payload: obj}),
+    setEmployeeShiftError: (trueOrFalse) => dispatch({type: EMPLOYEE_SHIFT_ERROR, payload: trueOrFalse}),
     getBookingType: bookingType =>
       dispatch({ type: BOOKING_TYPE, payload: { bookingType } }),
     getTimeChosen: timeChosen =>

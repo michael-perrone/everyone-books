@@ -9,6 +9,7 @@ import {
   BOOK_A_COURT,
   SHOW_SCHEDULE,
   SHOW_DROP_DOWN,
+  HIDE_DROP_DOWN
 } from "../actions/actions";
 
 const initialState = {
@@ -24,6 +25,12 @@ const initialState = {
 
 export default function(state = initialState, action) {
   switch (action.type) {
+    case HIDE_DROP_DOWN:
+      return {
+        ...state,
+        showDropDown: false
+      }
+
     case SHOW_DROP_DOWN:
     return {
       ...state,

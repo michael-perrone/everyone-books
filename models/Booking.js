@@ -24,7 +24,6 @@ const BookingSchema = new mongoose.Schema({
     ref: "instructor"
   },
   serviceType: {
-    required: true,
     type: mongoose.Schema.Types.ObjectId,
     ref: 'serviceType'
   },

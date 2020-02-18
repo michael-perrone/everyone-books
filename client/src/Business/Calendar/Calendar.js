@@ -2,7 +2,7 @@ import React from "react";
 import dateFns from "date-fns";
 import "./Calendar.css";
 import {connect} from 'react-redux';
-import {CHOOSE_DATE} from '../../actions/actions';
+import {CHOOSE_DATE, EMPLOYEE_CHOSEN, EMPLOYEE_SHIFT_ERROR, BREAK_ALERT} from '../../actions/actions';
 
 class Calendar extends React.Component {
   state = {
@@ -107,7 +107,12 @@ class Calendar extends React.Component {
                 : ""
             }`}
             key={day}
-            onClick={this.props.chooseDate(dateFns.parse(cloneDay))}
+            onClick={() => {
+              this.props.chooseDate(dateFns.parse(cloneDay))
+              this.props.unselectEmployee()
+              this.props.setBreakAlert()
+              this.props.setEmployeeShiftError()
+            }}
           >
             <span className="number">{formattedDate}</span>
             <span className="bg">{formattedDate}</span>
@@ -158,7 +163,11 @@ class Calendar extends React.Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    chooseDate: (dateChosen) => () => dispatch({type: CHOOSE_DATE, payload: {dateChosen}}) 
+    setEmployeeShiftError: () => dispatch({type: EMPLOYEE_SHIFT_ERROR, payload: false}),
+    setBreakAlert: () => dispatch({type: BREAK_ALERT, payload: ""}), 
+    chooseDate: (dateChosen) => dispatch({type: CHOOSE_DATE, payload: {dateChosen}}),
+    unselectEmployee: () => dispatch({type: EMPLOYEE_CHOSEN, payload: "" })
+    
   }
 }
 

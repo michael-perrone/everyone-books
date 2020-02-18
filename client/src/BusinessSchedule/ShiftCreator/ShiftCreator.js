@@ -6,13 +6,13 @@ import {connect} from 'react-redux';
 
 function ShiftCreator(props)  {
     // props.employees
-    const [date, setDate] = React.useState('');
+    const [date, setDate] = React.useState(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`);
     const [shiftDuration, setShiftDuration] = React.useState('');
     const [shiftStart, setShiftStart] = React.useState('');
     const [employee, setTest] = React.useState('');
     const [dateNeeded, setDateNeeded] = React.useState('')
     const [endOfShift, setEndOfShift] = React.useState('');
-    const [isBreak, setBreak] = React.useState(false);
+    const [isBreak, setBreak] = React.useState("");
     const [breakStart, setBreakStart] = React.useState('')
     const [breakEnd, setBreakEnd] = React.useState('')
     const [breakError, setBreakError] = React.useState('');
@@ -20,7 +20,7 @@ function ShiftCreator(props)  {
 
 
     React.useEffect(() => {
-        if (breakEnd && breakStart && shiftStart && endOfShift) {
+        if (breakEnd && breakStart && shiftStart && endOfShift && (isBreak === true && breakStart && breakEnd || isBreak === false)) {
             if (shiftCalcNum(breakStart) < shiftCalcNum(shiftStart)) {
                 setBreakError("Break cannot start before shift.")
             }
@@ -45,7 +45,9 @@ function ShiftCreator(props)  {
             setBreakError('');
             setReadyToGo(true)
         }
-    }, [breakEnd, breakStart, shiftStart, endOfShift])
+    }, [breakEnd, breakStart, shiftStart, endOfShift, isBreak])
+
+
 
     function setTestEm(employee) {
         return () => {
@@ -545,11 +547,20 @@ function ShiftCreator(props)  {
             breakEnd
         }
         
-        Axios.post('/api/shifts/create', obSending).then(res => {
-            
+        Axios.post('/api/shifts/create', obSending).then(response => {
+                if (response.status === 201) {
+                    props.getNewShifts()
+                }
            }
         )
     }
+
+    React.useEffect(() => {
+        if (breakError) {
+            setReadyToGo(false)
+        }
+
+    }, [breakError])
 
     function breakHandler(e) {
         if (e.target.value === "Yes") {
@@ -562,7 +573,6 @@ function ShiftCreator(props)  {
         }
     }
     
-
     return (
             <div id={styles.scheduleContainer}>
                 <p style={{position: 'absolute', left: '40px', top: '-20px', color: 'darkred'}}>{breakError}</p>
@@ -584,8 +594,8 @@ function ShiftCreator(props)  {
                 <div>
                 <span>Shift Time Start: </span>              
                 <select className={styles.inputs} onChange={shiftStartHandler}>
-            <option>{ }</option>
-                <option>12:00 AM</option>
+                 <option>{ }</option>
+                    <option>12:00 AM</option>
                     <option>12:30 AM</option>
                     <option>1:00 AM</option>
                     <option>1:30 AM</option>
@@ -633,8 +643,7 @@ function ShiftCreator(props)  {
                     <option>10:30 PM</option>
                     <option>11:00 PM</option>
                     <option>11:30 PM</option>
-                    </select>
-                    
+                    </select>   
                     </div>
                     <div>
                     <span>Shift Time Duration:</span>

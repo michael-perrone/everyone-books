@@ -11,27 +11,31 @@ function BusinessSchedule(props) {
     const [employees, setEmployees] = React.useState('');
     const [shifts, setShifts] = React.useState([])
     const [loading, setLoading] = React.useState(true);
+    const [anyNum, setAnyNum] = React.useState(1);
 
+    function getNewShifts() {
+        setAnyNum(anyNum => anyNum + 1);
+    }
 
-React.useEffect(() => {
-    let businessId;
-    if (props.admin) {
-        businessId = props.admin.admin.businessId
-    }
-    else if (props.employee) {
-        businessId = props.match.params.businessId
-    }
-    console.log(businessId)
-    axios.post('/api/business/businessschedule', {businessId})
-    .then(
-        response => {
-            if (response.status === 200) {
-                setSchedule(response.data.schedule)
-                setEmployees(response.data.employees)
-            }
+    React.useEffect(() => {
+        let businessId;
+        if (props.admin) {
+            businessId = props.admin.admin.businessId
         }
-    )
-}, [])
+        else if (props.employee) {
+            businessId = props.match.params.businessId
+        }
+        console.log(businessId)
+        axios.post('/api/business/businessschedule', {businessId})
+        .then(
+            response => {
+                if (response.status === 200) {
+                    setSchedule(response.data.schedule)
+                    setEmployees(response.data.employees)
+                }
+            }
+        )
+    },[])
 
  React.useEffect(() => {
     axios.post('api/shifts/get',
@@ -48,15 +52,17 @@ React.useEffect(() => {
      }
     )
     
-}, [props.shiftDate]) 
+}, [props.shiftDate, anyNum]) 
 
     return (
         <div id={styles.container}>
             <div id={styles.leftHolder}>
                 <WeekSelector/>
-                <ShiftCreator admin={props.admin.admin} employees={employees}/>
+                <ShiftCreator schedule={schedule} admin={props.admin.admin} employees={employees} getNewShifts={getNewShifts}/>
             </div>
+            <div id={styles.rightHolder}>
             <ShiftSchedule loading={loading} shiftDate={props.shiftDate} shifts={shifts}/>
+            </div>
         </div>
     )
 }

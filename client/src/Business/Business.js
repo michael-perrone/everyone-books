@@ -54,7 +54,7 @@ class Business extends React.Component {
             axios.post('/api/getServiceTypes', {serviceTypesArray: response.data.profile.serviceTypes}).then(
               response => {
                 if (response.status !== 204) {
-                  this.setState({services: response.data.serviceTypesArray})
+                  this.setState({services: [...response.data.serviceTypesArray, {serviceName: "BLOCK"}]})
                 }
               }
             )

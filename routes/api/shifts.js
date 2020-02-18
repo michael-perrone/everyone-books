@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const Shift = require('../../models/Shift')
-const Employee = require('../../models/Employee');
+
 
 router.post('/create', async (req, res) => {
 
@@ -151,17 +151,18 @@ router.post('/create', async (req, res) => {
     console.log(newShift)
 
     await newShift.save();
-    res.status(200).json({newShift})
+    res.status(201).send()
 });
 
 
 
 router.post('/employee', async (req, res) => {
-  const shift = await Shift.findOne({shiftDate: req.body.date, employeeId: req.body.employeeId}).select(['timeStart', 'timeEnd']);
+  console.log(req.body)
+  const shift = await Shift.findOne({shiftDate: req.body.date, employeeId: req.body.employeeId}).select(['timeStart', 'timeEnd', 'breakStart', 'breakEnd']);
   if (shift) {
     res.status(200).json({scheduled: true, shift})
   } else {
-    res.status(200).json({sheduled: false})
+    res.status(200).json({scheduled: false})
   }
 })
 

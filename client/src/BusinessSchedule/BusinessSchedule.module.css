@@ -1,7 +1,40 @@
 #container {
     display: flex;
     width: 100%;
-    justify-content: space-around;
 }
+
+
+#leftHolder {
+    background-color: lavender;
+    padding: 20px;
+    height: 100vh;
+    border-right: 1px solid gray;
+}
+
+#rightHolder {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background-color: rgb(243, 243, 243);
+}
+
+
+@media(max-width: 750px) {
+    #container {
+        flex-direction: column;
+    }
+    #leftHolder {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        order: 2;
+        padding-left: 0px;
+        background-color: rgb(243, 243, 243);
+        height: 90vh;
+        border-right: none;
+    }
+}
+
 
 

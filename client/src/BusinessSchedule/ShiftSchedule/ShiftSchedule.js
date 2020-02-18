@@ -5,7 +5,7 @@ import Spinner from '../../Spinner/Spinner';
 const ShiftSchedule = props => {
 
     return ( !props.loading ? <div id={styles.shiftSchedule} style={{fontSize: '14px', width: '360px',}}>
-            <p style={{fontSize: '26px', marginTop: '6px', marginBottom: '11px'}}>Shift Schedule - {props.shiftDate}</p>
+            <p style={{fontSize: '24px', marginTop: '6px', textAlign: 'center', marginBottom: '11px'}}>Shift Schedule - {props.shiftDate}</p>
             {props.shifts && props.shifts.length > 0 &&
             <React.Fragment>
             <div style={{ display: 'flex', justifyContent: 'space-between'}}>

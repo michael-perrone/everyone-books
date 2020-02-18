@@ -13,6 +13,7 @@ import { connect } from "react-redux";
 import NeedToLoginPage from "./NeedToLoginPage/NeedToLoginPage";
 import Nav from './Shared/Nav/Nav';
 import BusinessSchedule from './BusinessSchedule/BusinessSchedule';
+import { HIDE_DROP_DOWN } from "./actions/actions";
 
 class App extends React.Component {
   constructor(props) {
@@ -46,6 +47,7 @@ class App extends React.Component {
     return (
       <React.Fragment>
       {(token || employeeToken || adminToken) && <Nav/>}
+      <div onClick={this.props.hideDropDown}>
       <Switch>
         <Route path="/admin/:businessId/businessSchedule" exact component={BusinessSchedule}></Route>
         <Route
@@ -144,6 +146,7 @@ class App extends React.Component {
           />
         )}
       </Switch>
+      </div>
       </React.Fragment>
     );
   }
@@ -153,8 +156,14 @@ const mapStateToProps = state => {
   return {
     user: state.authReducer.user,
     employee: state.authReducer.employee,
-    admin: state.authReducer.admin
+    admin: state.authReducer.admin,
   };
 };
 
-export default withRouter(connect(mapStateToProps)(App));
+const mapDispatchToProps = dispatch => {
+  return {
+    hideDropDown: () => dispatch({type: HIDE_DROP_DOWN }) 
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

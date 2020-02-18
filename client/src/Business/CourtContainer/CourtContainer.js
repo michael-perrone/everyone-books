@@ -492,6 +492,8 @@ class CourtContainer extends React.Component {
     this.setState({ bookingArray: [] });
   };
 
+
+  // Business
   render() {
     if (this.props.openTime !== "Closed" || this.props.closeTime !== "Closed") {
     return (
@@ -552,15 +554,18 @@ class CourtContainer extends React.Component {
           />
         </div>
         <div
-          id={styles.courtContainerParent}
+          id={styles.courtContainerParent} style={{display: this.props.numberColumns > 6 ? "block" : ""}}
           onClick={this.thingClickedOn}
-        >
+        > 
+        <div style={{width: `${this.props.numberColumns * 185}px`, display: 'flex', justifyContent: 'center'}}>
           <div
             id={styles.thingContainer}
             style={{
               width: `${this.props.numberColumns * 178}px`
             }}
           >
+            {this.props.employeeShiftError && <p style={{position: 'absolute', left: '20px', top: '-50px',color: 'red'}}>This Employee is not scheduled on the selected day!</p>}
+            {this.props.breakAlert !== "" && <p style={{position: 'absolute', left: '20px', top: '-50px',color: 'red'}}>This employee has a break from {this.props.breakAlert.breakStart}-{this.props.breakAlert.breakEnd}</p>}
             {this.thingNumbersToThingColumns().map((element, index) => {
               return (
                 <CourtColumns
@@ -589,6 +594,7 @@ class CourtContainer extends React.Component {
               );
             })}
           </div>
+          </div>
         </div>
       </div>
     );
@@ -607,7 +613,8 @@ const mapStateToProps = state => {
     timeChosen: state.bookingInfoReducer.timeSelected,
     bookingType: state.bookingInfoReducer.bookingType,
     employeeChosen: state.bookingInfoReducer.employeeChosen,
-    
+    employeeShiftError: state.alertReducer.employeeShiftError,
+    breakAlert: state.alertReducer.breakAlert
   };
 };
 

@@ -13,7 +13,8 @@ const SecondContainer = props => {
       {props.employee && <EmployeeSecondContainer />}
       {props.user && <UserSecondContainer />}
       <div style={{marginRight: '40px'}}>
-      <i
+        
+        <i
         id={props.instructor ? styles.instructorBars : styles.bars}
         onClick={props.showDropDown}
         style={{

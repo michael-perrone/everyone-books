@@ -78,11 +78,10 @@ const UserHomeContainer = props => {
           <React.Fragment>
             <div className={styles.noClubsBookingsContainer}>
               <p>
-                You have not subscribed to any clubs yet. You can do this by
-                hitting View Clubs below. There you can search for Tennis Clubs
-                in your area and you will be able to subscribe to the clubs of
-                your choice. If you are searching for an instructor, use the
-                instructor search above.
+                You have not subscribed to any places yet. You can do this by
+                hitting View Businesses. There you can search for Businesses
+                in your area and you will be able to subscribe to the business of
+                your choice. 
               </p>
             </div>
           </React.Fragment>
@@ -91,7 +90,7 @@ const UserHomeContainer = props => {
       <div className={styles.half} id={styles.bookingsHalf}>
         <p
           style={{
-            marginBottom: "10px",
+            marginBottom: "6px",
             fontFamily: '"Josefin Sans", sans-serif'
           }}
         >
