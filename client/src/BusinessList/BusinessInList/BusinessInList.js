@@ -78,8 +78,8 @@ class TennisClub extends React.Component {
           <p className={styles.sectionContent}>{this.props.business.address}</p>
           <p className={styles.sectionContent}>{this.props.business.city}</p>
           <p className={styles.sectionContent}>{this.props.business.state}</p>
-          <p style={{width: '91%', paddingBottom: '5px', borderBottom: '1px solid gray'}} className={styles.sectionContent}>{this.props.business.zip}</p>
-          <p className={styles.sectionContent}>{this.props.business.phoneNumber}</p>
+          <p style={{width: '91%', paddingBottom: '10px', borderBottom: '1px solid gray'}} className={styles.sectionContent}>{this.props.business.zip}</p>
+          <p style={{marginTop: '8px'}} className={styles.sectionContent}>{this.props.business.phoneNumber}</p>
           {this.props.business.website && <p className={styles.sectionContent}>{this.props.business.website}</p>}
           </div>
           <div id={styles.hours} className={styles.shortenedSection}>

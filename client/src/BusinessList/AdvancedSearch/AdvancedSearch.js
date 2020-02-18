@@ -6,6 +6,7 @@ const AdvancedSearch = props => {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [businessName, setBusinessName] = useState("");
+  const [typeOfBusiness, setTypeOfBusiness] = useState('');
 
   function handleCity(event) {
     event.preventDefault();
@@ -19,6 +20,11 @@ const AdvancedSearch = props => {
   function handleZip(event) {
     event.preventDefault();
     setZip(event.target.value);
+  }
+
+  function handleTypeOfBusiness(event) {
+    event.preventDefault()
+    setTypeOfBusiness(event.target.value);
   }
 
   function handleBusinessName(event) {
@@ -48,6 +54,10 @@ const AdvancedSearch = props => {
             placeholder="Business City"
             className={styles.searchInput}
           />
+          <select onChange={handleTypeOfBusiness} placeholder="cute" className={styles.searchInput}>
+            <option disabeled>Type Of Business</option>
+            <option>Potato</option>
+          </select>
           <input
             onChange={handleZip}
             value={zip}
