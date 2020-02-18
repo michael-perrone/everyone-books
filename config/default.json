@@ -1,5 +1,5 @@
 {
-  "mongoURI": "mongodb://127.0.0.1/myapp", 
+  "mongoURI": "mongodb://mike:perrone1@ds033579.mlab.com:33579/tennis-mate-db", 
   "lastURI": "mongodb://0b266eb6-0ee0-4-231-b9ee:fOaD4IoXIMLMz99dTHYliQupnziZO75niMWrKetb4HOWvRPbZq0MVaLlAMyolT4u0uOzcM1XMk7D72r2psTeXw==@0b266eb6-0ee0-4-231-b9ee.documents.azure.com:10255/<hopethisworks>?ssl=true",
   "mongoURI2": "mongodb://0b266eb6-0ee0-4-231-b9ee:fOaD4IoXIMLMz99dTHYliQupnziZO75niMWrKetb4HOWvRPbZq0MVaLlAMyolT4u0uOzcM1XMk7D72r2psTeXw%3D%3D@0b266eb6-0ee0-4-231-b9ee.documents.azure.com:10255/<hopethisworks>?ssl=true",
   "userSecret": "39423942389472839472934823748237429834723894724893749384892349384",

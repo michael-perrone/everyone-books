@@ -54,6 +54,7 @@ class TennisClubsList extends React.Component {
 
 
   render() {
+    console.log(this.state.businesses)
     return (
       <div id={styles.clubsContainer}>
         <AdvancedSearch advancedSearchFunction={this.advancedSearchFunction} />
@@ -64,26 +65,22 @@ class TennisClubsList extends React.Component {
           />
           <div id={this.state.businesses.length > 2 ? "" : styles.defaultHeight} className={styles.actualClubsContainer}>
           {this.state.businesses.map(element => {
-            let following = false;
-            if (element.profile) {
-              for (let i = 0; i < this.state.user.businessesFollowing.length; i++) {
-                console.log(element.business._id, this.state.user.businessesFollowing[i])
-                if (element.business._id === this.state.user.businessesFollowing[i]) {
-                  following = true;
+                let following = false;
+                for (let i = 0; i < this.state.user.businessesFollowing.length; i++) {                  
+                  if (element._id === this.state.user.businessesFollowing[i]) {
+                    following = true;
+                  }
                 }
-              }
-            return (
-              <BusinessInList
-                following={following}
-                unfollow={this.unfollow}
-                follow={this.followBusiness}
-                business={element.business}
-                profile={element.profile}
-                push={this.props.history.push}
-                key={element._id}
-              />
-            );
-            }
+              return (
+                   <BusinessInList
+                  following={following}
+                  unfollow={this.unfollow}
+                  follow={this.followBusiness}
+                  business={element}
+                  push={this.props.history.push}
+                  key={element._id}
+                />
+              );
           })}
           </div>
         </div>
@@ -101,3 +98,4 @@ const mapStateToProps = state => {
 };
 
 export default withRouter(connect(mapStateToProps)(TennisClubsList));
+

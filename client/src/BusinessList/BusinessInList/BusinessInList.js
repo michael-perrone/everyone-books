@@ -60,7 +60,6 @@ class TennisClub extends React.Component {
 
   
   render() {
-    console.log(this.props)
     return (
       <React.Fragment>
        {this.state.errorArray.map(element => {
@@ -115,12 +114,6 @@ class TennisClub extends React.Component {
                return <p className={styles.sectionContent}>{day}: Closed</p>
              }
            })}
-          </div>
-          <div className={styles.section}>
-          <p className={styles.boxHeader}>Services:</p>
-          {this.props.profile.services.map(element => {
-          return <p className={styles.sectionContent}>{element}</p>
-          })}
           </div>
           <div id={styles.buttonContainer}>
             {!this.state.following && <button onClick={this.follow(this.props.business._id)} className={styles.sectionButton}>Follow Business</button>}

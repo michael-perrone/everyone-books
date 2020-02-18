@@ -1,6 +1,6 @@
 #businessContainer {
   width: 600px;
-  height: 240px;
+  height: 220px;
   background-color: white;
   border: 1px solid gray;
   margin-top: 40px;
@@ -9,6 +9,7 @@
   justify-content: space-around;
   align-items: center;
   position: relative;
+  padding-top: 20px;
 }
 
 #unfollow {
@@ -16,12 +17,12 @@
 }
 
 #buttonContainer {
-  position: absolute;
-  left: 90px;
-  width: 304px;
-  bottom: 7px;
+  position: relative;
+  top: -20px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 180px
 }
 
 
