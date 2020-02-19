@@ -49,7 +49,7 @@ const AdvancedSearch = props => {
       <form id={styles.inputContainer}>
       <div className={styles.threeRowDiv}>
          <select style={{height: '30px', width: '176px'}} onChange={handleTypeOfBusiness} placeholder="cute" className={styles.searchInput}>
-            <option style={{color: 'lightgray'}} disabeled>Type Of Business</option>
+            <option style={{color: 'lightgray'}} selected disabled>Type Of Business</option>
             <option>Wax Center</option>
             <option>Beauty Center</option>
             <option>Fitness Center</option>

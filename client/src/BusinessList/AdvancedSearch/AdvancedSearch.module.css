@@ -1,12 +1,10 @@
 #inputContainer {
   align-self: center;
-  position: relative;
+  margin-top: 25px;
   flex-direction: column;
-  top: 25px;
   display: flex;
   justify-content: space-around;
   width: 94%;
-  left: -10px;
 }
 
 .threeRowDiv {
@@ -54,7 +52,6 @@
   display: flex;
   flex-direction: column;
   background-color: rgb(212,212,255);
-  height: 110px;
   width: 100%;
 }
 

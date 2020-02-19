@@ -26,14 +26,15 @@ class TennisClubsList extends React.Component {
     })
   } 
 
-  advancedSearchFunction(city, state, zip, businessName) {
+  advancedSearchFunction(city, state, zip, businessName, typeOfBusiness) {
     return event => {
       event.preventDefault();
       const objectToSend = {
         city,
         state,
         zip,
-        businessName
+        businessName,
+        typeOfBusiness
       };
       this.setState({ searchError: "" });
       axios
@@ -63,7 +64,7 @@ class TennisClubsList extends React.Component {
             alertMessage={this.state.searchError}
             alertType={"error"}
           />
-          <div id={this.state.businesses.length > 2 ? "" : styles.defaultHeight} className={styles.actualClubsContainer}>
+          <div id={this.state.businesses.length > 4 ? "" : styles.defaultHeight} className={styles.actualClubsContainer}>
           {this.state.businesses.map(element => {
                 let following = false;
                 for (let i = 0; i < this.state.user.businessesFollowing.length; i++) {                  

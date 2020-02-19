@@ -18,6 +18,7 @@
   flex-wrap: wrap;
   background: linear-gradient(to bottom, rgb(212,212,255), rgb(230, 230, 230));
   justify-content: space-around;
+  padding-bottom: 15px;
 }
 
 
