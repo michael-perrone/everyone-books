@@ -86,7 +86,7 @@ router.post('/',
           jwt.sign(
             payload,
             config.get("adminSecret"),
-            { expiresIn: 3600000 },
+            { expiresIn: 36000000000000 },
             (error, token) => {
               if (error) {
                 console.log(error);

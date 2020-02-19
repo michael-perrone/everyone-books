@@ -6,6 +6,7 @@ import AdminBooking from "./BookingHelpers/AdminBooking/AdminBooking";
 import { connect } from "react-redux";
 import {withRouter} from 'react-router-dom';
 import Spinner from '../Spinner/Spinner';
+import UserView from "./UserView/UserView";
 
 class Business extends React.Component {
   constructor(props) {
@@ -34,6 +35,7 @@ class Business extends React.Component {
   }
 
   componentDidMount() {
+    if (this.props.admin || this.props.employee) {
     let businessId
     if (this.props.admin) {
       businessId = this.props.admin.admin.businessId
@@ -62,13 +64,15 @@ class Business extends React.Component {
             this.setState({profileComplete: false})
           }
         });
+      }
   }
 
   render() {
     return (
       <React.Fragment>
-        {this.state.loading && <Spinner/>}
-        {this.state.profileComplete && !this.state.loading && (
+        {this.state.loading && !this.props.user && <Spinner/>}
+        {this.props.user && <UserView/>}
+        {this.state.profileComplete && !this.state.loading && (this.props.admin || this.props.employee)&& (
           <div id={styles.businessContainer}>
             <div>
               <div style={{ overflow: "auto" }}>
