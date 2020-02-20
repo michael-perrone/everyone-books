@@ -4,11 +4,14 @@ import {connect} from 'react-redux';
 import Axios from 'axios';
 import styles from './UserView.module.css';
 import LeftSide from './LeftSide/LeftSide';
+import Core from './Core/Core';
+import RightSide from './RightSide/RightSide';
 
 const UserView = (props) => {
     const [business, setBusiness] = React.useState({});
     const [profile, setProfile] = React.useState({});
     const [employees, setEmployees] = React.useState([]);
+    const [services, setServices] = React.useState([]);
 
 
 
@@ -19,6 +22,15 @@ const UserView = (props) => {
                     setBusiness(response.data.business)
                     setProfile(response.data.profile)
                     setEmployees(response.data.employees)
+                    if (response.data.profile.serviceTypes.length > 0) {
+                        Axios.post('/api/getServiceTypes', {serviceTypesArray: response.data.profile.serviceTypes}).then (
+                            response => {
+                                if (response.status === 200) {
+                                setServices(response.data.serviceTypesArray)
+                            }
+                          }
+                       )
+                    }
                 }
             }
         )
@@ -26,8 +38,9 @@ const UserView = (props) => {
 
 
     return (
-        <div>
-          <LeftSide business={business} profile={profile}/>
+        <div id={styles.userViewContainer}>
+          <LeftSide services={services} schedule={business.schedule} business={business} profile={profile}/>
+          <Core business={business} profile={profile} employees={employees}/>
         </div>
     )
 }
