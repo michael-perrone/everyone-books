@@ -5,7 +5,6 @@ import Axios from 'axios';
 import styles from './UserView.module.css';
 import LeftSide from './LeftSide/LeftSide';
 import Core from './Core/Core';
-import RightSide from './RightSide/RightSide';
 
 const UserView = (props) => {
     const [business, setBusiness] = React.useState({});

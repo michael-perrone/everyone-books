@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
-const { check, validationResult, body } = require("express-validator");
 const User = require("../../models/User");
 const jwt = require("jsonwebtoken");
 const config = require("config");
@@ -9,9 +8,9 @@ const Admin = require("../../models/Admin.js");
 const Instructor = require("../../models/Instructor.js");
 
 router.post("/", async (req, res) => {
-  let user = await User.findOne({ email: req.body.email });
-  let admin = await Admin.findOne({ email: req.body.email });
-  let instructor = await Instructor.findOne({ email: req.body.email });
+  let user = await User.findOne({ email: req.body.email.toLowerCase() });
+  let admin = await Admin.findOne({ email: req.body.email.toLowerCase() });
+  let instructor = await Instructor.findOne({ email: req.body.email.toLowerCase() });
   try {
     if (user || admin || instructor) {
       return res
@@ -33,7 +32,7 @@ router.post("/", async (req, res) => {
       firstName: firstName,
       lastName: lastName,
       fullName: firstName + " " + lastName,
-      email: req.body.email,
+      email: req.body.email.toLowerCase(),
       phoneNumber: req.body.phoneNumber,
       password: req.body.createPassword,
       age: req.body.age,

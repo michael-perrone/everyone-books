@@ -16,7 +16,8 @@ class ServicesForm extends React.Component {
       empty: "",
       successAlert: false,
       newProfileAlert: false,
-      deletingArray: []
+      deletingArray: [],
+      timeDuration: ""
     };
     this.costHandler = this.costHandler.bind(this);
     this.addServices = this.addServices.bind(this);
@@ -54,16 +55,16 @@ class ServicesForm extends React.Component {
       this.setState({servicesArray: newArray });
       this.setState({service: "" });
       this.setState({cost: ""});
+      setTimeout(() => this.submitServices(), 500)
     } else {
       this.setState({ servicesError: true });
       setTimeout(() => this.setState({ servicesError: false }), 4400);
     }
   }
 
-  submitServices(event) {
+  submitServices() {
     this.setState({successAlert: false})
     this.setState({newProfileAlert: false})
-    event.preventDefault();
     const objectToSend = {
      services: this.state.servicesArray
     };
@@ -128,25 +129,13 @@ class ServicesForm extends React.Component {
         >
           Add
         </button>
-        <div>
-          <button
-            onClick={this.submitServices}
-            style={{
-              width: "130px",
-              height: "27px",
-              marginLeft: "70px",
-              marginTop: "20px"
-            }}
-          >
-            Submit All Services
-          </button>
-        </div>
         <ul style={{marginTop: '20px'}}>
+          <p style={{marginBottom: '14px', textDecoration: 'underline', position: 'relative', left: '-14px', textAlign: 'center'}}>Existing Services:</p>
         {this.state.servicesArray && this.state.servicesArray.length > 0 && this.state.servicesArray.map(serviceAdded => {
         return <li style={{listStyleType: 'disc', height: '24px' , paddingLeft: '10px'}}>{serviceAdded.serviceName} - ${serviceAdded.cost} <i style={{marginLeft: '6px', color: 'darkred', cursor: 'pointer'}} onClick={this.deleteService(serviceAdded._id)} class="fas fa-trash"></i></li>
         })}
         </ul>
-        {this.state.deletingArray.length > 0 && <SubmitButton onClick={this.sendDeletes}>Update</SubmitButton>}
+        {(this.state.deletingArray.length > 0 || this.state.servicesArray > 0) &&  <div style={{marginTop: '30px', width: '100%', display: 'flex', position: 'relative', left: '-14px', justifyContent: 'center'}}><button onClick={this.sendDeletes}>Update Services</button></div>}
       </div>
     );
   }

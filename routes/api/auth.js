@@ -14,11 +14,10 @@ const Business = require('../../models/Business');
 
 
 router.post("/login", async (req, res) => {
-  let adminLoggingIn = await Admin.findOne({ email: req.body.email });
-  let userLoggingIn = await User.findOne({ email: req.body.email });
+  let adminLoggingIn = await Admin.findOne({ email: req.body.email.toLowerCase() });
+  let userLoggingIn = await User.findOne({ email: req.body.email.toLowerCase() });
   if (adminLoggingIn) {
     try {
-
     console.log(adminLoggingIn)
     const passwordsMatching = await bcrypt.compare(
       req.body.password,

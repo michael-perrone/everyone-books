@@ -1,70 +1,52 @@
 import React from 'react';
 import styles from './LeftSide.module.css';
+import About from './About/About';
+import Contact from './Contact/Contact';
+import Hours from './Hours/Hours';
+import ServicesTab from './ServicesTab/ServicesTab';
 
 const LeftSide = (props) => {
+    const [selected, setSelected] = React.useState('Contact');
+    const [left, setLeft] = React.useState('0px');
 
+
+    function handleSelected(newSelected) {
+        return () => {
+            setSelected(newSelected)
+        }
+    }
+
+    React.useEffect(() => {
+        if (selected === "Contact") {
+            setLeft('0px')
+        }
+        else if (selected === "About") {
+            setLeft('76px')
+        }
+        else if (selected === "Services") {
+            setLeft('152px')
+        }
+        else if (selected === "Hours") {
+            setLeft('228px')
+        }
+    }, [selected])
 
     return (
-        <div>
-            <div className={styles.sideBar}>
-            <p>{props.business.businessName}</p>
-            <div className={styles.horizontalHolder}>
-                <div className={styles.businessStuff}>
-                    <p className={styles.basicP}>{props.business.address}</p>
-                    <p className={styles.basicP}>{props.business.city}</p>
-                    <p className={styles.basicP}>{props.business.state}</p>
-                    <p className={styles.basicP} style={{marginBottom: '20px'}}>{props.business.zip}</p>
-                    <p className={styles.basicP}>{props.business.phoneNumber}</p>
-                    <p className={styles.basicP}>{props.business.website}</p>
-                </div>
-                <div className={styles.businessStuff}>
-                <p style={{textDecoration: 'underline', fontWeight: 'bold', marginBottom: '14px', width: '100%', textAlign: 'center'}}>Services Offered: </p>
-                {props.services.map(service => {
-                    return <div style={{display: 'flex', justifyContent: 'space-around'}}><p>{service.serviceName}</p><p>${service.cost}</p></div>
-                })}
-            </div>
-            </div>
-            <div className={styles.horizontalHolder}>
-                {props.profile.bio && 
-                <div className={styles.businessStuff}>
-                    <p style={{fontFamily: 'auto', lineHeight: '22px'}}>{props.profile.bio}</p>    
-                </div>}
-                {!props.profile.bio && 
-                <div style={{fontFamily: 'auto'}} className={styles.businessStuff}>
-                    <p>This business has not created a profile yet.</p>
-                </div>
-                }
-                 <div style={{paddingLeft: '30px'}} className={styles.businessStuff}>
-            <p style={{textDecoration: 'underline', fontWeight: 'bold', marginBottom: '14px'}}>Hours Of Operation:</p>
-                {props.schedule && props.schedule.map((time, index) => {
-                    let dayName;
-                    if (index === 0) {
-                        dayName = "Sun: "
-                    }
-                    else if (index === 1) {
-                        dayName = "Mon: "
-                    }
-                    else if (index === 2) {
-                        dayName = "Tue: "
-                    }
-                    else if (index === 3) {
-                        dayName = "Wed: "
-                    }
-                    else if (index === 4) {
-                        dayName = "Thu: "
-                    }
-                    else if (index === 5) {
-                        dayName = "Fri: "
-                    }
-                    else if (index === 6) {
-                        dayName = "Sat: "
-                    }
-                    return (<p className={styles.basicP}>{dayName}{time.open}-{time.close}</p>)
-                })}
-            </div>
-            </div>
-            </div>
-        </div>
+           <div id={styles.tabContainer}>
+               <div id={styles.tabsHolder}> 
+                    <p onClick={handleSelected("Contact")} style={{backgroundColor: selected === "Contact" ? "white" : ""}} className={styles.tab}>Contact</p>
+                    <p onClick={handleSelected("About")} style={{backgroundColor: selected === "About" ? "white" : ""}} className={styles.tab}>About</p>
+                    <p onClick={handleSelected("Services")} style={{backgroundColor: selected === "Services" ? "white" : ""}} className={styles.tab}>Services</p>
+                    <p onClick={handleSelected("Hours")} style={{backgroundColor: selected === "Hours" ? "white" : ""}} className={styles.tab}>Hours</p>   
+               </div>
+               <div id={styles.infoContainer}>
+               <div style={{position: 'absolute', zIndex: '100000000000', height: '8px', width: '74px', left: left, top: '-4px', backgroundColor: 'white'}}></div>
+               {selected === "Contact" && <Contact business={props.business}/>}
+               {selected === "About" && <About bio={props.profile.bio}/>}
+               {selected === "Services" && <ServicesTab services={props.services}/>}
+               {selected === "Hours" && <Hours schedule={props.schedule}/>}
+               </div>
+           </div>
     )
 }
 

@@ -10,9 +10,9 @@ const Employee = require("../../models/Employee");
 
 router.post('/', async (req, res) => {
     try {
-          let user = await User.findOne({ email: req.body.email });
-          let admin = await Admin.findOne({ email: req.body.email });
-          let employee = await Employee.findOne({ email: req.body.email });
+          let user = await User.findOne({ email: req.body.email.toLowerCase() });
+          let admin = await Admin.findOne({ email: req.body.email.toLowerCase() });
+          let employee = await Employee.findOne({ email: req.body.email.toLowerCase() });
           if (employee || admin || user) {
             return res
               .status(400)
@@ -31,7 +31,7 @@ router.post('/', async (req, res) => {
             firstName: realFirstName,
             lastName: realLastName,
             fullName: realFirstName + " " + realLastName,
-            email: req.body.email,
+            email: req.body.email.toLowerCase(),
             tennisClub: req.body.tennisClub,
             profession: req.body.profession
           });

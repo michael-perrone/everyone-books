@@ -13,9 +13,9 @@ const Business = require('../../models/Business');
 
 router.post('/check', async (req, res) => {
   console.log(req.body.email)
-  const admin = await Admin.findOne({email: req.body.email})
-  const user = await User.findOne({email: req.body.email})
-  const employee = await Employee.findOne({email: req.body.email})
+  const admin = await Admin.findOne({email: req.body.email.toLowerCase()})
+  const user = await User.findOne({email: req.body.email.toLowerCase()})
+  const employee = await Employee.findOne({email: req.body.email.toLowerCase()})
   console.log(admin)
   console.log(user)
   console.log(employee)
@@ -31,9 +31,9 @@ router.post('/',
   async (req, res) => {
         try {
           console.log(req.body)
-          let employee = await Employee.findOne({ email: req.body.adminInfo.email });
-          let admin = await Admin.findOne({ email: req.body.adminInfo.email });
-          let user = await User.findOne({ email: req.body.adminInfo.email });
+          let employee = await Employee.findOne({ email: req.body.adminInfo.email.toLowerCase() });
+          let admin = await Admin.findOne({ email: req.body.adminInfo.email.toLowerCase() });
+          let user = await User.findOne({ email: req.body.adminInfo.email.toLowerCase() });
           if (admin || user || employee) {
             return res
               .status(400)
@@ -63,7 +63,7 @@ router.post('/',
             businessName: newBusiness.businessNameAllLower,
             firstName: req.body.adminInfo.firstName,
             lastName: req.body.adminInfo.lastName,
-            email: req.body.adminInfo.email,
+            email: req.body.adminInfo.email.toLowerCase(),
             password: req.body.adminInfo.password,
             business: newBusiness.id
           });

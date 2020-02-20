@@ -1,4 +1,7 @@
 #userViewContainer {
     display: flex;
-    justify-content: space-between; 
+    align-items: center;
+    height: 100vh;
+    justify-content: space-around;
+    background-color: rgb(231, 231, 231); 
 }
