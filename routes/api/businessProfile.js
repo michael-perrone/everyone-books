@@ -51,7 +51,8 @@ router.post("/", adminAuth, async (req, res) => {
       for (let i = 0; i < req.body.services.length; i++) {
         let newServiceType = new ServiceType({
           cost: req.body.services[i].cost,
-          serviceName: req.body.services[i].serviceName
+          serviceName: req.body.services[i].serviceName,
+          timeDuration: req.body.services[i].timeDuration
         })
         await newServiceType.save();
         servicesArray.push(newServiceType._id)

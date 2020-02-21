@@ -8,27 +8,27 @@ const Hours = props => {
             {props.schedule && props.schedule.map((eachDay,index) => {
                 let day;
                 if (index === 0) {
-                    day = "Sun: "
+                    day = "Sun:"
                 }
                 else if (index === 1) {
-                    day = "Mon: "
+                    day = "Mon:"
                 }
                 else if (index === 2) {
-                    day = "Tue: "
+                    day = "Tue:"
                 }
                 else if (index === 3) {
-                    day = "Wed: "
+                    day = "Wed:"
                 }
                 else if (index === 4) {
-                    day = "Thu: "
+                    day = "Thu:"
                 }
                 else if (index === 5) {
-                    day = "Fri: "
+                    day = "Fri:"
                 }
                 else if (index === 6) {
-                    day = "Sat "
+                    day = "Sat:"
                 }
-            return <div style={{display: 'flex',marginTop: '5px'}}><p>{day}</p><p>{eachDay.open}-{eachDay.close}</p></div>
+            return <div style={{display: 'flex',marginTop: '8px'}}><p style={{marginRight: '2px'}}>{day}</p><p>{eachDay.open}-{eachDay.close}</p></div>
             })}
             </div>
         </div>
