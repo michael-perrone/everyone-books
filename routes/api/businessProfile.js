@@ -43,35 +43,16 @@ router.get("/mybusiness", adminAuth, async (req, res) => {
 
 router.post("/", adminAuth, async (req, res) => {
   try {
-  // const instructorsBeingCurrentlyAdded = [];
-    let businessProfileFields = {};
-    let servicesArray = [];
-
-    if (req.body.services && req.body.services.length > 0) {
-      for (let i = 0; i < req.body.services.length; i++) {
-        let newServiceType = new ServiceType({
-          cost: req.body.services[i].cost,
-          serviceName: req.body.services[i].serviceName,
-          timeDuration: req.body.services[i].timeDuration
-        })
-        await newServiceType.save();
-        servicesArray.push(newServiceType._id)
-      }
-      businessProfileFields.serviceTypes = [...servicesArray];
-    }
-
-    if (servicesArray.length > 0) {
-      businessProfileFields.serviceTypes = [...servicesArray];
-    }
-
-    if (req.body.bio) {
-      businessProfileFields.bio = req.body.bio;
-    }
 
     let businessProfile = await BusinessProfile.findOne({
       business: req.admin.businessId
     });
+    let businessProfileFields = {};
 
+    if (req.body.bio) {
+      businessProfileFields.bio = req.body.bio;
+    }
+    
     businessProfileFields.business = req.admin.businessId;
 
     if (businessProfile) {

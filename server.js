@@ -8,7 +8,7 @@ app.use(cors());
 connectedDatabase();
 
 app.use(express.json({ extended: false }));
-
+app.use('/api/services', require('./routes/api/services'));
 app.use('/api/business', require('./routes/api/business'));
 app.use("/api/getInstructor", require("./routes/api/getInstructor"));
 app.use("/api/getBookings", require("./routes/api/getBookings"));

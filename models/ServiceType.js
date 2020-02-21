@@ -1,8 +1,14 @@
 const mongoose = require('mongoose');
 
 const ServiceTypeSchema = new mongoose.Schema({
-    cost: Number,
-    serviceName: String,
+    cost: {
+        type: Number,
+        required: true
+    },
+    serviceName: {
+        type: String,
+        required: true
+    },
     timeDuration: String,
 })
 

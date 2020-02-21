@@ -22,7 +22,6 @@ class ServicesForm extends React.Component {
     };
     this.costHandler = this.costHandler.bind(this);
     this.addServices = this.addServices.bind(this);
-    this.submitServices = this.submitServices.bind(this);
     this.serviceInputHandler = this.serviceInputHandler.bind(this);
     this.sendDeletes = this.sendDeletes.bind(this)
     this.restoreService = this.restoreService.bind(this)
@@ -50,37 +49,35 @@ class ServicesForm extends React.Component {
   }
 
   addServices(event) {
+    this.setState({servicesError: false})
     event.preventDefault();
     if (this.state.service !== "") {
       const newArray = [...this.state.servicesArray];
       newArray.push({serviceName: this.state.service, cost: parseFloat(this.state.cost)});
+      this.setState({successAlert: false})
+      this.setState({newProfileAlert: false})
+      const service = {
+       serviceName: this.state.service, cost: this.state.cost
+      };
+      Axios.post("/api/businessProfile", service, {
+        headers: { "x-auth-token": this.props.adminToken }
+      }).then(response => {
+        if (response.status === 200) {
+          setTimeout(this.setState({ successAlert: true }), 200);
+        }
+        if (response.status === 201) {
+          setTimeout(this.setState({newProfileAlert: true}), 200);
+        }
+      });
       this.setState({servicesArray: newArray });
       this.setState({service: "" });
       this.setState({cost: ""});
-      setTimeout(() => this.submitServices(), 500)
     } else {
-      this.setState({ servicesError: true });
-      setTimeout(() => this.setState({ servicesError: false }), 4400);
+      setTimeout(() => this.setState({ servicesError: true }), 420)
     }
   }
 
-  submitServices() {
-    this.setState({successAlert: false})
-    this.setState({newProfileAlert: false})
-    const objectToSend = {
-     services: this.state.servicesArray
-    };
-    Axios.post("/api/businessProfile", objectToSend, {
-      headers: { "x-auth-token": this.props.adminToken }
-    }).then(response => {
-      if (response.status === 200) {
-        setTimeout(this.setState({ successAlert: true }), 200);
-      }
-      if (response.status === 201) {
-        setTimeout(this.setState({newProfileAlert: true}), 200);
-      }
-    });
-  }
+ 
 
   deleteService(id) {
    return () => {
@@ -144,13 +141,14 @@ class ServicesForm extends React.Component {
           showAlert={this.state.servicesError}
           alertMessage={"Please enter a service your business offers."}
         />
-        
+        <div>
         <input
           onChange={this.serviceInputHandler}
           id={styles.otherServiceInput}
           placeholder="Service Name"
           value={this.state.service}
         />
+        
         <input onChange={this.costHandler} style={{width:'50px', marginLeft: '10px', height: '28px', position: 'relative', top: '-1px', paddingLeft: '5px', boxShadow: '0px 0px 1px black'}} placeHolder='Cost' value={this.state.cost}/>
         <button
           onClick={this.addServices}
@@ -164,9 +162,15 @@ class ServicesForm extends React.Component {
         >
           Add
         </button>
+        </div>
+        <div>
+          <p style={{marginTop: '10px'}}>Does this service have a time duration?</p>
+        </div>
+        <div>
+          <input style={{marginLeft: '24px', marginTop: '8px'}} type="radio" id="Yes"/><label style={{marginLeft:'6px'}} htmlFor="Yes">Yes</label><input id="No" style={{marginLeft: '80px'}} type="radio"/><label style={{marginLeft: '8px'}} htmlFor="No">No</label>
+        </div>
         <ul style={{marginTop: '20px'}}>
         {this.state.servicesArray.length > 0 && <p style={{marginBottom: '14px', textDecoration: 'underline', position: 'relative', left: '-14px', textAlign: 'center'}}>Existing Services:</p> }
-        {this.state.servicesArray.length === 0 && this.state.deletingArray.length === 0 && <p style={{marginLeft: '15px'}}>Add some services above!</p>}
         {this.state.servicesArray && this.state.servicesArray.length > 0 && this.state.servicesArray.map(serviceAdded => {
         return <li style={{listStyleType: 'disc', height: '24px' , paddingLeft: '10px'}}>{serviceAdded.serviceName} - ${serviceAdded.cost} <i style={{marginLeft: '6px', color: 'darkred', cursor: 'pointer'}} onClick={this.deleteService(serviceAdded)} class="fas fa-trash"></i></li>
         })}
