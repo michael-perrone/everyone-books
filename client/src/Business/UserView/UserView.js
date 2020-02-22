@@ -44,7 +44,7 @@ const UserView = (props) => {
           </div>
           <div style={{position: 'relative'}}>
           <p style={{position: 'absolute', top: '-40px', width: '320px', textAlign: 'center', fontSize: '24px'}}>Book Online</p>
-          <Core business={business} profile={profile} employees={employees}/>
+          <Core business={business} services={services} profile={profile} employees={employees}/>
           </div>
         </div>
     )
