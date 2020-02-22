@@ -38,8 +38,14 @@ const UserView = (props) => {
 
     return (
         <div id={styles.userViewContainer}>
+            <div style={{position: 'relative'}}>
+            <p style={{position: 'absolute', top: '-40px', width: '320px', textAlign: 'center', fontSize: business.businessName && business.businessName.length > 24 ? "18px" : '24px'}}>{business.businessName}</p>
           <LeftSide services={services} schedule={business.schedule} business={business} profile={profile}/>
+          </div>
+          <div style={{position: 'relative'}}>
+          <p style={{position: 'absolute', top: '-40px', width: '320px', textAlign: 'center', fontSize: '24px'}}>Book Online</p>
           <Core business={business} profile={profile} employees={employees}/>
+          </div>
         </div>
     )
 }

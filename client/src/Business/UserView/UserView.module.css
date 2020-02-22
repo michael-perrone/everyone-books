@@ -5,3 +5,10 @@
     justify-content: space-around;
     background-color: rgb(231, 231, 231); 
 }
+
+@media (max-width: 700px) {
+    #userViewContainer {
+        flex-direction: column;
+        height: 1200px;
+    }
+}

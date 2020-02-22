@@ -83,6 +83,8 @@ class ServicesForm extends React.Component {
       this.setState({servicesArray: newArrayOfServices});
       this.setState({service: "" });
       this.setState({cost: ""});
+      this.setState({timeDurationLength: ''})
+      this.setState({timeDuration: ""})
     });
     } else {
       setTimeout(() => this.setState({ servicesError: true }), 420)
@@ -129,8 +131,6 @@ class ServicesForm extends React.Component {
   }
 
   render() {
-    console.log(this.state.servicesArray)
-    console.log(this.props.profile)
     return (
       <div style={{ marginTop: "-5px" }}>
         <OtherAlert alertType={'success'} showAlert={this.state.newProfileAlert}
@@ -165,7 +165,7 @@ class ServicesForm extends React.Component {
           <p style={{marginTop: '10px'}}>Does this service have a time duration?</p>
         </div>
         <div>
-          <input onClick={this.timeDurationHandler(true)} style={{marginLeft: '24px', marginTop: '8px'}} type="radio" name="Time" id="Yes"/><label onSelect={this.timeDurationHandler(false)} style={{marginLeft:'6px'}} htmlFor="Yes">Yes</label><input onClick={this.timeDurationHandler(false)} name="Time" id="No" style={{marginLeft: '80px'}} type="radio"/><label style={{marginLeft: '8px'}} htmlFor="No">No</label>
+          <input checked={this.state.timeDuration} onClick={this.timeDurationHandler(true)} style={{marginLeft: '24px', marginTop: '8px'}} type="radio" name="Time" id="Yes"/><label onSelect={this.timeDurationHandler(false)} style={{marginLeft:'6px'}} htmlFor="Yes">Yes</label><input checked={this.state.timeDuration === false} onClick={this.timeDurationHandler(false)} name="Time" id="No" style={{marginLeft: '80px'}} type="radio"/><label style={{marginLeft: '8px'}} htmlFor="No">No</label>
           {this.state.timeDuration && ( 
           <div style={{display: 'flex', marginTop: '8px'}}>
             <p style={{marginLeft: '5px'}}>Time Duration: </p> 
@@ -195,17 +195,19 @@ class ServicesForm extends React.Component {
           </div>
           )}
           {this.state.service && this.state.cost && (this.state.timeDuration && this.state.timeDurationLength || this.state.timeDuration === false) && (
-          <button
-          onClick={this.addServices}
-          style={{
+          <div>
+           <button
+            onClick={this.addServices}
+            style={{
             marginLeft: '65px',
             marginTop: '10px',
             height: "33px",
             width: "120px"
-          }}
-        >
+           }}
+          >
           Add Service
-        </button> 
+         </button> 
+        </div>
           )}
         </div>
         <ul style={{marginTop: '20px'}}>
