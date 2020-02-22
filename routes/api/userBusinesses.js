@@ -2,14 +2,13 @@ const express = require("express");
 const router = express.Router();
 const userAuth = require("../../middleware/authUser");
 const User = require("../../models/User");
-const TennisClub = require("../../models/TennisClub");
+const Business = require("../../models/Business");
 
 router.get("/", userAuth, async (req, res) => {
-  const tennisClubs = await TennisClub.find({ followers: req.user.id });
-  console.log(tennisClubs.length);
-  if (tennisClubs.length) {
-    return res.status(200).json({ tennisClubs });
-  } else if (!tennisClubs.length) {
+  const businesses = await Business.find({ followers: req.user.id });
+  if (businesses.length) {
+    return res.status(200).json({ businesses });
+  } else if (!businesses.length) {
     return res.status(204).send();
   }
 

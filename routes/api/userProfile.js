@@ -5,7 +5,7 @@ const User = require("../../models/User");
 
 router.get("/myprofile", authUser, async (req, res) => {
   try {
-    const user = await User.findOne({ _id: req.user.id });
+    const user = await User.findOne({ _id: req.user.id }).select(['businessesFollowing','_id', 'fullName', 'bookings']);
     if (user) {
       res.status(200).json({ user });
     }

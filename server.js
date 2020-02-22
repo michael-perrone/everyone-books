@@ -8,6 +8,7 @@ app.use(cors());
 connectedDatabase();
 
 app.use(express.json({ extended: false }));
+app.use('/api/employees_dates', require('./routes/api/employees_dates'));
 app.use('/api/services', require('./routes/api/services'));
 app.use('/api/business', require('./routes/api/business'));
 app.use("/api/getInstructor", require("./routes/api/getInstructor"));
@@ -39,7 +40,7 @@ app.use(
 
 app.use("/api/userSubscribe", require("./routes/api/userSubscribe"));
 
-app.use("/api/userClubs", require("./routes/api/userClubs"));
+app.use("/api/userBusinesses", require("./routes/api/userBusinesses"));
 app.use("/api/getCustomers", require("./routes/api/getCustomers"));
 app.use("/api/getPlayers", require("./routes/api/getPlayers"));
 app.use("/api/rebooking", require("./routes/api/rebooking.js"));

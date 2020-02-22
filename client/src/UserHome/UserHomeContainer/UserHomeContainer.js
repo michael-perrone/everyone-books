@@ -2,23 +2,23 @@ import React, { useEffect, useState } from "react";
 import styles from "./UserHomeContainer.module.css";
 import Axios from "axios";
 import { connect } from "react-redux";
-import ClubInsideUserHome from "./ClubInsideUserHome/ClubInsideUserHome";
+import BusinessInsideUserHome from "./BusinessInsideUserHome/BusinessInsideUserHome";
 import UserBooking from "./UserBooking/UserBooking";
 
 const UserHomeContainer = props => {
-  const [clubs, setClubs] = useState([]);
-  const [noClubs, setNoClubs] = useState(false);
+  const [businesses, setBusinesses] = useState([]);
+  const [noBusinesses, setNoBusinesses] = useState(false);
   const [bookings, setBookings] = useState([]);
   const [noBookings, setNoBookings] = useState(false);
 
   useEffect(() => {
-    Axios.get("/api/userClubs", {
+    Axios.get("/api/userBusinesses", {
       headers: { "x-auth-token": props.userToken }
     }).then(response => {
       if (response.status === 200) {
-        setClubs(response.data.tennisClubs);
+        setBusinesses(response.data.businesses);
       } else {
-        setNoClubs(true);
+        setNoBusinesses(true);
       }
     });
   }, []);
@@ -35,15 +35,15 @@ const UserHomeContainer = props => {
     });
   }, []);
 
-  function setNewClubs(newClubs) {
-    setClubs(newClubs);
+  function setNewBusinesses(newClubs) {
+    setBusinesses(newClubs);
   }
 
   return (
     <div
       id={styles.userHomeContainer}
       className={
-        bookings.length > 1 || clubs.length > 1 ? "" : styles.homeContainerClass
+        bookings.length > 1 || businesses.length > 1 ? "" : styles.homeContainerClass
       }
     >
       <div
@@ -64,17 +64,17 @@ const UserHomeContainer = props => {
         >
          Places you follow
         </p>
-        {clubs.length > 0 &&
-          clubs.map(individualClub => {
+        {businesses.length > 0 &&
+          businesses.map(individualBusiness => {
             return (
-              <ClubInsideUserHome
-                setNewClubs={setNewClubs}
-                club={individualClub}
+              <BusinessInsideUserHome
+                setNewBusinesses={setNewBusinesses}
+                business={individualBusiness}
               />
             );
           })}
 
-        {noClubs && (
+        {noBusinesses && (
           <React.Fragment>
             <div className={styles.noClubsBookingsContainer}>
               <p>
