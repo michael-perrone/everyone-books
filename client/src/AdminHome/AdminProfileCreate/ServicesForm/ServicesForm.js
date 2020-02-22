@@ -3,7 +3,6 @@ import styles from "./ServicesForm.module.css";
 import Axios from "axios";
 import { connect } from "react-redux";
 import OtherAlert from "../../../OtherAlerts/OtherAlerts";
-import SubmitButton from '../../../Shared/SubmitButton/SubmitButton';
 
 class ServicesForm extends React.Component {
   constructor(props) {
@@ -19,14 +18,27 @@ class ServicesForm extends React.Component {
       deletingArray: [],
       timeDuration: "",
       deleteSuccess: false,
+      timeDuration: "",
+      timeDurationLength: "",
+
     };
+    this.timeDurationLengthHandler = this.timeDurationLengthHandler.bind(this);
     this.costHandler = this.costHandler.bind(this);
     this.addServices = this.addServices.bind(this);
     this.serviceInputHandler = this.serviceInputHandler.bind(this);
     this.sendDeletes = this.sendDeletes.bind(this)
     this.restoreService = this.restoreService.bind(this)
   }
-  // parseInt
+
+  timeDurationHandler(trueOrFalse) {
+    return () => { 
+    this.setState({timeDuration: trueOrFalse})
+    }
+  }
+
+  timeDurationLengthHandler(e) {
+    this.setState({timeDurationLength: e.target.value})
+  }
 
   componentDidUpdate(prevProps) {
     if (this.props.profile.serviceTypes && this.props.profile.serviceTypes.length && this.props.profile.serviceTypes !== prevProps.profile.serviceTypes) {
@@ -52,14 +64,12 @@ class ServicesForm extends React.Component {
     this.setState({servicesError: false})
     event.preventDefault();
     if (this.state.service !== "") {
-      const newArray = [...this.state.servicesArray];
-      newArray.push({serviceName: this.state.service, cost: parseFloat(this.state.cost)});
       this.setState({successAlert: false})
       this.setState({newProfileAlert: false})
       const service = {
-       serviceName: this.state.service, cost: this.state.cost
+       serviceName: this.state.service, cost: this.state.cost, timeDuration: this.state.timeDurationLength
       };
-      Axios.post("/api/businessProfile", service, {
+      Axios.post("/api/services/create", service, {
         headers: { "x-auth-token": this.props.adminToken }
       }).then(response => {
         if (response.status === 200) {
@@ -68,16 +78,16 @@ class ServicesForm extends React.Component {
         if (response.status === 201) {
           setTimeout(this.setState({newProfileAlert: true}), 200);
         }
-      });
-      this.setState({servicesArray: newArray });
+      
+      let newArrayOfServices = [response.data.newServiceType, ...this.state.servicesArray]
+      this.setState({servicesArray: newArrayOfServices});
       this.setState({service: "" });
       this.setState({cost: ""});
+    });
     } else {
       setTimeout(() => this.setState({ servicesError: true }), 420)
     }
   }
-
- 
 
   deleteService(id) {
    return () => {
@@ -150,24 +160,53 @@ class ServicesForm extends React.Component {
         />
         
         <input onChange={this.costHandler} style={{width:'50px', marginLeft: '10px', height: '28px', position: 'relative', top: '-1px', paddingLeft: '5px', boxShadow: '0px 0px 1px black'}} placeHolder='Cost' value={this.state.cost}/>
-        <button
-          onClick={this.addServices}
-          style={{
-            position: 'relative',
-            top: '-2px',
-            marginLeft: "10px",
-            height: "33px",
-            width: "40px"
-          }}
-        >
-          Add
-        </button>
         </div>
         <div>
           <p style={{marginTop: '10px'}}>Does this service have a time duration?</p>
         </div>
         <div>
-          <input style={{marginLeft: '24px', marginTop: '8px'}} type="radio" id="Yes"/><label style={{marginLeft:'6px'}} htmlFor="Yes">Yes</label><input id="No" style={{marginLeft: '80px'}} type="radio"/><label style={{marginLeft: '8px'}} htmlFor="No">No</label>
+          <input onClick={this.timeDurationHandler(true)} style={{marginLeft: '24px', marginTop: '8px'}} type="radio" name="Time" id="Yes"/><label onSelect={this.timeDurationHandler(false)} style={{marginLeft:'6px'}} htmlFor="Yes">Yes</label><input onClick={this.timeDurationHandler(false)} name="Time" id="No" style={{marginLeft: '80px'}} type="radio"/><label style={{marginLeft: '8px'}} htmlFor="No">No</label>
+          {this.state.timeDuration && ( 
+          <div style={{display: 'flex', marginTop: '8px'}}>
+            <p style={{marginLeft: '5px'}}>Time Duration: </p> 
+              <select onChange={this.timeDurationLengthHandler} style={{marginLeft: '10px'}}>
+                <option> </option>
+                <option>15 Minutes</option>
+                <option>30 Minutes</option>
+                <option>45 Minutes</option>
+                <option>1 Hour</option>
+                <option>1 Hour 15 Minutes</option>
+                <option>1 Hour 30 Minutes</option>
+                <option>1 Hour 45 Minutes</option>
+                <option>2 Hours</option>
+                <option>2 Hours 15 Minutes</option>
+                <option>2 Hours 30 Minutes</option>
+                <option>2 Hours 45 Minutes</option>
+                <option>3 Hours</option>
+                <option>3 Hours 15 Minutes</option>
+                <option>3 Hours 30 Minutes</option>
+                <option>3 Hours 45 Minutes</option>
+                <option>4 Hours</option>
+                <option>4 Hours 15 Minutes</option>
+                <option>4 Hours 30 Minutes</option>
+                <option>4 Hours 45 Minutes</option>
+                <option>5 Hours</option>
+              </select>
+          </div>
+          )}
+          {this.state.service && this.state.cost && (this.state.timeDuration && this.state.timeDurationLength || this.state.timeDuration === false) && (
+          <button
+          onClick={this.addServices}
+          style={{
+            marginLeft: '65px',
+            marginTop: '10px',
+            height: "33px",
+            width: "120px"
+          }}
+        >
+          Add Service
+        </button> 
+          )}
         </div>
         <ul style={{marginTop: '20px'}}>
         {this.state.servicesArray.length > 0 && <p style={{marginBottom: '14px', textDecoration: 'underline', position: 'relative', left: '-14px', textAlign: 'center'}}>Existing Services:</p> }
