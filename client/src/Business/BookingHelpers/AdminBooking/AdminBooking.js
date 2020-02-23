@@ -18,10 +18,31 @@ class AdminBooking extends React.Component {
     this.state = {
       employeeSelected: "",
       timeChosen: "",
-      bookingType: ""
+      bookingType: "",
+      employees: []
     };
     this.selectEmployeeWithClick = this.selectEmployeeWithClick.bind(this);
     this.selectTime = this.selectTime.bind(this);
+  }
+
+  componentDidMount() {
+    if (this.props.businessId) {
+    Axios.post('/api/employees_dates/dates', {date: this.props.date.toDateString(), businessId: this.props.businessId}).then(
+      response => {
+          this.setState({employees: response.data.availableEmployees})
+      }
+    )
+  }
+}
+
+  componentDidUpdate(prevProps) {
+    if (this.props.date.toDateString() !== prevProps.date.toDateString()) {
+      Axios.post('/api/employees_dates/dates', {date: this.props.date.toDateString(), businessId: this.props.businessId}).then(
+        response => {
+            this.setState({employees: response.data.availableEmployees})
+        }
+      )
+    }
   }
 
   selectEmployeeWithClick(employeeSelected) {
@@ -75,7 +96,8 @@ class AdminBooking extends React.Component {
           <div className={styles.bookingHolderContainer}>
             <p style={{ marginBottom: "-8px" }}>Choose Employee</p>
             <div className={styles.bookingHolderSubContainer}>
-              {this.props.employees && this.props.employees.map(element => {
+              {this.state.employees.length === 0 && <p style={{marginLeft: '7px', marginTop: '4px'}}>No Employees working today</p>}
+              {this.state.employees.length && this.state.employees.map(element => {
                 return (
                   <p
                     style={{
@@ -99,8 +121,9 @@ class AdminBooking extends React.Component {
           </div>
           </div>
           <div id={styles.coolContainer}>
-          <div className={styles.bookingHolderContainer}>
-            <p style={{ marginBottom: "-8px" }}>Choose Time Amount</p>
+          <div className={styles.bookingHolderContainer}> 
+          {this.props.user && <div id={styles.coverUser}></div>}
+           <p style={{ marginBottom: "-8px" }}>Choose Time Amount</p>
             <div className={styles.bookingHolderSubContainer}>
               {this.props.times.map(element => {
                 return (

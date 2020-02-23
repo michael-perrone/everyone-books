@@ -12,7 +12,7 @@ const BusinessInsideUserHome = props => {
   }
 
   function goToBusiness() {
-    props.history.push(`/clubs/${props.business._id}`);
+    props.history.push(`/businesses/${props.business._id}`);
   }
 
   function unfollowBusiness() {

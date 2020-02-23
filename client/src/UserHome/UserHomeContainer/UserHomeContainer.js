@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import BusinessInsideUserHome from "./BusinessInsideUserHome/BusinessInsideUserHome";
 import UserBooking from "./UserBooking/UserBooking";
 
+
 const UserHomeContainer = props => {
   const [businesses, setBusinesses] = useState([]);
   const [noBusinesses, setNoBusinesses] = useState(false);
@@ -43,7 +44,7 @@ const UserHomeContainer = props => {
     <div
       id={styles.userHomeContainer}
       className={
-        bookings.length > 1 || businesses.length > 1 ? "" : styles.homeContainerClass
+        bookings.length > 0 || businesses.length > 0 ? styles.otherHomeContainerClass : styles.homeContainerClass
       }
     >
       <div

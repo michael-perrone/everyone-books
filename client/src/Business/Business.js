@@ -35,12 +35,12 @@ class Business extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.admin || this.props.employee) {
+    if (this.props.admin || this.props.employee || this.props.user) {
     let businessId
     if (this.props.admin) {
       businessId = this.props.admin.admin.businessId
     }
-    else if (this.props.employee) {
+    else if (this.props.employee || this.props.user) {
       businessId = this.props.match.params.businessId
     }
       axios
@@ -56,7 +56,12 @@ class Business extends React.Component {
             axios.post('/api/getServiceTypes', {serviceTypesArray: response.data.profile.serviceTypes}).then(
               response => {
                 if (response.status !== 204) {
+                  if (this.props.admin || this.props.employee) {
                   this.setState({services: [...response.data.serviceTypesArray, {serviceName: "BLOCK"}]})
+                  }
+                  else if (this.props.user) {
+                  this.setState({services: [...response.data.serviceTypesArray]})
+                  }
                 }
               }
             )
@@ -71,13 +76,12 @@ class Business extends React.Component {
     return (
       <React.Fragment>
         {this.state.loading && !this.props.user && <Spinner/>}
-        {this.props.user && <UserView/>}
-        {this.state.profileComplete && !this.state.loading && (this.props.admin || this.props.employee)&& (
+        {this.state.profileComplete && !this.state.loading && (
           <div id={styles.businessContainer}>
             <div>
               <div style={{ overflow: "auto" }}>
                 <AdminBooking
-
+                  businessId={this.state.business._id}
                   onDateClick={this.onDateClick}
                   employees={this.state.employees}
                   services={this.state.services}

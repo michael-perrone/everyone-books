@@ -8,10 +8,21 @@ const Core = (props) => {
     const [dateChosen, setDateChosen] = React.useState('');
     const [employees, setEmployees] = React.useState([]);
     const [employeeChosen, setEmployeeChosen] = React.useState('');
+    const [timesAvailable, setTimesAvailable] = React.useState([]);
 
     React.useEffect(() => {
         setEmployees(props.employees)
     }, [props.employees])
+
+    React.useEffect(() => {
+        if (employeeChosen) {
+            Axios.post('/api/shifts/getEmployeeBookingsForDay', {employeeId: employeeChosen._id, date: dateChosen}).then(
+                response => {
+
+                }
+            )
+        }
+    },[employeeChosen])
 
     function getDate(e) {
         let dateArray = e.target.value.split('-');
@@ -25,7 +36,7 @@ const Core = (props) => {
                 setEmployees(response.data.availableEmployees)
             }
           )
-          setEmployeeChosen({})
+          setEmployeeChosen('')
         }
     }, [dateChosen])
 
@@ -43,7 +54,7 @@ const Core = (props) => {
 
     return (
             <div id={styles.actualCoreContainer}>
-            <div>
+            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
              <div style={{display: 'flex'}}>
                 <p style={{marginRight: '6px'}}>Select Service:</p>
                 <select style={{width: '138px'}}>
@@ -55,7 +66,7 @@ const Core = (props) => {
              </div>
              <div style={{display: 'flex', marginTop: '26px'}}>
                 <p style={{marginRight: '6px'}}>Select Date:</p>
-                <input onChange={getDate} type="date" style={{width: '153px'}}/>
+                <input onChange={getDate} type="date" style={{fontSize: '16px',width: '153px'}}/>
              </div>
              <StatementAppear appear={!!dateChosen}>
              <div style={{display: 'flex', marginTop: '26px'}}>
@@ -67,6 +78,17 @@ const Core = (props) => {
                     })}
                 </select>
              </div>
+             </StatementAppear>
+             <StatementAppear appear={!!employeeChosen && !!dateChosen}>
+                 <div style={{display: 'flex', marginTop: '26px'}}>
+                    <p>This service will take approximately {serviceChosen.timeDuration}.</p>
+                    <div style={{display: 'flex'}}><p style={{marginRight: '6px'}}>Please choose a time: </p>
+                    <select>
+                        <option> </option>
+                        {/* times */}
+                    </select>
+                    </div>
+                 </div>
              </StatementAppear>
              </div>
             </div>

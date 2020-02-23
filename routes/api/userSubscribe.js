@@ -43,8 +43,8 @@ router.post("/", async (req, res) => {
 
 router.post("/unfollow", async (req, res) => {
   try {
+    console.log(req.body)
     let user = await User.findOne({ _id: req.body.userId });
-    console.log(user)
     let newBusinessesFollowing = user.businessesFollowing.filter(
       businessId => businessId != req.body.businessId
     );
@@ -57,10 +57,11 @@ router.post("/unfollow", async (req, res) => {
       await user.save();
       business.followers = newBusinessFollowers;
       await business.save();
-      let businessAfterFilter = await Business.find({
+      let businessesAfterFilter = await Business.find({
         followers: user._id
       });
-      return res.status(200).send()
+      console.log(businessesAfterFilter)
+      return res.status(200).json({businessesAfterFilter})
     }
   } catch (error) {
     console.log(error);

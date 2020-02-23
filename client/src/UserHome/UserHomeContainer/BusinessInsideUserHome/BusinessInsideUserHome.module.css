@@ -54,10 +54,15 @@
   justify-content: space-around;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
   #userClubContainer {
     flex-direction: column;
+    justify-content: space-around;
     width: 340px;
     height: 400px;
+  }
+
+  .centerContainer {
+    display: none;
   }
 }
