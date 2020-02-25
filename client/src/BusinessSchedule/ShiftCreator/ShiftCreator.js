@@ -9,7 +9,8 @@ function ShiftCreator(props)  {
     const [date, setDate] = React.useState(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`);
     const [shiftDuration, setShiftDuration] = React.useState('');
     const [shiftStart, setShiftStart] = React.useState('');
-    const [employee, setTest] = React.useState('');
+    const [employeeId, setEmployeeId] = React.useState('');
+    const [employeeName, setEmployeeName] = React.useState('');
     const [dateNeeded, setDateNeeded] = React.useState('')
     const [endOfShift, setEndOfShift] = React.useState('');
     const [isBreak, setBreak] = React.useState("");
@@ -48,12 +49,6 @@ function ShiftCreator(props)  {
     }, [breakEnd, breakStart, shiftStart, endOfShift, isBreak])
 
 
-
-    function setTestEm(employee) {
-        return () => {
-            setTest(employee)
-        }
-    }
     function shiftStartHandler(e) {
         setShiftStart(e.target.value)
     } 
@@ -61,8 +56,7 @@ function ShiftCreator(props)  {
     function breakStartHandler(e) {
         setBreakStart(e.target.value)
     }
-
-    
+ 
     function breakEndHandler(e) {
         setBreakEnd(e.target.value)
     }
@@ -538,8 +532,8 @@ function ShiftCreator(props)  {
             shiftDate: dateNeeded,
             timeStart: shiftStart,
             timeEnd: endOfShift,
-            employeeId: employee._id,
-            employeeName: employee.fullName,
+            employeeId,
+            employeeName,
             shiftDuration,
             businessId: props.admin.businessId,
             isBreak,
@@ -572,6 +566,7 @@ function ShiftCreator(props)  {
             setBreakStart('')
         }
     }
+   
     
     return (
             <div id={styles.scheduleContainer}>
@@ -583,10 +578,13 @@ function ShiftCreator(props)  {
                 </div>
                 <div>
                     Employee:
-                <select className={styles.inputs}>
+                <select id='changer' onChange={(e) => {
+                    console.log(e.target.options)
+                    setEmployeeName(e.target.options[e.target.options.selectedIndex].text)
+                    setEmployeeId(e.target.options[e.target.options.selectedIndex].value)}} className={styles.inputs}>
                 <option>{ }</option>
                 {props.employees && props.employees.map(employee => {
-                    return <option onClick={setTestEm(employee)}>{employee.fullName}</option>
+                    return <option value={employee._id}>{employee.fullName}</option>
                 })}
                 </select>
                 </div>

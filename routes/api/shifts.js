@@ -4,6 +4,7 @@ const Booking = require('../../models/Booking')
 
 
 router.post('/create', async (req, res) => {
+  console.log(req.body)
 
     const shiftConflict = await Shift.find({employeeId: req.body.employeeId, shiftDate: req.body.shiftDate})
 

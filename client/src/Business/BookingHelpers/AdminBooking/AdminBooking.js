@@ -19,11 +19,14 @@ class AdminBooking extends React.Component {
       employeeSelected: "",
       timeChosen: "",
       bookingType: "",
-      employees: []
+      employees: [],
+      hideTimeSelector: false
     };
     this.selectEmployeeWithClick = this.selectEmployeeWithClick.bind(this);
     this.selectTime = this.selectTime.bind(this);
   }
+
+
 
   componentDidMount() {
     if (this.props.businessId) {
@@ -42,6 +45,21 @@ class AdminBooking extends React.Component {
             this.setState({employees: response.data.availableEmployees})
         }
       )
+    }
+    console.log(this.props.bookingType.timeDuration && prevProps.bookingType.timeDuration)
+    if (this.props.bookingType && this.props.bookingType.bookingType.timeDuration && !prevProps.bookingType.bookingType ) {
+      console.log('me')
+      this.setState({hideTimeSelector: true})
+      this.props.getTimeChosen(this.props.bookingType.bookingType.timeDuration)
+    }
+    else if (this.props.bookingType.bookingType && !this.props.bookingType.bookingType.timeDuration && prevProps.bookingType.bookingType && prevProps.bookingType.bookingType.timeDuration) {
+      console.log('me')
+      this.setState({hideTimeSelector: false})
+    }
+    else if (this.props.bookingType && this.props.bookingType.bookingType.timeDuration  && Object.keys(prevProps.bookingType).length > 0 && this.props.bookingType.bookingType.timeDuration !== prevProps.bookingType.bookingType.timeDuration) {
+      this.setState({hideTimeSelector: true})
+      this.props.getTimeChosen(this.props.bookingType.bookingType.timeDuration)
+      console.log('not me')
     }
   }
 
@@ -96,8 +114,8 @@ class AdminBooking extends React.Component {
           <div className={styles.bookingHolderContainer}>
             <p style={{ marginBottom: "-8px" }}>Choose Employee</p>
             <div className={styles.bookingHolderSubContainer}>
-              {this.state.employees.length === 0 && <p style={{marginLeft: '7px', marginTop: '4px'}}>No Employees working today</p>}
-              {this.state.employees.length && this.state.employees.map(element => {
+              {!this.state.employees.length  && <p style={{marginLeft: '7px', marginTop: '4px'}}>No Employees working today</p>}
+              {this.state.employees && this.state.employees.map(element => {
                 return (
                   <p
                     style={{
@@ -122,7 +140,9 @@ class AdminBooking extends React.Component {
           </div>
           <div id={styles.coolContainer}>
           <div className={styles.bookingHolderContainer}> 
-          {this.props.user && <div id={styles.coverUser}></div>}
+          {(this.props.user || this.state.hideTimeSelector) && <div id={styles.coverUser}></div>}
+            {(this.state.hideTimeSelector || this.props.user) && this.props.bookingType.bookingType && 
+            this.props.bookingType.bookingType.timeDuration && <p style={{zIndex: 300, background: 'white', border: '1px solid light gray', position: 'absolute', padding: '27px 32px', bottom: '0'}}>Time Duration: {this.props.bookingType.bookingType.timeDuration}</p>}
            <p style={{ marginBottom: "-8px" }}>Choose Time Amount</p>
             <div className={styles.bookingHolderSubContainer}>
               {this.props.times.map(element => {
