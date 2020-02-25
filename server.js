@@ -34,12 +34,10 @@ app.use(
 );
 app.use("/api/clubProfileEvents", require("./routes/api/clubProfileEvents"));
 app.use(
-  "/api/instructorCourtsBooked",
-  require("./routes/api/instructorCourtsBooked")
+  "/api/employeeBookings",
+  require("./routes/api/employeeBookings")
 );
-
 app.use("/api/userSubscribe", require("./routes/api/userSubscribe"));
-
 app.use("/api/userBusinesses", require("./routes/api/userBusinesses"));
 app.use("/api/getCustomers", require("./routes/api/getCustomers"));
 app.use("/api/getPlayers", require("./routes/api/getPlayers"));

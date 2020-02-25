@@ -142,7 +142,7 @@ class AdminBooking extends React.Component {
           <div className={styles.bookingHolderContainer}> 
           {(this.props.user || this.state.hideTimeSelector) && <div id={styles.coverUser}></div>}
             {(this.state.hideTimeSelector || this.props.user) && this.props.bookingType.bookingType && 
-            this.props.bookingType.bookingType.timeDuration && <p style={{zIndex: 300, background: 'white', border: '1px solid light gray', position: 'absolute', padding: '27px 32px', bottom: '0'}}>Time Duration: {this.props.bookingType.bookingType.timeDuration}</p>}
+            this.props.bookingType.bookingType.timeDuration && <p style={{zIndex: 300, background: 'white', border: '1px solid light gray', position: 'absolute', padding: '27px 0px', width: '240px', textAlign: 'center', bottom: '0'}}>Time Duration: {this.props.bookingType.bookingType.timeDuration}</p>}
            <p style={{ marginBottom: "-8px" }}>Choose Time Amount</p>
             <div className={styles.bookingHolderSubContainer}>
               {this.props.times.map(element => {

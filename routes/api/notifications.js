@@ -12,23 +12,27 @@ const userAuth = require("../../middleware/authUser");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
-router.post("/userBookedInstructor", async (req, res) => {
+router.post("/userBookedEmployee", async (req, res) => {
   try {
+    console.log(req.body, 'wingowat')
+    let user = await User.findOne({_id: req.body.userId})
     let booking = await Booking.findOne({ _id: req.body.bookingId });
-    let instructor = await Instructor.findOne({ _id: req.body.instructorId });
+    let employee = await Employee.findOne({ _id: req.body.employeeId });
     let bookingDateArray = booking.date.split(" ");
     let bookingDate = bookingDateArray.join("-");
     let notificationCreate = new Notification({
       notificationRead: false,
       notificationDate: new Date(),
-      instructorId: req.body.instructorId,
+      employeeId: req.body.employeeId,
       userId: req.body.userId,
-      notificationType: "instructorBookedUser",
+      notificationType: "userBookedEmployee",
       notificationMessage: `You have been booked for a ${booking.bookingType} by ${booking.bookedBy} from ${booking.timeStart}-${booking.timeEnd} on ${bookingDate}. You can view this booking in your club's schedule.`
     });
-    notificationCreate.save();
-    instructor.notifications.unshift(notificationCreate._id);
-    instructor.save();
+    await notificationCreate.save();
+    employee.notifications.unshift(notificationCreate._id);
+    await employee.save();
+    user.bookings = [...user.bookings, booking];
+    await user.save();
     res.status(200).send();
   } catch (error) {
     console.log(error);
@@ -45,27 +49,27 @@ router.post('/allReadUser', userAuth, async (req, res) => {
   }
 })
 
-router.post("/instructorBookedUser", async (req, res) => {
+router.post("/employeeBookedCustomer", async (req, res) => {
   try {
-    let instructor = await Instructor.findOne({ _id: req.body.instructorId });
+    let employee = await Employee.findOne({ _id: req.body.employeeId });
     let booking = await Booking.findOne({ _id: req.body.bookingId });
-    let players = await User.find({ _id: req.body.users });
+    let customers = await User.find({ _id: req.body.users });
     let newNotification = new Notification({
-      notificationType: "InstructorBookedUser",
-      notificationMessage: `You have been added to a ${booking.bookingType} from ${booking.timeStart}-${booking.timeEnd} at ${booking.clubName} by ${instructor.fullName}.`,
+      notificationType: "EmployeeBookedUser",
+      notificationMessage: `You have been booked for a ${booking.serviceName} from ${booking.timeStart}-${booking.timeEnd} at ${booking.businessName} by ${employee.fullName}.`,
       notificationDate: new Date(),
       notificationRead: false
     });
 
-    for (let i = 0; i < players.length; i++) {
-      let playerNotifications = players[i].notifications;
-      playerNotifications.unshift(newNotification);
-      players[i].notifications = playerNotifications;
-      await players[i].save();
+    for (let i = 0; i < customers.length; i++) {
+      let customerNotifications = customers[i].notifications;
+      customerNotifications.unshift(newNotification);
+      customers[i].notifications = customerNotifications;
+      await customers[i].save();
     }
     await newNotification.save();
 
-    res.status(204).send();
+    res.status(200).send();
   } catch (error) {
     console.log(error);
   }

@@ -64,7 +64,7 @@ class TennisClubsList extends React.Component {
             alertMessage={this.state.searchError}
             alertType={"error"}
           />
-          <div id={this.state.businesses.length > 4 ? "" : styles.defaultHeight} className={styles.actualClubsContainer}>
+          <div id={this.state.businesses.length > 3 ? "" : styles.defaultHeight} className={styles.actualClubsContainer}>
           {this.state.businesses.map(element => {
                 let following = false;
                 for (let i = 0; i < this.state.user.businessesFollowing.length; i++) {                  

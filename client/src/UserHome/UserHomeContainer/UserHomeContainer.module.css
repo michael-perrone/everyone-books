@@ -4,11 +4,11 @@
 }
 
 #clubsSubscribedHalf {
-  width: 55%;
+  width: 65%;
 }
 
 #bookingsHalf {
-  width: 45%;
+  width: 35%;
 }
 
 .half {
@@ -35,7 +35,23 @@
     height: 98vh;
   }
 
-@media (max-width: 850px) {
+
+  .otherHomeContainerClass {
+   height: 100vh;
+  }
+
+  @media (max-width: 970px) {
+    #clubsSubscribedHalf {
+      width: 50%;
+    }
+  
+    #bookingsHalf {
+      width: 50%;
+    }
+  }
+
+
+@media (max-width: 720px) {
   #userHomeContainer {
     flex-direction: column;
   }
@@ -53,13 +69,11 @@
     height: 160px;
     line-height: 22px;
   }
-}
-
-@media (min-width: 1100px) {
   .otherHomeContainerClass {
-    height: 100vh;
+    height: 130vh;
   }
 }
+
 
 @media (max-height: 700px) and (min-height: 500px) and (max-width: 600px) {
   .homeContainerClass {

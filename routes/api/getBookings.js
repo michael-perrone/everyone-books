@@ -11,7 +11,13 @@ router.get("/", userAuth, async (req, res) => {
     let user = await User.findOne({ _id: req.user.id });
     let bookings = await Booking.find({ _id: user.bookings });
     if (bookings.length) {
-      res.status(200).json({ bookings: bookings });
+      const newBookings = [];
+      bookings.forEach(booking => {
+       if (new Date(booking.date) >= new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())) {  
+        newBookings.push(booking)
+       }
+      })
+      res.status(200).json({ bookings: newBookings });
     } else {
       res.status(204).send();
     }

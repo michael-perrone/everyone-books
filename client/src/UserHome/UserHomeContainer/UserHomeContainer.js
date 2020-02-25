@@ -12,6 +12,7 @@ const UserHomeContainer = props => {
   const [bookings, setBookings] = useState([]);
   const [noBookings, setNoBookings] = useState(false);
 
+
   useEffect(() => {
     Axios.get("/api/userBusinesses", {
       headers: { "x-auth-token": props.userToken }
@@ -44,7 +45,7 @@ const UserHomeContainer = props => {
     <div
       id={styles.userHomeContainer}
       className={
-        bookings.length > 0 || businesses.length > 0 ? styles.otherHomeContainerClass : styles.homeContainerClass
+        bookings.length > 1 || businesses.length > 1 ? "" : styles.homeContainerClass
       }
     >
       <div

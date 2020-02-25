@@ -19,7 +19,8 @@ router.post("/", async (req, res) => {
       timeEnd: req.body.booking.timeEnd,
       minutes: req.body.booking.minutes,
       date: req.body.booking.date,
-      customers: req.body.customers
+      customers: req.body.customers,
+      businessName: req.body.booking.businessName
     });
     console.log(newThingBooked)
     if (req.body.customers && req.body.customers.length > 0) {

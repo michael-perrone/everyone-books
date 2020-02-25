@@ -22,6 +22,21 @@
 }
 
 
-#defaultHeight {
-  height: 80vh;
+@media(min-width: 1200px) {
+  #defaultHeight {
+   height: 120vh;
+  }
+}
+
+
+@media(max-width: 1200px) {
+  #defaultHeight {
+    height: 140vh;
+  }
+}
+
+@media(max-width: 600px) {
+  #defaultHeight {
+    height: 1300px;
+  }
 }

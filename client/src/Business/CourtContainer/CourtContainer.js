@@ -44,7 +44,8 @@ class CourtContainer extends React.Component {
       doubleBookError: false,
       employeeChosenError: false,
       chooseServiceError: false,
-      employeeNotWorking: ""
+      employeeNotWorking: "",
+      datePassed: false
     };
   }
 
@@ -205,34 +206,43 @@ class CourtContainer extends React.Component {
         })
         .then(firstResponse => {
           if (firstResponse.status === 200) {
-            if (this.props.instructorChosen) {
+            if (this.props.employeeChosen) {
               const objectToSend = {
-                instructorId: this.props.instructorChosen.instructorChosen._id,
+                employeeId: this.props.employeeChosen.employeeChosen._id,
                 newBooking: firstResponse.data.newBooking._id
               };
               axios
-                .post("/api/instructorCourtsBooked", objectToSend)
+                .post("/api/employeeBookings", objectToSend)
                 .then(secondResponse => {
                   if (secondResponse.status === 200 && this.props.user) {
-                    axios.post("/api/notifications/userBookedInstructor", {
-                      instructorId: this.props.instructorChosen.instructorChosen
+                    axios.post("/api/notifications/userBookedEmployee", {
+                      employeeId: this.props.employeeChosen.employeeChosen
                         ._id,
-                      userId: this.props.user.user._id,
+                      userId: this.props.user.user.id,
                       bookingId: firstResponse.data.newBooking._id
                     });
                   }
                   if (
                     secondResponse.status === 200 &&
-                    this.props.instructor &&
-                    firstResponse.data.newBooking.players.length > 0
+                    this.props.employee &&
+                    firstResponse.data.newBooking.customers.length > 0
                   ) {
-                    axios.post("/api/notifications/instructorBookedUser", {
-                      users: firstResponse.data.newBooking.players,
-                      instructorId: this.props.instructorChosen.instructorChosen
+                    axios.post("/api/notifications/employeeBookedCustomer", {
+                      users: firstResponse.data.newBooking.customers,
+                      employeeId: this.props.employeeChosen.employeeChosen
                         ._id,
                       bookingId: firstResponse.data.newBooking._id
                     });
                   }
+                  else if (secondResponse.status === 200 && this.props.admin && 
+                    firstResponse.data.newBooking.customers.length > 0) {
+                      axios.post('/api/notifications/businessBookedCustomer', {
+                        employeeId: this.props.employeeChosen.employeeChosen._id,
+                        users: firstResponse.data.newBooking.customers,
+                        businessId: this.props.admin.admin.businessId,
+                        bookingId: firstResponse.data.newBooking._id
+                      })
+                    }
                 })
                 .catch(error => {
                   console.log(error);
@@ -366,6 +376,13 @@ class CourtContainer extends React.Component {
   
 
   showTryingToBookModal = () => {
+    this.setState({datePassed: false})
+    console.log(this.props.dateChosen, this.state.firstSlotInArray.thing.timeStart)
+  // if (new Date(this.props.dateChosen, this.state.firstSlotInArray.timeStart) < new Date()) {
+      if (new Date(`${this.props.dateChosen}, ${this.state.firstSlotInArray.thing.timeStart}`) < new Date()) {
+        setTimeout(() => this.setState({datePassed: true}), 400)
+    }
+    else {
     this.setState({employeeNotWorking: ""});
     this.setState({employeeChosenError: false});
     this.setState({ doubleBookError: false });
@@ -466,7 +483,8 @@ class CourtContainer extends React.Component {
                 minutes: this.props.timeChosen.timeSelected === "15 Minutes" ? 15 : this.state.bookingArray.length * 15,
                 clubName: this.props.clubName,
                 date: this.props.dateChosen,
-                thingNumber
+                thingNumber,
+                businessName: this.props.businessName
               };
               this.setState({ bookingToSend });
               this.setState(prevState => {
@@ -483,6 +501,7 @@ class CourtContainer extends React.Component {
       setTimeout(() => this.setState({employeeChosenError: true}), 300);
       this.setState({slotsClicked: false})
       
+      }
     }
   };
 
@@ -505,6 +524,11 @@ class CourtContainer extends React.Component {
             objectToModal={this.state.objectToModal}
           />
         )}
+        <OtherAlert
+        alertType="error"
+        alertMessage={"This time or date has already passed."}
+        showAlert={this.state.datePassed}
+        />
         <OtherAlert
         alertType="error"
         alertMessage={this.state.employeeNotWorking}
