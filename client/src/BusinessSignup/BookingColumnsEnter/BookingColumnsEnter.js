@@ -46,7 +46,7 @@ const BookingColumnsEnter = (props) => {
     }, [props.kindOfBusiness])
     
     return (
-        <div style={{marginTop: '30px'}}>
+        <div style={{marginTop: '40px'}}>
         {props.kindOfBusiness === "Wax Center" && 
             <p>For a wax center we create your schedule around the number of rooms your business has. For example: your schedule will have Room 1, Room 2, etc. Please enter the number of rooms below.</p>
             }
