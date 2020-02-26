@@ -31,7 +31,7 @@ const AdminDropDown = (props) => {
     }
 
     return (
-        <div className={styles.adminDropDownHide}>
+        <div className={styles.adminDropDownHide} style={{marginTop: '40px'}}>
                 <p>Type of Business: {props.kindOfBusiness}</p>
                 <p>Name of Business: {props.nameOfBusiness}</p>
                 <p>Name: {props.adminInfo.firstName} {props.adminInfo.lastName}</p>
