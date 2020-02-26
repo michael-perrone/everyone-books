@@ -109,7 +109,7 @@ class ServicesForm extends React.Component {
     for (let i = 0; i < this.state.deletingArray.length; i++) {
       deleteIds.push(this.state.deletingArray[i]._id)
     }
-    Axios.post('/api/getServiceTypes/delete', {deletedServices: deleteIds}).then(
+    Axios.post('/api/getServiceTypes/delete', {businessId: this.props.profile.business, deletedServices: deleteIds}).then(
       response => {
         if (response.status === 200) {
           setTimeout(() => this.setState({deleteSucces: true}),400)

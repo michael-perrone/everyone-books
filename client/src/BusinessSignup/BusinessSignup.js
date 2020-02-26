@@ -19,7 +19,7 @@ const BusinessSignup = (props) => {
         <div id={styles.bSignupContainer}> 
             <div id={styles.welcomeContainer}>
                 <div style={{position: 'relative'}}>
-                    {(props.showAdminDropDown || props.businessScheduleComplete || props.businessInfoComplete || props.adminInfoComplete || props.kindBusinessCompleted) && <BackButton/>}
+                    {(props.showAdminDropDown || props.businessScheduleComplete || props.businessInfoComplete || props.adminInfoComplete || props.kindBusinessCompleted) && <BackButton marginTop={!!props.showAdminDropDown}/>}
                     {!props.kindBusinessCompleted && <p style={{fontSize: '18px', textAlign: 'center', borderBottom: '2px solid black', paddingBottom: '5px', color: 'black'}}>
                     We appreciate your interest in Everyone Books. Let's get you started right away! 
                     </p>}
