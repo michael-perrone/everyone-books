@@ -25,6 +25,7 @@ router.post('/create', adminAuth, async (req, res) => {
           serviceName: req.body.serviceName,
           timeDuration: req.body.timeDuration
         })
+        await newServiceType.save();
         let newBusinessProfile = new BusinessProfile({
           business: req.admin.businessId,
           serviceTypes: [newServiceType]

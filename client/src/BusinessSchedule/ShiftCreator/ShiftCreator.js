@@ -18,6 +18,20 @@ function ShiftCreator(props)  {
     const [breakEnd, setBreakEnd] = React.useState('')
     const [breakError, setBreakError] = React.useState('');
     const [readyToGo, setReadyToGo] = React.useState(false)
+    const [shiftCloneNumber, setShiftCloneNumber] = React.useState('');
+    const [shiftCloneDates, setShiftCloneDates] = React.useState([])
+
+    console.log(dateNeeded)
+
+    React.useEffect(() => {
+        if (shiftCloneNumber) {
+        let newShiftCloneDates = []
+        for (let i = 0 ; i < shiftCloneNumber; i++) {
+            console.log(new Date(new Date().getFullYear(), new Date().getMonth, new Date().getDate() + (i * 7)))
+            newShiftCloneDates.push(new Date(new Date().getFullYear(), new Date().getMonth, new Date().getDate() + (i * 7)))
+        }
+      }
+    }, [shiftCloneNumber])
 
 
     React.useEffect(() => {
