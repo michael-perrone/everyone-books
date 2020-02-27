@@ -2,6 +2,7 @@ import React from 'react';
 import Axios from 'axios';
 import styles from './ShiftCreator.module.css';
 import {connect} from 'react-redux';
+import OtherAlert from '../../OtherAlerts/OtherAlerts';
 
 
 function ShiftCreator(props)  {
@@ -20,6 +21,12 @@ function ShiftCreator(props)  {
     const [readyToGo, setReadyToGo] = React.useState(false)
     const [shiftCloneNumber, setShiftCloneNumber] = React.useState('');
     const [shiftCloneDates, setShiftCloneDates] = React.useState([])
+    const [clone, setClone] = React.useState('')
+    const [success, setSuccess] = React.useState(false);
+
+    function shiftCloneNumberHandler(e) {
+        setShiftCloneNumber(parseInt(e.target.value))
+    } 
 
     console.log(dateNeeded)
 
@@ -30,8 +37,15 @@ function ShiftCreator(props)  {
             console.log(new Date(new Date().getFullYear(), new Date().getMonth, new Date().getDate() + (i * 7)))
             newShiftCloneDates.push(new Date(new Date().getFullYear(), new Date().getMonth, new Date().getDate() + (i * 7)))
         }
+        setShiftCloneDates(newShiftCloneDates)
       }
     }, [shiftCloneNumber])
+
+    function cloneHandler(value) {
+        return () => {
+            setClone(value)
+        }
+    }
 
 
     React.useEffect(() => {
@@ -540,6 +554,27 @@ function ShiftCreator(props)  {
          setDateNeeded(new Date(dateArray[0], parseInt(dateArray[1]) - 1, dateArray[2]).toDateString())
     },[date])
 
+    function addShifts() {
+        const obSending = {
+            shiftDates: shiftCloneDates,
+            timeStart: shiftStart,
+            timeEnd: endOfShift,
+            employeeId,
+            employeeName,
+            shiftDuration,
+            businessId: props.admin.businessId,
+            isBreak,
+            breakStart,
+            breakEnd
+        }
+        Axios.post('/api/shifts/multiplecreate', obSending).then(response => {
+            if (response.status === 201) {
+                props.getNewShifts()
+                setTimeout(() => setSuccess(true), 500)
+            }
+        })
+    }
+
 
     function addShift() {
         const obSending = {
@@ -557,6 +592,7 @@ function ShiftCreator(props)  {
         
         Axios.post('/api/shifts/create', obSending).then(response => {
                 if (response.status === 201) {
+                    setTimeout(() => setSuccess(true), 500)
                     props.getNewShifts()
                 }
            }
@@ -779,10 +815,76 @@ function ShiftCreator(props)  {
                     <option>11:30 PM</option>
                     </select>
                     </div>}
-                {endOfShift && 
+                    <p style={{lineHeight: '24px'}}>Would you like to clone this shift for multiple weeks?</p>
+                    <div style={{position: 'relative', top: isBreak ? "-34px" : '-39px', left: '60px', display: 'flex'}}>
+                    <input id="AlsoYes" name="AlsoYes" checked={clone} onClick={cloneHandler(true)} type="radio"/><label style={{margin: '0px 14px 0px 4px'}} marign htmlFor="AlsoYes">Yes</label>
+                    <input id="AlsoNo" name="AlsoNo" checked={clone === false} onClick={cloneHandler(false)} type="radio"/><label style={{marginLeft: '4px', poisition: 'relative', top: '-5px'}} htmlFor="AlsoNo">No</label>
+                    {clone &&
+                     <div style={{position: 'absolute', display: 'flex', right: '120px'}}>
+                        <p style={{marginRight: '6px'}}>Weeks:</p>
+                        <select onChange={shiftCloneNumberHandler}>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                            <option>11</option>
+                            <option>12</option>
+                            <option>13</option>
+                            <option>14</option>
+                            <option>15</option>
+                            <option>16</option>
+                            <option>17</option>
+                            <option>18</option>
+                            <option>19</option>
+                            <option>20</option>
+                            <option>21</option>
+                            <option>22</option>
+                            <option>23</option>
+                            <option>24</option>
+                            <option>25</option>
+                            <option>26</option>
+                            <option>27</option>
+                            <option>28</option>
+                            <option>29</option>
+                            <option>30</option>
+                            <option>31</option>
+                            <option>32</option>
+                            <option>33</option>
+                            <option>34</option>
+                            <option>35</option>
+                            <option>36</option>
+                            <option>37</option>
+                            <option>38</option>
+                            <option>39</option>
+                            <option>40</option>
+                            <option>41</option>
+                            <option>42</option>
+                            <option>43</option>
+                            <option>44</option>
+                            <option>45</option>
+                            <option>46</option>
+                            <option>47</option>
+                            <option>48</option>
+                            <option>49</option>
+                            <option>50</option>
+                            <option>51</option>
+                            <option>52</option>
+
+                        </select>
+                    </div>}
+                    </div>
+                    <OtherAlert alertMessage={'Shifts Added Successfully'} showAlert={success}/>
+                {endOfShift && ((clone === true && shiftCloneNumber) || clone === false)  &&
                 <div>
                 <span>Shift End: {endOfShift}</span>
-                <button disabled={!readyToGo} onClick={addShift} style={{cursor: !readyToGo ? "not-allowed" : 'pointer' ,marginLeft: '80px', backgroundColor: 'white', border: 'none', boxShadow: '0px 0px 3px black', padding: '6px'}}>Add Shift</button>
+                {!clone && <button disabled={!readyToGo} onClick={addShift} style={{cursor: !readyToGo ? "not-allowed" : 'pointer' ,marginLeft: '80px', backgroundColor: 'white', border: 'none', boxShadow: '0px 0px 3px black', padding: '6px'}}>Add Shift</button>}
+                {clone && shiftCloneNumber &&<button disabled={!readyToGo} onClick={addShifts} style={{cursor: !readyToGo ? "not-allowed" : 'pointer' ,marginLeft: '80px', backgroundColor: 'white', border: 'none', boxShadow: '0px 0px 3px black', padding: '6px'}}>Add Shifts</button>}
                 </div>}   
             </div>
     )

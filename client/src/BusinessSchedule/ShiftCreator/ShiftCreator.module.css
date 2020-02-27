@@ -1,9 +1,9 @@
 #scheduleContainer {
     width: 316px;
     margin-left: 8px;
-    margin-top: 60px;
+    margin-top: 20px;
     padding-left: 15px;
-    height: 280px;
+    height: 330px;
     display: flex;
     position: relative;
     flex-direction: column;
