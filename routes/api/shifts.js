@@ -3,9 +3,10 @@ const Shift = require('../../models/Shift')
 const Booking = require('../../models/Booking')
 
 router.post('/multiplecreate', async(req, res) => {
+  console.log(req.body.shiftDates)
   for (let i = 0; i < req.body.shiftDates.length; i++) {
     let shiftConflict = await Shift.find({employeeId: req.body.employeeId, shiftDate: req.body.shiftDates[i]})
-    if (shiftConflict) {
+    if (shiftConflict.length) {
       function convertShiftTimes(numberTime) {
         let num = null;
         if (numberTime === "12:00 AM") {
@@ -109,10 +110,7 @@ router.post('/multiplecreate', async(req, res) => {
       }
 
       let startNum = convertShiftTimes(req.body.timeStart)
-    
       let endNum = convertShiftTimes(req.body.timeEnd)
-
-
 
       for (let i = 0; i < shiftConflict.length; i++) {
           let alreadyExistingStart = convertShiftTimes(shiftConflict[i].timeStart);
@@ -133,6 +131,7 @@ router.post('/multiplecreate', async(req, res) => {
       }
     }
      else {
+       console.log('creating')
     const newShift = new Shift({
       shiftDate: req.body.shiftDates[i],
       timeStart: req.body.timeStart,
@@ -145,6 +144,7 @@ router.post('/multiplecreate', async(req, res) => {
       breakEnd: req.body.breakEnd,
       breakStart: req.body.breakStart
    })
+   console.log(newShift)
       await newShift.save();
    }
    }
@@ -284,7 +284,6 @@ router.post('/create', async (req, res) => {
               return res.status(406).send()
           }
       }
-
     }
 
     const newShift = new Shift({
@@ -305,13 +304,50 @@ router.post('/create', async (req, res) => {
     res.status(201).send()
 });
 
+// 488 on thunder to win 1000
+// 1000 on sac cashed out 744.48
+// lost 266
+// 522
+// 
+// if thunder win
+// i lose 550 + 255
+// i lose 955 but win 1000
+// profit 195
+// kings win
+// 616
+// still have lost 255
+// and 488
+// 616
+// 757
+
+// 255
+// 150
+// 550
+// 955
+// 1000
+
+// 757
+// 255
+// 488
+
 
 
 router.post('/employee', async (req, res) => {
   console.log(req.body)
-  const shift = await Shift.findOne({shiftDate: req.body.date, employeeId: req.body.employeeId}).select(['timeStart', 'timeEnd', 'breakStart', 'breakEnd']);
-  if (shift) {
-    res.status(200).json({scheduled: true, shift})
+  const shift = await Shift.find({shiftDate: req.body.date, employeeId: req.body.employeeId}).select(['timeStart', 'timeEnd', 'breakStart', 'breakEnd']);
+
+  if (shift.length > 1) {
+   
+    shift.sort(function(a,b) {
+      let newA = new Date(`${new Date().getFullYear()}, ${new Date().getMonth()}, ${new Date().getDate()}, ${a.timeStart}`)
+      let newB = new Date(`${new Date().getFullYear()}, ${new Date().getMonth()}, ${new Date().getDate()}, ${b.timeStart}`)
+      return newA > newB
+    })
+
+    res.status(200).json(shift)
+    
+  } else if (shift.length === 1) {
+    res.status(200).json(shift)
   } else {
     res.status(200).json({scheduled: false})
   }

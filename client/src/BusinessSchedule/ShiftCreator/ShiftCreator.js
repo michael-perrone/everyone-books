@@ -6,7 +6,6 @@ import OtherAlert from '../../OtherAlerts/OtherAlerts';
 
 
 function ShiftCreator(props)  {
-    // props.employees
     const [date, setDate] = React.useState(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`);
     const [shiftDuration, setShiftDuration] = React.useState('');
     const [shiftStart, setShiftStart] = React.useState('');
@@ -28,14 +27,14 @@ function ShiftCreator(props)  {
         setShiftCloneNumber(parseInt(e.target.value))
     } 
 
-    console.log(dateNeeded)
+    
 
     React.useEffect(() => {
         if (shiftCloneNumber) {
         let newShiftCloneDates = []
+        let dateForLoop = new Date(dateNeeded)
         for (let i = 0 ; i < shiftCloneNumber; i++) {
-            console.log(new Date(new Date().getFullYear(), new Date().getMonth, new Date().getDate() + (i * 7)))
-            newShiftCloneDates.push(new Date(new Date().getFullYear(), new Date().getMonth, new Date().getDate() + (i * 7)))
+            newShiftCloneDates.push(new Date(dateForLoop.getFullYear(), dateForLoop.getMonth(), dateForLoop.getDate() + (i * 7)).toDateString())
         }
         setShiftCloneDates(newShiftCloneDates)
       }
@@ -64,6 +63,9 @@ function ShiftCreator(props)  {
             }
             else if (shiftCalcNum(breakStart) === shiftCalcNum(breakEnd)) {
                 setBreakError("Break cannot start and end at same time.")
+            }
+            else if (breakStart && breakEnd && (new Date(`${dateNeeded}, ${breakEnd}`) < new Date(`${dateNeeded}, ${breakStart}`))) {
+                   setBreakError("Break cannot end before it starts.")
             }
             else {
                 setBreakError('');
@@ -704,9 +706,9 @@ function ShiftCreator(props)  {
                 </div>  <div style={{display: 'flex'}}>
                     <span>Break?</span>
                     <input onClick={breakHandler} value="Yes" style={{marginLeft: '27px', position: 'relative', top: '1px'}} name="YesNo" id="Yes" type="radio"/>
-                    <label style={{marginLeft:'3px'}} htmlFor="Yes">Yes</label>
+                    <label style={{marginLeft:'4px', position: 'relative', top: '2px'}} htmlFor="Yes">Yes</label>
                     <input value="No" onClick={breakHandler} style={{marginLeft: '20px', position: 'relative', top: '1px'}} name="YesNo" id="No" type="radio"/>
-                    <label style={{marginLeft:'3px'}} htmlFor="No">No</label>
+                    <label style={{marginLeft:'5px', position: 'relative', top: '2px'}} htmlFor="No">No</label>
                     </div>
                     {isBreak &&
                     <div>
@@ -879,9 +881,9 @@ function ShiftCreator(props)  {
                         </select>
                     </div>}
                     </div>
-                    <OtherAlert alertMessage={'Shifts Added Successfully'} showAlert={success}/>
+                    <OtherAlert alertMessage={'Shifts Added Successfully'} showAlert={success} alertType="success"/>
                 {endOfShift && ((clone === true && shiftCloneNumber) || clone === false)  &&
-                <div>
+                <div style={{position: 'relative', top: '-26px'}}>
                 <span>Shift End: {endOfShift}</span>
                 {!clone && <button disabled={!readyToGo} onClick={addShift} style={{cursor: !readyToGo ? "not-allowed" : 'pointer' ,marginLeft: '80px', backgroundColor: 'white', border: 'none', boxShadow: '0px 0px 3px black', padding: '6px'}}>Add Shift</button>}
                 {clone && shiftCloneNumber &&<button disabled={!readyToGo} onClick={addShifts} style={{cursor: !readyToGo ? "not-allowed" : 'pointer' ,marginLeft: '80px', backgroundColor: 'white', border: 'none', boxShadow: '0px 0px 3px black', padding: '6px'}}>Add Shifts</button>}

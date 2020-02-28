@@ -83,9 +83,6 @@ const WeekSelector = (props) => {
             } else {
                 dayOfMonth = new Date(`${props.months[11]} ${i}, ${year - 1}`).getDay();
             }
-            console.log(i)
-            console.log(`${props.months[11]} ${i}, ${year}`)
-            console.log(`${props.months[11]} ${i}, ${year - 1}`)
            
             if (dayOfMonth === 0) {
                 newSunday.push({day: i, type: 'premonth'})

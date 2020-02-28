@@ -588,8 +588,10 @@ class CourtContainer extends React.Component {
               width: `${this.props.numberColumns * 178}px`
             }}
           >
-            {this.props.employeeShiftError && <p style={{position: 'absolute', left: '20px', top: '-50px',color: 'red'}}>This Employee is not scheduled on the selected day!</p>}
-            {this.props.breakAlert !== "" && <p style={{position: 'absolute', left: '20px', top: '-50px',color: 'red'}}>This employee has a break from {this.props.breakAlert.breakStart}-{this.props.breakAlert.breakEnd}</p>}
+            
+            {this.props.breakAlert !== "" && !this.props.user && <p style={{position: 'absolute', left: '20px', top: '-50px',color: 'red'}}>This employee has a break from {this.props.breakAlert.breakStart}-{this.props.breakAlert.breakEnd}</p>}
+            
+            {this.props.breakAlert !== "" && this.props.user && <p style={{position: 'absolute', left: '20px', top: '-50px',color: 'red'}}>This employee is not available from {this.props.breakAlert.breakStart}-{this.props.breakAlert.breakEnd}</p>}
             {this.thingNumbersToThingColumns().map((element, index) => {
               return (
                 <CourtColumns
