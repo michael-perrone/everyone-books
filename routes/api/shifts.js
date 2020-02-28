@@ -344,10 +344,52 @@ router.post('/employee', async (req, res) => {
       return newA > newB
     })
 
-    res.status(200).json(shift)
-    
+    let firstStart = shift[0].timeStart;
+    let firstEnd = shift[0].timeEnd;
+    let secondStart = shift[1].timeStart;
+    let secondEnd = shift[1].timeEnd;
+    let firstBreakStart;
+    let firstBreakEnd;
+    let onlyBreakStart;
+    let onlyBreakEnd;
+    let secondBreakStart;
+    let secondBreakEnd;
+    if (shift[0].breakStart && shift[0].breakEnd && !shift[1].breakStart && !shift[1].breakEnd) {
+      onlyBreakStart = shift[0].breakStart;
+      onlyBreakEnd = shift[0].breakEnd;
+    }
+    else if (!shift[0].breakStart && !shift[0].breakEnd && shift[1].breakStart && shift[1].breakEnd ) {
+      onlyBreakStart = shift[1].breakStart;
+      onlyBreakEnd = shift[1].breakEnd;
+    }
+
+    else if (shift[0].breakStart && shift[0].breakEnd && shift[1].breakStart && shift[1].breakEnd) {
+      firstBreakStart = shift[0].breakStart;
+      firstBreakEnd = shift[0].breakEnd;
+      secondBreakStart = shift[1].breakStart;
+      secondBreakEnd = shift[1].breakEnd;
+    }
+
+    if (onlyBreakEnd && onlyBreakStart) {
+      res.status(200).json({oneBreak: true, twoShifts: true, onlyBreakEnd, onlyBreakStart, firstStart, firstEnd, secondStart, secondEnd})
+    }
+    else if (firstBreakStart && secondBreakStart && secondBreakEnd && firstBreakEnd) {
+      res.status(200).json({twoBreaks: true, twoShifts: true, firstBreakStart, firstBreakEnd, secondBreakStart, secondBreakEnd, firstStart, firstEnd, secondStart, secondEnd})
+    }
   } else if (shift.length === 1) {
-    res.status(200).json(shift)
+    let onlyBreakStart;
+    let onlyBreakEnd;
+    let firstStart = shift[0].timeStart;
+    let firstEnd = shift[0].timeEnd;
+    if (shift[0].breakStart && shift[0].breakEnd) {
+      onlyBreakStart = shift[0].breakStart;
+      onlyBreakEnd = shift[0].breakEnd;
+      res.status(200).json({oneBreak: true, oneShift: true, onlyBreakEnd, onlyBreakStart, firstStart, firstEnd})
+    }
+    else {
+      res.status(200).json({oneShift: true, firstStart, firstEnd})
+    }
+   
   } else {
     res.status(200).json({scheduled: false})
   }

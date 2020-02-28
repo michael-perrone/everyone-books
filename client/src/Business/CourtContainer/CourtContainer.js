@@ -271,106 +271,23 @@ class CourtContainer extends React.Component {
     return newThingsArray;
   }
 
+ times = {
+   "12:00 AM": 0, "12:30 AM": 2,
+  "1:00 AM": 4, "1:30 AM": 6, "2:00 AM": 8,
+   "2:30 AM": 10, "3:00 AM": 12, "3:30 AM": 14,
+   "4:00 AM": 16, "4:30 AM": 18, "5:00 AM": 20, "5:30 AM": 22, "6:00 AM": 24, "6:30 AM": 26,
+   "7:00 AM": 28, "7:30 AM": 30, "8:00 AM": 32, "8:30 AM": 34, "9:00 AM": 36, "9:30 AM": 38,
+   "10:00 AM": 40, "10:30 AM": 42, "11:00 AM": 44, "11:30 AM": 46,
+    "12:00 PM": 48, "12:30 PM": 50,
+   "1:00 PM": 52, "1:30 PM": 54, "2:00 PM": 56,
+    "2:30 PM": 58, "3:00 PM": 60, "3:30 PM": 62,
+    "4:00 PM": 64, "4:30 PM": 66, "5:00 PM": 68, "5:30 PM": 70, "6:00 PM": 72, "6:30 PM": 74,
+    "7:00 PM": 76, "7:30 PM": 78, "8:00 PM": 80, "8:30 PM": 82, "9:00 PM": 84, "9:30 PM": 86,
+    "10:00 PM": 88, "10:30 PM": 90, "11:00 PM": 92, "11:30 PM": 94, }
+
   convertTimeToThings(numberTime) {
-    let thingTimeNumber = null;
-    if (numberTime === "12:00 AM") {
-      thingTimeNumber = 0;
-    } else if (numberTime === "12:30 AM") {
-      thingTimeNumber = 2;
-    } else if (numberTime === "1:00 AM") {
-      thingTimeNumber = 4;
-    } else if (numberTime === "1:30 AM") {
-      thingTimeNumber = 6;
-    } else if (numberTime === "2:00 AM") {
-      thingTimeNumber = 8;
-    } else if (numberTime === "2:30 AM") {
-      thingTimeNumber = 10;
-    } else if (numberTime === "3:00 AM") {
-      thingTimeNumber = 12;
-    } else if (numberTime === "3:30 AM") {
-      thingTimeNumber = 14;
-    } else if (numberTime === "4:00 AM") {
-      thingTimeNumber = 16;
-    } else if (numberTime === "4:30 AM") {
-      thingTimeNumber = 18;
-    } else if (numberTime === "5:00 AM") {
-      thingTimeNumber = 20;
-    } else if (numberTime === "5:30 AM") {
-      thingTimeNumber = 22;
-    } else if (numberTime === "6:00 AM") {
-      thingTimeNumber = 24;
-    } else if (numberTime === "6:30 AM") {
-      thingTimeNumber = 26;
-    } else if (numberTime === "7:00 AM") {
-      thingTimeNumber = 28;
-    } else if (numberTime === "7:30 AM") {
-      thingTimeNumber = 30;
-    } else if (numberTime === "8:00 AM") {
-      thingTimeNumber = 32;
-    } else if (numberTime === "8:30 AM") {
-      thingTimeNumber = 34;
-    } else if (numberTime === "9:00 AM") {
-      thingTimeNumber = 36;
-    } else if (numberTime === "9:30 AM") {
-      thingTimeNumber = 38;
-    } else if (numberTime === "10:00 AM") {
-      thingTimeNumber = 40;
-    } else if (numberTime === "10:30 AM") {
-      thingTimeNumber = 42;
-    } else if (numberTime === "11:00 AM") {
-      thingTimeNumber = 44;
-    } else if (numberTime === "11:30 AM") {
-      thingTimeNumber = 46;
-    } else if (numberTime === "12:00 PM") {
-      thingTimeNumber = 48;
-    } else if (numberTime === "12:30 PM") {
-      thingTimeNumber = 50;
-    } else if (numberTime === "1:00 PM") {
-      thingTimeNumber = 52;
-    } else if (numberTime === "1:30 PM") {
-      thingTimeNumber = 54;
-    } else if (numberTime === "2:00 PM") {
-      thingTimeNumber = 56;
-    } else if (numberTime === "2:30 PM") {
-      thingTimeNumber = 58;
-    } else if (numberTime === "3:00 PM") {
-      thingTimeNumber = 60;
-    } else if (numberTime === "3:30 PM") {
-      thingTimeNumber = 62;
-    } else if (numberTime === "4:00 PM") {
-      thingTimeNumber = 64;
-    } else if (numberTime === "4:30 PM") {
-      thingTimeNumber = 66;
-    } else if (numberTime === "5:00 PM") {
-      thingTimeNumber = 68;
-    } else if (numberTime === "5:30 PM") {
-      thingTimeNumber = 70;
-    } else if (numberTime === "6:00 PM") {
-      thingTimeNumber = 72;
-    } else if (numberTime === "6:30 PM") {
-      thingTimeNumber = 74;
-    } else if (numberTime === "7:00 PM") {
-      thingTimeNumber = 76;
-    } else if (numberTime === "7:30 PM") {
-      thingTimeNumber = 78;
-    } else if (numberTime === "8:00 PM") {
-      thingTimeNumber = 80;
-    } else if (numberTime === "8:30 PM") {
-      thingTimeNumber = 82;
-    } else if (numberTime === "9:00 PM") {
-      thingTimeNumber = 84;
-    } else if (numberTime === "9:30 PM") {
-      thingTimeNumber = 86;
-    } else if (numberTime === "10:00 PM") {
-      thingTimeNumber = 88;
-    } else if (numberTime === "10:30 PM") {
-      thingTimeNumber = 90;
-    } else if (numberTime === "11:00 PM") {
-      thingTimeNumber = 92;
-    } else if (numberTime === "11:30 PM") {
-      thingTimeNumber = 94;
-    }
-    return thingTimeNumber;
+    let timeThingNumber = this.times[numberTime]
+    return timeThingNumber;
   }
 
   
