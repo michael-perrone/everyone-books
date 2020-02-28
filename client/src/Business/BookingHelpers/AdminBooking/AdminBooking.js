@@ -7,7 +7,12 @@ import {
   EMPLOYEE_CHOSEN,
   EMPLOYEE_SHIFT_ERROR,
   HIDE_DROP_DOWN,
-  BREAK_ALERT
+  BREAK_ALERT,
+  ONE_SHIFT_ONE_BREAK,
+  ONE_SHIFT_NO_BREAK,
+  TWO_SHIFTS_NO_BREAK,
+  TWO_SHIFTS_ONE_BREAK,
+  TWO_SHIFTS_TWO_BREAKS
 } from "../../../actions/actions";
 import Calendar from "../../Calendar/Calendar";
 import Axios from "axios";
@@ -70,16 +75,25 @@ class AdminBooking extends React.Component {
       if (this.props.date && employeeSelected) {
         Axios.post('/api/shifts/employee', {date: this.props.date.toDateString(), employeeId: employeeSelected._id}).then(
           response => {
-            if (response.data.scheduled === false ) {
-              console.log('cooked')
+            /* if (response.data.scheduled === false ) {
               this.props.setEmployeeShiftError(true)
               this.props.setBreakAlert("");
-            }
-            if (response.data.scheduled === true ) {
               this.props.setEmployeeShiftError(false)
-              if (response.data.shift.breakStart && response.data.shift.breakEnd) {
-                this.props.setBreakAlert({breakStart: response.data.shift.breakStart, breakEnd: response.data.shift.breakEnd})
-              }
+            } */
+            if (response.data.oneBreak && response.data.oneShift) {
+              this.props.setOneShiftOneBreak(response.data.onlyShiftstarts, response.data.onlyshiftEnds, response.data.onlyBreakStarts, response.data.onlyBreakEnds)
+            }
+            else if (response.data.oneShift && !response.data.oneBreak) {
+              this.props.setOneShiftNoBreak(response.data.onlyShiftStarts, response.data.onlyShiftEnds )
+            }
+            else if (response.data.twoShifts && !response.data.oneBreak && !response.data.twoBreaks) {
+              this.props.setTwoShiftsNoBreak(response.data.firstShiftStarts, response.data.firstShiftEnds, response.data.secondShiftStarts, response.data.secondShiftEnds)
+            }
+            else if (response.data.twoShifts && response.data.oneBreak) {
+              this.props.setTwoShiftsOneBreak(response.data.firstShiftStarts, response.data.firstShiftEnds, response.data.secondShiftStarts, response.data.secondShiftEnds, response.data.onlyBreakStarts, response.data.onlyBreakEnds)
+            }
+            else if (response.data.twoShifts && response.data.twoBreaks) {
+              this.props.setTwoShiftsTwoBreaks(response.data.firstShiftStarts, response.data.firstShiftEnds, response.data.secondShiftStarts, response.data.secondShiftEnds, response.data.firstBreakStarts, response.data.firstBreakEnds, response.data.secondBreakStarts, response.data.secondBreakEnds)
             }
           }
         )
@@ -232,7 +246,17 @@ const mapDispatchToProps = dispatch => {
     getTimeChosen: timeChosen =>
       dispatch({ type: TIME_SELECTED, payload: { timeSelected: timeChosen } }),
     getEmployeeChosen: employeeChosen =>
-      dispatch({ type: EMPLOYEE_CHOSEN, payload: { employeeChosen } })
+      dispatch({ type: EMPLOYEE_CHOSEN, payload: { employeeChosen } }),
+    setOneShiftOneBreak: (onlyShiftStarts, onlyShiftEnds, onlyBreakStarts, onlyBreakEnds) =>
+      dispatch({type: ONE_SHIFT_ONE_BREAK, payload: {onlyBreakStarts, onlyShiftEnds, onlyBreakEnds, onlyShiftStarts}}),
+    setOneShiftNoBreak: (onlyShiftStarts, onlyShiftEnds) => 
+      dispatch({type: ONE_SHIFT_NO_BREAK, payload: {onlyShiftStarts, onlyShiftEnds}}),
+    setTwoShiftsNoBreak: (firstShiftStarts, firstShiftEnds, secondShiftStarts, secondShiftEnds) =>
+      dispatch({type: TWO_SHIFTS_NO_BREAK, payload: {firstShiftStarts, firstShiftEnds, secondShiftStarts, secondShiftEnds}}),
+    setTwoShiftsOneBreak: (firstShiftStarts, firstShiftEnds, secondShiftStarts, secondShiftEnds, onlyBreakStarts, onlyBreakEnds) => 
+      dispatch({type: TWO_SHIFTS_ONE_BREAK, payload: {firstShiftStarts, firstShiftEnds, secondShiftStarts, secondShiftEnds, onlyBreakStarts, onlyBreakEnds}}),
+    setTwoShiftsTwoBreaks: (firstShiftStarts, firstShiftEnds, secondShiftStarts, secondShiftEnds, firstBreakStarts, firstBreakEnds, secondBreakStarts, secondBreakEnds) => 
+      dispatch({type: TWO_SHIFTS_TWO_BREAKS, payload: {firstShiftStarts, firstShiftEnds, secondShiftStarts, secondShiftEnds, firstBreakStarts, firstBreakEnds, secondBreakStarts, secondBreakEnds}})
   };
 };
 

@@ -344,50 +344,53 @@ router.post('/employee', async (req, res) => {
       return newA > newB
     })
 
-    let firstStart = shift[0].timeStart;
-    let firstEnd = shift[0].timeEnd;
-    let secondStart = shift[1].timeStart;
-    let secondEnd = shift[1].timeEnd;
-    let firstBreakStart;
-    let firstBreakEnd;
-    let onlyBreakStart;
-    let onlyBreakEnd;
-    let secondBreakStart;
-    let secondBreakEnd;
+    let firstShiftStarts = shift[0].timeStart;
+    let firstShiftEnds = shift[0].timeEnd;
+    let secondShiftStarts = shift[1].timeStart;
+    let secondShiftEnds = shift[1].timeEnd;
+    let firstBreakStarts;
+    let firstBreakEnds;
+    let onlyBreakStarts;
+    let onlyBreakEnds;
+    let secondBreakStarts;
+    let secondBreakEnds;
     if (shift[0].breakStart && shift[0].breakEnd && !shift[1].breakStart && !shift[1].breakEnd) {
-      onlyBreakStart = shift[0].breakStart;
-      onlyBreakEnd = shift[0].breakEnd;
+      onlyBreakStarts = shift[0].breakStart;
+      onlyBreakEnds = shift[0].breakEnd;
     }
     else if (!shift[0].breakStart && !shift[0].breakEnd && shift[1].breakStart && shift[1].breakEnd ) {
-      onlyBreakStart = shift[1].breakStart;
-      onlyBreakEnd = shift[1].breakEnd;
+      onlyBreakStarts = shift[1].breakStart;
+      onlyBreakEnds = shift[1].breakEnd;
     }
 
     else if (shift[0].breakStart && shift[0].breakEnd && shift[1].breakStart && shift[1].breakEnd) {
-      firstBreakStart = shift[0].breakStart;
-      firstBreakEnd = shift[0].breakEnd;
-      secondBreakStart = shift[1].breakStart;
-      secondBreakEnd = shift[1].breakEnd;
+      firstBreakStarts = shift[0].breakStart;
+      firstBreakEnds = shift[0].breakEnd;
+      secondBreakStarts = shift[1].breakStart;
+      secondBreakEnds = shift[1].breakEnd;
     }
 
-    if (onlyBreakEnd && onlyBreakStart) {
-      res.status(200).json({oneBreak: true, twoShifts: true, onlyBreakEnd, onlyBreakStart, firstStart, firstEnd, secondStart, secondEnd})
+    if (!onlyBreakEnds && !onlyBreakStarts && !firstBreakEnds && !firstBreakStarts && !secondBreakEnds && !secondBreakStarts && firstShiftStarts && firstShiftEnds && secondShiftStarts && secondShiftEnds) {
+      res.status(200).json({twoShifts: true, firstShiftStarts, firstShiftEnds, secondShiftStarts, secondShiftEnds})
     }
-    else if (firstBreakStart && secondBreakStart && secondBreakEnd && firstBreakEnd) {
-      res.status(200).json({twoBreaks: true, twoShifts: true, firstBreakStart, firstBreakEnd, secondBreakStart, secondBreakEnd, firstStart, firstEnd, secondStart, secondEnd})
+    if (onlyBreakEnds && onlyBreakStarts) {
+      res.status(200).json({oneBreak: true, twoShifts: true, onlyBreakEnds, onlyBreakStarts, firstShiftStarts, firstShiftEnds, secondShiftStarts, secondShiftEnds})
+    }
+    else if (firstBreakStart && secondBreakStart && secondBreakEnds && firstBreakEnds) {
+      res.status(200).json({twoBreaks: true, twoShifts: true, firstBreakStarts, firstBreakEnds, secondBreakStarts, secondBreakEnds, firstShiftStarts, firstShiftEnds, secondShiftStarts, secondShiftEnds})
     }
   } else if (shift.length === 1) {
-    let onlyBreakStart;
-    let onlyBreakEnd;
-    let firstStart = shift[0].timeStart;
-    let firstEnd = shift[0].timeEnd;
+    let onlyBreakStarts;
+    let onlyBreakEnds;
+    let firstShiftStarts = shift[0].timeStart;
+    let firstShiftEnds = shift[0].timeEnd;
     if (shift[0].breakStart && shift[0].breakEnd) {
-      onlyBreakStart = shift[0].breakStart;
-      onlyBreakEnd = shift[0].breakEnd;
-      res.status(200).json({oneBreak: true, oneShift: true, onlyBreakEnd, onlyBreakStart, firstStart, firstEnd})
+      onlyBreakStarts = shift[0].breakStart;
+      onlyBreakEnds = shift[0].breakEnd;
+      res.status(200).json({oneBreak: true, oneShift: true, onlyBreakEnds, onlyBreakStarts, firstShiftStarts, firstShiftEnds})
     }
     else {
-      res.status(200).json({oneShift: true, firstStart, firstEnd})
+      res.status(200).json({oneShift: true, firstShiftStarts, firstShiftEnds})
     }
    
   } else {

@@ -1,4 +1,8 @@
-// pretty mUch all auth stuff for redux rn, maybe add some more later
+export const ONE_SHIFT_ONE_BREAK = "ONE_SHIFT_ONE_BREAK";
+export const ONE_SHIFT_NO_BREAK = "ONE_SHIFT_NO_BREAK"; 
+export const TWO_SHIFTS_NO_BREAK = "TWO_SHIFTS_NO_BREAK";
+export const TWO_SHIFTS_ONE_BREAK = "TWO_SHIFTS_ONE_BREAK";
+export const TWO_SHIFTS_TWO_BREAKS = "TWO_SHIFTS_TWO_BREAKS";
 export const CHANGE_TOKENS = 'CHANGE_TOKENS';
 export const SET_BUSINESS_INFO_COMPLETE = 'SET_BUSINESS_INFO_COMPLETE';
 export const HIDE_SCHEDULE = "HIDE_SCHEDULE";
