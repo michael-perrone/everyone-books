@@ -382,15 +382,15 @@ router.post('/employee', async (req, res) => {
   } else if (shift.length === 1) {
     let onlyBreakStarts;
     let onlyBreakEnds;
-    let firstShiftStarts = shift[0].timeStart;
-    let firstShiftEnds = shift[0].timeEnd;
+    let onlyShiftStarts = shift[0].timeStart;
+    let onlyShiftEnds = shift[0].timeEnd;
     if (shift[0].breakStart && shift[0].breakEnd) {
       onlyBreakStarts = shift[0].breakStart;
       onlyBreakEnds = shift[0].breakEnd;
-      res.status(200).json({oneBreak: true, oneShift: true, onlyBreakEnds, onlyBreakStarts, firstShiftStarts, firstShiftEnds})
+      res.status(200).json({oneBreak: true, oneShift: true, onlyBreakEnds, onlyBreakStarts, onlyShiftStarts, onlyShiftEnds})
     }
     else {
-      res.status(200).json({oneShift: true, firstShiftStarts, firstShiftEnds})
+      res.status(200).json({oneShift: true, onlyShiftStarts, onlyShiftEnds})
     }
    
   } else {

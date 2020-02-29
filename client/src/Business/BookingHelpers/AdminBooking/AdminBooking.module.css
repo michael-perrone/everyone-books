@@ -16,9 +16,7 @@
   background: rgba(0, 0, 0, 0.751);
   position: absolute;
   z-index: 299;
-
 }
-
 
 #coolContainer {
   padding: 18px;
@@ -40,7 +38,7 @@
 .bookingHolderSubContainer {
   position: relative;
   top: 12px;
-  height: 140px;
+  height: 120px;
   width: 210px;
   border: 1px solid black;
   overflow: auto;
@@ -55,18 +53,16 @@
   background-color: rgb(157, 217, 255);
 }
 
-
 @media (min-width: 1200px) {
   #coolContainer {
-   flex: 1;
-   display: flex;
-   justify-content: center;
+    flex: 1;
+    display: flex;
+    justify-content: center;
   }
   #bookingHolder {
     width: 100%;
   }
   #divWhereWidthChanges {
     width: 100%;
-
   }
 }
