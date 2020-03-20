@@ -4,7 +4,7 @@ import bookingInfoReducer from "./bookingInfoReducer";
 import newReducers from './newReducers';
 import dateReducer from './dateReducer';
 import scheduleReducer from './scheduleReducer';
-import employeeShiftReducer from './emploeeShiftReducer'
+import employeeShiftReducer from './employeeShiftReducer'
 import alertReducer from './alertReducer';
 import { combineReducers } from "redux";
 

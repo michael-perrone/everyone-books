@@ -17,6 +17,7 @@ const ShiftSchema = new mongoose.Schema({
     isBreak: Boolean,
     breakStart: String,
     breakEnd: String,
+    bookingColumnNumber: String,
 })
 
 const Shift = mongoose.model('shift', ShiftSchema);

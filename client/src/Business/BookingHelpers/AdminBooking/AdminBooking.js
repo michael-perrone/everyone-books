@@ -95,6 +95,7 @@ class AdminBooking extends React.Component {
             else if (response.data.twoShifts && response.data.twoBreaks) {
               this.props.setTwoShiftsTwoBreaks(response.data.firstShiftStarts, response.data.firstShiftEnds, response.data.secondShiftStarts, response.data.secondShiftEnds, response.data.firstBreakStarts, response.data.firstBreakEnds, response.data.secondBreakStarts, response.data.secondBreakEnds)
             }
+
           }
         )
       }
@@ -239,6 +240,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+   
     setBreakAlert: (obj) => dispatch({type: BREAK_ALERT, payload: obj}),
     setEmployeeShiftError: (trueOrFalse) => dispatch({type: EMPLOYEE_SHIFT_ERROR, payload: trueOrFalse}),
     getBookingType: bookingType =>

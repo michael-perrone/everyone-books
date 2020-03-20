@@ -10,27 +10,27 @@ const ShiftSchedule = props => {
             <React.Fragment>
             <div style={{ display: 'flex', justifyContent: 'space-between'}}>
                 <div>
-                <p style={{textAlign: 'center', textDecoration: 'underline', marginBottom: '5px'}}>Name</p>
+                <p style={{textAlign: 'center', textDecoration: 'underline', marginBottom: '9px'}}>Name</p>
                 {props.shifts && props.shifts.map(shift => {
-                    return <p>{shift.employeeName}</p>
+                    return <p style={{marginTop: '8px'}}>{shift.employeeName}</p>
                 })}
                 </div>
                 <div>
-                <p  style={{textAlign: 'center', textDecoration: 'underline', marginBottom: '5px'}}>Time</p>
+                <p  style={{textAlign: 'center', textDecoration: 'underline', marginBottom: '9px'}}>Time</p>
                 {props.shifts && props.shifts.map(shift => {
-                    return <p>{shift.timeStart}-{shift.timeEnd}</p>
+                    return <p style={{marginTop: '8px'}}>{shift.timeStart}-{shift.timeEnd}</p>
                 })}
                 </div>
                 <div>
-                <p  style={{textAlign: 'center', textDecoration: 'underline', marginBottom: '5px'}}>Break</p>
+                <p  style={{textAlign: 'center', textDecoration: 'underline', marginBottom: '9px'}}>Break</p>
                 {props.shifts && props.shifts.map(shift => {
                     if (shift.breakStart && shift.breakEnd) {
                     let breakStart = shift.breakStart.split(' ')[0];
                     let breakEnd = shift.breakEnd.split(' ')[0]
-                    return <p>{breakStart}-{breakEnd}</p>
+                    return <p style={{marginTop: '8px'}}>{breakStart}-{breakEnd}</p>
                     }
                     else {
-                        return <p>None</p>
+                        return <p style={{marginTop: '8px'}}>None</p>
                     }
                 })}
                 </div>

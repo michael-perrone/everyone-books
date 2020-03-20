@@ -14,7 +14,7 @@ const BookingButtons = props => {
         Book {props.bookingColumnType}
       </button>
       <button className={styles.thingButton} onClick={props.cancelBooking}>
-        Cancel Booking
+        Cancel
       </button>
     </div>
   );

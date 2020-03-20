@@ -45,7 +45,7 @@ const UserHomeContainer = props => {
     <div
       id={styles.userHomeContainer}
       className={
-        bookings.length > 1 || businesses.length > 1 ? "" : styles.homeContainerClass
+        bookings.length > 3 || businesses.length > 3 ? "" : styles.homeContainerClass
       }
     >
       <div

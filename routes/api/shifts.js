@@ -3,7 +3,7 @@ const Shift = require('../../models/Shift')
 const Booking = require('../../models/Booking')
 
 router.post('/multiplecreate', async(req, res) => {
-  console.log(req.body.shiftDates)
+  console.log(req.body)
   for (let i = 0; i < req.body.shiftDates.length; i++) {
     let shiftConflict = await Shift.find({employeeId: req.body.employeeId, shiftDate: req.body.shiftDates[i]})
     if (shiftConflict.length) {
@@ -142,7 +142,8 @@ router.post('/multiplecreate', async(req, res) => {
       businessId: req.body.businessId,
       isBreak: req.body.isBreak,
       breakEnd: req.body.breakEnd,
-      breakStart: req.body.breakStart
+      breakStart: req.body.breakStart,
+      bookingColumnNumber: req.body.bookingColumnNumber
    })
    console.log(newShift)
       await newShift.save();
@@ -296,7 +297,8 @@ router.post('/create', async (req, res) => {
         businessId: req.body.businessId,
         isBreak: req.body.isBreak,
         breakEnd: req.body.breakEnd,
-        breakStart: req.body.breakStart
+        breakStart: req.body.breakStart,
+        bookingColumnNumber: req.body.bookingColumnNumber
     })
     console.log(newShift)
 
@@ -334,7 +336,7 @@ router.post('/create', async (req, res) => {
 
 router.post('/employee', async (req, res) => {
   console.log(req.body)
-  const shift = await Shift.find({shiftDate: req.body.date, employeeId: req.body.employeeId}).select(['timeStart', 'timeEnd', 'breakStart', 'breakEnd']);
+  const shift = await Shift.find({shiftDate: req.body.date, employeeId: req.body.employeeId}).select(['timeStart', 'timeEnd', 'breakStart', 'breakEnd', 'bookingColumnNumber']);
 
   if (shift.length > 1) {
    
@@ -371,13 +373,13 @@ router.post('/employee', async (req, res) => {
     }
 
     if (!onlyBreakEnds && !onlyBreakStarts && !firstBreakEnds && !firstBreakStarts && !secondBreakEnds && !secondBreakStarts && firstShiftStarts && firstShiftEnds && secondShiftStarts && secondShiftEnds) {
-      res.status(200).json({twoShifts: true, firstShiftStarts, firstShiftEnds, secondShiftStarts, secondShiftEnds})
+      res.status(200).json({scheduled: true, twoShifts: true, firstShiftStarts, firstShiftEnds, secondShiftStarts, secondShiftEnds})
     }
     if (onlyBreakEnds && onlyBreakStarts) {
-      res.status(200).json({oneBreak: true, twoShifts: true, onlyBreakEnds, onlyBreakStarts, firstShiftStarts, firstShiftEnds, secondShiftStarts, secondShiftEnds})
+      res.status(200).json({scheduled: true, oneBreak: true, twoShifts: true, onlyBreakEnds, onlyBreakStarts, firstShiftStarts, firstShiftEnds, secondShiftStarts, secondShiftEnds})
     }
     else if (firstBreakStart && secondBreakStart && secondBreakEnds && firstBreakEnds) {
-      res.status(200).json({twoBreaks: true, twoShifts: true, firstBreakStarts, firstBreakEnds, secondBreakStarts, secondBreakEnds, firstShiftStarts, firstShiftEnds, secondShiftStarts, secondShiftEnds})
+      res.status(200).json({scheduled: true, twoBreaks: true, twoShifts: true, firstBreakStarts, firstBreakEnds, secondBreakStarts, secondBreakEnds, firstShiftStarts, firstShiftEnds, secondShiftStarts, secondShiftEnds})
     }
   } else if (shift.length === 1) {
     let onlyBreakStarts;
@@ -387,10 +389,10 @@ router.post('/employee', async (req, res) => {
     if (shift[0].breakStart && shift[0].breakEnd) {
       onlyBreakStarts = shift[0].breakStart;
       onlyBreakEnds = shift[0].breakEnd;
-      res.status(200).json({oneBreak: true, oneShift: true, onlyBreakEnds, onlyBreakStarts, onlyShiftStarts, onlyShiftEnds})
+      res.status(200).json({scheduled: true, oneBreak: true, oneShift: true, onlyBreakEnds, onlyBreakStarts, onlyShiftStarts, onlyShiftEnds})
     }
     else {
-      res.status(200).json({oneShift: true, onlyShiftStarts, onlyShiftEnds})
+      res.status(200).json({scheduled: true, oneShift: true, onlyShiftStarts, onlyShiftEnds})
     }
    
   } else {

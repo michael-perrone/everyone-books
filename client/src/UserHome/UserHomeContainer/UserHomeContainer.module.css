@@ -1,5 +1,5 @@
 #userHomeContainer {
-  background-color: rgb(230, 230, 230);
+  background-color: rgb(212, 212, 255);
   display: flex;
 }
 
@@ -24,7 +24,8 @@
   z-index: 0;
   width: 350px;
   height: 130px;
-  background-color: rgb(249, 233, 255);
+  line-height: 20px;
+  background-color: rgb(248, 248, 248);
   font-family: "Josefin Sans", sans-serif;
   padding: 10px;
   position: relative;
@@ -36,9 +37,17 @@
   }
 
 
-  .otherHomeContainerClass {
+.otherHomeContainerClass {
    height: 100vh;
   }
+
+
+@media (min-height: 500px) and (min-width: 720px) {
+  .homeContainerClass {
+    height: 105vh;
+  }
+}
+
 
   @media (max-width: 970px) {
     #clubsSubscribedHalf {
@@ -80,4 +89,5 @@
     height: 105vh;
   }
 }
+
 

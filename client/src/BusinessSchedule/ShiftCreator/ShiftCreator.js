@@ -22,12 +22,12 @@ function ShiftCreator(props)  {
     const [shiftCloneDates, setShiftCloneDates] = React.useState([])
     const [clone, setClone] = React.useState('')
     const [success, setSuccess] = React.useState(false);
+    const [optionsNumber, setOptionsNumber] = React.useState();
+    const [shiftError, setShiftError] = React.useState('');
 
     function shiftCloneNumberHandler(e) {
         setShiftCloneNumber(parseInt(e.target.value))
     } 
-
-    
 
     React.useEffect(() => {
         if (shiftCloneNumber) {
@@ -45,7 +45,6 @@ function ShiftCreator(props)  {
             setClone(value)
         }
     }
-
 
     React.useEffect(() => {
         if (breakEnd && breakStart && shiftStart && endOfShift && (isBreak === true && breakStart && breakEnd || isBreak === false)) {
@@ -67,12 +66,12 @@ function ShiftCreator(props)  {
             else if (breakStart && breakEnd && (new Date(`${dateNeeded}, ${breakEnd}`) < new Date(`${dateNeeded}, ${breakStart}`))) {
                    setBreakError("Break cannot end before it starts.")
             }
-            else {
+            else if (employeeName && dateNeeded ) {
                 setBreakError('');
                 setReadyToGo(true)
             }
         }
-        if (isBreak === false && shiftStart && endOfShift) {
+        if (isBreak === false && shiftStart && endOfShift && employeeName && employeeId && dateNeeded) {
             setBreakError('');
             setReadyToGo(true)
         }
@@ -557,6 +556,7 @@ function ShiftCreator(props)  {
     },[date])
 
     function addShifts() {
+        setShiftError("")
         const obSending = {
             shiftDates: shiftCloneDates,
             timeStart: shiftStart,
@@ -567,13 +567,16 @@ function ShiftCreator(props)  {
             businessId: props.admin.businessId,
             isBreak,
             breakStart,
-            breakEnd
+            breakEnd,
+            bookingColumnNumber: optionsNumber
         }
         Axios.post('/api/shifts/multiplecreate', obSending).then(response => {
             if (response.status === 201) {
                 props.getNewShifts()
                 setTimeout(() => setSuccess(true), 500)
             }
+        }).catch(error => {
+                setTimeout(() => setShiftError("dqsdqsdq"), 500)
         })
     }
 
@@ -589,7 +592,8 @@ function ShiftCreator(props)  {
             businessId: props.admin.businessId,
             isBreak,
             breakStart,
-            breakEnd
+            breakEnd,
+            bookingColumnNumber: optionsNumber
         }
         
         Axios.post('/api/shifts/create', obSending).then(response => {
@@ -598,7 +602,9 @@ function ShiftCreator(props)  {
                     props.getNewShifts()
                 }
            }
-        )
+        ).catch(error => {
+                setTimeout(() => setShiftError("dwdqwd"), 500)
+        })
     }
 
     React.useEffect(() => {
@@ -618,6 +624,19 @@ function ShiftCreator(props)  {
             setBreakStart('')
         }
     }
+
+    function createOptions() {
+        let optionsArray = [];
+        optionsArray.push(<option>None</option>)
+        for (let i = 0; i < props.bookingColumnsNumber; i++) {
+            optionsArray.push(<option>{i + 1}</option>)
+        }
+        return optionsArray;
+    }
+
+    function getOptionsNumber(e) {
+        setOptionsNumber(e.target.value)
+    }
    
     
     return (
@@ -625,8 +644,8 @@ function ShiftCreator(props)  {
                 <p style={{position: 'absolute', left: '40px', top: '-20px', color: 'darkred'}}>{breakError}</p>
                 <p style={{width: '100%', textAlign: 'center', fontSize: '20px'}}>Add New Shift</p>
                 <div>
-                <span>Shift Date:</span>
-                <input className={styles.inputs} onChange={setDateHandler} placeholder="select date" type="date"/>
+                <span >Shift Date:</span>
+                <input style={{position: 'relative', top: '-4px'}} className={styles.inputs} onChange={setDateHandler} placeholder="select date" type="date"/>
                 </div>
                 <div>
                     Employee:
@@ -640,7 +659,13 @@ function ShiftCreator(props)  {
                 })}
                 </select>
                 </div>
-              
+                <div style={{display: 'flex'}}>
+                        <p>{props.bookingColumnsType} number:</p>
+                        <select style={{position: 'relative', top: '-3px', left: '5px'}} onChange={getOptionsNumber}>
+                            {createOptions()}
+                        </select>
+                        
+                    </div>
                 <div>
                 <span>Shift Time Start: </span>              
                 <select className={styles.inputs} onChange={shiftStartHandler}>
@@ -705,15 +730,15 @@ function ShiftCreator(props)  {
                 </select>
                 </div>  <div style={{display: 'flex'}}>
                     <span>Break?</span>
-                    <input onClick={breakHandler} value="Yes" style={{marginLeft: '27px', position: 'relative', top: '1px'}} name="YesNo" id="Yes" type="radio"/>
-                    <label style={{marginLeft:'4px', position: 'relative', top: '2px'}} htmlFor="Yes">Yes</label>
-                    <input value="No" onClick={breakHandler} style={{marginLeft: '20px', position: 'relative', top: '1px'}} name="YesNo" id="No" type="radio"/>
-                    <label style={{marginLeft:'5px', position: 'relative', top: '2px'}} htmlFor="No">No</label>
+                    <input onClick={breakHandler} value="Yes" style={{marginLeft: '27px', position: 'relative', top: '-2px'}} name="YesNo" id="Yes" type="radio"/>
+                    <label style={{marginLeft:'4px', position: 'relative'}} htmlFor="Yes">Yes</label>
+                    <input value="No" onClick={breakHandler} style={{marginLeft: '20px', position: 'relative', top: '-2px'}} name="YesNo" id="No" type="radio"/>
+                    <label style={{marginLeft:'5px', position: 'relative'}} htmlFor="No">No</label>
                     </div>
                     {isBreak &&
                     <div>
-                  <span>Start:</span> 
-                   <select style={{marginLeft: '5px'}} onChange={breakStartHandler}>
+                  <span>Break-Start:</span> 
+                   <select style={{marginLeft: '2px', width: '76px'}} onChange={breakStartHandler}>
                     <option>{ }</option>
                     <option>12:00 AM</option>
                     <option>12:30 AM</option>
@@ -764,8 +789,8 @@ function ShiftCreator(props)  {
                     <option>11:00 PM</option>
                     <option>11:30 PM</option>
                     </select>
-                    <span  style={{marginLeft: '8px'}}>Finish:</span> 
-                   <select style={{marginLeft: '5px'}} onChange={breakEndHandler}>
+                    <span  style={{marginLeft: '5px'}}>Break-Finish:</span> 
+                   <select style={{marginLeft: '2px', width: '76px'}} onChange={breakEndHandler}>
                     <option>{ }</option>
                     <option>12:00 AM</option>
                     <option>12:30 AM</option>
@@ -817,14 +842,15 @@ function ShiftCreator(props)  {
                     <option>11:30 PM</option>
                     </select>
                     </div>}
-                    <p style={{lineHeight: '24px'}}>Would you like to clone this shift for multiple weeks?</p>
-                    <div style={{position: 'relative', top: isBreak ? "-34px" : '-39px', left: '60px', display: 'flex'}}>
-                    <input id="AlsoYes" name="AlsoYes" checked={clone} onClick={cloneHandler(true)} type="radio"/><label style={{margin: '0px 14px 0px 4px'}} marign htmlFor="AlsoYes">Yes</label>
-                    <input id="AlsoNo" name="AlsoNo" checked={clone === false} onClick={cloneHandler(false)} type="radio"/><label style={{marginLeft: '4px', poisition: 'relative', top: '-5px'}} htmlFor="AlsoNo">No</label>
+                    <p style={{lineHeight: '24px', fontSize: '16px'}}>Would you like to clone this shift for multiple weeks?</p>
+                    <div style={{position: 'relative', top: isBreak ? "-31px" : readyToGo ? "-35px" : '-39px', left: '60px', display: 'flex'}}>
+                    <input id="AlsoYes" name="AlsoYes" checked={clone} onClick={cloneHandler(true)} type="radio"/><label style={{position: 'relative', top: '2px', margin: '0px 14px 0px 4px'}} htmlFor="AlsoYes">Yes</label>
+                    <input id="AlsoNo" name="AlsoNo" checked={clone === false} onClick={cloneHandler(false)} type="radio"/><label style={{marginLeft: '4px', position: 'relative', top: '2px'}} htmlFor="AlsoNo">No</label>
                     {clone &&
-                     <div style={{position: 'absolute', display: 'flex', right: '120px'}}>
+                     <div style={{display: 'flex', position: 'absolute', left: '100px', top: '2px'}}>
                         <p style={{marginRight: '6px'}}>Weeks:</p>
-                        <select onChange={shiftCloneNumberHandler}>
+                        <select style={{position: 'relative', top: '-3px'}} onChange={shiftCloneNumberHandler}>
+                            <option> </option>
                             <option>1</option>
                             <option>2</option>
                             <option>3</option>
@@ -877,16 +903,16 @@ function ShiftCreator(props)  {
                             <option>50</option>
                             <option>51</option>
                             <option>52</option>
-
                         </select>
                     </div>}
                     </div>
+                    <OtherAlert alertMessage={"There is a conflict with the shift details."} showAlert={shiftError !== ""} alertType="error"/>
                     <OtherAlert alertMessage={'Shifts Added Successfully'} showAlert={success} alertType="success"/>
                 {endOfShift && ((clone === true && shiftCloneNumber) || clone === false)  &&
-                <div style={{position: 'relative', top: '-26px'}}>
+                <div style={{position: 'relative', top: '-10px'}}>
                 <span>Shift End: {endOfShift}</span>
-                {!clone && <button disabled={!readyToGo} onClick={addShift} style={{cursor: !readyToGo ? "not-allowed" : 'pointer' ,marginLeft: '80px', backgroundColor: 'white', border: 'none', boxShadow: '0px 0px 3px black', padding: '6px'}}>Add Shift</button>}
-                {clone && shiftCloneNumber &&<button disabled={!readyToGo} onClick={addShifts} style={{cursor: !readyToGo ? "not-allowed" : 'pointer' ,marginLeft: '80px', backgroundColor: 'white', border: 'none', boxShadow: '0px 0px 3px black', padding: '6px'}}>Add Shifts</button>}
+                {!clone && readyToGo && <button disabled={!readyToGo} onClick={addShift} style={{cursor: !readyToGo ? "not-allowed" : 'pointer', marginLeft: '80px', backgroundColor: 'white', border: 'none', boxShadow: '0px 0px 3px black', padding: '6px'}}>Add Shift</button>}
+                {clone && readyToGo && shiftCloneNumber &&<button disabled={!readyToGo} onClick={addShifts} style={{cursor: !readyToGo ? "not-allowed" : 'pointer' ,marginLeft: '80px', backgroundColor: 'white', border: 'none', boxShadow: '0px 0px 3px black', padding: '6px'}}>Add Shifts</button>}
                 </div>}   
             </div>
     )

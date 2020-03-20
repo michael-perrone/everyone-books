@@ -3,16 +3,18 @@ import styles from "../DropDown.module.css";
 import DropDownLink from "../DropDownLink/DropDownLink";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { USER_LOGOUT, SHOW_NOTIFICATIONS } from "../../../../actions/actions";
+import { USER_LOGOUT, SHOW_NOTIFICATIONS, HIDE_DROP_DOWN } from "../../../../actions/actions";
 
 const UserDropDown = props => {
   function goHome() {
     props.history.push(`/user/${props.user.user.id}`);
+    props.hideDropDown()
   }
 
   function userLogoutFunction() {
     props.userLogout();
     props.history.push("/");
+    props.hideDropDown()
   }
 
   function goToSettings() {
@@ -34,7 +36,8 @@ const UserDropDown = props => {
 const mapDispatchToProps = dispatch => {
   return {
     userLogout: () => dispatch({ type: USER_LOGOUT }),
-    showNotificationsFunction: () => dispatch({ type: SHOW_NOTIFICATIONS })
+    showNotificationsFunction: () => dispatch({ type: SHOW_NOTIFICATIONS }),
+    hideDropDown: () => dispatch({type: HIDE_DROP_DOWN})
   };
 };
 

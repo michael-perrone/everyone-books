@@ -17,7 +17,8 @@ const initialState = {
     firstBreakStarts: '',
     firstBreakEnds: '',
     secondBreakStarts: '',
-    secondBreakEnds: ''
+    secondBreakEnds: '',
+    notScheduled: ""
 }
 
 

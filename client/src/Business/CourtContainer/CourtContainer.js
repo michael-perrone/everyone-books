@@ -45,7 +45,8 @@ class CourtContainer extends React.Component {
       employeeChosenError: false,
       chooseServiceError: false,
       employeeNotWorking: "",
-      datePassed: false
+      datePassed: false,
+      employeeChosenError: false
     };
   }
 
@@ -102,11 +103,18 @@ class CourtContainer extends React.Component {
     };
   }
   thingClicked() {
+    this.setState({employeeChosenError: false})
     if (this.props.timeChosen.timeSelected) { 
-        this.setState(prevState => {
-        return { slotsClicked: !prevState.slotsClicked };
-        });
-    }
+        if (this.props.employeeChosen) {
+          this.setState(prevState => {
+            return { slotsClicked: !prevState.slotsClicked };
+            });
+        }
+        else {
+          setTimeout(this.setState({setEmployeeChosenError: true}), 500)
+         }
+        }  
+     
   }
   showBookingModal = objectToModal => () => {
     this.setState({ objectToModal, showBookingModalState: true });
@@ -334,38 +342,7 @@ class CourtContainer extends React.Component {
           }
 
           if (!blockBooking && this.props.bookingType) {
-            let shiftError = false;
-            axios.post('api/shifts/employee', {date: this.props.dateChosen, employeeId: this.props.employeeChosen.employeeChosen._id}).then(
-              response => {
-                if (response.data.scheduled) {
-                  let shiftStartDate = new Date(`${this.props.dateChosen}, ${response.data.shift.timeStart}`);
-                  let shiftEndDate = new Date(`${this.props.dateChosen}, ${response.data.shift.timeEnd}`)
-                  let requestedTimeStart = new Date(`${this.props.dateChosen}, ${this.state.firstSlotInArray.thing.timeStart}`)
-                  let requestedTimeEnd = new Date(`${this.props.dateChosen}, ${this.state.lastSlotInArray.thing.timeEnd}`)
-
-                  if (shiftStartDate > requestedTimeEnd || shiftStartDate > requestedTimeStart) {
-                    setTimeout(() => this.setState({employeeNotWorking: "This employees shift does not start until later"}), 200)
-                    shiftError = true;
-                    return;
-                  }
-                  else if (shiftEndDate < requestedTimeStart) {
-                    setTimeout(() =>this.setState({employeeNotWorking: "This employees shift has aleady concluded"}), 200)
-                    shiftError = true;
-                    return;
-                  }
-                  else if (shiftEndDate > requestedTimeStart && shiftEndDate < requestedTimeEnd) {
-                    setTimeout(() => this.setState({employeeNotWorking: "This employees shift will end before the estimated service conclusion"}), 200)
-                    shiftError = true
-                    return;
-                  }
-                }
-                else {
-                  setTimeout(() => this.setState({employeeNotWorking: "This employee is not working today."}), 200)
-                  shiftError = true
-                  return;
-                }
-              
-              console.log(shiftError)
+                       
             let nameForBooking = "";
             let employeeName;
             let employeeId;
@@ -410,7 +387,7 @@ class CourtContainer extends React.Component {
                 };
               });
             }
-          })
+        
           }
         });
     }
@@ -472,6 +449,11 @@ class CourtContainer extends React.Component {
           alertMessage="This employee is already booked at this time."
           showAlert={this.state.doubleBookError}
         />
+        <OtherAlert
+          alertType="error"
+          alertMessage="Please select an employee"
+          showAlert={this.state.employeeChosenError}
+        />
         {this.state.tryingToBookModalState && (
           <div
             style={{ width: "100%", display: "flex", justifyContent: "center" }}
@@ -505,7 +487,6 @@ class CourtContainer extends React.Component {
               width: `${this.props.numberColumns * 178}px`
             }}
           >
-            
             {this.props.breakAlert !== "" && !this.props.user && <p style={{position: 'absolute', left: '20px', top: '-50px',color: 'red'}}>This employee has a break from {this.props.breakAlert.breakStart}-{this.props.breakAlert.breakEnd}</p>}
             
             {this.props.breakAlert !== "" && this.props.user && <p style={{position: 'absolute', left: '20px', top: '-50px',color: 'red'}}>This employee is not available from {this.props.breakAlert.breakStart}-{this.props.breakAlert.breakEnd}</p>}

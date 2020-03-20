@@ -12,6 +12,8 @@ function BusinessSchedule(props) {
     const [shifts, setShifts] = React.useState([])
     const [loading, setLoading] = React.useState(true);
     const [anyNum, setAnyNum] = React.useState(1);
+    const [bookingColumnsNumber, setBookingColumnsNumber] = React.useState();
+    const [bookingColumnsType, setBookingColumnsType] = React.useState();
 
     function getNewShifts() {
         setAnyNum(anyNum => anyNum + 1);
@@ -32,6 +34,8 @@ function BusinessSchedule(props) {
                 if (response.status === 200) {
                     setSchedule(response.data.schedule)
                     setEmployees(response.data.employees)
+                    setBookingColumnsNumber(response.data.bookingColumnNumber)
+                    setBookingColumnsType(response.data.bookingColumnsType)
                 }
             }
         )
@@ -58,7 +62,7 @@ function BusinessSchedule(props) {
         <div id={styles.container}>
             <div id={styles.leftHolder}>
                 <WeekSelector/>
-                <ShiftCreator schedule={schedule} admin={props.admin.admin} employees={employees} getNewShifts={getNewShifts}/>
+                <ShiftCreator bookingColumnsNumber={bookingColumnsNumber} bookingColumnsType={bookingColumnsType} schedule={schedule} admin={props.admin.admin} employees={employees} getNewShifts={getNewShifts}/>
             </div>
             <div id={styles.rightHolder}>
             <ShiftSchedule loading={loading} shiftDate={props.shiftDate} shifts={shifts}/>
