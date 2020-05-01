@@ -29,9 +29,9 @@ router.post("/login", async (req, res) => {
       });
       const payload = {
         admin: {
-          businessId: `${adminLoggingIn.business}`,
+          businessId: adminLoggingIn.business,
           businessName: business.businessNameAllLower,
-          id: `${adminLoggingIn.id}`,
+          id: adminLoggingIn.id,
           isAdmin: true,
           name: `${adminLoggingIn.firstName} ${adminLoggingIn.lastName}`
         }
