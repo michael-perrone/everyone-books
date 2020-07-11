@@ -18,40 +18,40 @@ router.post("/login", async (req, res) => {
   let userLoggingIn = await User.findOne({ email: req.body.email.toLowerCase() });
   if (adminLoggingIn) {
     try {
-    console.log(adminLoggingIn)
-    const passwordsMatching = await bcrypt.compare(
-      req.body.password,
-      adminLoggingIn.password
-    );
-    if (passwordsMatching) {
-      const business = await Business.findOne({
-        _id: adminLoggingIn.business
-      });
-      const payload = {
-        admin: {
-          businessId: adminLoggingIn.business,
-          businessName: business.businessNameAllLower,
-          id: adminLoggingIn.id,
-          isAdmin: true,
-          name: `${adminLoggingIn.firstName} ${adminLoggingIn.lastName}`
-        }
-      };
-      jwt.sign(
-        payload,
-        config.get("adminSecret"),
-        { expiresIn: 366000000000000000000000 },
-        (error, token) => {
-          res.status(200).json({ token: token });
-        }
+      console.log(adminLoggingIn)
+      const passwordsMatching = await bcrypt.compare(
+        req.body.password,
+        adminLoggingIn.password
       );
-    } else {
-      res
-        .status(400)
-        .json({ error: "Email/Password Combination not recognized" });
+      if (passwordsMatching) {
+        const business = await Business.findOne({
+          _id: adminLoggingIn.business
+        });
+        const payload = {
+          admin: {
+            businessId: adminLoggingIn.business,
+            businessName: business.businessNameAllLower,
+            id: adminLoggingIn.id,
+            isAdmin: true,
+            name: `${adminLoggingIn.firstName} ${adminLoggingIn.lastName}`
+          }
+        };
+        jwt.sign(
+          payload,
+          config.get("adminSecret"),
+          { expiresIn: 366000000000000000000000 },
+          (error, token) => {
+            res.status(200).json({ token: token, loggingIn: "admin" });
+          }
+        );
+      } else {
+        res
+          .status(400)
+          .json({ error: "Email/Password Combination not recognized" });
+      }
+    } catch (error) {
+      console.log(error)
     }
-  }catch(error ) {
-    console.log(error)
-  }
   }
   if (userLoggingIn) {
     const passwordsMatching = await bcrypt.compare(
@@ -79,7 +79,7 @@ router.post("/login", async (req, res) => {
           if (error) {
             throw error;
           } else {
-            res.status(200).json({ token });
+            res.status(200).json({ token, loggingIn: "user" });
           }
         }
       );
@@ -104,7 +104,7 @@ router.post("/login", async (req, res) => {
           .status(400)
           .json({ error: "Email/Password Combination not recognized" });
       }
-      const business = await Business.findOne({_id: employeeLoggingIn.businessWorkingAt});
+      const business = await Business.findOne({ _id: employeeLoggingIn.businessWorkingAt });
       console.log(business)
       console.log(employeeLoggingIn)
       const payload = {
@@ -113,7 +113,7 @@ router.post("/login", async (req, res) => {
           employeeName: `${employeeLoggingIn.firstName} ${employeeLoggingIn.lastName}`,
           id: employeeLoggingIn.id,
           businessName: business ? business.businessName : undefined
-        }   
+        }
       };
       console.log(payload)
       jwt.sign(
@@ -124,7 +124,7 @@ router.post("/login", async (req, res) => {
           if (error) {
             throw error;
           } else {
-            res.status(200).json({ token });
+            res.status(200).json({ token, loggingIn: "employee" });
           }
         }
       );

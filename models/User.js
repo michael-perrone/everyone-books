@@ -5,16 +5,9 @@ const UserSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectId],
     ref: "booking"
   },
-  firstName: {
-    type: String,
-    required: true
-  },
-  lastName: {
-    type: String,
-    required: true
-  },
   fullName: {
-    type: String
+    type: String,
+    required: true
   },
   email: {
     type: String,

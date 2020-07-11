@@ -1,19 +1,9 @@
 const mongoose = require("mongoose");
 
 const EmployeeSchema = new mongoose.Schema({
-  profession: {
-    type: String
-  },
-  firstName: {
-    type: String,
-    required: true
-  },
-  lastName: {
-    type: String,
-    required: true
-  },
   fullName: {
-    type: String
+    type: String,
+    required: true
   },
   email: {
     type: String,

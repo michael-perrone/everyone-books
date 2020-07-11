@@ -14,13 +14,13 @@ router.post("/", async (req, res) => {
         subscriberExists.length > 0 &&
         subscriberExists[i]._id == req.body.businessId
       ) {
-        doesExist = true;
+        doesExist = true
       }
     }
     if (doesExist) {
       return res
         .status(406)
-        .json({ error: "You have already subscribed to this club" });
+        .json({ error: "You have already subscribed to this business" });
     }
     let business = await Business.findOne({ _id: req.body.businessId });
     if (business) {
@@ -43,7 +43,7 @@ router.post("/", async (req, res) => {
 
 router.post("/unfollow", async (req, res) => {
   try {
-    console.log(req.body)
+
     let user = await User.findOne({ _id: req.body.userId });
     let newBusinessesFollowing = user.businessesFollowing.filter(
       businessId => businessId != req.body.businessId
@@ -60,8 +60,8 @@ router.post("/unfollow", async (req, res) => {
       let businessesAfterFilter = await Business.find({
         followers: user._id
       });
-      console.log(businessesAfterFilter)
-      return res.status(200).json({businessesAfterFilter})
+
+      return res.status(200).send() // DONT FORGET U CHANGED THIS
     }
   } catch (error) {
     console.log(error);

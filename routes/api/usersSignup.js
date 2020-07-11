@@ -8,6 +8,7 @@ const Admin = require("../../models/Admin.js");
 const Instructor = require("../../models/Instructor.js");
 
 router.post("/", async (req, res) => {
+
   let user = await User.findOne({ email: req.body.email.toLowerCase() });
   let admin = await Admin.findOne({ email: req.body.email.toLowerCase() });
   let instructor = await Instructor.findOne({ email: req.body.email.toLowerCase() });
@@ -20,50 +21,53 @@ router.post("/", async (req, res) => {
   } catch (error) {
     res.status(500).send("Server Error");
   }
+  try {
 
-  if (!user) {
-    let firstNameUnAltered = req.body.firstName.split("");
-    firstNameUnAltered[0] = firstNameUnAltered[0].toUpperCase();
-    let firstName = firstNameUnAltered.join("");
-    let lastNameUnAltered = req.body.lastName.split("");
-    lastNameUnAltered[0] = lastNameUnAltered[0].toUpperCase();
-    let lastName = lastNameUnAltered.join("");
-    let newUser = new User({
-      firstName: firstName,
-      lastName: lastName,
-      fullName: firstName + " " + lastName,
-      email: req.body.email.toLowerCase(),
-      phoneNumber: req.body.phoneNumber,
-      password: req.body.createPassword,
-      age: req.body.age,
-      gender: req.body.gender
-    });
-
-    const salt = await bcrypt.genSalt(10);
-
-    newUser.password = await bcrypt.hash(req.body.createPassword, salt);
-
-    await newUser.save();
-
-    const payload = {
-      user: {
-        user: true,
-        id: newUser.id,
-        userName: `${newUser.firstName} ${newUser.lastName}`
+    if (!user) {
+      let fullName;
+      if (req.body.firstName && req.body.lastName) {
+        fullName = req.body.firstName + " " + req.body.lastName
       }
-    };
-    jwt.sign(
-      payload,
-      config.get("userSecret"),
-      { expiresIn: 360000000000 },
-      (error, token) => {
-        if (error) {
-          throw error;
-        } else {
-          res.status(200).json({ token });
+      else {
+        fullName = req.body.fullName
+      }
+      let newUser = new User({
+        fullName: fullName,
+        email: req.body.email.toLowerCase(),
+        phoneNumber: req.body.phoneNumber,
+        password: req.body.createPassword,
+      });
+
+      const salt = await bcrypt.genSalt(10);
+
+      newUser.password = await bcrypt.hash(req.body.createPassword, salt);
+
+      await newUser.save();
+
+      const payload = {
+        user: {
+          user: true,
+          id: newUser.id,
+          userName: newUser.fullName
         }
-      }
-    );
+      };
+
+      jwt.sign(
+        payload,
+        config.get("userSecret"),
+        { expiresIn: 360000000000 },
+        (error, token) => {
+          if (error) {
+            throw error;
+          } else {
+            res.status(200).json({ token });
+          }
+        }
+      );
+    }
+  }
+  catch (error) {
+    console.log(error)
   }
 });
 

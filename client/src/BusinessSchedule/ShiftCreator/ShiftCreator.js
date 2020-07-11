@@ -1,11 +1,11 @@
 import React from 'react';
 import Axios from 'axios';
 import styles from './ShiftCreator.module.css';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import OtherAlert from '../../OtherAlerts/OtherAlerts';
 
 
-function ShiftCreator(props)  {
+function ShiftCreator(props) {
     const [date, setDate] = React.useState(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`);
     const [shiftDuration, setShiftDuration] = React.useState('');
     const [shiftStart, setShiftStart] = React.useState('');
@@ -27,18 +27,18 @@ function ShiftCreator(props)  {
 
     function shiftCloneNumberHandler(e) {
         setShiftCloneNumber(parseInt(e.target.value))
-    } 
+    }
 
     React.useEffect(() => {
         if (shiftCloneNumber) {
-        let newShiftCloneDates = []
-        let dateForLoop = new Date(dateNeeded)
-        for (let i = 0 ; i < shiftCloneNumber; i++) {
-            newShiftCloneDates.push(new Date(dateForLoop.getFullYear(), dateForLoop.getMonth(), dateForLoop.getDate() + (i * 7)).toDateString())
+            let newShiftCloneDates = []
+            let dateForLoop = new Date(dateNeeded)
+            for (let i = 0; i < shiftCloneNumber; i++) {
+                newShiftCloneDates.push(new Date(dateForLoop.getFullYear(), dateForLoop.getMonth(), dateForLoop.getDate() + (i * 7)).toDateString())
+            }
+            setShiftCloneDates(newShiftCloneDates)
         }
-        setShiftCloneDates(newShiftCloneDates)
-      }
-    }, [shiftCloneNumber])
+    }, [shiftCloneNumber, dateNeeded])
 
     function cloneHandler(value) {
         return () => {
@@ -56,7 +56,7 @@ function ShiftCreator(props)  {
             }
             else if (shiftCalcNum(breakEnd) < shiftCalcNum(shiftStart)) {
                 setBreakError("Break cannot end before shift.")
-            } 
+            }
             else if (shiftCalcNum(breakEnd) > shiftCalcNum(endOfShift)) {
                 setBreakError('Break cannot end after shift ends.')
             }
@@ -64,9 +64,9 @@ function ShiftCreator(props)  {
                 setBreakError("Break cannot start and end at same time.")
             }
             else if (breakStart && breakEnd && (new Date(`${dateNeeded}, ${breakEnd}`) < new Date(`${dateNeeded}, ${breakStart}`))) {
-                   setBreakError("Break cannot end before it starts.")
+                setBreakError("Break cannot end before it starts.")
             }
-            else if (employeeName && dateNeeded ) {
+            else if (employeeName && dateNeeded) {
                 setBreakError('');
                 setReadyToGo(true)
             }
@@ -80,12 +80,12 @@ function ShiftCreator(props)  {
 
     function shiftStartHandler(e) {
         setShiftStart(e.target.value)
-    } 
+    }
 
     function breakStartHandler(e) {
         setBreakStart(e.target.value)
     }
- 
+
     function breakEndHandler(e) {
         setBreakEnd(e.target.value)
     }
@@ -172,7 +172,7 @@ function ShiftCreator(props)  {
         else if (time === "11:30 AM") {
             num = 23
         }
-       else if (time === "12:00 PM") {
+        else if (time === "12:00 PM") {
             num = 24;
         }
         else if (time === "12:30 PM") {
@@ -313,7 +313,7 @@ function ShiftCreator(props)  {
             num = 21;
         }
         else if (shiftDur === "11 Hours") {
-            num = 22; 
+            num = 22;
         }
         else if (shiftDur === '11 Hours 30 Minutes') {
             num = 23;
@@ -324,7 +324,7 @@ function ShiftCreator(props)  {
         return num;
     }
 
-     function shiftCalcTime(num) {
+    function shiftCalcTime(num) {
         let time;
         if (num === 0) {
             time = "12:00 AM";
@@ -469,91 +469,91 @@ function ShiftCreator(props)  {
         }
         else if (num === 47) {
             time = "11:30 PM"
+        }
+        else if (num === 48) {
+            time = "12:00 AM"
+        }
+        else if (num === 49) {
+            time = "12:30 AM"
+        }
+        else if (num === 50) {
+            time = "1:00 AM"
+        }
+        else if (num === 51) {
+            time = "1:30 AM"
+        }
+        else if (num === 52) {
+            time = "2:00 AM"
+        }
+        else if (num === 53) {
+            time = "2:30 AM"
+        }
+        else if (num === 54) {
+            time = "3:00 AM"
+        }
+        else if (num === 55) {
+            time = "3:30 AM"
+        }
+        else if (num === 56) {
+            time = "4:00 AM"
+        }
+        else if (num === 57) {
+            time = "4:30 AM"
+        }
+        else if (num === 58) {
+            time = "5:00 AM"
+        }
+        else if (num === 59) {
+            time = "5:30 AM"
+        }
+        else if (num === 60) {
+            time = "6:00 AM"
+        }
+        else if (num === 61) {
+            time = "6:30 AM"
+        }
+        else if (num === 62) {
+            time = "7:00 AM"
+        }
+        else if (num === 63) {
+            time = "7:30 AM"
+        }
+        else if (num === 64) {
+            time = "8:00 AM"
+        }
+        else if (num === 65) {
+            time = "8:30 AM"
+        }
+        else if (num === 66) {
+            time = "9:00 AM"
+        }
+        else if (num === 67) {
+            time = "9:30 AM"
+        }
+        else if (num === 68) {
+            time = "10:00 AM"
+        }
+        else if (num === 69) {
+            time = "10:30 AM"
+        }
+        else if (num === 70) {
+            time = "11:00 AM"
+        }
+        else if (num === 71) {
+            time = "11:30 AM"
+        }
+        return time;
     }
-    else if (num === 48) {
-        time = "12:00 AM"
-    }
-    else if (num === 49) {
-        time = "12:30 AM"
-    }
-    else if (num === 50) {
-        time = "1:00 AM"
-    }
-    else if (num === 51) {
-        time = "1:30 AM"
-    }
-    else if (num === 52) {
-        time = "2:00 AM"
-    }
-    else if (num === 53) {
-        time = "2:30 AM"
-    }
-    else if (num === 54) {
-        time = "3:00 AM"
-    }
-    else if (num === 55) {
-        time = "3:30 AM"
-    }
-    else if (num === 56) {
-        time = "4:00 AM"
-    }
-    else if (num === 57) {
-        time = "4:30 AM"
-    }
-    else if (num === 58) {
-        time = "5:00 AM"
-    }
-    else if (num === 59) {
-        time = "5:30 AM"
-    }
-    else if (num === 60) {
-        time = "6:00 AM"
-    }
-    else if (num === 61) {
-        time = "6:30 AM"
-    }
-    else if (num === 62) {
-        time = "7:00 AM"
-    }
-    else if (num === 63) {
-        time = "7:30 AM"
-    }
-    else if (num === 64) {
-        time = "8:00 AM"
-    }
-    else if (num === 65) {
-        time = "8:30 AM"
-    }
-    else if (num === 66) {
-        time = "9:00 AM"
-    }
-    else if (num === 67) {
-        time = "9:30 AM"
-    }
-    else if (num === 68) {
-        time = "10:00 AM"
-    }
-    else if (num === 69) {
-        time = "10:30 AM"
-    }
-    else if (num === 70) {
-        time = "11:00 AM"
-    }
-    else if (num === 71) {
-        time = "11:30 AM"
-    }
-    return time;
-}
 
 
     React.useEffect(() => {
         setEndOfShift(shiftCalcTime(shiftCalcNum(shiftStart) + turnShiftDurationIntoNum(shiftDuration)))
     }, [shiftStart, shiftDuration])
-    
+
     React.useEffect(() => {
         let dateArray = date.split('-');
-         setDateNeeded(new Date(dateArray[0], parseInt(dateArray[1]) - 1, dateArray[2]).toDateString())
-    },[date])
+        setDateNeeded(new Date(dateArray[0], parseInt(dateArray[1]) - 1, dateArray[2]).toDateString())
+    }, [date])
 
     function addShifts() {
         setShiftError("")
@@ -576,7 +576,7 @@ function ShiftCreator(props)  {
                 setTimeout(() => setSuccess(true), 500)
             }
         }).catch(error => {
-                setTimeout(() => setShiftError("dqsdqsdq"), 500)
+            setTimeout(() => setShiftError("dqsdqsdq"), 500)
         })
     }
 
@@ -595,15 +595,15 @@ function ShiftCreator(props)  {
             breakEnd,
             bookingColumnNumber: optionsNumber
         }
-        
+
         Axios.post('/api/shifts/create', obSending).then(response => {
-                if (response.status === 201) {
-                    setTimeout(() => setSuccess(true), 500)
-                    props.getNewShifts()
-                }
-           }
+            if (response.status === 201) {
+                setTimeout(() => setSuccess(true), 500)
+                props.getNewShifts()
+            }
+        }
         ).catch(error => {
-                setTimeout(() => setShiftError("dwdqwd"), 500)
+            setTimeout(() => setShiftError("dwdqwd"), 500)
         })
     }
 
@@ -637,39 +637,40 @@ function ShiftCreator(props)  {
     function getOptionsNumber(e) {
         setOptionsNumber(e.target.value)
     }
-   
-    
+
+
     return (
-            <div id={styles.scheduleContainer}>
-                <p style={{position: 'absolute', left: '40px', top: '-20px', color: 'darkred'}}>{breakError}</p>
-                <p style={{width: '100%', textAlign: 'center', fontSize: '20px'}}>Add New Shift</p>
-                <div>
+        <div id={styles.scheduleContainer}>
+            <p style={{ position: 'absolute', left: '40px', top: '-20px', color: 'darkred' }}>{breakError}</p>
+            <p style={{ width: '100%', textAlign: 'center', fontSize: '20px' }}>Add New Shift</p>
+            <div>
                 <span >Shift Date:</span>
-                <input style={{position: 'relative', top: '-4px'}} className={styles.inputs} onChange={setDateHandler} placeholder="select date" type="date"/>
-                </div>
-                <div>
-                    Employee:
+                <input style={{ position: 'relative', top: '-4px' }} className={styles.inputs} onChange={setDateHandler} placeholder="select date" type="date" />
+            </div>
+            <div>
+                Employee:
                 <select id='changer' onChange={(e) => {
                     console.log(e.target.options)
                     setEmployeeName(e.target.options[e.target.options.selectedIndex].text)
-                    setEmployeeId(e.target.options[e.target.options.selectedIndex].value)}} className={styles.inputs}>
-                <option>{ }</option>
-                {props.employees && props.employees.map(employee => {
-                    return <option value={employee._id}>{employee.fullName}</option>
-                })}
+                    setEmployeeId(e.target.options[e.target.options.selectedIndex].value)
+                }} className={styles.inputs}>
+                    <option>{}</option>
+                    {props.employees && props.employees.map(employee => {
+                        return <option value={employee._id}>{employee.fullName}</option>
+                    })}
                 </select>
-                </div>
-                <div style={{display: 'flex'}}>
-                        <p>{props.bookingColumnsType} number:</p>
-                        <select style={{position: 'relative', top: '-3px', left: '5px'}} onChange={getOptionsNumber}>
-                            {createOptions()}
-                        </select>
-                        
-                    </div>
-                <div>
-                <span>Shift Time Start: </span>              
+            </div>
+            <div style={{ display: 'flex' }}>
+                <p>{props.bookingColumnsType} number:</p>
+                <select style={{ position: 'relative', top: '-3px', left: '5px' }} onChange={getOptionsNumber}>
+                    {createOptions()}
+                </select>
+
+            </div>
+            <div>
+                <span>Shift Time Start: </span>
                 <select className={styles.inputs} onChange={shiftStartHandler}>
-                 <option>{ }</option>
+                    <option>{}</option>
                     <option>12:00 AM</option>
                     <option>12:30 AM</option>
                     <option>1:00 AM</option>
@@ -718,138 +719,138 @@ function ShiftCreator(props)  {
                     <option>10:30 PM</option>
                     <option>11:00 PM</option>
                     <option>11:30 PM</option>
-                    </select>   
-                    </div>
-                    <div>
-                    <span>Shift Time Duration:</span>
+                </select>
+            </div>
+            <div>
+                <span>Shift Time Duration:</span>
                 <select className={styles.inputs} onChange={shiftDurationHandler}>
                     {props.shiftTimeDurations.map(time => {
                         return <option>{time}</option>
                     })}
-                    
+
                 </select>
-                </div>  <div style={{display: 'flex'}}>
-                    <span>Break?</span>
-                    <input onClick={breakHandler} value="Yes" style={{marginLeft: '27px', position: 'relative', top: '-2px'}} name="YesNo" id="Yes" type="radio"/>
-                    <label style={{marginLeft:'4px', position: 'relative'}} htmlFor="Yes">Yes</label>
-                    <input value="No" onClick={breakHandler} style={{marginLeft: '20px', position: 'relative', top: '-2px'}} name="YesNo" id="No" type="radio"/>
-                    <label style={{marginLeft:'5px', position: 'relative'}} htmlFor="No">No</label>
-                    </div>
-                    {isBreak &&
-                    <div>
-                  <span>Break-Start:</span> 
-                   <select style={{marginLeft: '2px', width: '76px'}} onChange={breakStartHandler}>
-                    <option>{ }</option>
-                    <option>12:00 AM</option>
-                    <option>12:30 AM</option>
-                    <option>1:00 AM</option>
-                    <option>1:30 AM</option>
-                    <option>2:00 AM</option>
-                    <option>2:30 AM</option>
-                    <option>3:00 AM</option>
-                    <option>3:30 AM</option>
-                    <option>4:00 AM</option>
-                    <option>4:30 AM</option>
-                    <option>5:00 AM</option>
-                    <option>5:30 AM</option>
-                    <option>6:00 AM</option>
-                    <option>6:30 AM</option>
-                    <option>7:00 AM</option>
-                    <option>7:30 AM</option>
-                    <option>8:00 AM</option>
-                    <option>8:30 AM</option>
-                    <option>9:00 AM</option>
-                    <option>9:30 AM</option>
-                    <option>10:00 AM</option>
-                    <option>10:30 AM</option>
-                    <option>11:00 AM</option>
-                    <option>11:30 AM</option>
-                    <option>12:00 PM</option>
-                    <option>12:30 PM</option>
-                    <option>1:00 PM</option>
-                    <option>1:30 PM</option>
-                    <option>2:00 PM</option>
-                    <option>2:30 PM</option>
-                    <option>3:00 PM</option>
-                    <option>3:30 PM</option>
-                    <option>4:00 PM</option>
-                    <option>4:30 PM</option>
-                    <option>5:00 PM</option>
-                    <option>5:30 PM</option>
-                    <option>6:00 PM</option>
-                    <option>6:30 PM</option>
-                    <option>7:00 PM</option>
-                    <option>7:30 PM</option>
-                    <option>8:00 PM</option>
-                    <option>8:30 PM</option>
-                    <option>9:00 PM</option>
-                    <option>9:30 PM</option>
-                    <option>10:00 PM</option>
-                    <option>10:30 PM</option>
-                    <option>11:00 PM</option>
-                    <option>11:30 PM</option>
+            </div>  <div style={{ display: 'flex' }}>
+                <span>Break?</span>
+                <input onClick={breakHandler} value="Yes" style={{ marginLeft: '27px', position: 'relative', top: '-2px' }} name="YesNo" id="Yes" type="radio" />
+                <label style={{ marginLeft: '4px', position: 'relative' }} htmlFor="Yes">Yes</label>
+                <input value="No" onClick={breakHandler} style={{ marginLeft: '20px', position: 'relative', top: '-2px' }} name="YesNo" id="No" type="radio" />
+                <label style={{ marginLeft: '5px', position: 'relative' }} htmlFor="No">No</label>
+            </div>
+            {isBreak &&
+                <div>
+                    <span>Break-Start:</span>
+                    <select style={{ marginLeft: '2px', width: '76px' }} onChange={breakStartHandler}>
+                        <option>{}</option>
+                        <option>12:00 AM</option>
+                        <option>12:30 AM</option>
+                        <option>1:00 AM</option>
+                        <option>1:30 AM</option>
+                        <option>2:00 AM</option>
+                        <option>2:30 AM</option>
+                        <option>3:00 AM</option>
+                        <option>3:30 AM</option>
+                        <option>4:00 AM</option>
+                        <option>4:30 AM</option>
+                        <option>5:00 AM</option>
+                        <option>5:30 AM</option>
+                        <option>6:00 AM</option>
+                        <option>6:30 AM</option>
+                        <option>7:00 AM</option>
+                        <option>7:30 AM</option>
+                        <option>8:00 AM</option>
+                        <option>8:30 AM</option>
+                        <option>9:00 AM</option>
+                        <option>9:30 AM</option>
+                        <option>10:00 AM</option>
+                        <option>10:30 AM</option>
+                        <option>11:00 AM</option>
+                        <option>11:30 AM</option>
+                        <option>12:00 PM</option>
+                        <option>12:30 PM</option>
+                        <option>1:00 PM</option>
+                        <option>1:30 PM</option>
+                        <option>2:00 PM</option>
+                        <option>2:30 PM</option>
+                        <option>3:00 PM</option>
+                        <option>3:30 PM</option>
+                        <option>4:00 PM</option>
+                        <option>4:30 PM</option>
+                        <option>5:00 PM</option>
+                        <option>5:30 PM</option>
+                        <option>6:00 PM</option>
+                        <option>6:30 PM</option>
+                        <option>7:00 PM</option>
+                        <option>7:30 PM</option>
+                        <option>8:00 PM</option>
+                        <option>8:30 PM</option>
+                        <option>9:00 PM</option>
+                        <option>9:30 PM</option>
+                        <option>10:00 PM</option>
+                        <option>10:30 PM</option>
+                        <option>11:00 PM</option>
+                        <option>11:30 PM</option>
                     </select>
-                    <span  style={{marginLeft: '5px'}}>Break-Finish:</span> 
-                   <select style={{marginLeft: '2px', width: '76px'}} onChange={breakEndHandler}>
-                    <option>{ }</option>
-                    <option>12:00 AM</option>
-                    <option>12:30 AM</option>
-                    <option>1:00 AM</option>
-                    <option>1:30 AM</option>
-                    <option>2:00 AM</option>
-                    <option>2:30 AM</option>
-                    <option>3:00 AM</option>
-                    <option>3:30 AM</option>
-                    <option>4:00 AM</option>
-                    <option>4:30 AM</option>
-                    <option>5:00 AM</option>
-                    <option>5:30 AM</option>
-                    <option>6:00 AM</option>
-                    <option>6:30 AM</option>
-                    <option>7:00 AM</option>
-                    <option>7:30 AM</option>
-                    <option>8:00 AM</option>
-                    <option>8:30 AM</option>
-                    <option>9:00 AM</option>
-                    <option>9:30 AM</option>
-                    <option>10:00 AM</option>
-                    <option>10:30 AM</option>
-                    <option>11:00 AM</option>
-                    <option>11:30 AM</option>
-                    <option>12:00 PM</option>
-                    <option>12:30 PM</option>
-                    <option>1:00 PM</option>
-                    <option>1:30 PM</option>
-                    <option>2:00 PM</option>
-                    <option>2:30 PM</option>
-                    <option>3:00 PM</option>
-                    <option>3:30 PM</option>
-                    <option>4:00 PM</option>
-                    <option>4:30 PM</option>
-                    <option>5:00 PM</option>
-                    <option>5:30 PM</option>
-                    <option>6:00 PM</option>
-                    <option>6:30 PM</option>
-                    <option>7:00 PM</option>
-                    <option>7:30 PM</option>
-                    <option>8:00 PM</option>
-                    <option>8:30 PM</option>
-                    <option>9:00 PM</option>
-                    <option>9:30 PM</option>
-                    <option>10:00 PM</option>
-                    <option>10:30 PM</option>
-                    <option>11:00 PM</option>
-                    <option>11:30 PM</option>
+                    <span style={{ marginLeft: '5px' }}>Break-Finish:</span>
+                    <select style={{ marginLeft: '2px', width: '76px' }} onChange={breakEndHandler}>
+                        <option>{}</option>
+                        <option>12:00 AM</option>
+                        <option>12:30 AM</option>
+                        <option>1:00 AM</option>
+                        <option>1:30 AM</option>
+                        <option>2:00 AM</option>
+                        <option>2:30 AM</option>
+                        <option>3:00 AM</option>
+                        <option>3:30 AM</option>
+                        <option>4:00 AM</option>
+                        <option>4:30 AM</option>
+                        <option>5:00 AM</option>
+                        <option>5:30 AM</option>
+                        <option>6:00 AM</option>
+                        <option>6:30 AM</option>
+                        <option>7:00 AM</option>
+                        <option>7:30 AM</option>
+                        <option>8:00 AM</option>
+                        <option>8:30 AM</option>
+                        <option>9:00 AM</option>
+                        <option>9:30 AM</option>
+                        <option>10:00 AM</option>
+                        <option>10:30 AM</option>
+                        <option>11:00 AM</option>
+                        <option>11:30 AM</option>
+                        <option>12:00 PM</option>
+                        <option>12:30 PM</option>
+                        <option>1:00 PM</option>
+                        <option>1:30 PM</option>
+                        <option>2:00 PM</option>
+                        <option>2:30 PM</option>
+                        <option>3:00 PM</option>
+                        <option>3:30 PM</option>
+                        <option>4:00 PM</option>
+                        <option>4:30 PM</option>
+                        <option>5:00 PM</option>
+                        <option>5:30 PM</option>
+                        <option>6:00 PM</option>
+                        <option>6:30 PM</option>
+                        <option>7:00 PM</option>
+                        <option>7:30 PM</option>
+                        <option>8:00 PM</option>
+                        <option>8:30 PM</option>
+                        <option>9:00 PM</option>
+                        <option>9:30 PM</option>
+                        <option>10:00 PM</option>
+                        <option>10:30 PM</option>
+                        <option>11:00 PM</option>
+                        <option>11:30 PM</option>
                     </select>
-                    </div>}
-                    <p style={{lineHeight: '24px', fontSize: '16px'}}>Would you like to clone this shift for multiple weeks?</p>
-                    <div style={{position: 'relative', top: isBreak ? "-31px" : readyToGo ? "-35px" : '-39px', left: '60px', display: 'flex'}}>
-                    <input id="AlsoYes" name="AlsoYes" checked={clone} onClick={cloneHandler(true)} type="radio"/><label style={{position: 'relative', top: '2px', margin: '0px 14px 0px 4px'}} htmlFor="AlsoYes">Yes</label>
-                    <input id="AlsoNo" name="AlsoNo" checked={clone === false} onClick={cloneHandler(false)} type="radio"/><label style={{marginLeft: '4px', position: 'relative', top: '2px'}} htmlFor="AlsoNo">No</label>
-                    {clone &&
-                     <div style={{display: 'flex', position: 'absolute', left: '100px', top: '2px'}}>
-                        <p style={{marginRight: '6px'}}>Weeks:</p>
-                        <select style={{position: 'relative', top: '-3px'}} onChange={shiftCloneNumberHandler}>
+                </div>}
+            <p style={{ lineHeight: '24px', fontSize: '16px' }}>Would you like to clone this shift for multiple weeks?</p>
+            <div style={{ position: 'relative', top: isBreak ? "-31px" : readyToGo ? "-35px" : '-39px', left: '60px', display: 'flex' }}>
+                <input id="AlsoYes" name="AlsoYes" checked={clone} onClick={cloneHandler(true)} type="radio" /><label style={{ position: 'relative', top: '2px', margin: '0px 14px 0px 4px' }} htmlFor="AlsoYes">Yes</label>
+                <input id="AlsoNo" name="AlsoNo" checked={clone === false} onClick={cloneHandler(false)} type="radio" /><label style={{ marginLeft: '4px', position: 'relative', top: '2px' }} htmlFor="AlsoNo">No</label>
+                {clone &&
+                    <div style={{ display: 'flex', position: 'absolute', left: '100px', top: '2px' }}>
+                        <p style={{ marginRight: '6px' }}>Weeks:</p>
+                        <select style={{ position: 'relative', top: '-3px' }} onChange={shiftCloneNumberHandler}>
                             <option> </option>
                             <option>1</option>
                             <option>2</option>
@@ -905,16 +906,16 @@ function ShiftCreator(props)  {
                             <option>52</option>
                         </select>
                     </div>}
-                    </div>
-                    <OtherAlert alertMessage={"There is a conflict with the shift details."} showAlert={shiftError !== ""} alertType="error"/>
-                    <OtherAlert alertMessage={'Shifts Added Successfully'} showAlert={success} alertType="success"/>
-                {endOfShift && ((clone === true && shiftCloneNumber) || clone === false)  &&
-                <div style={{position: 'relative', top: '-10px'}}>
-                <span>Shift End: {endOfShift}</span>
-                {!clone && readyToGo && <button disabled={!readyToGo} onClick={addShift} style={{cursor: !readyToGo ? "not-allowed" : 'pointer', marginLeft: '80px', backgroundColor: 'white', border: 'none', boxShadow: '0px 0px 3px black', padding: '6px'}}>Add Shift</button>}
-                {clone && readyToGo && shiftCloneNumber &&<button disabled={!readyToGo} onClick={addShifts} style={{cursor: !readyToGo ? "not-allowed" : 'pointer' ,marginLeft: '80px', backgroundColor: 'white', border: 'none', boxShadow: '0px 0px 3px black', padding: '6px'}}>Add Shifts</button>}
-                </div>}   
             </div>
+            <OtherAlert alertMessage={"There is a conflict with the shift details."} showAlert={shiftError !== ""} alertType="error" />
+            <OtherAlert alertMessage={'Shifts Added Successfully'} showAlert={success} alertType="success" />
+            {endOfShift && ((clone === true && shiftCloneNumber) || clone === false) &&
+                <div style={{ position: 'relative', top: '-10px' }}>
+                    <span>Shift End: {endOfShift}</span>
+                    {!clone && readyToGo && <button disabled={!readyToGo} onClick={addShift} style={{ cursor: !readyToGo ? "not-allowed" : 'pointer', marginLeft: '80px', backgroundColor: 'white', border: 'none', boxShadow: '0px 0px 3px black', padding: '6px' }}>Add Shift</button>}
+                    {clone && readyToGo && shiftCloneNumber && <button disabled={!readyToGo} onClick={addShifts} style={{ cursor: !readyToGo ? "not-allowed" : 'pointer', marginLeft: '80px', backgroundColor: 'white', border: 'none', boxShadow: '0px 0px 3px black', padding: '6px' }}>Add Shifts</button>}
+                </div>}
+        </div>
     )
 }
 
