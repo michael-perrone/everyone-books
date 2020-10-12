@@ -29,6 +29,7 @@ router.post('/check', async (req, res) => {
 router.post('/',
   async (req, res) => {
     try {
+      console.log(req.body.thuOpen)
       if (req.body.monOpen) {
         console.log('WDW')
         let employee = await Employee.findOne({ email: req.body.email.toLowerCase() });
@@ -67,7 +68,8 @@ router.post('/',
           bookingColumnNumber: req.body.bookingColumnNumber,
           schedule: schedule,
           website: req.body.website,
-          phoneNumber: req.body.phoneNumber
+          phoneNumber: req.body.phoneNumber,
+          eq: req.body.eq
         });
         let newAdmin = new Admin({
           businessName: newBusiness.businessNameAllLower,

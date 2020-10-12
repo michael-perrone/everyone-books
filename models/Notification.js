@@ -1,35 +1,16 @@
 const mongoose = require("mongoose");
 
 const notificationSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "user"
-  },
-  employeeId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "instructor"
-  },
-  adminId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "admin"
-  },
   notificationType: String,
-  notificationDate: Date,
+  date: String,
   notificationRead: {
     type: Boolean,
     default: false
   },
-  notificationMessage: String,
-  notificationFrom: String,
-  notificationFromUserId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "user"
-  },
-  notificationFromBusiness: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "tennisClub"
-  },
-  answer: String
+  fromId: String,
+  fromString: String,
+  type: String,
+  answer: Boolean
 });
 
 const Notification = mongoose.model("notification", notificationSchema);

@@ -19,7 +19,6 @@ router.get("/myprofile", authUser, async (req, res) => {
 router.delete("/", authUser, async (req, res) => {
   try {
     await User.findOneAndRemove({ _id: req.user.id });
-
     res.json({ msg: "User Removed" });
   } catch (error) {
     console.log(error);
@@ -38,7 +37,6 @@ router.get('/following', authUser, async (req, res) => {
 })
 
 router.get('/followingForTab', authUser, async (req, res) => {
-  console.log("hi")
   let user = await User.findOne({ _id: req.user.id }).select(["businessesFollowing"]);
   let businesses = await Business.find({ _id: user.businessesFollowing }).select(['schedule', '_id', 'businessName', 'address', 'city', 'zip', 'state', 'website', 'phoneNumber'])
   if (user) {

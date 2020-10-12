@@ -8,17 +8,12 @@ const config = require("config");
 const Admin = require("../../models/Admin");
 const Business = require('../../models/Business');
 
-//@route GET api/auth
-// desc test route
-// access public
-
 
 router.post("/login", async (req, res) => {
   let adminLoggingIn = await Admin.findOne({ email: req.body.email.toLowerCase() });
   let userLoggingIn = await User.findOne({ email: req.body.email.toLowerCase() });
   if (adminLoggingIn) {
     try {
-      console.log(adminLoggingIn)
       const passwordsMatching = await bcrypt.compare(
         req.body.password,
         adminLoggingIn.password
@@ -94,6 +89,11 @@ router.post("/login", async (req, res) => {
         error: "Email/Password Combination not recognized"
       });
     } else {
+      console.log(employeeLoggingIn.notifications)
+      let notiNum = employeeLoggingIn.notifications.count;
+
+      console.log("ITS ME THE EMPLOYEE")
+      console.log(req.body)
       const isPasswordMatching = await bcrypt.compare(
         req.body.password,
         employeeLoggingIn.password
@@ -105,12 +105,10 @@ router.post("/login", async (req, res) => {
           .json({ error: "Email/Password Combination not recognized" });
       }
       const business = await Business.findOne({ _id: employeeLoggingIn.businessWorkingAt });
-      console.log(business)
-      console.log(employeeLoggingIn)
       const payload = {
         employee: {
           businessId: employeeLoggingIn.businessWorkingAt,
-          employeeName: `${employeeLoggingIn.firstName} ${employeeLoggingIn.lastName}`,
+          employeeName: `${employeeLoggingIn.fullName}`,
           id: employeeLoggingIn.id,
           businessName: business ? business.businessName : undefined
         }
@@ -124,7 +122,8 @@ router.post("/login", async (req, res) => {
           if (error) {
             throw error;
           } else {
-            res.status(200).json({ token, loggingIn: "employee" });
+            console.log(token)
+            res.status(200).json({ token, loggingIn: "employee", notiNum });
           }
         }
       );

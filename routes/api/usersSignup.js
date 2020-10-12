@@ -31,10 +31,20 @@ router.post("/", async (req, res) => {
       else {
         fullName = req.body.fullName
       }
+      let phoneArray = req.body.phoneNumber.split("");
+      console.log(phoneArray)
+      for (let i = 0; i < phoneArray.length; i++) {
+        if (phoneArray[i] !== "0" && phoneArray[i] !== "1" && phoneArray[i] !== "2" && phoneArray[i] !== "3" && phoneArray[i] !== "4" && phoneArray[i] !== "5" && phoneArray[i] !== "6" && phoneArray[i] !== "7" && phoneArray[i] !== "8" && phoneArray[i] !== "9") {
+          delete phoneArray[i];
+        }
+      }
+      console.log(req.body.phoneNumber);
+      let realPhone = phoneArray.join("");
+      console.log(realPhone)
       let newUser = new User({
         fullName: fullName,
         email: req.body.email.toLowerCase(),
-        phoneNumber: req.body.phoneNumber,
+        phoneNumber: realPhone,
         password: req.body.createPassword,
       });
 

@@ -8,18 +8,16 @@ app.use(cors());
 connectedDatabase();
 
 app.use(express.json({ extended: false }));
+app.use('/api/adminSchedule', require('./routes/api/adminSchedule'));
 app.use('/api/employees_dates', require('./routes/api/employees_dates'));
 app.use('/api/services', require('./routes/api/services'));
 app.use('/api/business', require('./routes/api/business'));
-app.use("/api/getInstructor", require("./routes/api/getInstructor"));
 app.use("/api/getBookings", require("./routes/api/getBookings"));
 app.use("/api/notifications", require("./routes/api/notifications"));
 app.use("/api/thingBooked", require("./routes/api/thingBooked"));
-app.use("/api/club", require("./routes/api/club"));
 app.use("/api/usersSignup", require("./routes/api/usersSignup"));
 app.use("/api/auth", require("./routes/api/auth"));
 app.use("/api/employeeSignup", require("./routes/api/employeeSignup"));
-app.use("/api/instructorProfile", require("./routes/api/instructorProfile"));
 app.use("/api/userProfile", require("./routes/api/userProfile"));
 app.use("/api/adminSignup", require("./routes/api/adminSignup"));
 app.use("/api/businessList", require("./routes/api/businessList"));
@@ -47,7 +45,7 @@ app.use("/api/eBookings", require("./routes/api/eBookings"));
 app.use("/api/addImage", require("./routes/api/addImage"));
 app.use('/api/getEmployee', require('./routes/api/getEmployee'));
 app.use('/api/employeeNotificationsRead', require('./routes/api/employeeNotificationsRead'))
-
+app.use('/api/iosBooking', require("./routes/api/iosBooking"))
 app.use(express.static("./client/build"));
 app.get("*", function (request, response) {
   response.sendFile(path.resolve(__dirname, "client", "build", "index.html"));

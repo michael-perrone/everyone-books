@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const BusinessSchema = new mongoose.Schema({
   typeOfBusiness: String,
   schedule: [
-      Object
+    Object
   ],
   phoneNumber: {
     type: String
@@ -14,7 +14,7 @@ const BusinessSchema = new mongoose.Schema({
     type: String
   },
   businessName: {
-  type: String,
+    type: String,
     required: true
   },
   address: {
@@ -44,7 +44,7 @@ const BusinessSchema = new mongoose.Schema({
     type: String
   },
   promos: {
-      type: [String]
+    type: [String]
   },
   bio: {
     type: String
@@ -57,6 +57,7 @@ const BusinessSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "clubProfile"
   },
+  eq: String
 });
 const Business = mongoose.model("business", BusinessSchema);
 

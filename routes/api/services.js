@@ -7,7 +7,7 @@ const ServiceType = require('../../models/ServiceType');
 router.get('/', adminAuth, async (req, res) => {
   try {
     console.log("hi")
-    let businessProfile = await BusinessProfile.findOne({ business: req.admin.businessId });
+    let businessProfile = await BusinessProfile.findOne({ business: req.admin.businessId }).select(["serviceTypes"]);
     console.log(businessProfile)
     if (businessProfile) {
       let serviceTypes = await ServiceType.find({ _id: businessProfile.serviceTypes });
@@ -19,6 +19,22 @@ router.get('/', adminAuth, async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send();
+  }
+})
+
+router.post("/getServices", async (req, res) => {
+  try {
+    let businessProfile = await BusinessProfile.findOne({ business: req.body.businessId }).select(["serviceTypes"]);
+    if (businessProfile) {
+      let serviceTypes = await ServiceType.find({ _id: businessProfile.serviceTypes });
+      res.status(200).json({ services: serviceTypes });
+    }
+    else {
+      res.status(204).send()
+    }
+  }
+  catch (error) {
+    console.log(error)
   }
 })
 

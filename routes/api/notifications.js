@@ -1,7 +1,7 @@
 const express = require("express");
 const Employee = require('../../models/Employee')
 const router = express.Router();
-const instructorAuth = require("../../middleware/authInstructor");
+const instructorAuth = require("../../middleware/authEmployee");
 const Instructor = require("../../models/Instructor");
 const Notification = require("../../models/Notification");
 const Business = require('../../models/Business');
@@ -11,11 +11,17 @@ const BusinessProfile = require('../../models/BusinessProfile')
 const userAuth = require("../../middleware/authUser");
 const jwt = require("jsonwebtoken");
 const config = require("config");
+const employeeAuth = require('../../middleware/authEmployee');
+const Admin = require("../../models/Admin");
+const authAdmin = require("../../middleware/authAdmin");
+const utils = require("../../utils/utils");
+
+
 
 router.post("/userBookedEmployee", async (req, res) => {
   try {
     console.log(req.body, 'wingowat')
-    let user = await User.findOne({_id: req.body.userId})
+    let user = await User.findOne({ _id: req.body.userId })
     let booking = await Booking.findOne({ _id: req.body.bookingId });
     let employee = await Employee.findOne({ _id: req.body.employeeId });
     let bookingDateArray = booking.date.split(" ");
@@ -41,8 +47,8 @@ router.post("/userBookedEmployee", async (req, res) => {
 
 
 router.post('/allReadUser', userAuth, async (req, res) => {
-  let user = await User.findOne({_id: req.user._id});
-  let notifications = await Notification.find({_id: user.notifications});
+  let user = await User.findOne({ _id: req.user._id });
+  let notifications = await Notification.find({ _id: user.notifications });
   for (let t = 0; t < notifications.length; t++) {
     notifications[t].notificationRead = true;
     await notifications[t].save();
@@ -90,9 +96,17 @@ router.get("/user", userAuth, async (req, res) => {
   }
 });
 
-router.get("/employeenotifications", instructorAuth, async (req, res) => {
+router.post("/employeeRead", async (req, res) => {
+  let notification = await Notification.findOne({ _id: req.body.notificationId });
+  notification.answer = true;
+  await notification.save();
+  res.status(200).send();
+})
+
+router.post("/employeenotifications", async (req, res) => {
+  console.log("hello")
   try {
-    let employee = await Employee.findOne({ _id: req.employee.id });
+    let employee = await Employee.findOne({ _id: req.body.employeeId });
     let notificationArray = [];
     for (let i = 0; i < employee.notifications.length; i++) {
       let notification = await Notification.findOne({
@@ -127,6 +141,156 @@ router.post("/updateread", async (req, res) => {
   }
 });
 
+router.get('/employeeHas', employeeAuth, async (req, res) => {
+  let employee = await Employee.findOne({ _id: req.employee.id }).select(["notifications"]);
+  if (employee.notifications.length > 0) {
+    res.status(200).json({ notis: true })
+  }
+  else {
+    res.status(200).json({ notis: false })
+  }
+})
+
+
+router.get('/getAdminNotis', authAdmin, async (req, res) => {
+  let admin = await Admin.findOne({ _id: req.admin.id });
+  let notifications = await Notification.find({ _id: admin.notifications });
+  return res.status(200).json({ notifications })
+})
+
+router.post("/employerDeniedEmployee", authAdmin, async (req, res) => {
+  try {
+    let notification = await Notification.findOne({ _id: req.body.notificationId });
+    notification.answer = false;
+    notification.save();
+    let business = await Business.findOne({ _id: req.admin.businessId });
+    let date = new Date();
+    let newNoti = new Notification({
+      notificationDate: utils.cutDay(`${date.toDateString()} ${date.getHours}-${date.getMinutes}`),
+      fromId: req.admin.businessId,
+      fromString: business.businessName,
+      notificationType: "EA"
+    });
+    let employee = await Employee.findOne({ _id: req.body.employeeId });
+    let notifications = [...employee.notifications];
+    employee.notifications = [...notifications, newNoti];
+    await employee.save();
+    res.status(200).send();
+  } catch (error) {
+    console.log(error)
+    res.status(500).send();
+  }
+})
+
+router.post("/employerAcceptedEmployee", authAdmin, async (req, res) => {
+  try {
+    let admin = await Admin.findOne({ _id: req.admin.id });
+    let businessProfile = await BusinessProfile.findOne({ business: admin.business })
+    if (admin.business && !businessProfile) {
+      let businessProfile = new BusinessProfile({
+        employeesWhoAccepted: [req.body.employeeId],
+        business: admin.business
+      })
+      await businessProfile.save();
+
+      let notification = await Notification.findOne({ _id: req.body.notificationId });
+      notification.answer = true;
+      await notification.save();
+      console.log("DSDSDQSDSQDQSD")
+      let business = await Business.findOne({ _id: req.body.businessId })
+      let employee = await Employee.findOne({ _id: req.body.employeeId });
+      let date = new Date();
+      let newNotification = new Notification({
+        notificationType: "ERA",
+        date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
+        fromString: business.businessName
+      })
+      await newNotification.save();
+      employee.businessWorkingAt = business._id;
+      let newNotis = [...employee.notifications, newNotification];
+      employee.notifications = newNotis;
+      await employee.save()
+      return res.status(200).send();
+    }
+    else {
+      console.log("did i make it here")
+      let oldEmployees = [...businessProfile.employeesWhoAccepted];
+      if (oldEmployees.findIndex(e => e == req.body.employeeId) === -1) {
+        newEmployees = [...oldEmployees, req.body.employeeId];
+        businessProfile.employeesWhoAccepted = newEmployees;
+        await businessProfile.save();
+        let business = await Business.findOne({ _id: req.body.businessId })
+        let employee = await Employee.findOne({ _id: req.body.employeeId });
+        let date = new Date();
+        let newNotification = new Notification({
+          notificationType: "ERA",
+          date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
+          fromString: business.businessName
+        })
+        await newNotification.save();
+        let newNotis = [...employee.notifications, newNotification];
+        employee.notifications = newNotis;
+        employee.businessWorkingAt = business._id;
+        await employee.save()
+        let notification = await Notification.findOne({ _id: req.body.notificationId });
+        notification.answer = true;
+        await notification.save();
+        return res.status(200).send();
+      }
+      else {
+        console.log("here i am")
+        return res.status(406).send();
+      }
+    }
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+router.post('/employeeSendingId', async (req, res) => {
+  let employee = await Employee.findOne({ _id: req.body.employeeId });
+  if (employee.idsSent > 1) {
+    return res.status(406).send();
+  }
+  const admin = await Admin.findOne({ business: req.body.businessId });
+  if (admin) {
+    let notifications = await Notification.find({ _id: admin.notifications })
+    for (let i = 0; i < notifications.length; i++) {
+      if (notifications[i].notificationType === "ESID" &&
+        notifications[i].notificationFromEmployee == req.body.employeeId) {
+        return res.status(409).send();
+      }
+    }
+    let adminNotis = [...admin.notifications];
+    let name = "";
+    let employee = await Employee.findOne({ _id: req.body.employeeId });
+    if (employee) {
+      name = employee.fullName;
+    }
+
+    console.log(req.body.employeeId)
+    let date = new Date()
+    let newNoti = new Notification({
+      notificationType: "ESID",
+      date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
+      fromId: req.body.employeeId,
+      type: "e",
+      fromString: name,
+    })
+    console.log(newNoti)
+    await newNoti.save();
+    if (newNoti) {
+      employee.idsSent += 1;
+      employee.save();
+    }
+    adminNotis.push(newNoti);
+    admin.notifications = adminNotis;
+    admin.save();
+    console.log(admin.notifications)
+    res.status(200).send();
+  }
+})
+
 router.post("/employeeclickedyes", async (req, res) => {
   try {
     const employee = await Employee.findOne({ _id: req.body.employeeId });
@@ -137,7 +301,7 @@ router.post("/employeeclickedyes", async (req, res) => {
       business: notification.notificationFromBusiness
     }).populate("business", ["businessName"]);
     employee.business = businessProfile.business.businessName;
-    employee.businessWorkingAt = businessProfile.business._id; 
+    employee.businessWorkingAt = businessProfile.business._id;
     await employee.save();
 
     if (businessProfile && employee) {
@@ -158,7 +322,7 @@ router.post("/employeeclickedyes", async (req, res) => {
     let notifications = await Notification.find({
       _id: employee.notifications
     });
-    notifications.sort(function(a, b) {
+    notifications.sort(function (a, b) {
       return b.notificationDate - a.notificationDate;
     });
 
@@ -175,7 +339,7 @@ router.post("/employeeclickedyes", async (req, res) => {
         businessName: business.businessName
       }
     };
-    
+
     jwt.sign(
       payload,
       config.get("employeeSecret"),

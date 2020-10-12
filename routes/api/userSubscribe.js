@@ -43,7 +43,6 @@ router.post("/", async (req, res) => {
 
 router.post("/unfollow", async (req, res) => {
   try {
-
     let user = await User.findOne({ _id: req.body.userId });
     let newBusinessesFollowing = user.businessesFollowing.filter(
       businessId => businessId != req.body.businessId

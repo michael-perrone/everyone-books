@@ -29,17 +29,6 @@ function ShiftCreator(props) {
         setShiftCloneNumber(parseInt(e.target.value))
     }
 
-    React.useEffect(() => {
-        if (shiftCloneNumber) {
-            let newShiftCloneDates = []
-            let dateForLoop = new Date(dateNeeded)
-            for (let i = 0; i < shiftCloneNumber; i++) {
-                newShiftCloneDates.push(new Date(dateForLoop.getFullYear(), dateForLoop.getMonth(), dateForLoop.getDate() + (i * 7)).toDateString())
-            }
-            setShiftCloneDates(newShiftCloneDates)
-        }
-    }, [shiftCloneNumber, dateNeeded])
-
     function cloneHandler(value) {
         return () => {
             setClone(value)
@@ -558,7 +547,8 @@ function ShiftCreator(props) {
     function addShifts() {
         setShiftError("")
         const obSending = {
-            shiftDates: shiftCloneDates,
+            shiftDate: dateNeeded,
+            cloneNumber: shiftCloneNumber,
             timeStart: shiftStart,
             timeEnd: endOfShift,
             employeeId,

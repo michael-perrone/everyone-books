@@ -43,6 +43,9 @@ router.get('/myEmployees', adminAuth, async (req, res) => {
       console.log(employeesPending)
       res.status(200).json({ employeesPending, employeesHere })
     }
+    else {
+      res.status(204).send();
+    }
   }
   catch (error) {
     console.log(error)

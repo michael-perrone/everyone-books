@@ -5,6 +5,10 @@ const EmployeeSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  idsSent: {
+    type: Number,
+    default: 0
+  },
   email: {
     type: String,
     required: true
