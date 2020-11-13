@@ -25,28 +25,36 @@ router.post("/admin", async (req, res) => {
             console.log(phoneArray)
             customer = await User.findOne({ phoneNumber: realPhone });
         }
-        console.log(customer)
         let bookings = await Booking.find({ businessId: req.body.businessId, customer: customer._id, date: date.dateString });
         let timeNum = 0;
         let cost = 0;
         for (let i = 0; i < req.body.serviceIds.length; i++) {
             let service = await ServiceType.findOne({ _id: req.body.serviceIds[i] });
+            console.log(service)
             timeNum += utils.timeDurationStringToInt[service.timeDuration];
             cost += Number(service.cost);
+            console.log(cost)
         }
         const endTime = utils.intToStringTime[utils.stringToIntTime[req.body.timeStart] + timeNum];
         const costString = cost.toString();
         const splitCostString = costString.split('.');
         let goodCost = "";
         if (splitCostString.length > 1) {
+            console.log("ANYTHING??")
             if (splitCostString[1].length === 1) {
                 splitCostString[1] = splitCostString[1] + "0";
                 goodCost = "$" + splitCostString[0] + "." + splitCostString[1];
+                console.log(goodCost)
+            }
+            else {
+                goodCost = "$" + costString;
             }
         }
         else {
             goodCost = "$" + costString + ".00";
         }
+        console.log(goodCost)
+        console.log("BELOW GOOD COST")
         const shift = await Shift.findOne({ shiftDate: date.dateString, employeeId: req.body.employeeId });
         const bcn = shift.bookingColumnNumber;
         let newBooking = new Booking({

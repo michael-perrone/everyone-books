@@ -4,7 +4,7 @@ const businessProfileSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "business"
   },
-    employeesToSendInvite: [
+  employeesToSendInvite: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "employee"
@@ -16,10 +16,13 @@ const businessProfileSchema = new mongoose.Schema({
       ref: "employee"
     }
   ],
-  bio: String,
   serviceTypes: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'serviceType'
+  },
+  products: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'product'
   }
 });
 

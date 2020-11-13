@@ -201,9 +201,6 @@ router.post('/individual', async (req, res) => {
     console.log("what")
     while (startNum <= endNum) {
       if (timeNumber === startNum) {
-        console.log("hello")
-        console.log(startNum);
-        console.log(bookings[i])
         return res.status(200).json({ booking: bookings[i] });
       }
       startNum++;

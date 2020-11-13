@@ -24,6 +24,7 @@ router.post("/login", async (req, res) => {
         });
         const payload = {
           admin: {
+            bn: business.businessName,
             businessId: adminLoggingIn.business,
             businessName: business.businessNameAllLower,
             id: adminLoggingIn.id,
@@ -89,11 +90,7 @@ router.post("/login", async (req, res) => {
         error: "Email/Password Combination not recognized"
       });
     } else {
-      console.log(employeeLoggingIn.notifications)
       let notiNum = employeeLoggingIn.notifications.count;
-
-      console.log("ITS ME THE EMPLOYEE")
-      console.log(req.body)
       const isPasswordMatching = await bcrypt.compare(
         req.body.password,
         employeeLoggingIn.password

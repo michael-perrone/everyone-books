@@ -13,7 +13,7 @@ router.post('/multiplecreate', async (req, res) => {
   let newShiftCloneDates = []
   let dateForLoop = new Date(date)
   for (let i = 0; i < req.body.cloneNumber; i++) {
-    newShiftCloneDates.push(new Date(dateForLoop.getFullYear(), dateForLoop.getMonth(), dateForLoop.getDate() + (i * 7)).toDateString())
+    newShiftCloneDates.push(new Date(dateForLoop.getFullYear(), dateForLoop.getMonth(), dateForLoop.getDate() + (i * 7)).toDateString());
   }
 
   for (let i = 0; i < newShiftCloneDates.length; i++) {

@@ -32,6 +32,7 @@ router.post('/',
       console.log(req.body.thuOpen)
       if (req.body.monOpen) {
         console.log('WDW')
+        console.log(req.body)
         let employee = await Employee.findOne({ email: req.body.email.toLowerCase() });
         let admin = await Admin.findOne({ email: req.body.email.toLowerCase() });
         let user = await User.findOne({ email: req.body.email.toLowerCase() });
@@ -91,6 +92,7 @@ router.post('/',
 
         const payload = {
           admin: {
+            bn: newBusiness.businessName,
             businessName: newBusiness.businessAllLower,
             name: `${newAdmin.firstName} ${newAdmin.lastName}`,
             isAdmin: true,
@@ -162,6 +164,7 @@ router.post('/',
 
         const payload = {
           admin: {
+            bn: newBusiness.businessName,
             businessName: newBusiness.businessAllLower,
             name: `${newAdmin.firstName} ${newAdmin.lastName}`,
             isAdmin: true,

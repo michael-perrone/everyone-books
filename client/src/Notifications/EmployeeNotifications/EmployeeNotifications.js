@@ -39,11 +39,11 @@ class InstructorNotifications extends React.Component {
       <React.Fragment>
         {this.props.employeeNotifications &&
           this.props.employeeNotifications.map(element => {
-            console.log(element.notificationType);
-            if (element.notificationType === "instructorBookedUser") {
+            console.log(element.type);
+            if (element.type === "instructorBookedUser") {
               return <UserBookedCourtWithInstructor notification={element} />;
             }
-            if (element.notificationType === "Business Added Employee") {
+            if (element.type === "BAE") {
               console.log('HOIWIDW')
               return (
                 <BusinessAddedEmployeeNotification

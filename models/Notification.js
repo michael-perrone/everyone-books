@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const notificationSchema = new mongoose.Schema({
-  notificationType: String,
   date: String,
   notificationRead: {
     type: Boolean,

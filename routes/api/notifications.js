@@ -28,10 +28,10 @@ router.post("/userBookedEmployee", async (req, res) => {
     let bookingDate = bookingDateArray.join("-");
     let notificationCreate = new Notification({
       notificationRead: false,
-      notificationDate: new Date(),
+      date: new Date(),
       employeeId: req.body.employeeId,
       userId: req.body.userId,
-      notificationType: "userBookedEmployee",
+      type: "userBookedEmployee",
       notificationMessage: `You have been booked for a ${booking.bookingType} by ${booking.bookedBy} from ${booking.timeStart}-${booking.timeEnd} on ${bookingDate}. You can view this booking in your club's schedule.`
     });
     await notificationCreate.save();
@@ -61,9 +61,9 @@ router.post("/employeeBookedCustomer", async (req, res) => {
     let booking = await Booking.findOne({ _id: req.body.bookingId });
     let customers = await User.find({ _id: req.body.users });
     let newNotification = new Notification({
-      notificationType: "EmployeeBookedUser",
+      type: "EmployeeBookedUser",
       notificationMessage: `You have been booked for a ${booking.serviceName} from ${booking.timeStart}-${booking.timeEnd} at ${booking.businessName} by ${employee.fullName}.`,
-      notificationDate: new Date(),
+      date: new Date(),
       notificationRead: false
     });
 
@@ -166,10 +166,10 @@ router.post("/employerDeniedEmployee", authAdmin, async (req, res) => {
     let business = await Business.findOne({ _id: req.admin.businessId });
     let date = new Date();
     let newNoti = new Notification({
-      notificationDate: utils.cutDay(`${date.toDateString()} ${date.getHours}-${date.getMinutes}`),
+      date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
       fromId: req.admin.businessId,
       fromString: business.businessName,
-      notificationType: "EA"
+      type: "EA"
     });
     let employee = await Employee.findOne({ _id: req.body.employeeId });
     let notifications = [...employee.notifications];
@@ -201,7 +201,7 @@ router.post("/employerAcceptedEmployee", authAdmin, async (req, res) => {
       let employee = await Employee.findOne({ _id: req.body.employeeId });
       let date = new Date();
       let newNotification = new Notification({
-        notificationType: "ERA",
+        type: "ERA",
         date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
         fromString: business.businessName
       })
@@ -213,7 +213,6 @@ router.post("/employerAcceptedEmployee", authAdmin, async (req, res) => {
       return res.status(200).send();
     }
     else {
-      console.log("did i make it here")
       let oldEmployees = [...businessProfile.employeesWhoAccepted];
       if (oldEmployees.findIndex(e => e == req.body.employeeId) === -1) {
         newEmployees = [...oldEmployees, req.body.employeeId];
@@ -223,7 +222,7 @@ router.post("/employerAcceptedEmployee", authAdmin, async (req, res) => {
         let employee = await Employee.findOne({ _id: req.body.employeeId });
         let date = new Date();
         let newNotification = new Notification({
-          notificationType: "ERA",
+          type: "ERA",
           date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
           fromString: business.businessName
         })
@@ -256,7 +255,7 @@ router.post('/employeeSendingId', async (req, res) => {
   if (admin) {
     let notifications = await Notification.find({ _id: admin.notifications })
     for (let i = 0; i < notifications.length; i++) {
-      if (notifications[i].notificationType === "ESID" &&
+      if (notifications[i].type === "ESID" &&
         notifications[i].notificationFromEmployee == req.body.employeeId) {
         return res.status(409).send();
       }
@@ -271,7 +270,7 @@ router.post('/employeeSendingId', async (req, res) => {
     console.log(req.body.employeeId)
     let date = new Date()
     let newNoti = new Notification({
-      notificationType: "ESID",
+      type: "ESID",
       date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
       fromId: req.body.employeeId,
       type: "e",
@@ -290,6 +289,37 @@ router.post('/employeeSendingId', async (req, res) => {
     res.status(200).send();
   }
 })
+
+router.post("/employeeClickedYesIos", async (req, res) => {
+  try {
+    const employee = await Employee.findOne({ _id: req.body.employeeId });
+    const notification = await Notification.findOne({
+      _id: req.body.notificationId
+    });
+    const businessProfile = await BusinessProfile.findOne({ business: notification.fromId });
+    if (businessProfile && employee) {
+      employee.businessWorkingAt = notification.fromId;
+      await employee.save();
+      let currentPending = [...businessProfile.employeesToSendInvite];
+      let newPending = currentPending.filter(cp => cp.toString() !== req.body.employeeId);
+      businessProfile.employeesToSendInvite = newPending;
+      let currentWorking = [...businessProfile.employeesWhoAccepted];
+      currentWorking.push(employee._id);
+      businessProfile.employeesWhoAccepted = currentWorking;
+      await businessProfile.save();
+      notification.answer = true;
+      await notification.save();
+      console.log(newPending);
+      res.status(200).send();
+    }
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500).send();
+  }
+})
+
+
 
 router.post("/employeeclickedyes", async (req, res) => {
   try {
@@ -323,7 +353,7 @@ router.post("/employeeclickedyes", async (req, res) => {
       _id: employee.notifications
     });
     notifications.sort(function (a, b) {
-      return b.notificationDate - a.notificationDate;
+      return b.date - a.date;
     });
 
     const business = await Business.findOne({
@@ -395,8 +425,8 @@ router.post("/employeeclickedyes", async (req, res) => {
 
     if (checkIfInstructorAlreadyInvited() === "No Error") {
       const notification = new Notification({
-        notificationType: "Club Added Instructor",
-        notificationDate: new Date(),
+        type: "Club Added Instructor",
+        date: new Date(),
         notificationFromTennisClub: tennisClub._id,
         notificationMessage: `You have been added as an instructor by ${tennisClub.clubName}. If you work here, accept this request and you will now be a registered employee of this Tennis Club.`
       });

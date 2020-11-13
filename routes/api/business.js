@@ -5,6 +5,7 @@ const Employee = require('../../models/Employee');
 const ServiceType = require('../../models/ServiceType');
 const authAdmin = require('../../middleware/authAdmin');
 const utils = require('../../utils/utils');
+const Booking = require('../../models/Booking');
 
 
 router.post('/bct', async (req, res) => {
@@ -15,6 +16,96 @@ router.post('/bct', async (req, res) => {
         let bcn = business.bookingColumnNumber;
         res.status(200).json({ bct, schedule, bcn })
     }
+})
+
+router.get("/", authAdmin, async (req, res) => {
+    const business = await Business.findOne({ _id: req.admin.businessId }).select(['businessName', 'address', "city", "zip", "state"]);
+    if (business) {
+        res.status(200).json({ business })
+    }
+    else {
+        res.status(404);
+    }
+})
+
+router.post("/employeePerformance", authAdmin, async (req, res) => {
+    const businessProfile = await BusinessProfile.findOne({ business: req.admin.businessId });
+    const startDay = new Date(req.body.startDay);
+    const endDay = new Date(req.body.endDay);
+    const days = (endDay - startDay) / 24 / 60 / 60 / 1000;
+    const dayFloor = Math.floor(days);
+    if (dayFloor < 0) {
+        return res.status(409).send()
+    }
+    let bookings = [];
+    for (let i = 0; i <= dayFloor; i++) {
+        const dateAdded = new Date(startDay.getFullYear(), startDay.getMonth(), (startDay.getDate() + i)).toDateString();
+        const bookingsForDates = await Booking.find({ date: dateAdded, businessId: req.admin.businessId });
+        bookings.push(...bookingsForDates);
+    }
+    const finalArray = [];
+    console.log(businessProfile)
+    for (let otherIndex = 0; otherIndex < businessProfile.employeesWhoAccepted.length; otherIndex++) {
+        const employee = await Employee.findOne({ _id: businessProfile.employeesWhoAccepted[otherIndex] });
+        const newObject = { employeeName: employee.fullName, employeeId: employee._id }
+        let earningsForThisEmployee = 0;
+        for (let otherOtherIndex = 0; otherOtherIndex < bookings.length; otherOtherIndex++) {
+            console.log(bookings[otherOtherIndex].employeeBooked.toString() == employee._id.toString())
+            if (bookings[otherOtherIndex].employeeBooked.toString() == employee._id.toString()) {
+                console.log("yes")
+                let costForBookingArray = bookings[otherOtherIndex].cost.split("");
+                delete costForBookingArray[0];
+                let correctCost = parseInt(costForBookingArray.join(""));
+                earningsForThisEmployee += correctCost;
+            }
+        }
+        newObject.employeeEarnings = "$" + earningsForThisEmployee.toFixed(2);
+        let serviceAmountPerDay = earningsForThisEmployee / (dayFloor + 1);
+        console.log(serviceAmountPerDay);
+        let correctAmount = serviceAmountPerDay.toFixed(2).toString();
+        let amountSendingBack = "$" + correctAmount;
+        newObject.realAmountPerDay = amountSendingBack;
+        finalArray.push(newObject);
+    }
+    console.log(finalArray);
+    res.status(200).json({ data: finalArray });
+})
+
+router.post("/performance", authAdmin, async (req, res) => {
+    console.log("anything")
+    console.log(req.admin)
+    const startDay = new Date(req.body.startDay);
+    const endDay = new Date(req.body.endDay);
+    const days = (endDay - startDay) / 24 / 60 / 60 / 1000;
+    let dayFloor = Math.floor(days);
+    if (dayFloor < 0) {
+        return res.status(409).send()
+    }
+    const bookings = [];
+    for (let i = 0; i <= dayFloor; i++) {
+        const dateAdded = new Date(startDay.getFullYear(), startDay.getMonth(), (startDay.getDate() + i)).toDateString();
+        const bookingsForDate = await Booking.find({ date: dateAdded, businessId: req.admin.businessId });
+        bookings.push(...bookingsForDate)
+    }
+    let moneyPerformance = 0;
+    for (let c = 0; c < bookings.length; c++) {
+        let costWithDollarSign = bookings[c].cost;
+        let costWithDollarSignArray = bookings[c].cost.split("");
+        costWithDollarSignArray.shift();
+        let costWithoutDollarSign = Number(costWithDollarSignArray.join(""));
+        moneyPerformance += costWithoutDollarSign;
+    }
+    dayFloor = dayFloor + 1;
+    const ipd = "$" + (moneyPerformance / dayFloor).toFixed(2);
+    moneyPerformance = "$" + moneyPerformance.toString();
+    let serviceCount = 0;
+    for (let bookingsIndex = 0; bookingsIndex < bookings.length; bookingsIndex++) {
+        serviceCount += bookings[bookingsIndex].serviceType.length;
+    }
+    console.log(serviceCount / dayFloor)
+    let spd = (serviceCount / dayFloor).toFixed(2);
+    console.log(spd)
+    res.status(200).json({ mp: moneyPerformance, sc: serviceCount.toString(), spd: spd.toString(), ipd });
 })
 
 
