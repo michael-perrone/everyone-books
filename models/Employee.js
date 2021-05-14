@@ -17,12 +17,6 @@ const EmployeeSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  bookings: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "courtBooked"
-    }
-  ],
   businessWorkingAt: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "business"
@@ -34,6 +28,10 @@ const EmployeeSchema = new mongoose.Schema({
   notifications: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: "notification"
+  },
+  secondBusiness: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "business"
   }
 });
 

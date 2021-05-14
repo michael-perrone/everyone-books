@@ -2,14 +2,14 @@ const mongoose = require("mongoose");
 
 const notificationSchema = new mongoose.Schema({
   date: String,
-  notificationRead: {
-    type: Boolean,
-    default: false
-  },
   fromId: String,
   fromString: String,
   type: String,
-  answer: Boolean
+  potentialServices: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "serviceType"
+  },
+  potentialStartTime: String
 });
 
 const Notification = mongoose.model("notification", notificationSchema);

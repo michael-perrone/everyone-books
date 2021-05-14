@@ -15,8 +15,8 @@ router.post('/', async (req, res) => {
     let employee = await Employee.findOne({ email: req.body.email.toLowerCase() });
     if (employee || admin || user) {
       return res
-        .status(400)
-        .json({ errors: [{ msg: "That email is already being used" }] });
+        .status(409)
+        .send()
     }
     let fullName;
     if (req.body.firstName && req.body.lastName) {

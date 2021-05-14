@@ -13,6 +13,9 @@ const stringToIntTime = {
     "11:30 PM": 94, "11:45 PM": 95
 }
 
+const date = new Date();
+const notificationDate = cutDay(`${date.toDateString()}, ${-convertTime(date.getHours(), date.getMinutes())}`);
+
 const intToStringTime = {
     0: "12:00 AM", 1: "12:15 AM", 2: "12:30 AM", 3: "12:45 AM", 4: "1:00 AM", 5: "1:15 AM", 6: "1:30 AM", 7: "1:45 AM", 8: "2:00 AM", 9: "2:15 AM",
     10: "2:30 AM", 11: "2:45 AM", 12: "3:00 AM", 13: "3:15 AM", 14: "3:30 AM", 15: "3:45 AM", 16: "4:00 AM", 17: "4:15 AM", 18: "4:30 AM", 19: "4:45 AM",
@@ -486,5 +489,6 @@ module.exports = {
     convertTime,
     cutDay,
     fixTime,
-    getStringDateTime
+    getStringDateTime,
+    notificationDate
 }

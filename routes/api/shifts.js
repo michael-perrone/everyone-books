@@ -6,6 +6,7 @@ const Business = require('../../models/Business');
 const Employee = require('../../models/Employee');
 const ServiceType = require('../../models/ServiceType');
 const utils = require('../../utils/utils');
+const adminAuth = require("../../middleware/authAdmin");
 
 router.post('/multiplecreate', async (req, res) => {
   console.log(req.body)
@@ -266,13 +267,14 @@ router.post('/getEmployeeBookingsForDay', async (req, res) => {
     const bcn = shift.bookingColumnNumber;
     const bct = business.bookingColumnType;
     if (bookings.length) {
-      console.log("what")
+      console.log(bookings)
       for (let i = 0; i < bookings.length; i++) {
         let user = await User.findOne({ _id: bookings[i].customer });
         let updatedWithNameBooking = {};
         updatedWithNameBooking.bcn = bcn;
+        updatedWithNameBooking.employeeBooked = bookings[i].employeeBooked;
         updatedWithNameBooking.cName = user.fullName;
-        updatedWithNameBooking.serviceTypes = bookings[i].serviceType;
+        updatedWithNameBooking.serviceType = bookings[i].serviceType;
         updatedWithNameBooking.serviceNames = []
         let serviceTypes = await ServiceType.find({ _id: bookings[i].serviceType });
         for (let t = 0; t < serviceTypes.length; t++) {
@@ -286,6 +288,7 @@ router.post('/getEmployeeBookingsForDay', async (req, res) => {
         updatedWithNameBooking._id = bookings[i]._id;
         updatedWithNameBookings.push(updatedWithNameBooking);
       }
+      console.log("paige")
       console.log(updatedWithNameBookings)
       return res.status(200).json({ bookings: updatedWithNameBookings, bct })
     }
@@ -294,6 +297,16 @@ router.post('/getEmployeeBookingsForDay', async (req, res) => {
       console.log("NO BOOKINGS")
       let shiftTimes = { start: shift.timeStart, end: shift.timeEnd };
       res.status(206).send({ shiftTimes });
+    }
+  }
+})
+
+router.post('/deleteOne', adminAuth, async (req, res) => {
+  if (req.admin) {
+    let shift = await Shift.findOne({ _id: req.body.shiftId });
+    if (shift) {
+      await Shift.deleteOne({ _id: req.body.shiftId });
+      res.status(200).send();
     }
   }
 })

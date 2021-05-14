@@ -8,6 +8,23 @@ const config = require("config");
 const Admin = require("../../models/Admin");
 const Business = require('../../models/Business');
 
+router.post("/checkEmail", async (req, res) => {
+  try {
+    let admin = await Admin.findOne({ email: req.body.email.toLowerCase() });
+    let employee = await Employee.findOne({ email: req.body.email.toLowerCase() });
+    let user = await User.findOne({ email: req.body.email.toLowerCase() });
+    if (user || employee || admin) {
+      console.log("hello")
+      return res.status(406).send();
+    }
+    else {
+      console.log(req.body.email)
+      return res.status(200).send();
+    }
+  } catch (error) {
+    console.log(error)
+  }
+})
 
 router.post("/login", async (req, res) => {
   let adminLoggingIn = await Admin.findOne({ email: req.body.email.toLowerCase() });
@@ -105,7 +122,7 @@ router.post("/login", async (req, res) => {
       const payload = {
         employee: {
           businessId: employeeLoggingIn.businessWorkingAt,
-          employeeName: `${employeeLoggingIn.fullName}`,
+          fullName: `${employeeLoggingIn.fullName}`,
           id: employeeLoggingIn.id,
           businessName: business ? business.businessName : undefined
         }

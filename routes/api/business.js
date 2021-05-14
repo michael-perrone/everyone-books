@@ -28,6 +28,10 @@ router.get("/", authAdmin, async (req, res) => {
     }
 })
 
+// 856 266 6214
+// 856 669 8219
+// 856 834 5502
+
 router.post("/employeePerformance", authAdmin, async (req, res) => {
     const businessProfile = await BusinessProfile.findOne({ business: req.admin.businessId });
     const startDay = new Date(req.body.startDay);
@@ -89,7 +93,6 @@ router.post("/performance", authAdmin, async (req, res) => {
     }
     let moneyPerformance = 0;
     for (let c = 0; c < bookings.length; c++) {
-        let costWithDollarSign = bookings[c].cost;
         let costWithDollarSignArray = bookings[c].cost.split("");
         costWithDollarSignArray.shift();
         let costWithoutDollarSign = Number(costWithDollarSignArray.join(""));
@@ -125,7 +128,7 @@ router.post('/', async (req, res) => {
 
 router.post('/appBusiness', async (req, res) => {
     try {
-        const business = await Business.findOne({ _id: req.body.businessId }).select(['schedule', 'businessName', 'bookingColumnType', 'typeOfBusiness', 'address', 'city', 'zip', 'state', 'bookingColumnNumber', 'website', 'phoneNumber']);
+        const business = await Business.findOne({ _id: req.body.businessId }).select(['schedule', 'businessName', 'bookingColumnType', 'typeOfBusiness', 'address', 'city', 'zip', 'state', 'bookingColumnNumber', 'website', 'phoneNumber', "eq"]);
         const profile = await BusinessProfile.findOne({ business: req.body.businessId }).select(["serviceTypes"]);
         if (profile) {
             let services = await ServiceType.find({ _id: profile.serviceTypes });

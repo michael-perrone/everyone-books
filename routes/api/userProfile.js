@@ -38,7 +38,7 @@ router.get('/following', authUser, async (req, res) => {
 
 router.get('/followingForTab', authUser, async (req, res) => {
   let user = await User.findOne({ _id: req.user.id }).select(["businessesFollowing"]);
-  let businesses = await Business.find({ _id: user.businessesFollowing }).select(['schedule', '_id', 'businessName', 'address', 'city', 'zip', 'state', 'website', 'phoneNumber'])
+  let businesses = await Business.find({ _id: user.businessesFollowing }).select(['schedule', '_id', 'businessName', 'address', 'city', 'zip', 'state', 'website', 'phoneNumber', "eq"])
   if (user) {
     res.status(200).json({ businessesFollowing: businesses });
   }

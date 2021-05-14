@@ -8,6 +8,8 @@ const utils = require('../../utils/utils');
 
 router.post('/', adminAuth, async (req, res) => {
     try {
+        console.log("hello");
+        console.log("SDAQSDQDQDSQ")
         const date = new Date(req.body.date).toDateString();
         const business = await Business.findOne({ _id: req.admin.businessId });
         const bookings = await Booking.find({ businessId: business._id, date: date });

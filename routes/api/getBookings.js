@@ -15,6 +15,15 @@ router.get('/adminSchedule', adminAuth, async (req, res) => {
   let bookings = Booking.find({ businessId: req.admin.businessId, date: req.body.date });
 })
 
+router.post("/moreBookingInfo", async (req, res) => {
+  console.log(req.body.serviceIds);
+  const serviceTypes = await ServiceType.find({ _id: req.body.serviceIds });
+  console.log(serviceTypes)
+  const customer = await User.findOne({ _id: req.body.customerId }).select(["phoneNumber", "fullName"]);
+  const employee = await Employee.findOne({ _id: req.body.employeeId }).select(["fullName"]);
+  res.status(200).json({ services: serviceTypes, customer: customer, employeeName: employee.fullName });
+})
+
 router.post("/employee", async (req, res) => {
   let employeeBookings = await Booking.find({ employeeBooked: req.body.employeeId, date: req.body.date });
   if (employeeBookings.length > 0) {
@@ -45,12 +54,41 @@ router.get("/", userAuth, async (req, res) => {
   }
 });
 
+router.post("/removeService", async (req, res) => {
+  try {
+    const booking = await Booking.findOne({ _id: req.body.bookingId });
+    console.log(req.body.serviceId);
+    const servicesForBooking = [...booking.serviceType];
+    const newServices = servicesForBooking.filter(id => id.toString() !== req.body.serviceId.toString());
+    booking.serviceType = newServices;
+    //
+    let timeNum = 0;
+    let services = await ServiceType.find({ _id: newServices });
+    console.log(services);
+    let costNum = 0;
+    for (let i = 0; i < services.length; i++) {
+      timeNum += utils.timeDurationStringToInt[services[i].timeDuration];
+      costNum += services[i].cost;
+    }
+    let bookingTimeArray = booking.time.split("-");
+    console.log(bookingTimeArray);
+    const endTime = utils.intToStringTime[utils.stringToIntTime[bookingTimeArray[0]] + timeNum];
+    console.log(endTime);
+    booking.time = bookingTimeArray[0] + `-${endTime}`;
+    booking.cost = `$${costNum}`;
+    await booking.save();
+    res.status(200).json({ cost: `$${costNum}`, time: bookingTimeArray[0] + `-${endTime}` });
+  }
+  catch (error) {
+    console.log(error)
+  }
+})
+
 
 router.get("/ios", userAuth, async (req, res) => {
   try {
     let bookings = await Booking.find({ customer: req.user.id });
     if (bookings.length) {
-
       const newBookings = [];
       bookings.forEach(booking => {
         if (new Date(booking.date) >= new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())) {
@@ -78,8 +116,7 @@ router.get("/ios", userAuth, async (req, res) => {
       console.log(actualBookings)
       res.status(200).json({ bookings: actualBookings });
     } else {
-      console.log("hello")
-      res.status(204).send();
+      res.status(200).json({ bookings: [] })
     }
   } catch (error) {
     console.log(error);
@@ -89,9 +126,10 @@ router.get("/ios", userAuth, async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
+    console.log(req.body.timeChosen);
     let date1 = utils.getStringDateTime(req.body.timeChosen, req.body.date);
+    console.log(date1);
     let dateToUse = new Date(date1.date);
-    console.log(dateToUse, "HM", new Date(), new Date() > dateToUse);
     if (new Date() > dateToUse) {
       console.log("OH NO")
       return res.status(409).send();
@@ -103,87 +141,153 @@ router.post('/', async (req, res) => {
     let shifts = await Shift.find({ businessId: req.body.businessId, shiftDate: date }).select(["timeStart", "timeEnd", "breakStart", "breakEnd", "employeeName", "employeeId"]);
     for (let l = 0; l < services.length; l++) {
       let timeForEachService = services[l].timeDuration;
-      console.log(timeForEachService)
       serviceDurationNum += utils.timeDurationStringToInt[timeForEachService];
     }
-    console.log(serviceDurationNum);
-    let timeStartNum = utils.stringToIntTime[req.body.timeChosen];
-    let viableShifts = [];
-    for (let i = 0; i < shifts.length; i++) { // looping throug shifts
-      let shiftStartNum = utils.stringToIntTime[shifts[i].timeStart]; // get the startNum
-      let shiftEndNum = utils.stringToIntTime[shifts[i].timeEnd]; // get the end num
-      if (shiftStartNum <= timeStartNum && (timeStartNum + serviceDurationNum) < shiftEndNum) { // setting it up so the the services and time preferred can be a criteria filtering below
-        if (shifts[i].breakStart) { // has to do with breaks we can come back to this
-          let breakStartNum = utils.stringToIntTime[shifts[i].breakStart];
-          let breakEndNum = utils.stringToIntTime[shifts[i].breakEnd];
-          for (let t = 1; t < serviceDurationNum; t++) {
-            if ((timeStartNum + t) < breakStartNum) { // making sure that it doesnt run into the break
-              viableShifts.push(shift[i]); // adding it into viable shifts
-            }
-            else if (timeStartNum > breakEndNum) { // making sure it starts after the break
-              viableShifts.push(shift[i]);
-            }
-            else {
-              return res.status(406).json({ error: "On break at this time" });
+    let business = await Business.findOne({ _id: req.body.businessId }).select(["eq"]);
+    if (business.eq === "n") {
+      let bp = await BusinessProfile.findOne({ business: business._id });
+      let employees = await Employee.find({ _id: bp.employeesWhoAccepted }).select(["fullName"]);
+      res.status(200).json({ employees, eq: business.eq })
+    }
+    else {
+      let timeStartNum = utils.stringToIntTime[req.body.timeChosen];
+      let viableShifts = [];
+      for (let i = 0; i < shifts.length; i++) { // looping throug shifts
+        let shiftStartNum = utils.stringToIntTime[shifts[i].timeStart]; // get the startNum
+        let shiftEndNum = utils.stringToIntTime[shifts[i].timeEnd]; // get the end num
+        if (shiftStartNum <= timeStartNum && (timeStartNum + serviceDurationNum) <=
+          shiftEndNum) {
+          // setting it up so the the services and time preferred can be a criteria filtering below
+          if (shifts[i].breakStart) { // has to do with breaks we can come back to this
+            let breakStartNum = utils.stringToIntTime[shifts[i].breakStart];
+            let breakEndNum = utils.stringToIntTime[shifts[i].breakEnd];
+            for (let t = 1; t < serviceDurationNum; t++) {
+              if ((timeStartNum + t) < breakStartNum) { // making sure that it doesnt run into the break
+                viableShifts.push(shift[i]); // adding it into viable shifts
+              }
+              else if (timeStartNum > breakEndNum) { // making sure it starts after the break
+                viableShifts.push(shift[i]);
+              }
+              else {
+                return res.status(406).json({ error: "On break at this time" });
+              }
             }
           }
-        }
-        else {
-          viableShifts.push(shifts[i]); // i guess this would be if there is no break
-          console.log(viableShifts);
-          console.log("viable shifts above")
+          else {
+            viableShifts.push(shifts[i]); // i guess this would be if there is no break
+          }
         }
       }
-    }
-    let things = []; // empty arrauy
-    for (let y = 0; y < viableShifts.length; y++) { // looping through viable shifts
-      let employeeArray = []; // we have an empty employee array which i dont quite get
-      employeeArray.push(viableShifts[y].employeeId); //
-      console.log(employeeArray, "I am employee Array", y)
-      console.log(req.body.businessId);
-      console.log(viableShifts[y].employeeId);
-      console.log(date)
-      let bookings = await Booking.find({ employeeBooked: viableShifts[y].employeeId, businessId: req.body.businessId, date: date }).select(["time"]);
-      console.log(bookings)
-      for (let q = 0; q < bookings.length; q++) {
-        let timeSplit = bookings[q].time.split("-");
-        let start = timeSplit[0];
-        let end = timeSplit[1];
-        console.log("DONT MISS ME")
-        for (let h = utils.stringToIntTime[start]; h < utils.stringToIntTime[end]; h++) {
-          employeeArray.push(h);
-          console.log(h, "im h")
+      let things = []; // empty arrauy
+      for (let y = 0; y < viableShifts.length; y++) { // looping through viable shifts
+        let employeeArray = []; // we have an empty employee array which i dont quite get
+        employeeArray.push(viableShifts[y].employeeId); //
+        let bookings = await Booking.find({ employeeBooked: viableShifts[y].employeeId, businessId: req.body.businessId, date: date }).select(["time"]);
+        for (let q = 0; q < bookings.length; q++) {
+          let timeSplit = bookings[q].time.split("-");
+          let start = timeSplit[0];
+          let end = timeSplit[1];
+          for (let h = utils.stringToIntTime[start]; h < utils.stringToIntTime[end]; h++) {
+            employeeArray.push(h);
+          }
         }
+        things.push(employeeArray);
+        console.log(employeeArray, "im employee array")
       }
-      things.push(employeeArray);
-      console.log(employeeArray, "im employee array")
-    }
-    console.log(things, "I AM THINGS")
 
-    let employeesAvailable = [];
-    for (b = 0; b < things.length; b++) {
-      let testArray = [];
-      for (let p = timeStartNum; p < (timeStartNum + serviceDurationNum); p++) {
-        if (things[b].includes(p)) {
-          testArray.push(p);
+      let employeesAvailable = [];
+      for (b = 0; b < things.length; b++) {
+        let testArray = [];
+        for (let p = timeStartNum; p < (timeStartNum + serviceDurationNum); p++) {
+          if (things[b].includes(p)) {
+            testArray.push(p);
+          }
+        }
+        if (testArray.length === 0) {
+          employeesAvailable.push(things[b][0]);
         }
       }
-      if (testArray.length === 0) {
-        employeesAvailable.push(things[b][0]);
-        console.log("availble employee", employeesAvailable, things[b][0])
+      if (employeesAvailable.length > 0) {
+        let employees = await Employee.find({ _id: employeesAvailable }).select(["fullName"])
+        return res.status(200).json({ employees })
+      } else {
+        return res.status(406).send()
       }
     }
-    if (employeesAvailable.length > 0) {
-      let employees = await Employee.find({ _id: employeesAvailable }).select(["fullName"])
-      console.log(employees)
-      return res.status(200).json({ employees })
-    } else {
-      return res.status(406).send()
-    }
-
   } catch (error) {
     console.log(error)
   }
+})
+
+router.post("/editBooking", async (req, res) => {
+  try {
+    console.log("hi")
+    let booking = await Booking.findOne({ _id: req.body.bookingId });
+    let bookingTimeArray = booking.time.split("-");
+    let business = await Business.findOne({ _id: booking.businessId }).select(["eq"]);
+    const previousServiceTypes = [...booking.serviceType];
+    const newServiceTypes = [...previousServiceTypes, ...req.body.servicesToAdd];
+    let newServices = await ServiceType.find({ _id: newServiceTypes });
+    booking.serviceType = newServiceTypes;
+    if (business.eq === "n") {
+      let bp = await BusinessProfile.findOne({ business: business._id });
+      let employees = await Employee.find({ _id: bp.employeesWhoAccepted }).select(["fullName"]);
+
+      res.status(200).json({ employees, eq: business.eq })
+    }
+    else {
+      let bookings = await Booking.find({ date: booking.date });
+      let counterNum = 0;
+      console.log(counterNum);
+      for (let i = 0; i < newServices.length; i++) {
+        console.log(counterNum);
+        counterNum += utils.timeDurationStringToInt[newServices[i].timeDuration];
+      }
+      console.log("hello")
+      let bookingsWithCurrentRemoved = bookings.filter((element, index) => {
+        return element._id.toString() !== booking._id.toString();
+      });
+      const indexStart = utils.stringToIntTime[bookingTimeArray[0]];
+      console.log(counterNum, "counterNum");
+      for (let index = indexStart; index < indexStart + counterNum; index++) {
+        console.log(index, "index")
+        for (let i = 0; i < bookingsWithCurrentRemoved.length; i++) {
+          console.log(i, "i")
+          let timeArray = bookingsWithCurrentRemoved[i].time.split("-");
+          console.log(index, "index")
+          console.log(timeArray)
+          if (utils.intToStringTime[index] === utils.intToStringTime[utils.stringToIntTime[timeArray[0]]]) {
+            console.log(bookingTimeArray)
+            console.log("big error mate", utils.intToStringTime[index], utils.intToStringTime[utils.stringToIntTime[timeArray[0]] + 1], index)
+            return res.status(400).send();
+          }
+        }
+      }
+      console.log("got through");
+    }
+
+
+    //////////////////////////////////////////////////////////////////
+
+
+
+    let timeNum = 0;
+
+    let costNum = 0;
+    for (let i = 0; i < newServices.length; i++) {
+      timeNum += utils.timeDurationStringToInt[newServices[i].timeDuration];
+      costNum += newServices[i].cost;
+    }
+    const endTime = utils.intToStringTime[utils.stringToIntTime[bookingTimeArray[0]] + timeNum];
+    booking.time = bookingTimeArray[0] + `-${endTime}`;
+    booking.cost = `$${costNum}`;
+    await booking.save();
+    res.status(200).json({ cost: `$${costNum}`, time: bookingTimeArray[0] + `-${endTime}` });
+  }
+  catch (error) {
+    console.log(error)
+  }
+
 })
 
 

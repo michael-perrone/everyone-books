@@ -21,7 +21,7 @@ router.get("/mybusinessForProfile", adminAuth, async (req, res) => {
       let business = await Business.findOne({ _id: req.admin.businessId });
       let employeesPending = await Employee.find({ _id: businessProfile.employeesToSendInvite }).select(["fullName", "id"]);
       let employeesHere = await Employee.find({ _id: businessProfile.employeesWhoAccepted }).select(["fullName", "id"]);
-      return res.status(200).json({ profileCreated: true, business });
+      return res.status(200).json({ profileCreated: true, eq: business.eq });
     }
     if (!businessProfile) {
       return res.status(406).json({ profileCreated: false });
@@ -46,7 +46,7 @@ router.get('/myEmployees', adminAuth, async (req, res) => {
       res.status(200).json({ employeesPending, employeesHere })
     }
     else {
-      res.status(204).send();
+      res.status(200).json({ well: "well" })
     }
   }
   catch (error) {
@@ -179,7 +179,7 @@ router.post("/employeesWorking", async (req, res) => {
     res.status(200).send();
   }
   catch (error) {
-
+    console.log(error)
   }
 })
 
@@ -226,21 +226,25 @@ router.post("/employeeDeleteFromBusiness", adminAuth, async (req, res) => {
     let businessProfile = await BusinessProfile.findOne({
       business: req.admin.businessId
     });
+    let business = await Business.findOne({ _id: req.admin.businessId });
     const newEmployees = businessProfile.employeesWhoAccepted.filter(
       employee => {
         return employee.toString() !== req.body.employeeId;
       }
     );
-
-    console.log(newEmployees);
-    console.log(req.body.employeeId);
-
     businessProfile.employeesWhoAccepted = newEmployees;
-
     let employee = await Employee.findOne({
       _id: req.body.employeeId
     });
+    let firedNoti = new Notification({
+      type: "BRE",
+      date: utils.notificationDate,
+      fromString: business.businessName
+    })
+    employee.businessWorkAt = null;
     employee.business = "None";
+    employee.notifications = [...employee.notifications, firedNoti];
+    await firedNoti.save();
     await employee.save();
     await businessProfile.save();
 
@@ -286,10 +290,18 @@ router.post("/removeFromPending", adminAuth, async (req, res) => {
 
     for (let i = 0; i < notificationsToSort.length; i++) {
       console.log(notificationsToSort[i])
-      if (notificationsToSort[i].type === "BAE" && notificationsToSort[i].fromId.String() === req.admin.businessId.toString()) {
+      if (notificationsToSort[i].type === "BAE" && notificationsToSort[i].fromId.toString() === req.admin.businessId.toString()) {
         console.log(notificationsToSort[i]);
         console.log("WORKED")
         notificationUpHere = notificationsToSort[i];
+        await Notification.deleteOne(
+          {
+            _id: notificationsToSort[i]._id
+          },
+          function (error) {
+            console.log(error);
+          }
+        );
       }
     }
 
@@ -304,16 +316,7 @@ router.post("/removeFromPending", adminAuth, async (req, res) => {
 
     await employee.save();
 
-    await Notification.deleteOne(
-      {
-        employeeId: req.body.employees[i],
-        notificationFromBusiness: req.admin.businessId,
-        type: "BAE"
-      },
-      function (error) {
-        console.log(error);
-      }
-    );
+
 
     await businessProfile.save();
     res.status(200).send();
@@ -348,13 +351,13 @@ router.post("/getEmployeesPendingAndAccepted", async (req, res) => {
 
 router.post('/addEmployeeToBusinessApp', async (req, res) => {
   try {
+    let date = new Date();
     let businessProfile = await BusinessProfile.findOne({
       business: req.body.business
     });
     if (businessProfile) {
       function checkIfDuplicates() {
         let sendError = "No Error";
-
         for (
           let y = 0;
           y < businessProfile.employeesToSendInvite.length;
@@ -364,7 +367,7 @@ router.post('/addEmployeeToBusinessApp', async (req, res) => {
             req.body.employeeId ==
             businessProfile.employeesToSendInvite[y]
           ) {
-            sendError = "You can not add the same instructor twice.";
+            sendError = "You can not add the same employee twice.";
             return sendError;
           }
         }
@@ -400,15 +403,13 @@ router.post('/addEmployeeToBusinessApp', async (req, res) => {
         employee.requestPending = true;
 
         let newNotification = new Notification({
-          employeeId: employee._id,
           type: "BAE",
           date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
           notificationFromBusiness: business._id,
           fromId: req.body.business,
           fromString: business.businessName
-
         });
-        employee.notifications.unshift(newNotification);
+        employee.notifications.push(newNotification);
         await newNotification.save();
         await employee.save();
         res.status(200).send();
@@ -430,11 +431,11 @@ router.post('/addEmployeeToBusinessApp', async (req, res) => {
       });
       employeesForInstantAdd.push(employeeForInstant);
       let newNotification = new Notification({
-        employeeId: employeeForInstant._id,
         type: "BAE",
         date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
         notificationFromBusiness: business._id,
-
+        fromId: req.body.business,
+        fromString: business.businessName
       });
       employeeForInstant.notifications.unshift(newNotification);
       await newNotification.save();

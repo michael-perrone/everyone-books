@@ -46,6 +46,8 @@ app.use("/api/addImage", require("./routes/api/addImage"));
 app.use('/api/getEmployee', require('./routes/api/getEmployee'));
 app.use('/api/employeeNotificationsRead', require('./routes/api/employeeNotificationsRead'))
 app.use('/api/iosBooking', require("./routes/api/iosBooking"))
+app.use('/api/changePassword', require("./routes/api/changePassword"));
+app.use('/api/employeeInfo', require('./routes/api/employeeInfo'))
 app.use(express.static("./client/build"));
 app.get("*", function (request, response) {
   response.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
