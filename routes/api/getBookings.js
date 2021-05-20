@@ -293,10 +293,15 @@ router.post("/editBooking", async (req, res) => {
 
 router.post('/individual', async (req, res) => {
   let date = new Date(req.body.date).toDateString();
-  console.log(date);
-  console.log(req.body.bcn)
+  console.log(req.body);
   let bookings = await Booking.find({ bcn: req.body.bcn, date: date, businessId: req.body.businessId });
   let timeNumber = utils.stringToIntTime[req.body.time];
+  if (timeNumber === undefined) {
+    let fifteenMinuteTimeArray = req.body.time.split("-");
+    timeNumber = utils.stringToIntTime[fifteenMinuteTimeArray[0]];
+    console.log(timeNumber);
+    console.log(utils.intToStringTime[timeNumber]);
+  }
   console.log(timeNumber);
   for (let i = 0; i < bookings.length; i++) {
     let timesArray = bookings[i].time.split("-");
