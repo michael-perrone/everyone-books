@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const BookingSchema = new mongoose.Schema({
+  extraMinutes: Number,
   cost: String,
   time: String,
   businessId: {

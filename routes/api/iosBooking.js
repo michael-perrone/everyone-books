@@ -13,6 +13,7 @@ const authAdmin = require("../../middleware/authAdmin");
 
 router.post("/admin", async (req, res) => {
     try {
+        console.log(req.body)
         const date = utils.getStringDateTime(req.body.timeStart, req.body.date);
         let customer;
         if (req.body.phone && req.body.phone !== "") {
@@ -32,14 +33,68 @@ router.post("/admin", async (req, res) => {
             let bookings = await Booking.find({ businessId: req.body.businessId, customer: customer._id, date: date.dateString });
             let timeNum = 0;
             let cost = 0;
+            let numOfFiveMinServices = 0;
+            let numOfTenMinServices = 0;
+            let numOfTwentyMinServices = 0;
             for (let i = 0; i < req.body.serviceIds.length; i++) {
                 let service = await ServiceType.findOne({ _id: req.body.serviceIds[i] });
-                console.log(service)
-                timeNum += utils.timeDurationStringToInt[service.timeDuration];
+                if (service.timeDuration === "5 Minutes") {
+                    numOfFiveMinServices += 1;
+                }
+                else if (service.timeDuration === "10 Minutes") {
+                    numOfTenMinServices += 1;
+                    console.log("ITS ME I RAN")
+                }
+                else if (service.timeDuration === "20 Minutes") {
+                    numOfTwentyMinServices += 1;
+                }
+                else {
+                    timeNum += utils.timeDurationStringToInt[service.timeDuration];
+                }
                 cost += Number(service.cost);
-                console.log(cost)
+                console.log(cost, "cant be me")
             }
+
+            let extraMinutesForBooking = 0;
+
+            if (numOfFiveMinServices !== 0 || numOfTenMinServices !== 0 || numOfTwentyMinServices !== 0) {
+                let minutes = 0;
+                if (numOfFiveMinServices !== 0) {
+                    let fiveCounter = 0;
+                    while (fiveCounter < numOfFiveMinServices) {
+                        fiveCounter++;
+                        minutes += 5;
+                    }
+                }
+                if (numOfTenMinServices !== 0) {
+                    let tenCounter = 0;
+                    while (tenCounter < numOfTenMinServices) {
+                        tenCounter++;
+                        minutes += 10;
+                    }
+                }
+                if (numOfTwentyMinServices !== 0) {
+                    let twentyCounter = 0;
+                    while (twentyCounter < numOfTwentyMinServices) {
+                        twentyCounter++;
+                        minutes += 20;
+                    }
+                }
+                console.log(numOfFiveMinServices);
+                console.log(numOfTenMinServices);
+                extraMinutesForBooking = minutes % 15;
+                console.log("LOOK HERE");
+                console.log(extraMinutesForBooking, minutes);
+                const numToAdd = Math.ceil(minutes / 15);
+                console.log(numToAdd);
+                console.log(minutes)
+                console.log(Math.ceil(minutes / 15));
+                console.log("ABOVE")
+                timeNum += numToAdd;
+            }
+
             const endTime = utils.intToStringTime[utils.stringToIntTime[req.body.timeStart] + timeNum];
+            console.log(endTime, "im endtime");
             const costString = cost.toString();
             const splitCostString = costString.split('.');
             let goodCost = "";
@@ -62,6 +117,7 @@ router.post("/admin", async (req, res) => {
             const shift = await Shift.findOne({ shiftDate: date.dateString, employeeId: req.body.employeeId });
             const bcn = shift.bookingColumnNumber;
             let newBooking = new Booking({
+                extraMinutes: extraMinutesForBooking,
                 serviceType: req.body.serviceIds,
                 time: `${req.body.timeStart}-${endTime}`,
                 businessId: req.body.businessId,

@@ -94,8 +94,10 @@ router.post('/multiplecreate', async (req, res) => {
 
 router.post('/create', async (req, res) => {
   try {
+    console.log(req.body);
+    console.log("req.body above")
     let date = new Date(req.body.shiftDate).toDateString();
-    const areaConflict = await Shift.find({ bookingColumnNumber: req.body.bookingColumnNumber, shiftDate: date });
+    const areaConflict = await Shift.find({ businessId: req.body.businessId, bookingColumnNumber: req.body.bookingColumnNumber, shiftDate: date });
     const shiftConflict = await Shift.find({ employeeId: req.body.employeeId, shiftDate: date });
     if (areaConflict.length > 0) {
       let startNum = utils.stringToIntTime[req.body.timeStart];
@@ -110,7 +112,9 @@ router.post('/create', async (req, res) => {
           return res.status(406).send();
         }
         else if (startNum <= alreadyExistingStart && endNum >= alreadyExistingStart) {
-          console.log("fall time")
+          console.log(areaConflict)
+          console.log(startNum, "startNum");
+          console.log(endNum, "endNum")
           return res.status(406).send();
         }
         else if (startNum >= alreadyExistingStart && startNum <= alreadyExistingEnd) {
@@ -136,6 +140,7 @@ router.post('/create', async (req, res) => {
           return res.status(406).send()
         }
         else if (startNum <= alreadyExistingStart && endNum >= alreadyExistingStart) {
+          console.log("here?")
           console.log("fall time")
           return res.status(406).send()
         }

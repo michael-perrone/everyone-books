@@ -123,18 +123,62 @@ router.get("/ios", userAuth, async (req, res) => {
   }
 });
 
+router.post("/smallTimes", async (req, res) => {
+  try {
+    let services = await ServiceType.find({ _id: req.body.services });
+    console.log(services);
+    let timeDurationNum = 0;
+    let numOfFiveMinServices = 0;
+    let numOfTenMinServices = 0;
+    let numOfTwentyMinuteServices = 0;
+    let addedMinutes = 0;
+    for (let i = 0; i < services.length; i++) {
+      if (services[i].timeDuration !== "10 Minutes" && services[i].timeDuration !== "5 Minutes" && services[i].timeDuration !== "20 Minutes") {
+        timeDurationNum += utils.timeDurationStringToInt[services[i].timeDuration];
+      }
+      else {
+        if (services[i].timeDuration === "5 Minutes") {
+          numOfFiveMinServices += 1;
+          addedMinutes += 5;
+        }
+        else if (services[i].timeDuration === "10 Minutes") {
+          numOfTenMinServices += 1;
+          addedMinutes += 10;
+        }
+        else if (services[i].timeDuration === "20 Minutes") {
+          numOfTwentyMinuteServices += 1;
+          addedMinutes += 20;
+        }
+      }
+    }
+    if (numOfTenMinServices === 0 && numOfTenMinServices === 0) {
+      timeDurationNum = timeDurationNum;
+    } else {
+      timeDurationNum = timeDurationNum + Math.ceil(addedMinutes / 15);
+    }
+
+
+    console.log(timeDurationNum);
+    if (timeDurationNum) {
+      res.status(200).json({ timeDurationNum })
+    }
+  }
+  catch (error) {
+    console.log(error);
+  }
+})
+
 
 router.post('/', async (req, res) => {
   try {
     console.log(req.body.timeChosen);
     let date1 = utils.getStringDateTime(req.body.timeChosen, req.body.date);
-    console.log(date1);
+    console.log(req.body)
     let dateToUse = new Date(date1.date);
     if (new Date() > dateToUse) {
       console.log("OH NO")
       return res.status(409).send();
     }
-
     let date = new Date(req.body.date).toDateString();
     let services = await ServiceType.find({ _id: req.body.serviceIds });
     let serviceDurationNum = 0;
@@ -142,6 +186,9 @@ router.post('/', async (req, res) => {
     for (let l = 0; l < services.length; l++) {
       let timeForEachService = services[l].timeDuration;
       serviceDurationNum += utils.timeDurationStringToInt[timeForEachService];
+    }
+    if (req.body.timeDurationNum) {
+      serviceDurationNum = req.body.timeDurationNum;
     }
     let business = await Business.findOne({ _id: req.body.businessId }).select(["eq"]);
     if (business.eq === "n") {
@@ -208,9 +255,11 @@ router.post('/', async (req, res) => {
         }
       }
       if (employeesAvailable.length > 0) {
+        console.log(employeesAvailable, "employees available here")
         let employees = await Employee.find({ _id: employeesAvailable }).select(["fullName"])
         return res.status(200).json({ employees })
       } else {
+        console.log("do i print????")
         return res.status(406).send()
       }
     }
