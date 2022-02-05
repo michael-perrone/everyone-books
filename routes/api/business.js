@@ -6,6 +6,8 @@ const ServiceType = require('../../models/ServiceType');
 const authAdmin = require('../../middleware/authAdmin');
 const utils = require('../../utils/utils');
 const Booking = require('../../models/Booking');
+const Admin = require("../../models/Admin");
+const BookedNotification = require("../../models/BookedNotification");
 
 
 router.post('/bct', async (req, res) => {
@@ -74,6 +76,88 @@ router.post("/employeePerformance", authAdmin, async (req, res) => {
     console.log(finalArray);
     res.status(200).json({ data: finalArray });
 })
+
+router.post("/fbcn", async (req, res) => {
+    let business;
+    let admin = await Admin.findOne({_id: req.body.idNeeded}).select(["business"]);
+    if (admin) {
+        business = await Business.findOne({_id: admin.business});
+    }
+    else {
+        let employee = await Employee.findOne({_id: req.body.idNeeded}).select(['businessWorkingAt']);
+        business = await Business.findOne({_id: employee.businessWorkingAt});
+    }
+        let notification = await BookedNotification.findOne({_id: req.body.noti});
+        let services = await ServiceType.find({_id: notification.ps});
+        let timeNum = 0;
+        for (let i = 0; i < services.length; i++) {
+            timeNum += utils.timeDurationStringToInt[services[i].timeDuration];
+        }
+        const endTime = utils.intToStringTime[utils.stringToIntTime[notification.potentialStartTime] + timeNum];
+        const startTimeNum = utils.stringToIntTime[notification.potentialStartTime];
+        const endTimeNum = utils.stringToIntTime[endTime];
+
+        let whiley = startTimeNum;
+        let timeNums = [];
+
+        while(whiley < endTimeNum) {
+            timeNums.push(whiley);
+            whiley++
+        }
+        console.log(timeNums)
+
+        let bookings = await Booking.find({date: notification.potentialDate, businessId: business._id});
+        const takenColumns = [];
+
+        for (let i = 0; i < bookings.length; i++) {
+            let startTime = bookings[i].time.split("-")[0];
+            let endTime = bookings[i].time.split("-")[1];
+            let startTimeNum = utils.stringToIntTime[startTime];
+            let endTimeNum = utils.stringToIntTime[endTime];
+            const nums = [];
+            let whiley = startTimeNum;
+            while(whiley < endTimeNum) {
+                nums.push(whiley);
+                whiley++;
+            }
+            if (timeNums.some(iNum => nums.includes(iNum))) {
+                takenColumns.push(Number(bookings[i].bcn));
+                console.log(bookings[i].bcn);
+            }
+            
+        }
+
+        console.log(takenColumns, "taken columns")
+        let bcn = Number(business.bookingColumnNumber);
+        console.log(typeof(bcn));
+        let i = 1;
+        let bcnArray = [];
+        while (i <= bcn) {
+            bcnArray.push(i);
+            i++;
+        }
+        let otherArray;
+        
+        for (let i = 0; i < bcnArray.length; i++) {
+            for (t = 0; t < takenColumns.length; t++) {
+                if(bcnArray[i] === takenColumns[t]) {
+                    bcnArray.splice(i, 1);
+                }
+             }
+        }
+
+        // for (let z = 0; z < takenColumns.length; z++) {
+        //     if (bcnArray.includes(takneColumns[z])) {
+        //         bcnArray.splice()
+        //     }
+        // }
+
+        console.log(otherArray, "otherArray");
+        console.log(bcnArray)
+        console.log("BCN ARRAY ABOVE");
+        
+    return res.status(200).json({bcnArray});
+});
 
 router.post("/performance", authAdmin, async (req, res) => {
     console.log("anything")

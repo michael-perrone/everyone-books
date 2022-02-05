@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const BookingSchema = new mongoose.Schema({
-  extraMinutes: Number,
   cost: String,
   time: String,
   businessId: {
@@ -21,7 +20,11 @@ const BookingSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "user"
   },
-  bcn: String
+  bcn: String,
+  products: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "product"
+  }
 });
 
 const Booking = mongoose.model("booking", BookingSchema);

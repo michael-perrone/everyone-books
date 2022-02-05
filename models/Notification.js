@@ -4,12 +4,7 @@ const notificationSchema = new mongoose.Schema({
   date: String,
   fromId: String,
   fromString: String,
-  type: String,
-  potentialServices: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: "serviceType"
-  },
-  potentialStartTime: String
+  type: String
 });
 
 const Notification = mongoose.model("notification", notificationSchema);

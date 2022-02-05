@@ -41,8 +41,9 @@ router.post("/getServices", async (req, res) => {
 router.post('/delete', adminAuth, async (req, res) => {
   try {
     let businessProfile = await BusinessProfile.findOne({ business: req.admin.businessId });
+    console.log(req.body.serviceId)
     businessProfile.serviceTypes = businessProfile.serviceTypes.filter(serviceType => {
-      return !req.body.removing.includes(serviceType.toString());
+      return req.body.serviceId.toString() !== serviceType.toString()
     });
     await businessProfile.save();
     res.status(200).json({ serviceTypes: businessProfile.serviceTypes })

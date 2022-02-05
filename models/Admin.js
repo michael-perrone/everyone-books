@@ -26,6 +26,10 @@ const AdminSchema = new mongoose.Schema({
   notifications: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: "notification"
+  },
+  bookedNotifications: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "bookedNotification"
   }
 });
 const Admin = mongoose.model("admin", AdminSchema);

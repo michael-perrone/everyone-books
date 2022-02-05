@@ -7,9 +7,8 @@ const Booking = require('../../models/Booking');
 const utils = require('../../utils/utils');
 
 router.post('/', adminAuth, async (req, res) => {
+    console.log("running")
     try {
-        console.log("hello");
-        console.log("SDAQSDQDQDSQ")
         const date = new Date(req.body.date).toDateString();
         const business = await Business.findOne({ _id: req.admin.businessId });
         const bookings = await Booking.find({ businessId: business._id, date: date });
@@ -36,9 +35,13 @@ router.post('/', adminAuth, async (req, res) => {
         else if (day === "Sat") {
             num = 6;
         }
+        console.log(bookings);
+        console.log("Below Bookings");
+        console.log(business.schedule[num].open);
         res.status(200).json({
             bookings, bcn: business.bookingColumnNumber, bct: business.bookingColumnType,
-            open: business.schedule[num].open, close: business.schedule[num].close
+            open: business.schedule[num].open, close: business.schedule[num].close,
+            eq: business.eq
         });
     }
     catch (error) {

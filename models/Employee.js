@@ -29,6 +29,10 @@ const EmployeeSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectId],
     ref: "notification"
   },
+  bookedNotifications: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "bookedNotifcation"
+  },
   secondBusiness: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "business"

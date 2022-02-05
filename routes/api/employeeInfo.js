@@ -7,6 +7,8 @@ const BusinessProfile = require("../../models/BusinessProfile");
 const Employee = require("../../models/Employee");
 const Booking = require('../../models/Booking');
 const utils = require("../../utils/utils");
+const Notification = require("../../models/Notification");
+const Shift = require('../../models/Shift');
 
 
 router.get("/getBusinesses", authEmployee, async (req, res) => {
@@ -59,15 +61,23 @@ router.post("/performance", authEmployee, async (req, res) => {
 router.post("/leaveBusiness", authEmployee, async (req, res) => {
     let date = new Date();
     try {
-        let employee = await Employee.findOne({ _id: req.employee.id });
-        let businessProfile = await BusinessProfile.findOne({ business: req.body.bId });
-        let newEmployees = businessProfile.employeesWhoAccepted.filter(e => e.toString() !== req.employee.id.toString());
-        let leftNoti = new Notification({
+        const employee = await Employee.findOne({ _id: req.employee.id });
+        const businessProfile = await BusinessProfile.findOne({ business: req.body.bId });
+        const newEmployees = businessProfile.employeesWhoAccepted.filter(e => e.toString() !== req.employee.id.toString());
+        const leftNoti = new Notification({
             date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
             fromString: req.employee.fullName,
             type: "ELB"
         });
-        let admin = await Admin.findOne({ business: req.body.bId });
+        const bookings = await Booking.find({employeeBooked: employee._id, businessId: req.body.bId});
+        for (let i = 0; i < bookings.length; i++) {
+            await Booking.deleteOne({_id: bookings[i]._id});
+        }
+        const shifts = await Shift.find({employeeId: employee._id, businessId: req.body.bId});
+        for (let z = 0; z < shifts.length; z++) {
+            await shifts.deleteOne({_id: shifts[z]._id});
+        }
+        const admin = await Admin.findOne({ business: req.body.bId });
         admin.notifications.push(leftNoti);
         businessProfile.employeesWhoAccepted = newEmployees;
         employee.business = "None";
@@ -75,8 +85,7 @@ router.post("/leaveBusiness", authEmployee, async (req, res) => {
         await leftNoti.save();
         await businessProfile.save();
         await employee.save();
-        await admin.save()
-        console.log(employee)
+        await admin.save();
         res.status(200).send();
     } catch (error) {
         console.log(error)

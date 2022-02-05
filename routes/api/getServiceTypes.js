@@ -1,10 +1,10 @@
 const router = require('express').Router();
 const ServiceType = require('../../models/ServiceType')
 const BusinessProfile = require('../../models/BusinessProfile');
+const Employee = require("../../models/Employee");
 
 
 router.post('/', async (req, res) => {
-    console.log(req.body)
     if (req.body.serviceTypesArray.length > 0) {
         let serviceTypesArray = [];
         for (let i = 0; i < req.body.serviceTypesArray.length; i++) {
@@ -13,9 +13,15 @@ router.post('/', async (req, res) => {
             serviceTypesArray.push(serviceType)
         }
     }
-        
         if (serviceTypesArray.length > 0) {
-            res.status(200).json({serviceTypesArray})
+            if (req.body.pe) {
+                let employee = await Employee.findOne({_id: req.body.pe}).select(["fullName"]);
+                
+                res.status(200).json({serviceTypesArray, employee: employee.fullName})
+            }
+            else {
+                res.status(200).json({serviceTypesArray})
+            }
         }
         else {
             res.status(204).send();

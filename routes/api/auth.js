@@ -29,6 +29,7 @@ router.post("/checkEmail", async (req, res) => {
 router.post("/login", async (req, res) => {
   let adminLoggingIn = await Admin.findOne({ email: req.body.email.toLowerCase() });
   let userLoggingIn = await User.findOne({ email: req.body.email.toLowerCase() });
+  console.log(userLoggingIn)
   if (adminLoggingIn) {
     try {
       const passwordsMatching = await bcrypt.compare(
@@ -78,7 +79,7 @@ router.post("/login", async (req, res) => {
     } else {
       const payload = {
         user: {
-          userName: `${userLoggingIn.firstName} ${userLoggingIn.lastName}`,
+          userName: userLoggingIn.fullName,
           isUser: true,
           id: userLoggingIn.id
         }

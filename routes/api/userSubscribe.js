@@ -5,9 +5,12 @@ const User = require("../../models/User");
 
 router.post("/", async (req, res) => {
   try {
+    console.log(req.body);
+    console.log("weiner")
     let subscriberExists = await Business.find({
       followers: req.body.userId
     });
+    console.log(subscriberExists, "this is subscriber exists");
     let doesExist = false;
     for (let i = 0; i < subscriberExists.length; i++) {
       if (
@@ -18,11 +21,14 @@ router.post("/", async (req, res) => {
       }
     }
     if (doesExist) {
+      console.log("hey there");
       return res
         .status(406)
         .json({ error: "You have already subscribed to this business" });
     }
     let business = await Business.findOne({ _id: req.body.businessId });
+    console.log(business, "AM I NNULLL")
+    console.log("HEY")
     if (business) {
       business.followers.unshift(req.body.userId);
       await business.save();
@@ -59,7 +65,6 @@ router.post("/unfollow", async (req, res) => {
       let businessesAfterFilter = await Business.find({
         followers: user._id
       });
-
       return res.status(200).send() // DONT FORGET U CHANGED THIS
     }
   } catch (error) {

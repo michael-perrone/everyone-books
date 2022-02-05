@@ -8,6 +8,7 @@ app.use(cors());
 connectedDatabase();
 
 app.use(express.json({ extended: false }));
+app.use('/api/products', require('./routes/api/products'));
 app.use('/api/adminSchedule', require('./routes/api/adminSchedule'));
 app.use('/api/employees_dates', require('./routes/api/employees_dates'));
 app.use('/api/services', require('./routes/api/services'));
