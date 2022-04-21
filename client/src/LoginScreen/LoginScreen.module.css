@@ -1,12 +1,3 @@
-#loginScreenContainer {
-  background: url("./image.png") no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  display: flex;
-}
-
 .loginScreenContainer {
   height: 100vh;
   width: 100%;
@@ -14,7 +5,7 @@
 }
 
 .coverDiv {
-  background: linear-gradient(to right, rgb(256,256,256, 0.8), rgb(0, 0, 0, 0.8));
+  background-color: #f9e9f9;
 }
 
 #loginScreenLeftSide {
@@ -27,12 +18,13 @@
 @media (max-width: 950px) and (min-width: 0px) {
 
   .coverDiv {
-  background: linear-gradient(to bottom, rgb(256,256,256, 0.8), rgb(0, 0, 0, 0.8));
+    background-color: #f9e9f9;
   }
   .loginScreenContainer {
     flex-direction: column;
-    height: 1110px;
+    height: 1100px;
   }
+
   #loginScreenLeftSide {
     width: 100%;
     height: 550px;

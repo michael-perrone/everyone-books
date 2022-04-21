@@ -8,3 +8,8 @@
 button {
   cursor: pointer;
 }
+
+option {
+  background-color: white;
+  color: black;
+}

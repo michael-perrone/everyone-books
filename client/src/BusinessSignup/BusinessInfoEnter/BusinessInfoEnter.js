@@ -17,6 +17,7 @@ const BusinessInfoEnter = (props) => {
     const [stateDirty, setStateDirty] = React.useState(false);
     const [zipDirty, setZipDirty] = React.useState(false);
     const [phoneNumberDirty, setPhoneNumberDirty] = React.useState(false);
+    const [goodToGo, setGoodToGo] = React.useState(true)
 
     function validatePhone(phone) {
         let newRe = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
@@ -68,6 +69,10 @@ const BusinessInfoEnter = (props) => {
     }
 
     function storeAdminInfoInRedux() {
+        if (!validatePhone(phoneNumber) || city === "" || state === "" || zip === "" || phoneNumber === "" || address === "") {
+            setGoodToGo(false);
+            return;
+        }
         const business = {
             address,
             city,
@@ -83,7 +88,7 @@ const BusinessInfoEnter = (props) => {
 
    return (
        <div>
-            <div id={styles.adminSignUpContainer}>
+            <div style={{height: "400px"}} id={styles.adminSignUpContainer}>
             <div className={styles.inputContainer}>
             <input onBlur={addressHandlerDirty} placeholder="Street Address" className={styles.adminInput} onChange={addressHandler}/>
             {address === "" && addressDirty === true && <Alert top={'25px'} alertPhrase={"Field Cannot Be Blank"}/>}
@@ -157,9 +162,9 @@ const BusinessInfoEnter = (props) => {
             {!validatePhone(phoneNumber) && phoneNumberDirty === true && <Alert top={'25px'} alertPhrase={"Not a Valid Phone number"}/>}
             </div>
             
-            <input placeholder="Business Website (If Appliccable)" className={styles.adminInput} onChange={websiteHandler}></input>
-            
-            <SubmitButton onClick={storeAdminInfoInRedux}>Let's Finish Up!</SubmitButton>
+            <input placeholder="Business Website (If applicable)" className={styles.adminInput} onChange={websiteHandler}></input>
+            {!goodToGo && <Alert bottom={"170px"} right={""} top={""} alertPhrase={"Please fill in required info above"}/>}
+            <SubmitButton marginTop={"20px"} onClick={storeAdminInfoInRedux}>Let's Finish Up!</SubmitButton>
         </div>
        </div>
    ) 

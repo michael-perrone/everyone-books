@@ -1,4 +1,4 @@
-import {GET_KIND_OF_BUSINESS, GET_NAME_OF_BUSINESS, KIND_BUSINESS_COMPLETED, SAVE_ADMIN_INFO, SAVE_BUSINESS_INFO, ENTER_BUSINESS_SCHEDULE, ADMIN_DROP_DOWN, SET_BOOKING_NUMBER_AND_TYPE, BACK_FUNCTION} from '../actions/actions';
+import {GET_KIND_OF_BUSINESS, GET_NAME_OF_BUSINESS, KIND_BUSINESS_COMPLETED, SAVE_ADMIN_INFO, SAVE_BUSINESS_INFO, ENTER_BUSINESS_SCHEDULE, ADMIN_DROP_DOWN, SET_BOOKING_NUMBER_AND_TYPE, BACK_FUNCTION, REMOVE_CREATE_STATE} from '../actions/actions';
 
 
 const initialState = {
@@ -18,10 +18,24 @@ const initialState = {
 
 export default function (state = initialState, action) {
     switch(action.type) {
+        case REMOVE_CREATE_STATE:
+            return {
+                ...state,
+                kindOfBusiness: "",
+                nameOfBusiness: "",
+                kindBusinessCompleted: false,
+                adminInfo: {},
+                adminInfoComplete: false,
+                businessInfo: {},
+                businessSchedule: [],
+                businessScheduleComplete: false,
+                businessInfoComplete: false,
+                bookingColumnNumber: "",
+                bookingColumnType: "",
+                showDropDown: false,
+            }
         case BACK_FUNCTION:
-        console.log(state.showDropDown, state.businessScheduleComplete, state.businessInfoComplete, state.adminInfoComplete, state.showDropDown)
             if (state.showDropDown) {
-                console.log('hi')
                 return {
                     ...state,
                     showDropDown: false,
@@ -104,6 +118,5 @@ export default function (state = initialState, action) {
       
         default: 
         return state;
-
     }
 }

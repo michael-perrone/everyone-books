@@ -131,15 +131,13 @@ class EmployeeRegisterForm extends React.Component {
             </div>
             <div className={otherStyles.divWidthControl}>
               <label
-                style={{ color: "white", letterSpacing: "0.3px" }}
+                style={{letterSpacing: "0.3px" }}
                 className={otherStyles.labels}
               >
                 Last Name:
               </label>
               <input
-                style={{
-                  border: "2px solid white"
-                }}
+  
                 onBlur={this.setDirty}
                 onChange={this.getEmployeeInput}
                 value={this.state.employee.lastName}
@@ -157,7 +155,7 @@ class EmployeeRegisterForm extends React.Component {
 
             <div className={otherStyles.divWidthControl}>
               <label
-                style={{ color: "white", letterSpacing: "0.3px" }}
+                style={{letterSpacing: "0.3px" }}
                 className={otherStyles.labels}
               >
                 Email Address:
@@ -183,7 +181,7 @@ class EmployeeRegisterForm extends React.Component {
 
             <div className={otherStyles.divWidthControl}>
               <label
-                style={{ color: "white", letterSpacing: "1.0px" }}
+                style={{letterSpacing: "1.0px" }}
                 className={otherStyles.labels}
               >
                 Create Password:

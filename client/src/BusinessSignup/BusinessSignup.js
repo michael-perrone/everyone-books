@@ -7,7 +7,7 @@ import PeopleAnimation from './PeopleAnimation/PeopleAnimation';
 import BusinessInfoEnter from './BusinessInfoEnter/BusinessInfoEnter';
 import BusinessScheduleCreate from './BusinessScheduleCreate/BusinessScheduleCreate'
 import BookingColumnsEnter from './BookingColumnsEnter/BookingColumnsEnter';
-import AdminDropDown from './AdminConfirm/AdminConfirm';
+
 import FakeNav from './FakeNav/FakeNav'
 import BackButton from './BackButton/BackButton';
 
@@ -36,9 +36,8 @@ const BusinessSignup = (props) => {
                 {props.adminInfoComplete && !props.businessInfoComplete && <BusinessInfoEnter/>}
                 {props.businessInfoComplete && !props.businessScheduleComplete && <BusinessScheduleCreate/>}
                 {props.businessScheduleComplete && !props.showAdminDropDown && <BookingColumnsEnter/>}
-                {props.showAdminDropDown && props.businessInfoComplete && props.businessScheduleComplete && props.adminInfoComplete && props.kindBusinessCompleted &&  <AdminDropDown/>}
             </div>
-            <PeopleAnimation/>
+            
         </div>
     </React.Fragment>
     )

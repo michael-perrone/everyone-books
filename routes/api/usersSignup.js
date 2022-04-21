@@ -8,7 +8,13 @@ const Admin = require("../../models/Admin.js");
 const Instructor = require("../../models/Instructor.js");
 
 router.post("/", async (req, res) => {
-  console.log(req.body)
+  // let userByPhone = await User.findOne({phoneNumber: req.body.phoneNumber});
+  // if (userByPhone) {
+  //   if (userByPhone.newUser && userByPhone.email) {
+  //     res.status(403).send();
+  //   }
+  // }
+
   let user = await User.findOne({ email: req.body.email.toLowerCase() });
   let admin = await Admin.findOne({ email: req.body.email.toLowerCase() });
   let instructor = await Instructor.findOne({ email: req.body.email.toLowerCase() });

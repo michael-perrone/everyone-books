@@ -18,13 +18,12 @@ router.get("/mybusinessForProfile", adminAuth, async (req, res) => {
       business: req.admin.businessId
     });
     if (businessProfile) {
-      let business = await Business.findOne({ _id: req.admin.businessId });
-      let employeesPending = await Employee.find({ _id: businessProfile.employeesToSendInvite }).select(["fullName", "id"]);
-      let employeesHere = await Employee.find({ _id: businessProfile.employeesWhoAccepted }).select(["fullName", "id"]);
+      let business = await Business.findOne({ _id: req.admin.businessId }).select(["eq"]);
       return res.status(200).json({ profileCreated: true, eq: business.eq });
     }
     if (!businessProfile) {
-      return res.status(406).json({ profileCreated: false });
+      let business = await Business.findOne({ _id: req.admin.businessId }).select(["eq"]);
+      return res.status(406).json({ profileCreated: false, eq: business.eq });
     }
   } catch (error) {
     console.log(error);
@@ -242,7 +241,7 @@ router.post("/employeeDeleteFromBusiness", adminAuth, async (req, res) => {
       fromString: business.businessName
     })
     employee.businessWorkAt = null;
-    employee.business = "None";
+    employee.business = null;
     employee.notifications = [...employee.notifications, firedNoti];
     await firedNoti.save();
     await employee.save();

@@ -23,7 +23,6 @@ const BookedNotification = require("../../models/BookedNotification");
 
 router.post("/userBookedEmployee", async (req, res) => {
   try {
-    console.log(req.body, 'wingowat')
     let user = await User.findOne({ _id: req.body.userId })
     let booking = await Booking.findOne({ _id: req.body.bookingId });
     let employee = await Employee.findOne({ _id: req.body.employeeId });
@@ -153,12 +152,13 @@ router.post("/updateread", async (req, res) => {
 });
 
 router.get('/employeeHas', employeeAuth, async (req, res) => {
-  let employee = await Employee.findOne({ _id: req.employee.id }).select(["notifications"]);
-  if (employee.hasBusiness) {
-    res.status(200).json({hasBusiness: true});
+  let employee = await Employee.findOne({ _id: req.employee.id }).select(["businessWorkingAt"]);
+  console.log(employee)
+  if (employee.businessWorkingAt) {
+      return res.status(200).json({hasBusiness: true});
   }
   else {
-    res.status(200).json({ hasBusiness: false })
+    return res.status(200).json({ hasBusiness: false })
   }
 })
 
@@ -271,12 +271,45 @@ router.post("/employerAcceptedEmployee", authAdmin, async (req, res) => {
   }
 })
 
+router.get('/getUserNotis', userAuth, async (req, res) => {
+  const user = await User.findOne({_id: req.user.id}).select(["notifications", "bookedNotifications"]);
+  const userNotis = await Notification.find({_id: user.notifications});
+  const userBookedNotis = await BookedNotification.find({_id: user.bookedNotifications});
+  const allNotis = [...userNotis, ...userBookedNotis];
+  res.status(200).json({allNotis});
+})
+
 router.post("/changeAcceptedUserRequestNoti", async (req, res) => {
+  let date = new Date();
   let notification = await BookedNotification.findOne({_id: req.body.notiId});
-  console.log(notification);
-  console.log("HELLO");
   notification.type = "AAUR";
   await notification.save();
+  const user = await User.findOne({_id: notification.fromId}).select(["notifications"]);
+  if (req.body.employeeId) {
+    const employee = await Employee.findOne({_id: req.body.employeeId}).select(["fullName"])
+    let newNoti = new Notification({
+      date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
+      fromString: employee._id,
+      fromId: employee.fullName,
+      type: "YURA"
+    })
+    let userNotis = [newNoti, ...user.notifications];
+    await newNoti.save();
+    user.notifications = userNotis;
+  }
+  else if (req.body.businessId) {
+    const business = await Business.findOne({_id: req.body.businessId}).select(["businessName"]);
+    let newNoti = new Notification({
+       date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
+      fromString: business.businessName,
+      fromId: business._id,
+      type: "YURA"
+    })
+    let userNotis = [newNoti, ...user.notifications];
+    await newNoti.save();
+    user.notifications = userNotis;
+  }
+  await user.save();
   res.status(200).send();
 })
 
@@ -284,6 +317,32 @@ router.post("/changeDeniedUserRequestNoti", async (req, res) => {
   let notification = await BookedNotification.findOne({_id: req.body.notiId});
   notification.type = "ADUR";
   await notification.save();
+  const user = await User.findOne({_id: notification.fromId}).select(["notifications"]);
+  if (req.body.employeeId) {
+    const employee = await Employee.findOne({_id: req.body.employeeId}).select(["fullName"])
+    let newNoti = new Notification({
+      date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
+      fromString: employee._id,
+      fromId: employee.fullName,
+      type: "YURD"
+    })
+    let userNotis = [newNoti, ...user.notifications];
+    await newNoti.save();
+    user.notifications = userNotis;
+  }
+  if (req.body.businessId) {
+    const business = await Business.findOne({_id: req.body.businessId}.select("businessName"));
+    let newNoti = new Notification({
+       date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
+      fromString: business.businessName,
+      fromId: business._id,
+      type: "YURD"
+    })
+    let userNotis = [newNoti, ...user.notifications];
+    user.notifications = userNotis;
+  }
+  await user.save();
+  await newNoti.save();
   res.status(200).send();
 })
 
@@ -333,6 +392,7 @@ router.post('/employeeSendingId', async (req, res) => {
 router.post("/changeToRead", async (req, res) => {
   try {
     const notification = await Notification.findOne({ _id: req.body.notificationId });
+    if (notification) {
     if (notification.type === "ERY") {
       notification.type = "ERYR";
       await notification.save();
@@ -348,6 +408,28 @@ router.post("/changeToRead", async (req, res) => {
       await notification.save();
       res.status(200).send();
       }
+    else if (notification.type === "BBY") {
+        notification.type = "BBYR";
+        await notification.save();
+        res.status(200).send();
+      }
+     else if (notification.type === "YURA") {
+       notification.type = "YURAR";
+       await notification.save();
+       res.status(200).send();
+     }
+    }
+    else {
+      console.log("yo")
+      const bookedNoti = await BookedNotification.findOne({_id: req.body.notificationId});
+      if (bookedNoti.type === "UATG") {
+        bookedNoti.type = "UATGR";
+        console.log("brojo");
+        console.log(bookedNoti.type);
+        await bookedNoti.save();
+        res.status(200).send();
+      }
+    }
   }
   catch (error) {
     console.log(error)

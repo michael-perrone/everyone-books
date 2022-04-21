@@ -19,7 +19,7 @@
 }
 
 :root {
-  --lavender: rgb(212, 212, 255);
+  --lavender: lavenderblush;
   --main-color: #1a8fff;
   --text-color: rgb(83, 83, 83);
   --text-color-light: rgb(141, 141, 141);

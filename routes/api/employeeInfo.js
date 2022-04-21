@@ -74,15 +74,16 @@ router.post("/leaveBusiness", authEmployee, async (req, res) => {
             await Booking.deleteOne({_id: bookings[i]._id});
         }
         const shifts = await Shift.find({employeeId: employee._id, businessId: req.body.bId});
+        console.log(shifts);
         for (let z = 0; z < shifts.length; z++) {
-            await shifts.deleteOne({_id: shifts[z]._id});
+            await shifts[z].deleteOne({_id: shifts[z]._id});
         }
         const admin = await Admin.findOne({ business: req.body.bId });
         admin.notifications.push(leftNoti);
         businessProfile.employeesWhoAccepted = newEmployees;
-        employee.business = "None";
         employee.businessWorkingAt = null;
         await leftNoti.save();
+        admin.idsSent = 0;
         await businessProfile.save();
         await employee.save();
         await admin.save();

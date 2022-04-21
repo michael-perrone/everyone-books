@@ -14,13 +14,9 @@ import OtherAlert from '../../OtherAlerts/OtherAlerts';
 
 const AdminSignup = (props) => {
     const [formError, setFormError] = React.useState(false)
-    const [firstName, setFirstName] = React.useState('');
-    const [lastName, setLastName] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [passwordConfirm, setPasswordConfirm] = React.useState('');
-    const [firstNameDirty, setFirstNameDirty] = React.useState(false);
-    const [lastNameDirty, setLastNameDirty] = React.useState(false);
     const [emailDirty, setEmailDirty] = React.useState(false);
     const [passwordDirty, setPasswordDirty] = React.useState(false);
     const [passwordConfirmDirty, setPasswordConfirmDirty] = React.useState(false);
@@ -40,14 +36,6 @@ const AdminSignup = (props) => {
         })
     }
 
-    function firstNameHandler(e) {
-        setFirstName(e.target.value)
-    }
-
-    function lastNameHandler(e) {
-        setLastName(e.target.value)
-    }
-
     function emailHandler(e) {
         setEmail(e.target.value)
     }
@@ -58,14 +46,6 @@ const AdminSignup = (props) => {
 
     function confirmPasswordHandler(e) {
         setPasswordConfirm(e.target.value)
-    }
-
-    function firstNameHandlerDirty() {
-        setFirstNameDirty(true)
-    }
-
-    function lastNameHandlerDirty() {
-        setLastNameDirty(true)
     }
 
     function emailHandlerDirty() {
@@ -81,21 +61,18 @@ const AdminSignup = (props) => {
     }
 
     function storeAdminInfoInRedux() {
-      /*       setFormError(false)
-        if (firstName === "" || lastName === "" || !validateEmail(email) || password === "" || passwordConfirm !== password) {
-            setTimeout(() => setFormError(true), 200)
-            
+        setFormError(false)
+        if (!validateEmail(email) || password === "" || passwordConfirm !== password) {
+            setTimeout(() => setFormError(true), 200)   
         }
-        else { DONT FORGET THIs */
+        else { 
         const admin = {
-            firstName,
-            lastName,
             email,
             password,
             passwordConfirm
         }
         props.saveAdminInfo(admin)
-    // }
+    }
 }
 
     function validateEmail(email) {
@@ -109,16 +86,8 @@ const AdminSignup = (props) => {
         <React.Fragment>
         <OtherAlert showAlert={formError} alertMessage={"Please check the information you've entered."}/>
         <div id={styles.adminSignUpContainer}>
-        <div className={styles.inputContainer}>
-            <input onBlur={firstNameHandlerDirty} placeholder="First Name" className={styles.adminInput} onChange={firstNameHandler}/>
-            {firstName === "" && firstNameDirty === true && <Alert top={'25px'} alertPhrase={"Field Cannot Be Blank"}/>}
-            </div>
             <div className={styles.inputContainer}>
-            <input onBlur={lastNameHandlerDirty} placeholder="Last Name" className={styles.adminInput} onChange={lastNameHandler}/>
-            {lastName === "" && lastNameDirty === true && <Alert top={'25px'} alertPhrase={"Field Cannot Be Blank"}/>}
-            </div>
-            <div className={styles.inputContainer}>
-            <input onBlur={emailHandlerDirty} onClick={() => setEmailError(false)} style={{backgroundColor: emailError ? "black": "", color: emailError ? '#ff6666' : ""}} value={emailError ? "Email is already being used" : email} placeholder="Email" className={styles.adminInput} onChange={emailHandler}/>
+            <input onBlur={emailHandlerDirty} onClick={() => setEmailError(false)} style={{color: emailError ? '#ff6666' : ""}} value={emailError ? "Email is already being used" : email} placeholder="Email" className={styles.adminInput} onChange={emailHandler}/>
             {!validateEmail(email) && emailDirty === true && <Alert top={'25px'} alertPhrase={"Not a Valid Email"}/>}
             </div>
             <div className={styles.inputContainer}>
@@ -129,7 +98,7 @@ const AdminSignup = (props) => {
             <input type='password' onFocus={confirmPasswordHandlerDirty} placeholder="Confirm Password" className={styles.adminInput} onChange={confirmPasswordHandler}/>
             {passwordConfirm !== password && passwordConfirmDirty === true && <Alert top={'25px'} alertPhrase={"Passwords do not match"}/>}
             </div>
-            <SubmitButton onClick={checkEmail}>This is my Info!</SubmitButton>
+            <SubmitButton marginTop={"30px"} onClick={checkEmail}>This is my Info!</SubmitButton>
         </div>
         </React.Fragment>
     )

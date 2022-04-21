@@ -10,6 +10,7 @@ const ServiceTypeSchema = new mongoose.Schema({
         required: true
     },
     timeDuration: String,
+    requiresEmployee: Boolean
 })
 
 const ServiceType = mongoose.model('serviceType', ServiceTypeSchema);

@@ -29,7 +29,7 @@ router.post('/check', async (req, res) => {
 router.post('/',
   async (req, res) => {
     try {
-      console.log(req.body.thuOpen)
+      console.log(req.body.eq)
       if (req.body.monOpen) {
         console.log('WDW')
         console.log(req.body)
@@ -41,8 +41,6 @@ router.post('/',
             .status(400)
             .json({ errors: [{ msg: "That email is being used" }] });
         }
-        console.log("hi")
-        console.log(req.body)
         let schedule = {};
         schedule =
           [{ open: req.body.sunOpen, close: req.body.sunClose },
@@ -145,7 +143,8 @@ router.post('/',
           bookingColumnNumber: req.body.bookingColumnNumber,
           schedule: req.body.schedule || schedule,
           website: req.body.businessInfo.website,
-          phoneNumber: req.body.businessInfo.phoneNumber
+          phoneNumber: req.body.businessInfo.phoneNumber,
+          eq: req.body.eq
         });
 
         let newAdmin = new Admin({

@@ -53,18 +53,19 @@ router.post('/delete', adminAuth, async (req, res) => {
   }
 })
 
-router.post('/create', adminAuth, async (req, res) => {
-  console.log("hi")
+router.post('/create', adminAuth, async (req, res) => {1
   let businessProfile = await BusinessProfile.findOne({ business: req.admin.businessId });
   if (businessProfile) {
     const servicesArray = businessProfile ? [...businessProfile.serviceTypes] : []
     let newServiceType = new ServiceType({
+      requiresEmployee: req.body.requiresEmployee,
       cost: req.body.cost,
       serviceName: req.body.serviceName,
       timeDuration: req.body.timeDuration
     })
     await newServiceType.save();
     servicesArray.push(newServiceType._id);
+    console.log(newServiceType)
     businessProfile.serviceTypes = servicesArray;
     await businessProfile.save();
     console.log("hi")
@@ -72,6 +73,7 @@ router.post('/create', adminAuth, async (req, res) => {
   }
   else {
     let newServiceType = new ServiceType({
+      requiresEmployee: req.body.requiresEmployee,
       cost: req.body.cost,
       serviceName: req.body.serviceName,
       timeDuration: req.body.timeDuration

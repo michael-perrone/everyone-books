@@ -9,7 +9,6 @@ const ShiftSchema = new mongoose.Schema({
         ref: 'employee'
     },
     employeeName: String,
-    shiftDuration: String,
     businessId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'business'

@@ -1,4 +1,4 @@
-const stringToIntTime = {
+export const stringToIntTime = {
     "12:00 AM": 0, "12:05 AM": 1, "12:10 AM": 2, "12:15 AM": 3, "12:20 AM": 4, "12:25 AM": 5, "12:30 AM": 6,
     "12:35 AM": 7, "12:40 AM": 8, "12:45 AM": 9, "12:50 AM": 10, "12:55 AM": 11, "1:00 AM": 12, "1:05 AM": 13, "1:10 AM": 14,
     "1:15 AM": 15, "1:20 AM": 16, "1:25 AM": 17, "1:30 AM": 18, "1:35 AM": 19, "1:40 AM": 20, "1:45 AM": 21, "1:50 AM": 22,
@@ -41,7 +41,9 @@ const stringToIntTime = {
 const date = new Date();
 const notificationDate = cutDay(`${date.toDateString()}, ${-convertTime(date.getHours(), date.getMinutes())}`);
 
-const intToStringTime = {
+
+
+export const intToStringTime = {
     0: "12:00 AM", 1: "12:05 AM", 2: "12:10 AM", 3: "12:15 AM", 4: "12:20 AM", 5: "12:25 AM", 6: "12:30 AM", 7: "12:35 AM", 8: "12:40 AM", 9: "12:45 AM", 10: "12:50 AM", 11: "12:55 AM", 12: "1:00 AM", 13: "1:05 AM", 14: "1:10 AM", 15: "1:15 AM", 16: "1:20 AM", 17: "1:25 AM", 18: "1:30 AM", 19: "1:35 AM", 20: "1:40 AM", 21: "1:45 AM", 22: "1:50 AM", 23: "1:55 AM", 24: "2:00 AM", 25: "2:05 AM", 26: "2:10 AM", 27: "2:15 AM", 28: "2:20 AM", 29: "2:25 AM", 30: "2:30 AM", 31: "2:35 AM", 32: "2:40 AM", 33: "2:45 AM", 34: "2:50 AM", 35: "2:55 AM",
     36: "3:00 AM", 37: "3:05 AM", 38: "3:10 AM", 39: "3:15 AM", 40: "3:20 AM", 41: "3:25 AM", 42: "3:30 AM", 43: "3:35 AM",
     44: "3:40 AM", 45: "3:45 AM", 46: "3:50 AM", 47: "3:55 AM", 48: "4:00 AM", 49: "4:05 AM", 50: "4:10 AM", 51: "4:15 AM",
@@ -55,14 +57,14 @@ const intToStringTime = {
     277: "11:05 PM", 278: "11:10 PM", 279: "11:15 PM", 280: "11:20 PM", 281: "11:25 PM", 282: "11:30 PM", 283: "11:35 PM", 284: "11:40 PM", 285: "11:45 PM", 286: "11:50 PM", 287: "11:55 PM"
 }
 
-const timeDurationStringToInt = {
+export const timeDurationStringToInt = {
     "5 Minutes": 1, "10 Minutes": 2, "15 Minutes": 3, "20 Minutes": 4, "25 Minutes": 5, "30 Minutes": 6, "35 Minutes": 7, "40 Minutes": 8, "45 Minutes": 9, "50 Minutes": 10, "55 Minutes": 11, "1 Hour": 12}
 
-const timeDurationIntToString = {
+export const timeDurationIntToString = {
     1: "5 Minutes", 2: "10 Minutes", 3: "15 Minutes", 4: "20 Minutes", 5: "25 Minutes", 6: "30 Minutes", 7: "35 Minutes", 8: "40 Minutes", 9: "45 Minutes", 10: "50 Minutes", 11: "55 Minutes", 12: "1 Hour"
 }
 
-const fixTime = {
+export const fixTime = {
     "12:00 AM": "0:00", "12:15 AM": "0:15", "12:30 AM": "0:30", "12:45 AM": "0:45", "1:00 AM": "1:00", "1:15 AM": "1:15", "1:30 AM": "1:30", "1:45 AM": "1:45",
     "2:00 AM": "2:00", "2:15 AM": "2:15", "2:30 AM": "2:30", "2:45 AM": "2:45", "3:00 AM": "3:00", "3:15 AM": "3:15", "3:30 AM": "3:30", "3:45 AM": "3:45",
     "4:00 AM": "4:00", "4:15 AM": "4:15", "4:30 AM": "4:30", "4:45 AM": "4:45", "5:00 AM": "5:00", "5:15 AM": "5:15", "5:30 AM": "5:30", "5:45 AM": "5:45",
@@ -78,18 +80,18 @@ const fixTime = {
     "11:15 PM": "23:15", "11:30 PM": "23:30", "11:45 PM": "23:45"
 }
 
-function removeDollarSign(cost) {
+export function removeDollarSign(cost) {
     let costIntoArray = cost.split("");
     let newArray = costIntoArray.filter(e => e !== "$");
     return parseFloat(newArray.join(""));
 }
 
-function addDollarSign(cost) {
+export function addDollarSign(cost) {
     return `$${cost}`;
 }
 
 
-function convertShiftTimes(numberTime) {
+export function convertShiftTimes(numberTime) {
     let num = null;
     if (numberTime === "12:00 AM") {
         num = 0;
@@ -191,7 +193,7 @@ function convertShiftTimes(numberTime) {
     return num;
 }
 
-function shiftCalcTime(num) {
+export function shiftCalcTime(num) {
     let time;
     if (num === 0) {
         time = "12:00 AM";
@@ -412,7 +414,7 @@ function shiftCalcTime(num) {
     return time
 }
 
-function convertTime(hour, minute) {
+export function convertTime(hour, minute) {
     hour = hour.toString();
     minute = minute.toString();
     if (minute.length == 1) {
@@ -497,7 +499,7 @@ function convertTime(hour, minute) {
     return time;
 }
 
-function getStringDateTime(time, day) {
+export function getStringDateTime(time, day) {
     let date = new Date(`${day}, ${time}`);
     let hour = date.getHours();
     let minute = date.getMinutes();
@@ -510,13 +512,13 @@ function getStringDateTime(time, day) {
     }
 }
 
-function getBookingTimesAsInt(time) {
+export function getBookingTimesAsInt(time) {
     let start = time.split("-")[0];
     let end = time.split("-")[1];
     return {start, end}
 }
 
-function getNumsFromTimes(time) {
+export function getNumsFromTimes(time) {
     let start = stringToIntTime[getBookingTimesAsInt(time).start];
     const end = stringToIntTime[getBookingTimesAsInt(time).end];
     
@@ -528,20 +530,20 @@ function getNumsFromTimes(time) {
     return nums;
 }
 
-function cutDay(date) {
+export function cutDay(date) {
     let dateArray = date.split(" ");
     return dateArray[1] + " " + dateArray[2] + " " + dateArray[3] + " " + dateArray[4] + " " + dateArray[5]
 }
 
-function milisToDays(milis) {
+export function milisToDays(milis) {
     return milis / 1000 / 60 / 60 / 24;
 }
 
-function daysToMilis(days) {
+export function daysToMilis(days) {
     return days * 24 * 60 * 60 * 1000;
 }
 
-function convertNumToStringDollars(num) {
+export function convertNumToStringDollars(num) {
     num = Math.round((num + Number.EPSILON) * 100) / 100
     let numString = num.toString();
     let numArray = numString.split(".");
@@ -558,11 +560,11 @@ function convertNumToStringDollars(num) {
     }
 }
 
-function removeComma(num) {
+export function removeComma(num) {
     return Number(num.toString().split("").filter(e => e !== ",").join(""));
 }
 
-function removeAndRound(num) {
+export function removeAndRound(num) {
     // let numArray = num.toString().split("");
     // let index = numArray.findIndex(e => e === ".");
     // let lastNum;
@@ -598,23 +600,17 @@ function removeAndRound(num) {
     return num;
 }
 
-module.exports = {
-    removeAndRound,
-    getBookingTimesAsInt,
-    stringToIntTime,
-    intToStringTime,
-    timeDurationStringToInt,
-    timeDurationIntToString,
-    convertTime,
-    cutDay,
-    fixTime,
-    getStringDateTime,
-    notificationDate,
-    removeDollarSign,
-    addDollarSign,
-    getNumsFromTimes,
-    milisToDays,
-    daysToMilis,
-    convertNumToStringDollars,
-    removeComma
+
+
+    export function badTimes(time1, time2) { 
+        console.log("DO I NOT WORK")
+    if (stringToIntTime[time1] >= stringToIntTime[time2]) {
+       return true;
+    }
+    else {
+        return false;
+    }
 }
+
+
+

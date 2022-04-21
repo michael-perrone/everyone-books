@@ -10,39 +10,39 @@ const adminAuth = require("../../middleware/authAdmin");
 
 router.post('/multiplecreate', async (req, res) => {
   console.log(req.body)
-  let date = new Date(req.body.shiftDate).toDateString();
-  let newShiftCloneDates = []
-  let dateForLoop = new Date(date)
+  let date = new Date(req.body.shiftDate).toDateString(); // get the date string
+  let newShiftCloneDates = []  // empty array to hold clone shifts in
+  let dateForLoop = new Date(date); // purple date
   for (let i = 0; i < req.body.cloneNumber; i++) {
-    newShiftCloneDates.push(new Date(dateForLoop.getFullYear(), dateForLoop.getMonth(), dateForLoop.getDate() + (i * 7)).toDateString());
+    newShiftCloneDates.push(new Date(dateForLoop.getFullYear(), dateForLoop.getMonth(), dateForLoop.getDate() + (i * 7)).toDateString()); // doing the * 7 thing to change the dates
   }
-
-  for (let i = 0; i < newShiftCloneDates.length; i++) {
-    let areaConflict = await Shift.find({ bookingColumnNumber: req.body.bookingColumnNumber, shiftDate: newShiftCloneDates[i] });
+  const employeeForBusiness = await Employee.findOne({_id: req.body.employeeId}).select(["businessWorkingAt"]);
+  const businessForEq = await Business.findOne({_id: employeeForBusiness.businessWorkingAt}).select(["eq"]);
+  for (let i = 0; i < newShiftCloneDates.length; i++) { // number of clones based on clone num
+    if (businessForEq.eq === "y") {
+    let areaConflict = await Shift.find({ bookingColumnNumber: req.body.bookingColumnNumber, shiftDate: newShiftCloneDates[i] }); 
+    // area conflict needs to also be looked at through employees bc some shifts may not have a bct which is annoying but whatever
     if (areaConflict.length) {
+      let startNum = utils.stringToIntTime[req.body.timeStart];
+      let endNum = utils.stringToIntTime[req.body.timeEnd];
       for (let i = 0; i < areaConflict.length; i++) {
         let alreadyExistingStart = utils.stringToIntTime[areaConflict[i].timeStart];
         let alreadyExistingEnd = utils.stringToIntTime[areaConflict[i].timeEnd];
-
         if (startNum >= alreadyExistingStart && endNum <= alreadyExistingEnd) {
-          console.log(startNum, alreadyExistingStart)
-          console.log(endNum, alreadyExistingEnd)
-          return res.status(406).send()
+          return res.status(406).json({error: "ebcn", date: areaConflict[i].shiftDate});
         }
         else if (startNum <= alreadyExistingStart && endNum >= alreadyExistingStart) {
-          console.log("bm")
-          return res.status(406).send()
+          return res.status(406).json({error: "ebcn", date: areaConflict[i].shiftDate});
         }
         else if (startNum >= alreadyExistingStart && startNum <= alreadyExistingEnd) {
-          console.log("scm")
-          return res.status(406).send()
+          return res.status(406).json({error: "ebcn", date: areaConflict[i].shiftDate});
         }
         else if (endNum >= alreadyExistingStart && endNum <= alreadyExistingEnd) {
-          console.log("stm")
-          return res.status(406).send()
+          return res.status(406).json({error: "ebcn", date: areaConflict[i].shiftDate});
         }
       }
     }
+  }
     let shiftConflict = await Shift.find({ employeeId: req.body.employeeId, shiftDate: newShiftCloneDates[i] });
     if (shiftConflict.length) {
       let startNum = utils.stringToIntTime[req.body.timeStart];
@@ -53,27 +53,274 @@ router.post('/multiplecreate', async (req, res) => {
         let alreadyExistingEnd = utils.stringToIntTime[shiftConflict[i].timeEnd];
 
         if (startNum >= alreadyExistingStart && endNum <= alreadyExistingEnd) {
-          console.log(startNum, alreadyExistingStart)
-          console.log(endNum, alreadyExistingEnd)
-          return res.status(406).send()
+          // ee stands for employee issue
+          return res.status(406).json({error: `ee`, date: shiftConflict[i].shiftDate});
         }
         else if (startNum <= alreadyExistingStart && endNum >= alreadyExistingStart) {
-          console.log("bm")
-          return res.status(406).send()
+          return res.status(406).json({error: `ee`, date: shiftConflict[i].shiftDate});
         }
         else if (startNum >= alreadyExistingStart && startNum <= alreadyExistingEnd) {
-          console.log("scm")
-          return res.status(406).send()
+          return res.status(406).json({error: `ee`, date: shiftConflict[i].shiftDate});
         }
         else if (endNum >= alreadyExistingStart && endNum <= alreadyExistingEnd) {
-          console.log("stm")
-          return res.status(406).send()
+          return res.status(406).json({error: `ee`, date: shiftConflict[i].shiftDate});
         }
       }
     }
     else {
-      const newShift = new Shift({
-        shiftDate: newShiftCloneDates[i],
+
+      let newShift;
+
+      if (req.body.bookingColumnNumber) {
+        newShift = new Shift({
+          shiftDate: date,
+          timeStart: req.body.timeStart,
+          timeEnd: req.body.timeEnd,
+          employeeId: req.body.employeeId,
+          employeeName: req.body.employeeName,
+          shiftDuration: req.body.shiftDuration,
+          businessId: req.body.businessId,
+          isBreak: req.body.isBreak,
+          breakEnd: req.body.breakEnd,
+          breakStart: req.body.breakStart
+        })
+      }
+      else {
+        newShift = new Shift({
+          shiftDate: newShiftCloneDates[i],
+          timeStart: req.body.timeStart,
+          timeEnd: req.body.timeEnd,
+          employeeId: req.body.employeeId,
+          employeeName: req.body.employeeName,
+          shiftDuration: req.body.shiftDuration,
+          businessId: req.body.businessId,
+          isBreak: req.body.isBreak,
+          breakEnd: req.body.breakEnd,
+          breakStart: req.body.breakStart,
+          bookingColumnNumber: req.body.bookingColumnNumber
+        })
+      }
+      await newShift.save();
+    }
+  }
+  res.status(201).send()
+})
+
+router.post('/edit', async (req, res) => {
+  try {
+    let date = new Date(req.body.shiftDate).toDateString();
+    const originalShift = await Shift.findOne({_id: req.body.shiftId});
+    const areaConflict = await Shift.find({ businessId: req.body.businessId, bookingColumnNumber: req.body.bookingColumnNumber, shiftDate: date });
+    const areaConflictIndex = areaConflict.findIndex(e =>  {
+      return e._id.toString() === originalShift._id.toString();
+    });
+    if (areaConflictIndex !== -1) {
+      areaConflict.splice(areaConflictIndex, 1);
+    }
+    const shiftConflict = await Shift.find({ employeeId: req.body.employeeId, shiftDate: date });
+    
+    const shiftConflictIndex = shiftConflict.findIndex(e => {
+      console.log(e._id, "shiftConflict")
+      console.log(originalShift._id, "originalShift")
+      return e._id.toString() === originalShift._id.toString();
+    })
+    if (shiftConflictIndex !== -1) {
+      shiftConflict.splice(shiftConflictIndex, 1);
+    }
+    console.log(shiftConflict[0], "shiftconflictID");
+    console.log(originalShift, "originalshiftID");
+    console.log(req.body.employeeId, "reqbodyem");
+    console.log(req.body.employeeName, "req.body.employeeName")
+   // console.log(shiftConflict[0].employeeId, "shiftconem")
+    const employeeForBusiness = await Employee.findOne({_id: req.body.employeeId}).select(["businessWorkingAt"]);
+    const businessForEq = await Business.findOne({_id: employeeForBusiness.businessWorkingAt}).select(["eq"]);
+    if (businessForEq.eq === "y") {
+    if (areaConflict.length > 0) {
+      let startNum = utils.stringToIntTime[req.body.timeStart];
+      let endNum = utils.stringToIntTime[req.body.timeEnd];
+      for (let i = 0; i < areaConflict.length; i++) {
+        let alreadyExistingStart = utils.stringToIntTime[areaConflict[i].timeStart];
+        let alreadyExistingEnd = utils.stringToIntTime[areaConflict[i].timeEnd];
+
+        if (startNum >= alreadyExistingStart && endNum <= alreadyExistingEnd) {
+          return res.status(406).json({error: "ebcn", date: areaConflict[i].shiftDate});
+        }
+        else if (startNum <= alreadyExistingStart && endNum >= alreadyExistingStart) {
+          return res.status(406).json({error: "ebcn", date: areaConflict[i].shiftDate});
+        }
+        else if (startNum >= alreadyExistingStart && startNum <= alreadyExistingEnd) {
+          return res.status(406).json({error: "ebcn", date: areaConflict[i].shiftDate});
+        }
+        else if (endNum >= alreadyExistingStart && endNum <= alreadyExistingEnd) {
+          return res.status(406).json({error: "ebcn", date: areaConflict[i].shiftDate});
+        }
+      }
+    }
+  }
+    if (shiftConflict.length > 0) {
+      let startNum = utils.stringToIntTime[req.body.timeStart];
+      let endNum = utils.stringToIntTime[req.body.timeEnd];
+
+      for (let i = 0; i < shiftConflict.length; i++) {
+        let alreadyExistingStart = utils.stringToIntTime[shiftConflict[i].timeStart];
+        let alreadyExistingEnd = utils.stringToIntTime[shiftConflict[i].timeEnd];
+
+        if (startNum >= alreadyExistingStart && endNum <= alreadyExistingEnd) {
+          console.log("YOOO1")
+          return res.status(406).json({error: `ee`, date: shiftConflict[i].shiftDate});
+        }
+        else if (startNum <= alreadyExistingStart && endNum >= alreadyExistingStart) {
+          console.log("YOOO2")
+          return res.status(406).json({error: `ee`, date: shiftConflict[i].shiftDate});
+        }
+        else if (startNum >= alreadyExistingStart && startNum <= alreadyExistingEnd) {
+          console.log("YOOO3")
+          return res.status(406).json({error: `ee`, date: shiftConflict[i].shiftDate});
+        }
+        else if (endNum >= alreadyExistingStart && endNum <= alreadyExistingEnd) {
+          console.log("YOOO4")
+          return res.status(406).json({error: `ee`, date: shiftConflict[i].shiftDate});
+        }
+      }
+    }
+
+    originalShift.date = date;
+    originalShift.timeStart = req.body.timeStart;
+    originalShift.timeEnd = req.body.timeEnd;
+    originalShift.employeeId = req.body.employeeId;
+    originalShift.employeeName = req.body.employeeName;
+    originalShift.businessId = req.body.businessId;
+    if (req.body.isBreak && req.body.breakStart && req.body.breakEnd) {
+      originalShift.isBreak = req.body.isBreak;
+      originalShift.breakStart = req.body.breakStart;
+      originalShift.breakEnd = req.body.breakEnd;
+    }
+    if (originalShift.isBreak && !req.body.isBreak) {
+        originalShift.isBreak = false;
+        originalShift.breakStart = undefined;
+        originalBreak.breakEnd = undefined;
+    }
+    if (req.body.bookingColumnNumber) {
+      originalShift.bookingColumnNumber = req.body.bookingColumnNumber;
+    }
+
+    await originalShift.save();
+
+    // if (req.body.bookingColumnNumber) {
+    //   newShift = new Shift({
+    //     shiftDate: date,
+    //     timeStart: req.body.timeStart,
+    //     timeEnd: req.body.timeEnd,
+    //     employeeId: req.body.employeeId,
+    //     employeeName: req.body.employeeName,
+    //     businessId: req.body.businessId,
+    //     isBreak: req.body.isBreak,
+    //     breakEnd: req.body.breakEnd,
+    //     breakStart: req.body.breakStart,
+    //     bookingColumnNumber: req.body.bookingColumnNumber
+    //   })
+    // }
+    // else {
+    //   newShift = new Shift({
+    //     shiftDate: date,
+    //     timeStart: req.body.timeStart,
+    //     timeEnd: req.body.timeEnd,
+    //     employeeId: req.body.employeeId,
+    //     employeeName: req.body.employeeName,
+    //     businessId: req.body.businessId,
+    //     isBreak: req.body.isBreak,
+    //     breakEnd: req.body.breakEnd,
+    //     breakStart: req.body.breakStart,
+    //     bookingColumnNumber: req.body.bookingColumnNumber
+    //   })
+    // }
+  
+    // await newShift.save();
+    // console.log(newShift)
+    // res.status(201).send()
+    res.status(200).send();
+  }
+  catch (error) {
+    console.log(error)
+  }
+});
+
+router.post("/breaksForDay", adminAuth, async (req, res) => {
+  const date = new Date(req.body.date).toDateString();
+  console.log(date);
+  console.log(req.admin)
+  const shifts = await Shift.find({businessId: req.admin.businessId, shiftDate: date});
+  console.log(shifts)
+  const breaksForDay = [];
+  shifts.forEach(function(eachShift) {
+    if (eachShift.breakStart && eachShift.breakEnd) {
+      breaksForDay.push({time: `${eachShift.breakStart}-${eachShift.breakEnd}`, bcn: eachShift.bookingColumnNumber});
+    }
+  });
+  console.log(breaksForDay)
+ return res.status(200).json({breaks: breaksForDay})
+})
+
+router.post('/create', async (req, res) => {
+  try {
+    let date = new Date(req.body.shiftDate).toDateString();
+    const areaConflict = await Shift.find({ businessId: req.body.businessId, bookingColumnNumber: req.body.bookingColumnNumber, shiftDate: date });
+    const shiftConflict = await Shift.find({ employeeId: req.body.employeeId, shiftDate: date });
+    const employeeForBusiness = await Employee.findOne({_id: req.body.employeeId}).select(["businessWorkingAt"]);
+    console.log(employeeForBusiness)
+    const businessForEq = await Business.findOne({_id: employeeForBusiness.businessWorkingAt}).select(["eq"]);
+    if (businessForEq.eq === "y") {
+    if (areaConflict.length > 0) {
+      let startNum = utils.stringToIntTime[req.body.timeStart];
+      let endNum = utils.stringToIntTime[req.body.timeEnd];
+      for (let i = 0; i < areaConflict.length; i++) {
+        let alreadyExistingStart = utils.stringToIntTime[areaConflict[i].timeStart];
+        let alreadyExistingEnd = utils.stringToIntTime[areaConflict[i].timeEnd];
+
+        if (startNum >= alreadyExistingStart && endNum <= alreadyExistingEnd) {
+          return res.status(406).json({error: "ebcn", date: areaConflict[i].shiftDate});
+        }
+        else if (startNum <= alreadyExistingStart && endNum >= alreadyExistingStart) {
+          return res.status(406).json({error: "ebcn", date: areaConflict[i].shiftDate});
+        }
+        else if (startNum >= alreadyExistingStart && startNum <= alreadyExistingEnd) {
+          return res.status(406).json({error: "ebcn", date: areaConflict[i].shiftDate});
+        }
+        else if (endNum >= alreadyExistingStart && endNum <= alreadyExistingEnd) {
+          return res.status(406).json({error: "ebcn", date: areaConflict[i].shiftDate});
+        }
+      }
+    }
+  }
+    if (shiftConflict.length > 0) {
+      let startNum = utils.stringToIntTime[req.body.timeStart];
+      let endNum = utils.stringToIntTime[req.body.timeEnd];
+
+      for (let i = 0; i < shiftConflict.length; i++) {
+        let alreadyExistingStart = utils.stringToIntTime[shiftConflict[i].timeStart];
+        let alreadyExistingEnd = utils.stringToIntTime[shiftConflict[i].timeEnd];
+
+        if (startNum >= alreadyExistingStart && endNum <= alreadyExistingEnd) {
+          console.log();
+          return res.status(406).json({error: `ee`, date: shiftConflict[i].shiftDate});
+        }
+        else if (startNum <= alreadyExistingStart && endNum >= alreadyExistingStart) {
+          return res.status(406).json({error: `ee`, date: shiftConflict[i].shiftDate});
+        }
+        else if (startNum >= alreadyExistingStart && startNum <= alreadyExistingEnd) {
+          return res.status(406).json({error: `ee`, date: shiftConflict[i].shiftDate});
+        }
+        else if (endNum >= alreadyExistingStart && endNum <= alreadyExistingEnd) {
+          return res.status(406).json({error: `ee`, date: shiftConflict[i].shiftDate});
+        }
+      }
+    }
+
+    let newshift;
+
+    if (req.body.bookingColumnNumber) {
+      newShift = new Shift({
+        shiftDate: date,
         timeStart: req.body.timeStart,
         timeEnd: req.body.timeEnd,
         employeeId: req.body.employeeId,
@@ -85,89 +332,23 @@ router.post('/multiplecreate', async (req, res) => {
         breakStart: req.body.breakStart,
         bookingColumnNumber: req.body.bookingColumnNumber
       })
-      await newShift.save();
     }
-  }
-  res.status(201).send()
-})
-
-
-router.post('/create', async (req, res) => {
-  try {
-    console.log(req.body);
-    console.log("req.body above")
-    let date = new Date(req.body.shiftDate).toDateString();
-    const areaConflict = await Shift.find({ businessId: req.body.businessId, bookingColumnNumber: req.body.bookingColumnNumber, shiftDate: date });
-    const shiftConflict = await Shift.find({ employeeId: req.body.employeeId, shiftDate: date });
-    if (areaConflict.length > 0) {
-      let startNum = utils.stringToIntTime[req.body.timeStart];
-      let endNum = utils.stringToIntTime[req.body.timeEnd];
-
-      for (let i = 0; i < areaConflict.length; i++) {
-        let alreadyExistingStart = utils.stringToIntTime[areaConflict[i].timeStart];
-        let alreadyExistingEnd = utils.stringToIntTime[areaConflict[i].timeEnd];
-
-        if (startNum >= alreadyExistingStart && endNum <= alreadyExistingEnd) {
-          console.log("winter time")
-          return res.status(406).send();
-        }
-        else if (startNum <= alreadyExistingStart && endNum >= alreadyExistingStart) {
-          console.log(areaConflict)
-          console.log(startNum, "startNum");
-          console.log(endNum, "endNum")
-          return res.status(406).send();
-        }
-        else if (startNum >= alreadyExistingStart && startNum <= alreadyExistingEnd) {
-          console.log("oh me")
-          return res.status(406).send();
-        }
-        else if (endNum >= alreadyExistingStart && endNum <= alreadyExistingEnd) {
-          console.log("summer time")
-          return res.status(406).send();
-        }
-      }
+    else {
+      newShift = new Shift({
+        shiftDate: date,
+        timeStart: req.body.timeStart,
+        timeEnd: req.body.timeEnd,
+        employeeId: req.body.employeeId,
+        employeeName: req.body.employeeName,
+        shiftDuration: req.body.shiftDuration,
+        businessId: req.body.businessId,
+        isBreak: req.body.isBreak,
+        breakEnd: req.body.breakEnd,
+        breakStart: req.body.breakStart,
+        bookingColumnNumber: req.body.bookingColumnNumber
+      })
     }
-    if (shiftConflict.length > 0) {
-      let startNum = utils.stringToIntTime[req.body.timeStart];
-      let endNum = utils.stringToIntTime[req.body.timeEnd];
-
-      for (let i = 0; i < shiftConflict.length; i++) {
-        let alreadyExistingStart = utils.stringToIntTime[shiftConflict[i].timeStart];
-        let alreadyExistingEnd = utils.stringToIntTime[shiftConflict[i].timeEnd];
-
-        if (startNum >= alreadyExistingStart && endNum <= alreadyExistingEnd) {
-          console.log("winter time")
-          return res.status(406).send()
-        }
-        else if (startNum <= alreadyExistingStart && endNum >= alreadyExistingStart) {
-          console.log("here?")
-          console.log("fall time")
-          return res.status(406).send()
-        }
-        else if (startNum >= alreadyExistingStart && startNum <= alreadyExistingEnd) {
-          console.log("oh me")
-          return res.status(406).send()
-        }
-        else if (endNum >= alreadyExistingStart && endNum <= alreadyExistingEnd) {
-          console.log("summer time")
-          return res.status(406).send()
-        }
-      }
-    }
-
-    const newShift = new Shift({
-      shiftDate: date,
-      timeStart: req.body.timeStart,
-      timeEnd: req.body.timeEnd,
-      employeeId: req.body.employeeId,
-      employeeName: req.body.employeeName,
-      shiftDuration: req.body.shiftDuration,
-      businessId: req.body.businessId,
-      isBreak: req.body.isBreak,
-      breakEnd: req.body.breakEnd,
-      breakStart: req.body.breakStart,
-      bookingColumnNumber: req.body.bookingColumnNumber
-    })
+  
     await newShift.save();
     console.log(newShift)
     res.status(201).send()
@@ -176,7 +357,6 @@ router.post('/create', async (req, res) => {
     console.log(error)
   }
 });
-
 
 
 router.post('/employee', async (req, res) => {
@@ -246,36 +426,50 @@ router.post('/employee', async (req, res) => {
 
 
 router.post('/get', async (req, res) => {
-  let date = new Date(req.body.shiftDate).toDateString();
-  console.log(date)
-  const shifts = await Shift.find({ shiftDate: date, businessId: req.body.businessId }).select(["employeeName", "timeStart", "timeEnd"])
-  if (shifts.length > 0) {
-    res.status(200).json({ shifts })
+  try {
+     let date = new Date(req.body.shiftDate).toDateString();
+     console.log(date)
+     const shifts = await Shift.find({ shiftDate: date, businessId: req.body.businessId }).select(["employeeName", "timeStart", "timeEnd", "shiftDate", "breakStart", "breakEnd", "bookingColumnNumber"]);
+     return res.status(200).json({ shifts });
   }
-  else {
-    res.status(204).send();
-  }
+  catch(error) {
+    res.status(400).send();
+    print(error)
+   }
 })
 
 router.post('/getEmployeeBookingsForDay', async (req, res) => {
   let date = new Date(req.body.date).toDateString();
   const employee = await Employee.findOne({ _id: req.body.employeeId });
   const business = await Business.findOne({ _id: employee.businessWorkingAt });
-  const shift = await Shift.findOne({ employeeId: req.body.employeeId, shiftDate: date })
-  if (!shift) {
-    console.log("NO SHIFT")
-    return res.status(406).send()
+  const shift = await Shift.findOne({ employeeId: req.body.employeeId, shiftDate: date });
+  if (business.eq === "y" && !shift) {
+    console.log("no");
+      console.log("NO SHIFT")
+      return res.status(406).send()
   }
   else {
     const bookings = await Booking.find({ employeeBooked: req.body.employeeId, date: date });
     const updatedWithNameBookings = [];
-    const bcn = shift.bookingColumnNumber;
+    let bcn;
+    let breakStart;
+    let breakEnd;
+    if (shift) {
+      if (shift.breakStart && shift.breakEnd) {
+        breakStart = shift.breakStart;
+        breakEnd = shift.breakEnd;
+      }
+      bcn = shift.bookingColumnNumber;
+    }
     const bct = business.bookingColumnType;
     if (bookings.length) {
       console.log(bookings)
       for (let i = 0; i < bookings.length; i++) {
         let user = await User.findOne({ _id: bookings[i].customer });
         let updatedWithNameBooking = {};
+        if (!bcn) {
+          bcn = bookings[i].bcn;
+        }
         updatedWithNameBooking.bcn = bcn;
         updatedWithNameBooking.employeeBooked = bookings[i].employeeBooked;
         updatedWithNameBooking.cName = user.fullName;
@@ -293,15 +487,42 @@ router.post('/getEmployeeBookingsForDay', async (req, res) => {
         updatedWithNameBooking._id = bookings[i]._id;
         updatedWithNameBookings.push(updatedWithNameBooking);
       }
-      console.log("paige")
-      console.log(updatedWithNameBookings)
+      if (breakStart && breakEnd) {
+        return res.status(200).json({ bookings: updatedWithNameBookings, bct, breakTime: `${breakStart}-${breakEnd}` })
+      }
       return res.status(200).json({ bookings: updatedWithNameBookings, bct })
+    } else if (!bookings.length && business.eq === "n") {
+      return res.status(202).send();
     }
     else {
-      console.log("no bookings")
-      console.log("NO BOOKINGS")
+      let bcn;
+      let bct;
+      if (shift.bookingColumnNumber) {
+        bcn = shift.bookingColumnNumber;
+        bct = business.bookingColumnType;
+      }
       let shiftTimes = { start: shift.timeStart, end: shift.timeEnd };
-      res.status(206).send({ shiftTimes });
+      console.log(shift)
+      if (shift.breakStart && shift.breakEnd) {
+        if (bcn) {
+          return res.status(206).json({shiftTimes, breakStart: shift.breakStart, breakEnd: shift.breakEnd, bcn, bct});
+        }
+        else {
+          return res.status(205).json({shiftTimes, breakStart: shift.breakStart, breakEnd: shift.breakEnd});
+        }
+      }
+      else {
+        if (bcn) {
+          console.log(bcn, bct, shiftTimes)
+          console.log("ABOUT TO SEND")
+          return res.status(204).json({shiftTimes, bcn, bct});
+        }
+        else {
+          console.log("YOOOOO")
+          return res.status(203).json({shiftTimes});
+        }
+        
+      }
     }
   }
 })
@@ -315,8 +536,6 @@ router.post('/deleteOne', adminAuth, async (req, res) => {
     }
   }
 })
-
-
 
 
 module.exports = router;

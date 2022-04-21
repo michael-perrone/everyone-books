@@ -3,7 +3,7 @@ import styles from "./AdminProfileCreate.module.css";
 import { connect } from "react-redux";
 import axios from "axios";
 import ServicesForm from "./ServicesForm/ServicesForm";
-import BioForm from "./BioForm/BioForm";
+
 import EmployeeAddForm from "./EmployeesAddForm/EmployeeAddForm";
 
 const AdminProfileCreate = props => {
@@ -12,7 +12,6 @@ const AdminProfileCreate = props => {
   const [profileExists, setProfileExists] = useState(true);
   const [showingEmployees, setShowingEmployees] = useState(true);
   const [showingServices, setShowingServices] = useState(false);
-  const [showingBio, setShowingBio] = useState(false);
   const [accepted, setAccepted] = useState([]);
   const [pending, setPending] = useState([]);
   
@@ -56,32 +55,26 @@ const AdminProfileCreate = props => {
       });
   }, []);
 
-  function setBio() {
-    setShowingBio(true);
-    setShowingServices(false);
-    setShowingEmployees(false);
-  }
-
   function setServices() {
     setShowingServices(true);
     setShowingEmployees(false);
-    setShowingBio(false);
+    // setShowingBio(false);
   }
 
   function setEmployees() {
-    setShowingEmployees(true);
-    setShowingBio(false);
-    setShowingServices(false);
+    // setShowingEmployees(true);
+    // setShowingBio(false);
+    // setShowingServices(false);
   }
 
   const leftArrowClick = () => {
-    if (showingBio) {
-      setShowingServices(true);
-      setShowingBio(false);
-    } else if (showingServices) {
-      setShowingEmployees(true);
-      setShowingServices(false);
-    }
+    // if (showingBio) {
+    //   setShowingServices(true);
+    //   setShowingBio(false);
+    // } else if (showingServices) {
+    //   setShowingEmployees(true);
+    //   setShowingServices(false);
+    // }
   };
 
   function setNewPending(newPending) {
@@ -90,13 +83,13 @@ const AdminProfileCreate = props => {
   }
 
   const rightArrowClick = () => {
-    if (showingEmployees) {
-      setShowingServices(true);
-      setShowingEmployees(false);
-    } else if (showingServices) {
-      setShowingBio(true);
-      setShowingServices(false);
-    }
+    // if (showingEmployees) {
+    //   setShowingServices(true);
+    //   setShowingEmployees(false);
+    // } else if (showingServices) {
+    //   setShowingBio(true);
+    //   setShowingServices(false);
+    // }
   };
 
   function getAmountOfResults(resultsNumber) {
@@ -125,8 +118,8 @@ const AdminProfileCreate = props => {
               fontSize: "22px",
               marginTop: "4px",
               marginRight: "8px",
-              cursor: showingBio || showingServices ? "pointer" : "",
-              color: showingBio || showingServices ? "black" : "lightgray"
+              cursor: showingServices ? "pointer" : "",
+              color: showingServices ? "black" : "lightgray"
             }}
             className="fas fa-chevron-left"
           ></i>
@@ -145,9 +138,10 @@ const AdminProfileCreate = props => {
             Services
           </p>
           <p
-            onClick={setBio}
+
+            // onClick={setBio}
             className={styles.pTagsForSelection}
-            id={showingBio ? styles.selectedPTag : ""}
+            // id={showingBio ? styles.selectedPTag : ""}
           >
             Bio
           </p>
@@ -191,15 +185,6 @@ const AdminProfileCreate = props => {
             
           </p>
           <ServicesForm profile={profile} />
-        </div>
-        <div
-          className={styles.divHolderNotAnimated}
-          id={showingBio ? styles.divHolderAnimated : ""}
-        >
-          <p className={styles.pTag}>
-            Below you can add a small bio about your business. It is not required but it is reccomended.
-          </p>
-          <BioForm bio={profile.bio} />
         </div>
       </div>
     </div>

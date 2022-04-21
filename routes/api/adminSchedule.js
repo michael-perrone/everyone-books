@@ -5,12 +5,14 @@ const Business = require('../../models/Business');
 const Shift = require('../../models/Shift');
 const Booking = require('../../models/Booking');
 const utils = require('../../utils/utils');
+const Group = require("../../models/Group");
 
 router.post('/', adminAuth, async (req, res) => {
-    console.log("running")
     try {
         const date = new Date(req.body.date).toDateString();
         const business = await Business.findOne({ _id: req.admin.businessId });
+        const groups = await Group.find({businessId: business._id, date: date});
+        console.log(groups)
         const bookings = await Booking.find({ businessId: business._id, date: date });
         var num;
         let day = date.split(" ")[0];
@@ -35,13 +37,13 @@ router.post('/', adminAuth, async (req, res) => {
         else if (day === "Sat") {
             num = 6;
         }
-        console.log(bookings);
-        console.log("Below Bookings");
-        console.log(business.schedule[num].open);
+        if (business.schedule[num].open === "Closed" || business.schedule[num].close === "Closed") {
+          return res.status(202).json({eq: business.eq, bcn: business.bookingColumnNumber, bct: business.bookingColumnType});
+        }
         res.status(200).json({
             bookings, bcn: business.bookingColumnNumber, bct: business.bookingColumnType,
             open: business.schedule[num].open, close: business.schedule[num].close,
-            eq: business.eq
+            groups: groups, eq: business.eq
         });
     }
     catch (error) {

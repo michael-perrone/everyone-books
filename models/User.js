@@ -27,6 +27,14 @@ const UserSchema = new mongoose.Schema({
   notifications: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: "notification"
+  },
+  bookedNotifications: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "bookedNotification"
+  },
+  friends: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "user"
   }
 });
 

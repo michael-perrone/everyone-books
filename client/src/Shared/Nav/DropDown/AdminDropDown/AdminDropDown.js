@@ -1,6 +1,6 @@
 import React from 'react';
 import DropDownLink from '../DropDownLink/DropDownLink';
-import {SHOW_NOTIFICATIONS, ADMIN_LOGOUT} from '../../../../actions/actions'
+import {SHOW_NOTIFICATIONS, ADMIN_LOGOUT, REMOVE_CREATE_STATE} from '../../../../actions/actions'
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 
@@ -23,6 +23,7 @@ const AdminDropDown = (props) => {
 
   function adminLogout() {
     props.logoutAdmin()
+    props.removeCreateState();
     props.history.push('/')
   }
 
@@ -47,7 +48,8 @@ const AdminDropDown = (props) => {
 const mapDispatchToProps = dispatch => {
   return {
     showNotifications: () => dispatch({type: SHOW_NOTIFICATIONS}),
-    logoutAdmin: () => dispatch({type: ADMIN_LOGOUT})
+    logoutAdmin: () => dispatch({type: ADMIN_LOGOUT}),
+    removeCreateState: () => dispatch({type: REMOVE_CREATE_STATE})
   }
 }
 

@@ -8,7 +8,7 @@ const BackButton = (props) => {
 
 
     return (
-        <div id={styles.backButton} style={{marginTop: props.marginTop ? "27px" : ""}}>
+        <div id={styles.backButton} style={{marginTop: "14px", marginLeft: "8px"}}>
         <SubmitButton onClick={props.backFunction}><i style={{marginRight: '5px'}} className="far fa-arrow-alt-circle-left"></i>Back</SubmitButton>
         </div>
     )

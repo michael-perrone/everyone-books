@@ -24,5 +24,7 @@
     "concurrently": "^4.1.1",
     "nodemon": "^1.19.4"
   },
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs":"active",
   "proxy": "http://localhost:8080"
 }

@@ -1,0 +1,13 @@
+
+.colorButton {
+    padding:6px 8px;
+    box-shadow: 0px 0px 4px black;
+    border: none;
+    font-size: 14px;
+    margin-left: 10px;
+    width: 70px;
+}
+
+#subButton:hover {
+    box-shadow: 0px 0px 2px black;
+}
