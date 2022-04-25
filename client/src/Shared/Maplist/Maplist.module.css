@@ -1,0 +1,20 @@
+#mainContainer {
+    display: flex;
+    justify-content: center;
+}
+
+#subContainer {
+    width: 300px;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0px 0px 2px black;
+    padding: 4px 10px 4px 10px;
+    align-items: center;
+    height: 40px;
+}
+
+#button {
+    border: none;
+    background-color: transparent;
+    margin-top: 3px;
+}

@@ -6,9 +6,7 @@ const ServiceType = require('../../models/ServiceType');
 
 router.get('/', adminAuth, async (req, res) => {
   try {
-    console.log("hi")
     let businessProfile = await BusinessProfile.findOne({ business: req.admin.businessId }).select(["serviceTypes"]);
-    console.log(businessProfile)
     if (businessProfile) {
       let serviceTypes = await ServiceType.find({ _id: businessProfile.serviceTypes });
       res.status(200).json({ services: serviceTypes });

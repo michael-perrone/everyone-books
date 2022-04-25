@@ -445,9 +445,11 @@ router.post("/employeeClickedYesIos", async (req, res) => {
     let date = new Date();
     let business = await Business.findOne({ _id: notification.fromId });
     const businessProfile = await BusinessProfile.findOne({ business: notification.fromId });
+    console.log("what")
+    console.log(business);
     if (businessProfile && employee) {
       employee.businessWorkingAt = notification.fromId;
-      employee.business = business.fullName;
+      employee.business = business.businessName;
       await employee.save();
       let currentPending = [...businessProfile.employeesToSendInvite];
       let newPending = currentPending.filter(cp => cp.toString() !== req.body.employeeId);

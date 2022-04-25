@@ -12,7 +12,6 @@ const ServiceType = require("../../models/ServiceType");
 router.post("/getEmployeePayroll", adminAuth, async (req, res) => {
     const emPayroll = await EmPayroll.findOne({employee: req.body.employeeId});
     if (emPayroll) {
-        console.log(emPayroll);
         return res.status(200).json({emPayroll});    
     }
     else {

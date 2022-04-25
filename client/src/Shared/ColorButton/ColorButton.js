@@ -3,7 +3,6 @@ import { useState  } from "react";
 import styles from '../ColorButton/ColorButton.module.css';
 
 function YesNoButton(props) {
-    const [selected, setSelected] = useState(false);
 
     function buttonSelected() {
        props.clicked();

@@ -32,11 +32,9 @@ router.get("/mybusinessForProfile", adminAuth, async (req, res) => {
 
 router.get('/myEmployees', adminAuth, async (req, res) => {
   try {
-    console.log('HERE')
     let businessProfile = await BusinessProfile.findOne({
       business: req.admin.businessId
     });
-    console.log(businessProfile)
     if (businessProfile) {
       let employeesPending = await Employee.find({ _id: businessProfile.employeesToSendInvite }).select(["fullName", "id"]);
       let employeesHere = await Employee.find({ _id: businessProfile.employeesWhoAccepted }).select(["fullName", "id"]);
@@ -45,7 +43,8 @@ router.get('/myEmployees', adminAuth, async (req, res) => {
       res.status(200).json({ employeesPending, employeesHere })
     }
     else {
-      res.status(200).json({ well: "well" })
+      console.log("hello");
+      return res.status(200).send();
     }
   }
   catch (error) {
@@ -221,6 +220,7 @@ router.post("/", adminAuth, async (req, res) => {
 });
 
 router.post("/employeeDeleteFromBusiness", adminAuth, async (req, res) => {
+  console.log(req.body)
   try {
     let businessProfile = await BusinessProfile.findOne({
       business: req.admin.businessId
@@ -256,8 +256,6 @@ router.post("/employeeDeleteFromBusiness", adminAuth, async (req, res) => {
 
 router.post("/removeFromPending", adminAuth, async (req, res) => {
   try {
-    console.log("hi")
-    console.log(req.body.employees)
     let businessProfile = await BusinessProfile.findOne({
       business: req.admin.businessId
     });
@@ -286,13 +284,14 @@ router.post("/removeFromPending", adminAuth, async (req, res) => {
 
     let notificationsToSort = await Notification.find({ _id: employee.notifications });
 
-
+    let notificationUpHere;
     for (let i = 0; i < notificationsToSort.length; i++) {
       console.log(notificationsToSort[i])
       if (notificationsToSort[i].type === "BAE" && notificationsToSort[i].fromId.toString() === req.admin.businessId.toString()) {
         console.log(notificationsToSort[i]);
         console.log("WORKED")
         notificationUpHere = notificationsToSort[i];
+        console.log(notificationsToSort[i])
         await Notification.deleteOne(
           {
             _id: notificationsToSort[i]._id
@@ -304,7 +303,7 @@ router.post("/removeFromPending", adminAuth, async (req, res) => {
       }
     }
 
-    console.log(notificationUpHere)
+
     let newEmployeeNotifications = employee.notifications.filter(
       notification => {
         return notification !== notificationUpHere._id;
@@ -348,12 +347,13 @@ router.post("/getEmployeesPendingAndAccepted", async (req, res) => {
   }
 });
 
-router.post('/addEmployeeToBusinessApp', async (req, res) => {
+router.post('/addEmployeeToBusinessApp', adminAuth, async (req, res) => {   // used and altered to accept token
   try {
-    let date = new Date();
+
+    let date = new Date();   // create date
     let businessProfile = await BusinessProfile.findOne({
-      business: req.body.business
-    });
+      business: req.admin.businessId
+    }); // finding if profile exists based on token
     if (businessProfile) {
       function checkIfDuplicates() {
         let sendError = "No Error";
@@ -389,7 +389,7 @@ router.post('/addEmployeeToBusinessApp', async (req, res) => {
       if (checkIfDuplicates() === "No Error") {
         let date = new Date();
         let business = await Business.findOne({
-          _id: req.body.business
+          _id: req.admin.businessId
         });
         let employeesForInstantAdd = [];
         businessProfile.employeesToSendInvite.push(req.body.employeeId);
@@ -400,12 +400,12 @@ router.post('/addEmployeeToBusinessApp', async (req, res) => {
         employeesForInstantAdd.push(employee);
         employee.requestFrom = req.body.business;
         employee.requestPending = true;
-
+        console.log(business)
         let newNotification = new Notification({
           type: "BAE",
           date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
-          notificationFromBusiness: business._id,
-          fromId: req.body.business,
+          notificationFromBusiness: req.admin.businessId,
+          fromId: req.admin.businessId,
           fromString: business.businessName
         });
         employee.notifications.push(newNotification);
@@ -417,11 +417,11 @@ router.post('/addEmployeeToBusinessApp', async (req, res) => {
       }
     } else {
       let business = await Business.findOne({
-        _id: req.body.business
+        _id: req.admin.businessId
       });
       let businessProfile = new BusinessProfile({
         employeesToSendInvite: req.body.employeeId,
-        business: req.body.business
+        business: req.admin.businessId
       });
       await businessProfile.save();
       let employeesForInstantAdd = [];
@@ -433,7 +433,7 @@ router.post('/addEmployeeToBusinessApp', async (req, res) => {
         type: "BAE",
         date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
         notificationFromBusiness: business._id,
-        fromId: req.body.business,
+        fromId: req.admin.businessId,
         fromString: business.businessName
       });
       employeeForInstant.notifications.unshift(newNotification);

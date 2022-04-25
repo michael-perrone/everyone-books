@@ -3,7 +3,6 @@ import styles from './BusinessSignup.module.css';
 import KindOfBusiness from './KindOfBusiness/KindOfBusiness';
 import {connect} from 'react-redux';
 import AdminSignup from './AdminSignup/AdminSignup';
-import PeopleAnimation from './PeopleAnimation/PeopleAnimation';
 import BusinessInfoEnter from './BusinessInfoEnter/BusinessInfoEnter';
 import BusinessScheduleCreate from './BusinessScheduleCreate/BusinessScheduleCreate'
 import BookingColumnsEnter from './BookingColumnsEnter/BookingColumnsEnter';

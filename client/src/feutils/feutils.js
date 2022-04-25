@@ -601,6 +601,25 @@ export function removeAndRound(num) {
 }
 
 
+    export function createMaplist(arrayOfObjects, displayedName) {
+        if (arrayOfObjects.length > 0) {
+        console.log(arrayOfObjects[0]["fullName"])
+        const newArray = [];
+        for (let i = 0; i < arrayOfObjects.length; i++) {
+            let obj = {"displayName": arrayOfObjects[i][displayedName], id: arrayOfObjects[i]["_id"]};
+            newArray.push(obj);
+        }
+        console.log(newArray);
+        console.log("HUHHH")
+        return newArray;
+        }
+    }
+    
+    export function createMaplistElement(object, displayName) {
+        return {"displayName": object[displayName], id: object["_id"]}
+    }
+
+
 
     export function badTimes(time1, time2) { 
         console.log("DO I NOT WORK")
