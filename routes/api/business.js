@@ -230,8 +230,8 @@ router.post('/appBusiness', async (req, res) => {
 })
 
 router.post("/startEndTime", authAdmin, async (req, res) => {
+    console.log("hello")
     const date = new Date(req.body.date).toDateString();
-    console.log(req.admin)
     const business = await Business.findOne({ _id: req.admin.businessId }).select(["schedule"]);
     const dateSplit = date.split(" ");
     const day = dateSplit[0];

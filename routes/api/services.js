@@ -20,9 +20,9 @@ router.get('/', adminAuth, async (req, res) => {
   }
 })
 
-router.post("/getServices", async (req, res) => {
+router.get("/getServices", adminAuth, async (req, res) => {
   try {
-    let businessProfile = await BusinessProfile.findOne({ business: req.body.businessId }).select(["serviceTypes"]);
+    let businessProfile = await BusinessProfile.findOne({ business: req.admin.businessId}).select(["serviceTypes"]);
     if (businessProfile) {
       let serviceTypes = await ServiceType.find({ _id: businessProfile.serviceTypes });
       res.status(200).json({ services: serviceTypes });

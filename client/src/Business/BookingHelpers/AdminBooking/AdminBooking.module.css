@@ -1,29 +1,36 @@
 .bookingHolderContainer {
-  height: 240px;
-  width: 240px;
-  border: 1px solid black;
+  height: 300px;
+  width: 830px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: white;
   position: relative;
 }
 
-#coverUser {
-  height: 100%;
+.ptags{
+  font-size: 18px;
+  margin-top: 4px;
+  margin-right: 8px;
+  display: inline;
+}
+
+#addBookingContainer {
   width: 100%;
-  cursor: not-allowed;
-  background: rgba(0, 0, 0, 0.751);
-  position: absolute;
-  z-index: 299;
+  display: flex;
+  height: 260px;
+}
+
+.holder {
+  padding-left: 8px;
 }
 
 #coolContainer {
-  padding: 18px;
-  box-shadow: 0px 0px 4px black;
+  padding: 10px 10px 10px 10px;
   border-bottom: 1px solid gray;
   background-color: #f9e9f9;
   position: relative;
+  display: flex;
+  justify-content: center;
 }
 
 #divWhereWidthChanges {
@@ -53,7 +60,7 @@
   background-color: rgb(157, 217, 255);
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1100px) {
   #coolContainer {
     flex: 1;
     display: flex;

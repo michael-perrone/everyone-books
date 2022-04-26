@@ -1,7 +1,6 @@
 import React from "react";
 import axios from "axios";
 import styles from "./Business.module.css";
-import CourtContainer from "./CourtContainer/CourtContainer";
 import AdminBooking from "./BookingHelpers/AdminBooking/AdminBooking";
 import { connect } from "react-redux";
 import {withRouter} from 'react-router-dom';
@@ -87,16 +86,7 @@ class Business extends React.Component {
                   services={this.state.services}
                 />
               </div>
-              <CourtContainer
-                dateChosen={this.props.dateChosen.toDateString()}
-                openTime={this.state.timeOpen}
-                closeTime={this.state.timeClose}
-                bookingColumnType={this.state.business.bookingColumnType}
-                businessNameAllLower={this.state.business.businessNameAllLower}
-                numberColumns={this.state.business.bookingColumnNumber}
-                businessName={this.state.business.businessName}
-                businessId={this.state.business._id}
-              />
+
             </div>
           </div>
         )}{" "}
