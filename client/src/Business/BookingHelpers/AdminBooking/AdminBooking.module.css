@@ -1,11 +1,11 @@
-.bookingHolderContainer {
+/* .bookingHolderContainer {
   height: 300px;
   width: 830px;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
-}
+} */
 
 .ptags{
   font-size: 18px;
@@ -22,6 +22,7 @@
 
 .holder {
   padding-left: 8px;
+  width: 320px;
 }
 
 #coolContainer {
@@ -33,8 +34,19 @@
   justify-content: center;
 }
 
+#newContainer {
+  padding: 10px 10px 10px 10px;
+  border-bottom: 1px solid gray;
+  background-color: #f9e9f9;
+  position: relative;
+  display: flex;
+  min-width: 1300px;
+  width: 1300px;
+  overflow: auto;
+}
+
+
 #divWhereWidthChanges {
-  width: 1188px;
   display: flex;
 }
 
@@ -60,16 +72,9 @@
   background-color: rgb(157, 217, 255);
 }
 
+
 @media (min-width: 1100px) {
-  #coolContainer {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-  }
-  #bookingHolder {
-    width: 100%;
-  }
-  #divWhereWidthChanges {
-    width: 100%;
-  }
+    #newContainer {
+      width: 100%;
+    }
 }

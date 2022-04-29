@@ -1,15 +1,14 @@
 #mainContainer {
     display: flex;
     justify-content: center;
-    max-height: 250px;
 }
 
 #subContainer {
-    width: 280px;
+    width: 220px;
     display: flex;
-    justify-content: space-between;
     box-shadow: 0px 0px 2px black;
-    padding: 4px 10px 4px 10px;
+    cursor: pointer;
+    padding: 4px 10px 4px 20px;
     align-items: center;
     height: 40px;
 }
@@ -17,8 +16,5 @@
 #button {
     border: none;
     background-color: transparent;
-    font-size: 34px;
-    margin-top: -3px;
-    position: relative;
-    right: 8px;
+    margin-top: 3px;
 }

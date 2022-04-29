@@ -41,7 +41,54 @@ export const stringToIntTime = {
 const date = new Date();
 const notificationDate = cutDay(`${date.toDateString()}, ${-convertTime(date.getHours(), date.getMinutes())}`);
 
+export function getTimeRightAway() {
+    let ampm = "";
+    let hour = new Date().getHours();
+    if (hour > 12) {
+        hour = hour - 12;
+        ampm = "PM";
+    }
+    else {
+        ampm = "AM";
+    }
 
+    let minutesArray = new Date().getMinutes().toString().split("");
+
+    if (minutesArray.length === 2) {
+        if (minutesArray[0] === "5" && minutesArray[1] > 5) {
+            hour = hour + 1;
+            minutesArray[0] = 0;
+            minutesArray[1] = 0;
+        }
+        else if (minutesArray[1] > 5) {
+            minutesArray[1] = "0"
+            minutesArray[0] = (Number(minutesArray[0]) + 1).toString();
+         } 
+         else {
+            minutesArray[1] = "5";
+         }
+    }
+    else {
+        if (minutesArray[0] > 5) {
+            minutesArray[0] = "1"
+            minutesArray[1] = "0" 
+         } 
+         else if (minutesArray > 0 && minutesArray < 6) {
+            minutesArray[0] = "05";
+         }
+         else {
+             minutesArray[0] = "00";
+         }
+    }
+    
+   
+
+    let minutes = minutesArray.join("");
+    console.log(`${hour}:${minutes} ${ampm}`)
+
+    return `${hour}:${minutes} ${ampm}`
+
+}
 
 export const intToStringTime = {
     0: "12:00 AM", 1: "12:05 AM", 2: "12:10 AM", 3: "12:15 AM", 4: "12:20 AM", 5: "12:25 AM", 6: "12:30 AM", 7: "12:35 AM", 8: "12:40 AM", 9: "12:45 AM", 10: "12:50 AM", 11: "12:55 AM", 12: "1:00 AM", 13: "1:05 AM", 14: "1:10 AM", 15: "1:15 AM", 16: "1:20 AM", 17: "1:25 AM", 18: "1:30 AM", 19: "1:35 AM", 20: "1:40 AM", 21: "1:45 AM", 22: "1:50 AM", 23: "1:55 AM", 24: "2:00 AM", 25: "2:05 AM", 26: "2:10 AM", 27: "2:15 AM", 28: "2:20 AM", 29: "2:25 AM", 30: "2:30 AM", 31: "2:35 AM", 32: "2:40 AM", 33: "2:45 AM", 34: "2:50 AM", 35: "2:55 AM",

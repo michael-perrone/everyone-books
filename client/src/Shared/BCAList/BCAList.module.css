@@ -1,0 +1,14 @@
+#container {
+    display: flex;
+    max-width: 300px;
+    height: 46px;
+    overflow: auto;
+    box-shadow: 0px 0px 2px black;
+}
+
+.bcn {
+    font-size: 20px;
+    padding: 8px 20px 14px 20px;
+    box-shadow: 0px 0px 2px black;
+    cursor: pointer;
+}

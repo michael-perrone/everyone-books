@@ -35,10 +35,13 @@ router.post("/admin", async (req, res) => {
         if (customer) {
             let bookings = await Booking.find({ businessId: req.body.businessId, customer: customer._id, date: date.dateString });
             let timeNum = 0;
+            let cost = 0;
             for (let i = 0; i < req.body.serviceIds.length; i++) {
                 let service = await ServiceType.findOne({ _id: req.body.serviceIds[i] });
                     timeNum += utils.timeDurationStringToInt[service.timeDuration];
+                    cost += service.cost;
                 }
+            cost = utils.convertNumToStringDollars(cost);
             const endTime = utils.intToStringTime[utils.stringToIntTime[req.body.timeStart] + timeNum];
             console.log(endTime, "im endtime");
             console.log(typeof(req.body.bcn))
@@ -54,6 +57,7 @@ router.post("/admin", async (req, res) => {
             if (!bcn) {
                 return res.status(409).send();
             }
+           
             let newBooking = new Booking({
                 serviceType: req.body.serviceIds,
                 time: `${req.body.timeStart}-${endTime}`,
@@ -61,7 +65,7 @@ router.post("/admin", async (req, res) => {
                 customer: customer._id,
                 date: date.dateString,
                 employeeBooked: req.body.employeeId,
-                cost: req.body.cost,
+                cost: req.body.cost ? req.body.cost : cost,
                 bcn: bcn
             });
             let business = await Business.findOne({_id: req.body.businessId});
@@ -88,6 +92,7 @@ router.post("/admin", async (req, res) => {
 })
 
 router.post("/admin/area", async (req, res) => {
+    console.log(req.body);
     const date = utils.getStringDateTime(req.body.timeStart, req.body.date);
     let customer;
     if (req.body.phone && req.body.phone !== "") {

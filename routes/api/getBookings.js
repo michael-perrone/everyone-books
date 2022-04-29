@@ -307,7 +307,7 @@ router.get("/ios", userAuth, async (req, res) => {
 });
 
 
-router.post('/', async (req, res) => {
+router.post('/', adminAuth, async (req, res) => {
   try {
     let date1 = utils.getStringDateTime(req.body.timeChosen, req.body.date);
     let dateToUse = new Date(date1.date);
@@ -334,9 +334,9 @@ router.post('/', async (req, res) => {
       let timeForEachService = services[l].timeDuration;
       serviceDurationNum += utils.timeDurationStringToInt[timeForEachService];
     }
-    if (req.body.timeDurationNum) {
-      serviceDurationNum = req.body.timeDurationNum;
-    }
+    // if (req.body.timeDurationNum) {
+    //   serviceDurationNum = req.body.timeDurationNum;
+    // }
     const business = await Business.findOne({ _id: req.body.businessId }).select(["eq", "bookingColumnNumber", "schedule"]);
     const businessProfile = await BusinessProfile.findOne({business: business._id});
     if (business.eq === "n") {

@@ -19,8 +19,17 @@ class Business extends React.Component {
       employees: "",
       timeOpen: "",
       timeClose: "",
-      services: []
+      services: [],
+      shouldExpand: false
     }; 
+  }
+
+  slide = () => {
+      document.getElementById("slideLeft").scrollTo({
+        top: 0,
+        left: 1200,
+        behavior: 'smooth'
+      });
   }
 
 
@@ -34,42 +43,25 @@ class Business extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.admin || this.props.employee || this.props.user) {
-    let businessId
-    if (this.props.admin) {
-      businessId = this.props.admin.admin.businessId
-    }
-    else if (this.props.employee || this.props.user) {
-      businessId = this.props.match.params.businessId
-    }
+    console.log("did")
       axios
-        .post("/api/business", {
-          businessId
+        .post("/api/business/appBusiness", {
+          businessId: this.props.admin.admin.businessId
         })
         .then(response => {
           if (response.status === 200) {
+            console.log("YOOOOOOOOOOO")
+            console.log(response.data)
             this.setState({ profileComplete: true });
             this.setState({ businessProfile: response.data.profile });
             this.setState({ business: response.data.business });
-            this.setState({ employees: response.data.employees})
-            axios.post('/api/getServiceTypes', {serviceTypesArray: response.data.profile.serviceTypes}).then(
-              response => {
-                if (response.status !== 204) {
-                  if (this.props.admin || this.props.employee) {
-                  this.setState({services: [...response.data.serviceTypesArray, {serviceName: "BLOCK"}]})
-                  }
-                  else if (this.props.user) {
-                  this.setState({services: [...response.data.serviceTypesArray]})
-                  }
-                }
-              }
-            )
           } else {
             this.setState({profileComplete: false})
           }
         });
       }
-  }
+
+
 
   render() {
     return (
@@ -78,33 +70,16 @@ class Business extends React.Component {
         {this.state.profileComplete && !this.state.loading && (
           <div id={styles.businessContainer}>
             <div>
-              <div style={{ overflow: "auto" }}>
+              <div id={"slideLeft"} className={styles.main}>
                 <AdminBooking
-                  businessId={this.state.business._id}
-                  onDateClick={this.onDateClick}
-                  employees={this.state.employees}
-                  services={this.state.services}
+                  slideLeft={this.slide}
+                  eq={this.state.business.eq}
+                  bca={this.state.business.bookingColumnType}    
                 />
               </div>
-
             </div>
           </div>
         )}{" "}
-        {this.state.profileComplete === false && !this.state.loading &&
-          (this.props.user || this.props.employee) && (
-            <p style={{ marginTop: "80px" }}>
-              This club has not finished setting up on tennis-mate yet. Check
-              back again soon.
-            </p>
-          )}
-        
-        {this.state.profileComplete === false && this.props.admin && !this.state.loading && (
-          <p style={{ marginTop: "80px" }}>
-            You have not finished setting up your profile. To be helpful to our
-            users, your club will not show up on tennis-mate until your profile
-            is more complete.
-          </p>
-        )}
       </React.Fragment>
     );
   }

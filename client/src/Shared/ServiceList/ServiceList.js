@@ -19,7 +19,7 @@ function ServiceList(props) {
                     {props.selectedServices.indexOf(element["id"]) !== -1 &&
                     <div style={{backgroundColor: "gray", color: "lavenderblush"}} id={styles.subContainer}>
                        <p style={{fontSize: "18px"}}>{element["displayName"]}</p>
-                       <button onClick={props.minusService(element["id"])} id={styles.button}>
+                       <button style={{right: "12px"}} onClick={props.minusService(element["id"])} id={styles.button}>
                         -
                        </button>
                     </div>}

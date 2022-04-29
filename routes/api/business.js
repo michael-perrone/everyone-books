@@ -210,7 +210,7 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.post('/appBusiness', async (req, res) => {
+router.post('/appBusiness', async (req, res) => { // check this
     try {
         const business = await Business.findOne({ _id: req.body.businessId }).select(['schedule', 'businessName', 'bookingColumnType', 'typeOfBusiness', 'address', 'city', 'zip', 'state', 'bookingColumnNumber', 'website', 'phoneNumber', "eq"]);
         const profile = await BusinessProfile.findOne({ business: req.body.businessId }).select(["serviceTypes"]);
