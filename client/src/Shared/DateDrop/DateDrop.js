@@ -41,13 +41,11 @@ function DateDrop(props) {
             daysArray.push(i);
             i++;
         }
-        console.log(daysArray);
         setDays(daysArray);
     }, [monthNum])
 
     React.useEffect(function() {
-        console.log("hello?")
-        console.log(dateString)
+       
         props.setDateString(dateString)
     }, [dateString])
 

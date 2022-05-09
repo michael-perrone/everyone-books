@@ -5,15 +5,19 @@ import { connect } from "react-redux";
 import {
   SHOW_SCHEDULE,
   SHOW_NOTIFICATIONS,
-  ADMIN_LOGOUT
+  ADMIN_LOGOUT,
+  SHOW_CREATE_BOOKING
 } from "../../../../actions/actions";
 import Notifications from "../../../../Notifications/Notifications";
 import DropDown from "../../DropDown/DropDown";
 
 const AdminSecondContainer = props => {
-  function goToBusinessSchedule() {
-    props.history.push(`/admin/${props.businessId}/businessSchedule`)
-  }
+
+  // function goToBusinessSchedule() {
+  //   props.history.push(`/admin/${props.businessId}/businessSchedule`)
+  // }
+
+  
 
   return (
     <React.Fragment>
@@ -21,9 +25,9 @@ const AdminSecondContainer = props => {
             <p
             style={{ cursor: "pointer" }}
             className={styles.links}
-            onClick={goToBusinessSchedule}
+            onClick={() => props.setShowCreateBooking()}
             >
-            Schedule
+            Add Booking
             </p>
         <DropDown/>
       </div>
@@ -34,14 +38,15 @@ const AdminSecondContainer = props => {
 const mapDispatchToProps = dispatch => {
   return {
     adminLogout: () => dispatch({ type: ADMIN_LOGOUT }),
-    showNotifications: () => dispatch({ type: SHOW_NOTIFICATIONS })
+    showNotifications: () => dispatch({ type: SHOW_NOTIFICATIONS }),
+    setShowCreateBooking: () => dispatch({type: SHOW_CREATE_BOOKING})
   };
 };
 
 const mapStateToProps = state => {
   return {
     showDropDownState: state.booleanReducers.showDropDown,
-    showNotificationsState: state.booleanReducers.showNotifications
+    showNotificationsState: state.booleanReducers.showNotifications,
   };
 };
 

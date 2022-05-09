@@ -113,9 +113,11 @@ router.post("/admin/area", async (req, res) => {
     if (customer) {
         let bookings = await Booking.find({ businessId: req.body.businessId, customer: customer._id, date: date.dateString });
         let timeNum = 0;
+        let cost = 0;
         for (let i = 0; i < req.body.serviceIds.length; i++) {
             let service = await ServiceType.findOne({ _id: req.body.serviceIds[i] });
                 timeNum += utils.timeDurationStringToInt[service.timeDuration];
+                cost += service.cost;
             }
         const endTime = utils.intToStringTime[utils.stringToIntTime[req.body.timeStart] + timeNum];
 
@@ -128,7 +130,7 @@ router.post("/admin/area", async (req, res) => {
             businessId: req.body.businessId,
             customer: customer._id,
             date: date.dateString,
-            cost: req.body.cost,
+            cost: req.body.cost ? req.body.cost : cost,
             bcn: req.body.bcn
         });
         await newBooking.save();

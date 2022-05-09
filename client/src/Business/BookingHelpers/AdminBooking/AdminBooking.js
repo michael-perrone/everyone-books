@@ -27,6 +27,8 @@ import StatementAppear from '../../../Shared/StatementAppear/StatementAppear';
 import SelectOneList from "../../../Shared/SelectOneList/SelectOneList";
 import BCAList from "../../../Shared/BCAList/BCAList";
 import x from './x.png'
+import e from "cors";
+
 
 
 
@@ -38,7 +40,6 @@ import x from './x.png'
     const [time, setTime] = useState(getTimeRightAway);
     const [daysBetweenBookings, setDaysBetweenBookings] = useState("1");
     const [times, setTimes] = useState([]);
-    const [serviceList, setServiceList] = useState([]);
     const [selectedServices, setSelectedServices] = useState([]);
     const [successMessage, setSuccessMessage] = useState("");
     const [error, setError] = useState("");
@@ -50,6 +51,12 @@ import x from './x.png'
     const [selectedBcn, setSelectedBcn] = useState("");
     const [registeringNewGuest, setRegisteringNewGuest] = useState(false);
     const [newGuestName, setNewGuestName] = useState("");
+    const [employeeNeeded, setEmployeeNeeded] = useState();
+    const [bookingType, setBookingType] = useState("");
+    const [datesForClone, setDatesForClone] = useState("");
+    const [services, setServices] = useState([]);
+
+    
 
     function createBooking() {
      // data = ["phone": phone ,"timeStart": timeStart, "date": date, "serviceIds": serviceIdsArray,
@@ -66,27 +73,92 @@ import x from './x.png'
         setError("");
         setTimeout(() => setError("Please fill in new guest name"), 200);
       }
-      let data;
 
-    
+    if (bookingType === "Regular") {
       Axios.post("api/iosBooking/admin", selectedBcn ? {phone: phoneNumber, timeStart: time, date: dateString, serviceIds: selectedServices,
-         businessId: props.admin.admin.businessId, bcn: selectedBcn, employeeId: selectedEmployee } : {phone: phoneNumber, timeStart: time, date: dateString,
-           serviceIds: selectedServices, businessId: props.admin.admin.businessId,  employeeId: selectedEmployee}).then(
-        response => {
-          if (response.status === 200) {
-            setEmployeesBack([]);
-            setSelectedEmployee();
-            setPhoneNumber("");
-            setNewGuestName("");
-            setCustomerFound();
-            setSelectedBcn("");
-            setSuccessMessage("");
-            setTimeout(() => setSuccessMessage("Booking successfully created"), 200);
-          }
-        }
+        businessId: props.admin.admin.businessId, bcn: selectedBcn, employeeId: selectedEmployee } : {phone: phoneNumber, timeStart: time, date: dateString,
+          serviceIds: selectedServices, businessId: props.admin.admin.businessId,  employeeId: selectedEmployee}).then(
+       response => {
+         if (response.status === 200) {
+           setEmployeesBack([]);
+           setSelectedEmployee();
+           setPhoneNumber("");
+           setNewGuestName("");
+           setCustomerFound();
+           setSelectedBcn("");
+           setSuccessMessage("");
+           setTimeout(() => setSuccessMessage("Booking successfully created"), 200);
+           props.bookingAdded(); // check this
+         }
+       }
+     ).catch(error => {
+       console.log(error)
+     })
+    }
+
+    else if (bookingType === "Area") {
+      Axios.post("api/iosBooking/admin/area", {phone: phoneNumber, timeStart: time, date: dateString, serviceIds: selectedServices,
+        businessId: props.admin.admin.businessId, bcn: selectedBcn}).then(
+       response => {
+         if (response.status === 200) {
+           setEmployeesBack([]);
+           setSelectedEmployee();
+           setPhoneNumber("");
+           setNewGuestName("");
+           setCustomerFound();
+           setSelectedBcn("");
+           setSuccessMessage("");
+           setTimeout(() => setSuccessMessage("Booking successfully created"), 200);
+           props.bookingAdded(); // check this
+         }
+       }
+     ).catch(error => {
+       console.log(error)
+     })
+    }
+
+    else if (bookingType === "Clone") {
+      Axios.post("api/iosBooking/admin/clone", selectedBcn ? {phone: phoneNumber, timeStart: time, date: dateString, serviceIds: selectedServices,
+        businessId: props.admin.admin.businessId, bcn: selectedBcn, employeeId: selectedEmployee, dates: datesForClone} : {phone: phoneNumber, timeStart: time, date: dateString,
+          serviceIds: selectedServices, businessId: props.admin.admin.businessId,  employeeId: selectedEmployee, datesForClone}).then(
+       response => {
+         if (response.status === 200) {
+           setEmployeesBack([]);
+           setSelectedEmployee();
+           setPhoneNumber("");
+           setNewGuestName("");
+           setCustomerFound();
+           setSelectedBcn("");
+           setSuccessMessage("");
+           setTimeout(() => setSuccessMessage("Booking successfully created"), 200);
+           props.bookingAdded(); // check this
+         }
+       }
+     ).catch(error => {
+       console.log(error)
+     })
+    }
+
+    else if (bookingType === "Clone Areas") {
+      Axios.post("api/iosBooking/admin/clone/area", {phone: phoneNumber, timeStart: time, date: dateString, serviceIds: selectedServices,
+        businessId: props.admin.admin.businessId, bcn: selectedBcn, dates: datesForClone}).then(
+       response => {
+         if (response.status === 200) {
+             setEmployeesBack([]);
+             setSelectedEmployee();
+             setPhoneNumber("");
+             setNewGuestName("");
+             setCustomerFound();
+             setSelectedBcn("");
+             setSuccessMessage("");
+             setTimeout(() => setSuccessMessage("Booking successfully created"), 200);
+             props.bookingAdded(); // check this
+           }
+         }
       ).catch(error => {
-        console.log(error)
-      })
+          console.log(error)
+        })
+      }
     }
 
     function toSetNewGuestName(e) {
@@ -143,11 +215,30 @@ import x from './x.png'
         }
     }
 
-    function selectService(id) {
+    function selectService(service) {
       return function() {
-      const selectedServiceIds = [...selectedServices];
-      selectedServiceIds.push(id);
-      setSelectedServices(selectedServiceIds);
+         if (employeeNeeded && service.requiresEmployee === false) {
+            setError("");
+            setTimeout(() => setError("Please reselect your services, these cannot be combined due to employee requrements."))
+            setSelectedServices([]);
+            setEmployeeNeeded();
+            setBcnArray();
+            setEmployeesBack([]);
+            return;
+        }
+        if (employeeNeeded === false && service.requiresEmployee === true) {
+          setError("");
+          setTimeout(() => setError("Please reselect your services, these cannot be combined due to employee requrements."))
+          setSelectedServices([]);
+          setEmployeeNeeded();
+          setBcnArray();
+          setEmployeesBack([]);
+          return;
+        }
+        setEmployeeNeeded(service.requiresEmployee)
+        const selectedServiceIds = [...selectedServices];
+        selectedServiceIds.push(service._id);
+        setSelectedServices(selectedServiceIds);
       }
     }
 
@@ -157,10 +248,16 @@ import x from './x.png'
         return e !== id
       });
       setSelectedServices(selectedServiceIds);
+      if (selectedServiceIds.length === 0) {
+        setEmployeeNeeded();
+        setBcnArray()
+        setEmployeesBack([]);
+      }
       }
     }
 
     function getAvailableEmployees() {
+
       if (cloneBooking === undefined) {
         setError("");
         setTimeout(() => setError("Choose whether this booking will be cloned"), 200);
@@ -172,16 +269,126 @@ import x from './x.png'
         return;
       }
 
+      if (employeeNeeded === false && cloneBooking === true) {
+        Axios.post('/api/getBookings/cloneAreas', {date: dateString, serviceIds: selectedServices, timeChosen: time, businessId: props.admin.admin.businessId, cloneNum: numberOfTimesToClone, daysBetween: daysBetweenBookings, cloneNum: numberOfTimesToClone, daysBetween: daysBetweenBookings}).then(
+          response => {
+            if (response.status === 200) {
+              if (response.data.bcnArray) {
+                 setBcnArray(response.data.bcnArray);
+                 setBookingType("Clone Areas");
+                 setDatesForClone(response.data.dates);
+              }
+              setEmployeesBack(createMaplist(response.data.employees, "fullName"));
+              props.slideLeft()
+            }
+            if (response.status === 201) {
+               if (response.data.day) {
+                setError("");
+                setTimeout(() => setError(`The business will be closed on ${response.data.day} at this time. Please choose a different time.`))
+               }
+               else {
+                setError("");
+                setTimeout(() => setError(`The business will be not be open yet on ${response.data.openError} at this time. Please choose a different time.`))
+               }
+             }
+          }
+        ).catch(error => {
+          if (error.response) {
+            if (error.response.status === 409) {
+              setError("");
+              setTimeout(() => setError("This time has already passed and cannot be scheduled"), 200);
+            }
+            else if (error.response.status === 406) {
+              setError("");
+              setTimeout(() => setError("There is no availability at this time"), 200);
+            }
+            else {
+              console.log(error)
+            }
+          }
+        })
+      }
+
+      if (employeeNeeded === false && cloneBooking === false) {
+        Axios.post('/api/getBookings/areas', {date: dateString, serviceIds: selectedServices, timeChosen: time, businessId: props.admin.admin.businessId, cloneNum: numberOfTimesToClone, daysBetween: daysBetweenBookings}).then(
+          response => {
+            if (response.status === 201) {
+              setError("");
+              setTimeout(() => setError("The business will close before the service can end"))
+            }
+            if (response.status === 200) {
+              setBcnArray(response.data.bcnArray);
+              setBookingType("Areas")
+            }
+          }
+        ).catch(error => {
+          if (error.response.status === 409) {
+            setError("");
+            setTimeout(() => setError("This time has already passed and cannot be scheduled"))
+          }
+          else if (error.response.status === 406) {
+            setError("");
+            setTimeout(() => setError("There is no availability at this time"), 200);
+          }
+        })
+        setEmployeesBack([])
+        return;
+      }
+
+
+      if (cloneBooking === true && employeeNeeded === true) {
+        Axios.post('api/getBookings/clone', {date: dateString, serviceIds: selectedServices, timeChosen: time, businessId: props.admin.admin.businessId, cloneNum: numberOfTimesToClone, daysBetween: daysBetweenBookings}, {headers: {'x-auth-token': props.adminToken}}).then(
+          response => {
+             if (response.status === 200) {
+               if (response.data.bcnArray) {
+                  setBcnArray(response.data.bcnArray);
+                  setBookingType("Clone");
+                  setDatesForClone(response.data.dates);
+               }
+               setEmployeesBack(createMaplist(response.data.employees, "fullName"));
+               props.slideLeft()
+             }
+             if (response.status === 201) {
+              if (response.data.day) {
+               setError("");
+               setTimeout(() => setError(`The business will be closed on ${response.data.day} at this time. Please choose a different time.`))
+              }
+              else {
+               setError("");
+               setTimeout(() => setError(`The business will be not be open yet on ${response.data.openError} at this time. Please choose a different time.`))
+              }
+            }
+          }
+        ).catch(error => {
+          if (error.response) {
+            if (error.response.status === 409) {
+              setError("");
+              setTimeout(() => setError("This time has already passed and cannot be scheduled"))
+            }
+            else if (error.response.status === 406) {
+              setError("");
+              setTimeout(() => setError("There is no availability at this time"), 200);
+            }
+            else {
+              console.log(error)
+            }
+          }
+        })
+      }
+
+      if (cloneBooking === false && employeeNeeded === true) {
       Axios.post('api/getBookings', {date: dateString, serviceIds: selectedServices, timeChosen: time, businessId: props.admin.admin.businessId}, {headers: {'x-auth-token': props.adminToken}}).then(
         response => {
            if (response.status === 200) {
              if (response.data.bcnArray) {
                 setBcnArray(response.data.bcnArray);
+                setBookingType("Regular")
              }
              setEmployeesBack(createMaplist(response.data.employees, "fullName"));
              props.slideLeft()
            }
-           if (response.status === 205) {
+           if (response.status === 201) {
+             console.log(response.data)
             setError("");
             setTimeout(() => setError("The business will close before the service can end"))
            }
@@ -192,12 +399,17 @@ import x from './x.png'
             setError("");
             setTimeout(() => setError("This time has already passed and cannot be scheduled"))
           }
+          else if (error.response.status === 406) {
+            setError("");
+            setTimeout(() => setError("There is no availability at this time"), 200);
+          }
           else {
             console.log(error)
           }
         }
       })
     }
+  }
 
     function selectEmployee(id) {
       console.log(id)
@@ -213,15 +425,6 @@ import x from './x.png'
     const days = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50];
 
 
-    useEffect(function() {
-      Axios.get("api/services/getServices", {headers: {'x-auth-token': props.adminToken}}).then(response => {
-          if (response.data.services) {
-            setServiceList(createMaplist(response.data.services, "serviceName"))
-          }
-      }).catch(error => {
-        console.log(error)
-      })
-    },[]);
 
     useEffect(function() {
       if (dateString !== "") {
@@ -257,16 +460,13 @@ import x from './x.png'
 
     return (
       <div id={styles.bookingHolder} onClick={props.hideDropDown}>
-        <div
-         id={styles.divWhereWidthChanges}
-        >
           <div id={styles.coolContainer} style={{maxWidth: "400px"}}>
           <Calendar/>
           </div>
           <div id={styles.newContainer}>
-              <div style={{borderLeft: "2px solid black", paddingLeft: "20px"}} className={styles.holder}>
-              <p style={{fontSize: "18px", fontWeight: 'bold', marginTop: "-10px", position: 'relative', left: "175px"}}>Create Booking with Services:</p>
-              <div style={{marginTop: "12px"}}>
+              <div className={styles.holder}>
+              <p style={{fontSize: "18px", fontWeight: 'bold', marginTop: "20px", textAlign: "center", position: 'relative', right: "20px"}}>Create Booking:</p>
+              <div style={{marginTop: "32px"}}>
                 <p className={styles.ptags}>Select Date:</p>
                 <DateDrop setDateString={(dateString) => toSetDateString(dateString)}/>
               </div>
@@ -296,24 +496,26 @@ import x from './x.png'
                   </div>
                   </React.Fragment>
               </div>
-              <div style={{borderRight: "2px solid black", paddingRight: "20px"}}>
-              <div style={{width: "270px", marginLeft: "20px", marginTop: "24px", maxHeight: "220px", overflow: "auto", boxShadow: "0px 0px 2px black"}}>
-                <ServiceList minusService={(id) => minusService(id)} selectedServices={selectedServices} addService={(id) => selectService(id)} array={serviceList} />
+              <div>
+              <div style={{marginTop: "18px", display: "flex", flexDirection: "column", alignItems: "center"}}>
+              <p style={{fontSize: "18px", fontWeight: 'bold', marginTop: "20px", textAlign: "center", position: 'relative', right: "20px", marginBottom: "20px"}}>Choose Services:</p>
+                <ServiceList minusService={(id) => minusService(id)} selectedServices={selectedServices} addService={(id) => selectService(id)} array={props.services} />
               </div>
-                <div style={{marginTop: "15px", display: "flex", justifyContent: "center", position: "relative", right: "150px"}}>
+                <div style={{marginTop: "22px", textAlign: "center"}}>
                   <SubmitButton onClick={getAvailableEmployees}>Check Availability</SubmitButton>
                 </div>
               </div>
-              <div style={{marginLeft: "20px", display: "flex"}}>
-              <StatementAppear appear={employeesBack.length > 0 && (bcnArray === undefined || (bcnArray && bcnArray.length > 0))}>
-                <p style={{fontWeight: "bold", fontSize: "18px", marginBottom: "10px", marginTop: "-6px"}}>Employees Available:</p>
+              <div style={{display: "flex", flexDirection: 'column',}}>
+              <StatementAppear center={true} appear={employeeNeeded && employeesBack.length > 0 && selectedServices.length > 0 && (bcnArray === undefined) || employeesBack.length > 0 && selectedServices.length > 0 && (bcnArray && bcnArray.length > 0)}>
+                <p style={{fontWeight: "bold", fontSize: "18px", marginBottom: "10px", marginTop: "26px"}}>Employees Available:</p>
                 <SelectOneList unSelectOne={unSelectEmployee} array={employeesBack} selected={selectedEmployee} selectOne={(id) => selectEmployee(id)}/>
               </StatementAppear>
-              <StatementAppear appear={employeesBack.length > 0 && (bcnArray === undefined || (bcnArray && bcnArray.length > 0))}>
-                <div style={{display: 'flex'}}>
-                <input value={phoneNumber} onChange={toSetPhoneNumber} style={{width: "220px", marginLeft: "30px", height: "28px", fontSize: "18px", borderBottom: "2px solid black", backgroundColor: "transparent", borderTop: "none", borderLeft: "none", borderRight: "none "}} placeholder="Customer Phone #"/>
+              {(bcnArray !== undefined || employeesBack.length > 0) && <div style={{height: "40px", width: "375px"}}><p style={{fontWeight: "bold", fontSize: "18px", textAlign: 'center', marginTop: employeesBack.length > 0 ? "25px": "0px"}}>Find Customer:</p></div>}
+              <StatementAppear appear={selectedServices.length > 0 && (bcnArray && bcnArray.length > 0)} center={true}>
+                <div style={{display: 'flex', marginTop: "20px"}}>
+                <input value={phoneNumber} onChange={toSetPhoneNumber} style={{width: "220px", height: "28px", fontSize: "18px", borderBottom: "2px solid black", backgroundColor: "transparent", borderTop: "none", borderLeft: "none", borderRight: "none "}} placeholder="Customer Phone #"/>
                 {!registeringNewGuest && <SubmitButton onClick={findGuest}>Find Guest</SubmitButton>}
-                {registeringNewGuest && <img src={x} alt="cancel" onClick={cancelRegisteringNewGuest} style={{fontWeight: "bold", marginLeft: "20px"}}/>}
+                {registeringNewGuest && <img src={x} alt="cancel" onClick={cancelRegisteringNewGuest} style={{fontWeight: "bold", marginLeft: "20px", marginTop: '-3px'}}/>}
                 </div>
                 {customerFound === undefined && !registeringNewGuest &&
                 <React.Fragment>
@@ -324,15 +526,19 @@ import x from './x.png'
                   {registeringNewGuest && <div style={{textAlign: "left"}}><input value={newGuestName} onChange={toSetNewGuestName} style={{width: "220px", marginLeft: "30px", height: "28px", fontSize: "18px", borderBottom: "2px solid black", backgroundColor: "transparent", borderTop: "none", borderLeft: "none", borderRight: "none "}} placeholder="New Guest Name"/></div>}
                 {customerFound !== undefined &&
                 <React.Fragment>
-                  <p style={{fontWeight: "bold", fontSize: "18px", marginTop: "12px", width: "200px", textAlign: "left", marginLeft: "30px"}}>Customer:</p>
-                  <p style={{ padding: "10px", boxShadow: "0px 0px 3px black", width: "200px", display: "inline-block"}}>{customerFound.fullName}</p><img src={x} alt={"cancel"} onClick={removeFound} style={{position: 'relative', top: "12px", marginLeft: "18px", cursor: "pointer", display: "inline"}}/>
+                  <p style={{fontWeight: "bold", fontSize: "18px", marginTop: "12px", width: "200px", textAlign: "left"}}>Customer:</p>
+                  <div style={{display: "flex"}}><p style={{ padding: "10px", marginTop: "14px", boxShadow: "0px 0px 3px black", width: "200px"}}>{customerFound.fullName}</p><img src={x} alt={"cancel"} onClick={removeFound} style={{position: 'relative', top: "12px", marginLeft: "18px", cursor: "pointer", height: "36px", width: "36px"}}/></div>
                  </React.Fragment>}
-                 {bcnArray && bcnArray.length > 0 && <p style={{fontWeight: "bold", fontSize: "18px", marginTop: "35px"}}>{props.bca}:</p>}
-                 {bcnArray && bcnArray.length > 0 && <div style={{marginLeft: "40px", marginTop: "14px"}}><BCAList selectBcn={(bcn) => toSetBcn(bcn)} selectedBcn={selectedBcn} bcnList={bcnArray}/></div>}
-                 <StatementAppear appear={(customerFound && selectedBcn !== "" && selectedEmployee) || (registeringNewGuest && phoneNumber !== "" && newGuestName !== "") || (bcnArray === undefined && customerFound)}><div style={{width: "150px", position: "relative", left: "-60px", top: "30px"}}><SubmitButton onClick={createBooking}>Create Booking</SubmitButton></div></StatementAppear>
+                 {bcnArray && bcnArray.length > 0 && <p style={{fontWeight: "bold", fontSize: "18px", marginTop: "35px"}}>{props.bct}:</p>}
+                 {bcnArray && bcnArray.length > 0 && <div style={{ marginTop: "14px"}}><BCAList selectBcn={(bcn) => toSetBcn(bcn)} selectedBcn={selectedBcn} bcnList={bcnArray}/></div>}
+                 <div style={{height: '30px', width: "375px"}}></div>
+                 <StatementAppear appear={(customerFound && selectedBcn !== "" && selectedEmployee) || (registeringNewGuest && phoneNumber !== "" && newGuestName !== "") ||
+                  (bcnArray === undefined && customerFound && selectedEmployee) ||
+                  (selectedBcn !== "" && employeesBack.length === 0 && customerFound) ||
+                   (selectedBcn !== "" && registeringNewGuest && newGuestName !== "" && phoneNumber !== "") }><div style={{width: "150px"}}><SubmitButton onClick={createBooking}>Create Booking</SubmitButton></div></StatementAppear>
+                 <div style={{height: '50px', width: "375px"}}></div>
               </StatementAppear>
               </div>
-          </div>
         </div>
         <OtherAlert showAlert={successMessage !== ""} alertMessage={successMessage} alertType={"success"}/>
         <OtherAlert showAlert={error !== ""} alertMessage={error} alertType={"notgood"}/>

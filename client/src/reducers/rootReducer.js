@@ -6,6 +6,7 @@ import dateReducer from './dateReducer';
 import scheduleReducer from './scheduleReducer';
 import employeeShiftReducer from './employeeShiftReducer'
 import alertReducer from './alertReducer';
+import showCreateBookingReducer from "./showCreateBookingReducer";
 import { combineReducers } from "redux";
 
 export default combineReducers({
@@ -16,5 +17,6 @@ export default combineReducers({
   newReducers,
   scheduleReducer,
   employeeShiftReducer,
-  dateReducer
+  dateReducer,
+  showCreateBookingReducer
 });

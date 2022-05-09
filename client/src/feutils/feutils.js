@@ -51,9 +51,7 @@ export function getTimeRightAway() {
     else {
         ampm = "AM";
     }
-
     let minutesArray = new Date().getMinutes().toString().split("");
-
     if (minutesArray.length === 2) {
         if (minutesArray[0] === "5" && minutesArray[1] > 5) {
             hour = hour + 1;
@@ -80,12 +78,7 @@ export function getTimeRightAway() {
              minutesArray[0] = "00";
          }
     }
-    
-   
-
     let minutes = minutesArray.join("");
-    console.log(`${hour}:${minutes} ${ampm}`)
-
     return `${hour}:${minutes} ${ampm}`
 
 }

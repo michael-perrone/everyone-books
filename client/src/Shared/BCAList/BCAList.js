@@ -6,12 +6,12 @@ function BCAList(props) {
 
     return (
         <div id={styles.container}>
-            {props.bcnList.map(element => {
+            {props.bcnList.map((element, index) => {
                 if (element !== props.selectedBcn) {
-                    return <p onClick={props.selectBcn(element)} className={styles.bcn}>{element}</p> 
+                    return <p key={index} onClick={props.selectBcn(element)} className={styles.bcn}>{element}</p> 
                 }
                 else {
-                    return <p style={{backgroundColor: "gray", color: 'lavenderblush'}} className={styles.bcn}>{element}</p>
+                    return <p key={index} style={{backgroundColor: "gray", color: 'lavenderblush'}} className={styles.bcn}>{element}</p>
                 }
             })}
         </div>

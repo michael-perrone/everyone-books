@@ -11,7 +11,7 @@
 
 #otherAlertContainerAnimation {
   animation-name: alertContainerSlide;
-  animation-duration: 4s;
+  animation-duration: 6s;
   animation-delay: none;
   animation-iteration-count: 1;
   opacity: 1;

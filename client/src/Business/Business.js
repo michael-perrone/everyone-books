@@ -1,89 +1,109 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import styles from "./Business.module.css";
 import AdminBooking from "./BookingHelpers/AdminBooking/AdminBooking";
 import { connect } from "react-redux";
-import {withRouter} from 'react-router-dom';
-import Spinner from '../Spinner/Spinner';
-import UserView from "./UserView/UserView";
+import CourtContainer from "./CourtContainer/CourtContainer";
+import ViewBooking from './ViewBooking/ViewBooking';
 
-class Business extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: true,
-      business: "",
-      showThings: false,
-      businessProfile: "",
-      profileComplete: null,
-      employees: "",
-      timeOpen: "",
-      timeClose: "",
-      services: [],
-      shouldExpand: false
-    }; 
+function Business(props) {
+  const [business, setBusiness] = useState("");
+  const [timeOpen, setTimeOpen] = useState("");
+  const [timeClose, setTimeCLose] = useState("");
+  const [services, setServices] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [eq, setEq] = useState("");
+  const [bcn, setBcn] = useState("");
+  const [bct, setBct] = useState("");
+  const [openTime, setOpenTime] = useState("");
+  const [closeTime, setCloseTime] = useState("");
+  const [sortedBookings, setsortedBookings] = useState([]);
+  const [updateBookings, setUpdateBookings] = useState();
+  const [showBackDrop, setShowBackDrop] = useState(false);
+  const [bookingToView, setBookingToView] = useState({});
+
+  function bookingAdded() {
+    axios
+    .post("/api/adminSchedule", {
+      date: props.dateChosen.toDateString()
+    }, {headers: {
+      'x-auth-token': props.adminToken
+    }})
+    .then(response => {
+      if (response.status === 200) {
+        console.log(response.data)
+        setBcn(response.data.bcn);
+        setBct(response.data.bct);
+        setOpenTime(response.data.open);
+        setCloseTime(response.data.close);
+        setEq(response.data.eq);
+        setProducts(response.data.products);
+        const sorted = [];
+        const bookings = response.data.bookings;
+        let i = 1;
+        while(i <= Number(response.data.bcn)) {
+          const array = [];
+          sorted.push(array);
+          i++;
+        }
+        for (let e = 0; e < bookings.length; e++) {
+            sorted[bookings[e].bcn - 1].push(bookings[e])
+        }
+        setsortedBookings(sorted);
+      }
+    })
   }
 
-  slide = () => {
-      document.getElementById("slideLeft").scrollTo({
-        top: 0,
-        left: 1200,
-        behavior: 'smooth'
-      });
-  }
+  useEffect(function() {
+    axios.get("api/services/getServices", {headers: {'x-auth-token': props.adminToken}}).then(response => {
+      if (response.status === 200) {
+        setServices(response.data.services);
+      }
+    })
+}, [])
 
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.dateChosen !== prevProps.dateChosen || this.state.business.businessName !== prevState.business.businessName) {
-      console.log(this.props.dateChosen, prevProps.dateChosen)
-      this.setState({timeOpen: this.state.business.schedule[this.props.dateChosen.getDay()].open})
-      this.setState({timeClose: this.state.business.schedule[this.props.dateChosen.getDay()].close})
-      this.setState({loading: false})
+  function clickBooking(booking) {
+    console.log("anything");
+    return () => {
+      console.log(booking)
+      axios.post('/api/getBookings/moreBookingInfo', {bookingId: booking._id}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
+          if (response.status === 200) {
+            console.log(response.data)
+              const newBooking = booking;
+              newBooking.services = response.data.services;
+              newBooking.customer = response.data.customer;
+              newBooking.products = response.data.products;
+              newBooking.employeeName = response.data.employeeName;
+              setBookingToView(newBooking);
+              setShowBackDrop(true);
+          }
+      }).catch(error => {
+        console.log(error);
+      })  
     }
   }
+  
 
-  componentDidMount() {
-    console.log("did")
-      axios
-        .post("/api/business/appBusiness", {
-          businessId: this.props.admin.admin.businessId
-        })
-        .then(response => {
-          if (response.status === 200) {
-            console.log("YOOOOOOOOOOO")
-            console.log(response.data)
-            this.setState({ profileComplete: true });
-            this.setState({ businessProfile: response.data.profile });
-            this.setState({ business: response.data.business });
-          } else {
-            this.setState({profileComplete: false})
-          }
-        });
-      }
+  useEffect(function() { // check this
+    bookingAdded();
+  },[props.dateChosen])
 
 
-
-  render() {
     return (
-      <React.Fragment>
-        {this.state.loading && !this.props.user && <Spinner/>}
-        {this.state.profileComplete && !this.state.loading && (
           <div id={styles.businessContainer}>
-            <div>
-              <div id={"slideLeft"} className={styles.main}>
+           {showBackDrop && <div style={{display: "flex", position: "absolute", top: 0, lef: 0, width: "100%", justifyContent: "center"}}><div onClick={() => setShowBackDrop(false)} id={styles.backDrop}></div> <ViewBooking reload={bookingAdded} products={products} services={services} hide={() => setShowBackDrop(false)} booking={bookingToView}/></div>}
                 <AdminBooking
-                  slideLeft={this.slide}
-                  eq={this.state.business.eq}
-                  bca={this.state.business.bookingColumnType}    
+                  bookingAdded={bookingAdded}
+                  services={services}
+                  eq={eq}
+                  bct={bct}    
                 />
-              </div>
-            </div>
+                <CourtContainer clickBooking={clickBooking} sortedBookings={sortedBookings} openTime={openTime} closeTime={closeTime} bct={bct} bcn={bcn}/>
           </div>
-        )}{" "}
-      </React.Fragment>
+  
     );
   }
-}
+
 
 const mapStateToProps = state => {
   return {
@@ -96,4 +116,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default withRouter(connect(mapStateToProps)(Business));
+export default connect(mapStateToProps)(Business);

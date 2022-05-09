@@ -19,7 +19,7 @@ router.get('/adminSchedule', adminAuth, async (req, res) => {
   let bookings = Booking.find({ businessId: req.admin.businessId, date: req.body.date });
 })
 
-router.post("/moreBookingInfo", async (req, res) => {
+router.post("/moreBookingInfo", adminAuth, async (req, res) => {
   console.log(req.body)
   const booking = await Booking.findOne({_id: req.body.bookingId});
   console.log(booking)
@@ -361,37 +361,37 @@ router.post('/', adminAuth, async (req, res) => {
           const day = date1.dateString.split(" ")[0];
           if (day === "Sun") {
             if (!cte(0)) {
-             return res.status(205).json({day: "Sunday"})
+             return res.status(201).json({day: "Sunday"})
             }
           }
           if (day === "Mon") {
             if (!cte(1)) {
-             return res.status(205).json({day: "Monday"})
+             return res.status(201).json({day: "Monday"})
             }
           }
           if (day === "Tue") {
            if (!cte(2)) {
-            return res.status(205).json({day: "Tuesday"})
+            return res.status(201).json({day: "Tuesday"})
            }
          }
          if (day === "Wed") {
            if (!cte(3)) {
-            return res.status(205).json({day: "Wednesday"})
+            return res.status(201).json({day: "Wednesday"})
            }
          }
          if (day === "Thu") {
            if (!cte(4)) {
-            return res.status(205).json({day: "Thursday"})
+            return res.status(201).json({day: "Thursday"})
            }
          }
          if (day === "Fri") {
            if (!cte(5)) {
-            return res.status(205).json({day: "Friday"})
+            return res.status(201).json({day: "Friday"})
            }
          }
          if (day === "Sat") {
            if (!cte(6)) {
-            return res.status(205).json({day: "Saturday"})
+            return res.status(201).json({day: "Saturday"})
             }
           }
 
@@ -566,12 +566,12 @@ router.post('/clone', async (req, res) => {
       let timeForEachService = services[l].timeDuration;
       serviceDurationNum += utils.timeDurationStringToInt[timeForEachService];
     }
-    if (req.body.timeDurationNum) {
-      serviceDurationNum = req.body.timeDurationNum;
-    }
-    else {
-      return res.status(400).send();
-    }
+    // if (req.body.timeDurationNum) {
+    //   serviceDurationNum = req.body.timeDurationNum;
+    // }
+    // else {
+    //   return res.status(400).send();
+    // }
     const business = await Business.findOne({ _id: req.body.businessId }).select(["eq", "bookingColumnNumber", "schedule"]);
     const businessProfile = await BusinessProfile.findOne({business: business._id});
     if (business.eq === "n") {
@@ -627,43 +627,43 @@ router.post('/clone', async (req, res) => {
          if (day === "Sun") {
            if (!cto(0)) {
             console.log(day)
-            return res.status(205).json({openError: "Sunday"})
+            return res.status(201).json({openError: "Sunday"})
            }
          }
          if (day === "Mon") {
            if (!cto(1)) {
             console.log(day)
-            return res.status(205).json({openError: "Monday"})
+            return res.status(201).json({openError: "Monday"})
            }
          }
          if (day === "Tue") {
           if (!cto(2)) {
             console.log(day)
-           return res.status(205).json({openError: "Tuesday"})
+           return res.status(201).json({openError: "Tuesday"})
           }
         }
         if (day === "Wed") {
           if (!cto(3)) {
             console.log(day)
-           return res.status(205).json({openError: "Wednesday"})
+           return res.status(201).json({openError: "Wednesday"})
           }
         }
         if (day === "Thu") {
           if (!cto(4)) {
             console.log(day)
-           return res.status(205).json({openError: "Thursday"})
+           return res.status(201).json({openError: "Thursday"})
           }
         }
         if (day === "Fri") {
           if (!cto(5)) {
             console.log(day)
-           return res.status(205).json({openError: "Friday"})
+           return res.status(201).json({openError: "Friday"})
           }
         }
         if (day === "Sat") {
           if (!cto(6)) {
             console.log(day)
-           return res.status(205).json({openError: "Saturday"})
+           return res.status(201).json({openError: "Saturday"})
            }
          }
        }
@@ -675,50 +675,49 @@ router.post('/clone', async (req, res) => {
         if (day === "Sun") {
           if (!cte(0)) {
             console.log(day)
-           return res.status(205).json({day: "Sunday"})
+           return res.status(201).json({day: "Sunday"})
           }
         }
         if (day === "Mon") {
           if (!cte(1)) {
             console.log(day)
-           return res.status(205).json({day: "Monday"})
+           return res.status(201).json({day: "Monday"})
           }
         }
         if (day === "Tue") {
          if (!cte(2)) {
           console.log(day)
-          return res.status(205).json({day: "Tuesday"})
+          return res.status(201).json({day: "Tuesday"})
          }
        }
        if (day === "Wed") {
          if (!cte(3)) {
           console.log(day)
-          return res.status(205).json({day: "Wednesday"})
+          return res.status(201).json({day: "Wednesday"})
          }
        }
        if (day === "Thu") {
          if (!cte(4)) {
           console.log(day)
-          return res.status(205).json({day: "Thursday"})
+          return res.status(201).json({day: "Thursday"})
          }
        }
        if (day === "Fri") {
          if (!cte(5)) {
           console.log(day)
-          return res.status(205).json({day: "Friday"})
+          return res.status(201).json({day: "Friday"})
          }
        }
        if (day === "Sat") {
          if (!cte(6)) {
-          return res.status(205).json({day: "Saturday"})
+          return res.status(201).json({day: "Saturday"})
           }
         }
       }
 
        let bookings = await Booking.find({date: dates, businessId: req.body.businessId});
        let groups = await Group.find({date: dates, businessId: req.body.businessId});
-
-       console.log(allBookings);
+       const allBookings = [...bookings, ...groups];
 
       const takenColumns = [];
       const employeesWhoCant = [];
@@ -894,37 +893,37 @@ router.post("/areas", async (req, res) => {
         const day = date1.dateString.split(" ")[0];
         if (day === "Sun") {
           if (!cte(0)) {
-           return res.status(205).json({day: "Sunday"})
+           return res.status(201).json({day: "Sunday"})
           }
         }
         if (day === "Mon") {
           if (!cte(1)) {
-           return res.status(205).json({day: "Monday"})
+           return res.status(201).json({day: "Monday"})
           }
         }
         if (day === "Tue") {
          if (!cte(2)) {
-          return res.status(205).json({day: "Tuesday"})
+          return res.status(201).json({day: "Tuesday"})
          }
        }
        if (day === "Wed") {
          if (!cte(3)) {
-          return res.status(205).json({day: "Wednesday"})
+          return res.status(201).json({day: "Wednesday"})
          }
        }
        if (day === "Thu") {
          if (!cte(4)) {
-          return res.status(205).json({day: "Thursday"})
+          return res.status(201).json({day: "Thursday"})
          }
        }
        if (day === "Fri") {
          if (!cte(5)) {
-          return res.status(205).json({day: "Friday"})
+          return res.status(201).json({day: "Friday"})
          }
        }
        if (day === "Sat") {
          if (!cte(6)) {
-          return res.status(205).json({day: "Saturday"})
+          return res.status(201).json({day: "Saturday"})
           }
         }
 
@@ -1025,12 +1024,12 @@ router.post('/cloneAreas', async (req, res) => {
       let timeForEachService = services[l].timeDuration;
       serviceDurationNum += utils.timeDurationStringToInt[timeForEachService];
     }
-    if (req.body.timeDurationNum) {
-      serviceDurationNum = req.body.timeDurationNum;
-    }
-    else {
-      return res.status(400).send();
-    }
+    // if (req.body.timeDurationNum) {
+    //   serviceDurationNum = req.body.timeDurationNum;
+    // }
+    // else {
+    //   return res.status(400).send();
+    // }
     const business = await Business.findOne({ _id: req.body.businessId }).select(["eq", "bookingColumnNumber", "schedule"]);
     const businessProfile = await BusinessProfile.findOne({business: business._id});
     if (business.eq === "n") {
@@ -1082,37 +1081,37 @@ router.post('/cloneAreas', async (req, res) => {
          const day = dates[d].split(" ")[0];
          if (day === "Sun") {
            if (!cto(0)) {
-            return res.status(205).json({openError: "Sunday"})
+            return res.status(201).json({openError: "Sunday"})
            }
          }
          if (day === "Mon") {
            if (!cto(1)) {
-            return res.status(205).json({openError: "Monday"})
+            return res.status(201).json({openError: "Monday"})
            }
          }
          if (day === "Tue") {
           if (!cto(2)) {
-           return res.status(205).json({openError: "Tuesday"})
+           return res.status(201).json({openError: "Tuesday"})
           }
         }
         if (day === "Wed") {
           if (!cto(3)) {
-           return res.status(205).json({openError: "Wednesday"})
+           return res.status(201).json({openError: "Wednesday"})
           }
         }
         if (day === "Thu") {
           if (!cto(4)) {
-           return res.status(205).json({openError: "Thursday"})
+           return res.status(201).json({openError: "Thursday"})
           }
         }
         if (day === "Fri") {
           if (!cto(5)) {
-           return res.status(205).json({openError: "Friday"})
+           return res.status(201).json({openError: "Friday"})
           }
         }
         if (day === "Sat") {
           if (!cto(6)) {
-           return res.status(205).json({openError: "Saturday"})
+           return res.status(201).json({openError: "Saturday"})
            }
          }
        }
@@ -1122,43 +1121,43 @@ router.post('/cloneAreas', async (req, res) => {
         console.log(dates[d])
         if (day === "Sun") {
           if (!cte(0)) {
-           return res.status(205).json({day: "Sunday"})
+           return res.status(201).json({day: "Sunday"})
           }
         }
         if (day === "Mon") {
           if (!cte(1)) {    
-           return res.status(205).json({day: "Monday"})
+           return res.status(201).json({day: "Monday"})
           }
         }
         if (day === "Tue") {
          if (!cte(2)) {
-          return res.status(205).json({day: "Tuesday"})
+          return res.status(201).json({day: "Tuesday"})
          }
        }
        if (day === "Wed") {
          if (!cte(3)) {
-          return res.status(205).json({day: "Wednesday"})
+          return res.status(201).json({day: "Wednesday"})
          }
        }
        if (day === "Thu") {
          if (!cte(4)) {
-          return res.status(205).json({day: "Thursday"})
+          return res.status(201).json({day: "Thursday"})
          }
        }
        if (day === "Fri") {
          if (!cte(5)) {
-          return res.status(205).json({day: "Friday"})
+          return res.status(201).json({day: "Friday"})
          }
        }
        if (day === "Sat") {
          if (!cte(6)) {
-          return res.status(205).json({day: "Saturday"})
+          return res.status(201).json({day: "Saturday"})
           }
         }
       }
 
       const bookings = await Booking.find({date: dates, businessId: req.body.businessId});
-      const groups = await Group.find({date: dates, businessId: req.body.business.businessId});
+      const groups = await Group.find({date: dates, businessId: req.body.businessId});
       const allBookings = [...bookings, ... groups]
 
 
@@ -1207,9 +1206,8 @@ router.post('/cloneAreas', async (req, res) => {
 
 
 
-router.post("/editBooking", async (req, res) => {
+router.post("/editBooking", adminAuth, async (req, res) => {
   try {
-
     let booking = await Booking.findOne({ _id: req.body.bookingId }); // booking
     let bookingTimeArray = booking.time.split("-"); // array split
     let business = await Business.findOne({ _id: booking.businessId }).select(["eq"]); // business
@@ -1217,24 +1215,16 @@ router.post("/editBooking", async (req, res) => {
     const newServiceTypes = [...previousServiceTypes, ...req.body.servicesToAdd]; // serviceIDsAdded Together
     let newServices = await ServiceType.find({ _id: newServiceTypes });
     booking.serviceType = newServiceTypes;
-    if (business.eq === "n") {
-      // let bp = await BusinessProfile.findOne({ business: business._id });
-      // let employees = await Employee.find({ _id: bp.employeesWhoAccepted }).select(["fullName"]);
-      // // NEED TO DO THIS
-      // res.status(200).json({ employees, eq: business.eq })
-    }
-    else {
+      // check this // see if employee is working anywhere else before extension
       let bookings = await Booking.find({ date: booking.date, businessId: booking.businessId }); // getting all the bookings that have the same date as this booking?
       let counterNum = 0;
       
       for (let i = 0; i < newServices.length; i++) {
-        
         counterNum += utils.timeDurationStringToInt[newServices[i].timeDuration];
       }
       let bookingsWithCurrentRemoved = bookings.filter((element, index) => {
         return element._id.toString() !== booking._id.toString();
       });
-      
       
       const indexStart = utils.stringToIntTime[bookingTimeArray[0]];
       
@@ -1253,7 +1243,6 @@ router.post("/editBooking", async (req, res) => {
         }
       }
       console.log("got through");
-    }
     let timeNum = 0;
 
     let costNum = 0;

@@ -6,6 +6,8 @@ const Shift = require('../../models/Shift');
 const Booking = require('../../models/Booking');
 const utils = require('../../utils/utils');
 const Group = require("../../models/Group");
+const BusinessProfile = require("../../models/BusinessProfile");
+const Product = require('../../models/Product');
 
 router.post('/', adminAuth, async (req, res) => {
     try {
@@ -37,18 +39,22 @@ router.post('/', adminAuth, async (req, res) => {
         else if (day === "Sat") {
             num = 6;
         }
+        const bp = await BusinessProfile.findOne({business: business._id});
+        const products = await Product.find({_id: bp.products});
         if (business.schedule[num].open === "Closed" || business.schedule[num].close === "Closed") {
-          return res.status(202).json({eq: business.eq, bcn: business.bookingColumnNumber, bct: business.bookingColumnType});
+          return res.status(202).json({eq: business.eq, bcn: business.bookingColumnNumber, bct: business.bookingColumnType, products});
         }
         res.status(200).json({
             bookings, bcn: business.bookingColumnNumber, bct: business.bookingColumnType,
             open: business.schedule[num].open, close: business.schedule[num].close,
-            groups: groups, eq: business.eq
+            groups: groups, eq: business.eq, products
         });
     }
     catch (error) {
         console.log(error)
     }
 })
+
+
 
 module.exports = router;

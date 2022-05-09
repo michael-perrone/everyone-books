@@ -1,0 +1,22 @@
+#courtColumn {
+    position: relative;
+    width: 200px;
+    border: 1.5px solid black;
+    background-color: rgb(236, 236, 236);
+}
+
+
+.bookingContainer {
+    background-color: rgb(255, 187, 180);
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.bookingContainer:hover {
+    background-color: rgb(246, 165, 156);
+}

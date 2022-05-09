@@ -32,9 +32,7 @@ class AdminHome extends React.Component {
 
   render() {
     return (
-      <div>
-        {this.state.adminProfileCreated === true && <Business />}
-      </div>
+        this.state.adminProfileCreated === true && <Business />
     );
   }
 }
