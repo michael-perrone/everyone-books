@@ -13,7 +13,7 @@ function ViewBooking(props) {
     const [showProducts, setShowProducts] = useState(false);
     const [selectedProducts, setSelectedProducts] = useState([]);
     const [selectedServices, setSelectedServices] = useState([]);
-    const [productsInBooking, setProductsInBooking] = useState(createMaplist(props.booking.products, "name"));
+    const [productsInBooking, setProductsInBooking] = useState(props.booking.products.length > 0 ? createMaplist(props.booking.products, "name") : []);
     const [time, setTime] = useState(props.booking.time);
     const [cost, setCost] = useState(props.booking.cost)
     const [servicesInBooking, setServicesInBooking] = useState(createMaplist(props.booking.services, "serviceName"));
@@ -22,24 +22,49 @@ function ViewBooking(props) {
     const [error, setError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
 
+    // check this -- make it so that
+
+    function deleteBooking() {
+        Axios.post("/api/iosBooking/delete", {bookingId: props.booking._id}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
+            if (response.status === 200) {
+                props.hide();
+                setSuccessMessage("");
+                setTimeout(setSuccessMessage("Booking successfully deleted"));
+                props.reload()
+            }
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+
     function addProducts() {
         for (let i = 0; i < selectedProducts.length; i++) {
             for (let t = 0; t < productsInBooking.length; t++) {
                 if (selectedProducts[i]._id === productsInBooking[t]._id) {
                     setError("");
-                    setTimeout(() => setError("Product already exists in booking"))
+                    setTimeout(() => setError("Product already exists in booking"), 200);
                     return;
                 }
             }
         }
+        Axios.post("api/products/addProducts", {bookingId: props.booking._id, productIds: selectedProducts}).then(response => {
+            if (response.status === 200) {
+                const productsHere = [...createMaplist(selectedProducts, "name"), ...productsInBooking];
+                setProductsInBooking(productsHere);
+                setCost(response.data.newCost);  
+            }
+        }).catch(error => {
+            console.log(error)
+        })
     }
 
     function addServices() {
+        console.log("yo?")
         for (let i = 0; i < selectedServices.length; i++) {
             for (let t = 0; t < servicesInBooking.length; t++) {
                 if (selectedServices[i]._id === servicesInBooking[t].id) {
                     setError("");
-                    setTimeout(() => setError("Service already exists in booking"))
+                    setTimeout(() => setError("Service already exists in booking"), 200);
                     return;
                 }
             }
@@ -58,34 +83,78 @@ function ViewBooking(props) {
     ).catch(error => {
         if (error.response.status === 400) {
             setError("");
-            setTimeout(() => setError("Adding these service(s) to this booking will make the booking overlap with the next booking."));
+            setTimeout(() => setError("Adding these service(s) to this booking will make the booking overlap with the next booking."),200);
             return;
             }
-        })
+        if (error.response.status === 406) {
+            setError("");
+            setTimeout(() => setError("Adding these service(s) to this booking will extend the time of the service past the business closing time."),200);
+        }
+      })
     }
 
     function toSetProducts() {
        setShowProducts(true);
        setSelectedServices([]);
+       setSelectedServiceIds([]);
     }
 
     function toSetServices() {
         setShowProducts(false);
         setSelectedProducts([]);
+        setSelectedProductIds([]);
     }
 
-    function deleteProduct() {
-
+    function deleteProduct(productId) {
+        return () => {
+            Axios.post("api/products/removeProducts", {bookingId: props.booking._id, productId: productId}).then(
+                response => {
+                    if (response.status === 200) {
+                        const newProducts = [...productsInBooking];
+                        console.log(newProducts.length)
+                        const index = newProducts.findIndex(e => {
+                         return e.id === productId
+                        })
+                        console.log(index);
+                        newProducts.splice(index, 1);
+                        console.log(newProducts.length);
+                        setProductsInBooking(newProducts);
+                        setSuccessMessage("");
+                        setTimeout(() => setSuccessMessage("Product deleted successfully"), 200);
+                        setCost(response.data.newCost);
+                        
+                    }
+                }
+            ).catch(error => {
+                console.log(error)
+            })
+        }
     }
 
     function deleteService(serviceId) {
-        Axios.post("api/getBookings/removeService", {bookingId: props.booking._id, serviceId}).then(
-            response => {
-                if (response.status === 200) {
-
-                }
+        return () => {
+            if (servicesInBooking.length === 1) {
+                setError("");
+                setTimeout(() => setError("A booking must have at least one service."), 200);
+                return;
             }
-        )
+            Axios.post("api/getBookings/removeService", {bookingId: props.booking._id, serviceId}).then(
+                response => {
+                    if (response.status === 200) {
+                        const newServicesInBooking = servicesInBooking.filter(e => {
+                          return serviceId !== e.id;
+                        })
+                        if (newServicesInBooking.length > 0) {
+                            setServicesInBooking(newServicesInBooking);
+                            setSuccessMessage("");
+                            setTimeout(() => setSuccessMessage("Service deleted successfully"), 200);
+                            setCost(response.data.cost);
+                            setTime(response.data.time)
+                        }
+                    }
+                }
+            )
+        }
     }
 
     function selectService(service) {
@@ -101,11 +170,11 @@ function ViewBooking(props) {
 
       function selectProduct(product) {
         return function() {
-          console.log(product._id)
           const selectedProductsArray = [...selectedProducts];
-          selectedProductsArray.push(product._id);
+          selectedProductsArray.push(product);
           setSelectedProducts(selectedProductsArray);
           const selectedProductIdsArray = [...selectedProductIds];
+          selectedProductIdsArray.push(product._id);
           setSelectedProductIds(selectedProductIdsArray);
         }
       }
@@ -124,11 +193,14 @@ function ViewBooking(props) {
     function minusProduct(id) {
         return function() {
             const selectedProductIdsArray = [...selectedProductIds].filter((e) => {
+                console.log(e, id)
               return e !== id
             });
+            console.log(selectedProductIdsArray);
+
          setSelectedProductIds(selectedProductIdsArray);
          const selectedProductsArray = [...selectedProducts].filter(e => e._id !== id);
-         setSelectedProductIds(selectedProductsArray);
+         setSelectedProducts(selectedProductsArray);
          }
     }
 
@@ -161,7 +233,7 @@ function ViewBooking(props) {
                     <p className={styles.bolder}>Cost of Service:</p>
                     <p>{cost}</p>
                 </div>
-                <button style={{backgroundColor: "salmon", height: "35px", width: "120px", position: "absolute", bottom: "40px", fontWeight: "bold", boxShadow: "0px 0px 2px black", border: "none"}}>Delete Booking</button>
+                <button onClick={deleteBooking} style={{backgroundColor: "salmon", height: "35px", width: "120px", position: "absolute", bottom: "40px", fontWeight: "bold", boxShadow: "0px 0px 2px black", border: "none"}}>Delete Booking</button>
             </div>
             <div id={styles.rightContainer}>
                 {showProducts ?
@@ -190,16 +262,20 @@ function ViewBooking(props) {
                    }
                     </div>
                 </div>
+                {showProducts && 
                 <StatementAppear appear={selectedProducts.length > 0 && showProducts}>
                     <div className={styles.bottomButton}>
                    <button style={{height: "35px", width: "120px", boxShadow: "0px 0px 2px black", border: "none"}} onClick={addProducts}>Add Product(s)</button>
                    </div>
                 </StatementAppear>
+                }
+                { !showProducts &&
                 <StatementAppear appear={selectedServices.length > 0 && !showProducts}>
                     <div className={styles.bottomButton}>
                    <button style={{height: "35px", width: "120px", boxShadow: "0px 0px 2px black", border: "none"}} onClick={addServices}>Add Service(s)</button>
                    </div>
                 </StatementAppear>
+                }
             </div>
             <OtherAlert showAlert={successMessage !== ""} alertMessage={successMessage} alertType={"success"}/>
              <OtherAlert showAlert={error !== ""} alertMessage={error} alertType={"notgood"}/>

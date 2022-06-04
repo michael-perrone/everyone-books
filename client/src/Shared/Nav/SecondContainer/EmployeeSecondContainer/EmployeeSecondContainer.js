@@ -8,9 +8,9 @@ import {
 } from "../../../../actions/actions";
 import Schedule from "../../Schedule/Schedule";
 import axios from "axios";
-import Notifications from "../../../../Notifications/Notifications";
+// import Notifications from "../../../../Notifications/Notifications";
 import DropDown from "../../DropDown/DropDown";
-import NotificationNumber from "../NotificationNumber/NotificationNumber";
+// import NotificationNumber from "../NotificationNumber/NotificationNumber";
 
 
 const EmployeeSecondContainer = props => {
@@ -42,24 +42,24 @@ const EmployeeSecondContainer = props => {
   })
 }, [props.employeeToken] )
 
-  React.useEffect(() => {
-    axios
-      .get("/api/notifications/employeenotifications", {
-        headers: { "x-auth-token": props.employeeToken }
-      })
-      .then(response => {
-        let newNotifications = [];
-        setNotifications(response.data.notifications);
-        if (response.data.notifications) {
-          for (let i = 0; i < response.data.notifications.length; i++) {
-            if (response.data.notifications[i].notificationRead === false) {
-              newNotifications.push(response.data.notifications[i]);
-            }
-          }
-        }
-        setNewNotificationsState(newNotifications);
-      });
-  }, []);
+  // React.useEffect(() => {
+  //   axios
+  //     .get("/api/notifications/employeenotifications", {
+  //       headers: { "x-auth-token": props.employeeToken }
+  //     })
+  //     .then(response => {
+  //       let newNotifications = [];
+  //       setNotifications(response.data.notifications);
+  //       if (response.data.notifications) {
+  //         for (let i = 0; i < response.data.notifications.length; i++) {
+  //           if (response.data.notifications[i].notificationRead === false) {
+  //             newNotifications.push(response.data.notifications[i]);
+  //           }
+  //         }
+  //       }
+  //       setNewNotificationsState(newNotifications);
+  //     });
+  // }, []);
 
   return (
     <React.Fragment>
@@ -71,16 +71,16 @@ const EmployeeSecondContainer = props => {
           >
           {businessName}
         </Link> }
-          {newNotificationsState.length > 0 && !props.showDropDownState && <NotificationNumber num={newNotificationsState.length}/>}
+          {/* {newNotificationsState.length > 0 && !props.showDropDownState && <NotificationNumber num={newNotificationsState.length}/>} */}
         <DropDown clearNotis={clearNotis} notiNum={newNotificationsState.length} employeeProfile={employeeProfile} />
       </div>
       {props.showScheduleState && <Schedule employee={props} />}
-      {props.showNotificationsState && (
+      {/* {props.showNotificationsState && (
         <Notifications
           setNew={setNewNotifications}
           employeeNotifications={notifications}
         />
-      )}
+      )} */}
     </React.Fragment>
   );
 };

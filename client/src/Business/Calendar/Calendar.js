@@ -1,5 +1,5 @@
 import React from "react";
-import dateFns from "date-fns";
+import  {format, startOfWeek, addDays, endOfWeek, startOfMonth, endOfMonth, addMonths, subMonths, isSameDay, isSameMonth, parse} from "date-fns";
 import "./Calendar.css";
 import {connect} from 'react-redux';
 import {CHOOSE_DATE, EMPLOYEE_CHOSEN, EMPLOYEE_SHIFT_ERROR, BREAK_ALERT} from '../../actions/actions';
@@ -23,7 +23,7 @@ class Calendar extends React.Component {
           </div>
         </div>
         <div className="col col-center">
-          <span>{dateFns.format(this.state.currentMonth, dateFormat)}</span>
+          <span>{format(this.state.currentMonth, dateFormat)}</span>
         </div>
         <div className="col col-end" onClick={this.nextMonth}>
           <div className="icon">chevron_right</div>
@@ -36,12 +36,12 @@ class Calendar extends React.Component {
     const dateFormat = "dddd";
     const days = [];
 
-    let startDate = dateFns.startOfWeek(this.state.currentMonth);
+    let startDate = startOfWeek(this.state.currentMonth);
 
     for (let i = 0; i < 7; i++) {
       days.push(
         <div className="col col-center" key={i}>
-          {dateFns.format(dateFns.addDays(startDate, i), dateFormat)}
+          {format(addDays(startDate, i), dateFormat)}
         </div>
       );
     }
@@ -81,10 +81,10 @@ class Calendar extends React.Component {
 
   renderCells() {
     const { currentMonth } = this.state;
-    const monthStart = dateFns.startOfMonth(currentMonth);
-    const monthEnd = dateFns.endOfMonth(monthStart);
-    const startDate = dateFns.startOfWeek(monthStart);
-    const endDate = dateFns.endOfWeek(monthEnd);
+    const monthStart = startOfMonth(currentMonth);
+    const monthEnd = endOfMonth(monthStart);
+    const startDate = startOfWeek(monthStart);
+    const endDate = endOfWeek(monthEnd);
 
     const dateFormat = "D";
     const rows = [];
@@ -95,20 +95,20 @@ class Calendar extends React.Component {
 
     while (day <= endDate) {
       for (let i = 0; i < 7; i++) {
-        formattedDate = dateFns.format(day, dateFormat);
+        formattedDate = format(day, dateFormat);
         const cloneDay = day;
         days.push(
           <div
             className={`col cell ${
-              !dateFns.isSameMonth(day, monthStart)
+              !isSameMonth(day, monthStart)
                 ? "disabled"
-                : dateFns.isSameDay(day, this.props.dateChosen)
+                : isSameDay(day, this.props.dateChosen)
                 ? "selected"
                 : ""
             }`}
             key={day}
             onClick={() => {
-              this.props.chooseDate(dateFns.parse(cloneDay))
+              this.props.chooseDate(parse(cloneDay))
               this.props.unselectEmployee()
               this.props.setBreakAlert()
               this.props.setEmployeeShiftError()
@@ -118,7 +118,7 @@ class Calendar extends React.Component {
             <span className="bg">{formattedDate}</span>
           </div>
         );
-        day = dateFns.addDays(day, 1);
+        day = addDays(day, 1);
       }
       rows.push(
         <div className="row" key={day}>
@@ -138,13 +138,13 @@ class Calendar extends React.Component {
 
   nextMonth = () => {
     this.setState({
-      currentMonth: dateFns.addMonths(this.state.currentMonth, 1)
+      currentMonth: addMonths(this.state.currentMonth, 1)
     });
   };
 
   prevMonth = () => {
     this.setState({
-      currentMonth: dateFns.subMonths(this.state.currentMonth, 1)
+      currentMonth: subMonths(this.state.currentMonth, 1)
     });
   };
 

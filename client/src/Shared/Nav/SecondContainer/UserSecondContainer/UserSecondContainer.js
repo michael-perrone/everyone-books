@@ -3,8 +3,8 @@ import styles from "../../Nav.module.css";
 import axios from "axios";
 import { connect } from "react-redux";
 import DropDown from "../../DropDown/DropDown";
-import Notifications from "../../../../Notifications/Notifications";
-import NotificationNumber from "../NotificationNumber/NotificationNumber";
+// import Notifications from "../../../../Notifications/Notifications";
+
 import {withRouter} from 'react-router-dom';
 
 const UserSecondContainer = props => {
@@ -40,10 +40,10 @@ const UserSecondContainer = props => {
   return (
     <div id={styles.secondContainer}>
       <p onClick={viewClubs} className={styles.links}>View Businesses</p>
-      {newNotifications.length > 0 && !props.showDropDownState && <NotificationNumber user={true} num={newNotifications.length}/>}
-      {props.showNotifications && (
+      {/* {newNotifications.length > 0 && !props.showDropDownState && <NotificationNumber user={true} num={newNotifications.length}/>} */}
+      {/* {props.showNotifications && (
         <Notifications notifications={notifications} />
-      )}
+      )} */}
       <DropDown notiNum={newNotifications.length}/>
     </div>
   );

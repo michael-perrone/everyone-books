@@ -88,7 +88,7 @@ import e from "cors";
            setSelectedBcn("");
            setSuccessMessage("");
            setTimeout(() => setSuccessMessage("Booking successfully created"), 200);
-           props.bookingAdded(); // check this
+           props.loadSchedule(); // check this
          }
        }
      ).catch(error => {
@@ -275,9 +275,9 @@ import e from "cors";
             if (response.status === 200) {
               if (response.data.bcnArray) {
                  setBcnArray(response.data.bcnArray);
-                 setBookingType("Clone Areas");
-                 setDatesForClone(response.data.dates);
               }
+              setDatesForClone(response.data.dates);
+              setBookingType("Clone Areas");
               setEmployeesBack(createMaplist(response.data.employees, "fullName"));
               props.slideLeft()
             }
@@ -335,16 +335,15 @@ import e from "cors";
         return;
       }
 
-
       if (cloneBooking === true && employeeNeeded === true) {
         Axios.post('api/getBookings/clone', {date: dateString, serviceIds: selectedServices, timeChosen: time, businessId: props.admin.admin.businessId, cloneNum: numberOfTimesToClone, daysBetween: daysBetweenBookings}, {headers: {'x-auth-token': props.adminToken}}).then(
           response => {
              if (response.status === 200) {
                if (response.data.bcnArray) {
-                  setBcnArray(response.data.bcnArray);
-                  setBookingType("Clone");
-                  setDatesForClone(response.data.dates);
+                  setBcnArray(response.data.bcnArray);  
                }
+               setDatesForClone(response.data.dates);
+               setBookingType("Clone");
                setEmployeesBack(createMaplist(response.data.employees, "fullName"));
                props.slideLeft()
              }
@@ -382,8 +381,8 @@ import e from "cors";
            if (response.status === 200) {
              if (response.data.bcnArray) {
                 setBcnArray(response.data.bcnArray);
-                setBookingType("Regular")
              }
+             setBookingType("Regular")
              setEmployeesBack(createMaplist(response.data.employees, "fullName"));
              props.slideLeft()
            }
@@ -502,7 +501,7 @@ import e from "cors";
                 <ServiceList minusService={(id) => minusService(id)} selectedServices={selectedServices} addService={(id) => selectService(id)} array={props.services} />
               </div>
                 <div style={{marginTop: "22px", textAlign: "center"}}>
-                  <SubmitButton onClick={getAvailableEmployees}>Check Availability</SubmitButton>
+                  {props.services.length > 0 ? <SubmitButton onClick={getAvailableEmployees}>Check Availability</SubmitButton> : <p style={{width: "350px", marginLeft: "10px"}}>Your business has no services, please edit your business profile to create services and add employees!</p>}
                 </div>
               </div>
               <div style={{display: "flex", flexDirection: 'column',}}>
@@ -511,7 +510,7 @@ import e from "cors";
                 <SelectOneList unSelectOne={unSelectEmployee} array={employeesBack} selected={selectedEmployee} selectOne={(id) => selectEmployee(id)}/>
               </StatementAppear>
               {(bcnArray !== undefined || employeesBack.length > 0) && <div style={{height: "40px", width: "375px"}}><p style={{fontWeight: "bold", fontSize: "18px", textAlign: 'center', marginTop: employeesBack.length > 0 ? "25px": "0px"}}>Find Customer:</p></div>}
-              <StatementAppear appear={selectedServices.length > 0 && (bcnArray && bcnArray.length > 0)} center={true}>
+              <StatementAppear appear={selectedServices.length > 0 && ((bcnArray && bcnArray.length > 0) || props.eq === "y" && employeesBack.length > 0)} center={true}>
                 <div style={{display: 'flex', marginTop: "20px"}}>
                 <input value={phoneNumber} onChange={toSetPhoneNumber} style={{width: "220px", height: "28px", fontSize: "18px", borderBottom: "2px solid black", backgroundColor: "transparent", borderTop: "none", borderLeft: "none", borderRight: "none "}} placeholder="Customer Phone #"/>
                 {!registeringNewGuest && <SubmitButton onClick={findGuest}>Find Guest</SubmitButton>}

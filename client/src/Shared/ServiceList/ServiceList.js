@@ -6,10 +6,9 @@ function ServiceList(props) {
         props.array ?
         <div style={{width: props.small ? "218px" : "", height: props.small ? "202px" : "", boxShadow: props.small ? "none" : ""}} id={styles.otherMainContainer}>
         {props.array.map((element, index) => {
-            console.log(element)
             return (
                     props.selectedServices.indexOf(element["_id"]) === -1 ?
-                    <div key={element["_id"]} id={!props.small ? styles.subContainer : styles.smallSubContainer}>
+                    <div key={element["_id"] + index} id={!props.small ? styles.subContainer : styles.smallSubContainer}>
                        {!props.prod && <p style={{fontSize: "18px"}}>{element["serviceName"]}</p>}
                        {props.prod &&  <p style={{fontSize: "18px"}}>{element["name"]}</p>}
                        <button onClick={props.addService(element)} id={styles.button}>
@@ -17,7 +16,7 @@ function ServiceList(props) {
                        </button>
                     </div> :
                     props.selectedServices.indexOf(element["_id"]) !== -1 &&
-                    <div key={element["_id"]} style={{backgroundColor: "gray", color: "lavenderblush"}} id={!props.small ? styles.subContainer : styles.smallSubContainer}>
+                    <div key={element["_id"] + index} style={{backgroundColor: "gray", color: "lavenderblush"}} id={!props.small ? styles.subContainer : styles.smallSubContainer}>
                         {!props.prod && <p style={{fontSize: "18px"}}>{element["serviceName"]}</p>}
                        {props.prod &&  <p style={{fontSize: "18px"}}>{element["name"]}</p>}
                        <button style={{right: "12px"}} onClick={props.minusService(element["_id"])} id={styles.button}>

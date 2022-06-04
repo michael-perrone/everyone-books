@@ -5,46 +5,38 @@ import { HIDE_SCHEDULE } from "../../../actions/actions";
 import axios from "axios";
 
 const Schedule = props => {
+
+  function getDateInFormat() {
+    const date = new Date();
+    const day = date.getDate();
+    const year = date.getFullYear();
+    let month = (date.getMonth() + 1).toString();
+    if (month.length === 1) {
+      month = "0" + month;
+    }
+    const dateString = `${year}-${month}-${day}`;
+    return dateString;
+  }
+
   const [employeeBookings, setEmployeeBookings] = React.useState([]);
-  const [dateFromPicker, setDateFromPicker] = React.useState();
+  const [dateFromPicker, setDateFromPicker] = React.useState(getDateInFormat());
   const [dateNeeded, setDateNeeded] = React.useState(new Date().toDateString());
   const [scheduled, setScheduled] = React.useState('');
-  const [shiftInfo, setShiftInfo] = React.useState('')
+  const [shiftInfo, setShiftInfo] = React.useState('');
 
   function datePickerHandler(e) {
     setDateFromPicker(e.target.value)
   }
+
   React.useEffect(() => {
     if (dateFromPicker) {
       let dateArray = dateFromPicker.split('-');
-      setDateNeeded(new Date(dateArray[0], parseInt(dateArray[1]) - 1, dateArray[2]).toDateString())
+      setDateNeeded(new Date(dateArray[0], parseInt(dateArray[1]) - 1, dateArray[2]).toDateString());
+      console.log(new Date(dateArray[0], parseInt(dateArray[1]) - 1, dateArray[2]))
     }
   },[dateFromPicker])
 
-  React.useEffect(() => {
-    axios
-      .post("/api/eBookings/schedule", {
-        date: dateNeeded,
-        employeeId: props.employee.employee.id
-      })
-      .then(response => {
-        if (response.status === 200) {
-          setEmployeeBookings(response.data.bookings);
-        }
-      });
-      axios.post('/api/shifts/employee', {
-        date: dateNeeded,
-        employeeId: props.employee.employee.id
-      }).then(response => {
-        setScheduled(response.data.scheduled)
-        if (response.data.scheduled) {
-          setShiftInfo(response.data.shift)
-        }
-        else {
-          setShiftInfo('')
-        }
-      })
-}, [dateNeeded])
+
 
   return (
     <React.Fragment>
@@ -70,6 +62,7 @@ const Schedule = props => {
           </p>
           <input
             onChange={datePickerHandler}
+            value={dateFromPicker}
             style={{ height: "22px" }}
             type="date"
           />

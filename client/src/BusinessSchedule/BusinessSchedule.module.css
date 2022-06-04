@@ -3,12 +3,11 @@
     width: 100%;
 }
 
-
 #leftHolder {
     background-color: #f9e9f9;
-    padding: 20px;
-    height: 100vh;
+    padding: 15px;
     border-right: 1px solid gray;
+    height: 100vh;;
 }
 
 #rightHolder {
@@ -21,7 +20,7 @@
 
 @media(max-width: 750px) {
     #container {
-        flex-direction: column;
+        flex-direction: column-reverse;
     }
     #leftHolder {
         width: 100%;
@@ -33,6 +32,7 @@
         background-color: rgb(243, 243, 243);
         height: 90vh;
         border-right: none;
+        padding-right: 0;
     }
 }
 

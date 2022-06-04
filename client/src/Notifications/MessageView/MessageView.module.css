@@ -1,0 +1,35 @@
+#messageViewContainer {
+    width: 370px;
+    height: 600px;
+    margin-top: 40px;
+    position: relative;
+}
+
+.bu {
+    height: 35px;
+    width: 120px;
+    font-size: 22px;
+    border: none;
+    box-shadow: 0px 0px 3px black;
+    background-color: white;
+}
+
+.bu:hover {
+    background-color: rgb(217, 217, 217);
+}
+
+.date {
+    position: absolute;
+    font-size: 16px;
+}
+
+.header {
+    font-size: 22px;
+    font-weight: 600;
+    position: absolute;
+    top: 30px;
+}
+
+.message {
+    line-height: 22px;
+}

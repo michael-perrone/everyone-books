@@ -8,16 +8,23 @@ import {
   ADMIN_LOGOUT,
   SHOW_CREATE_BOOKING
 } from "../../../../actions/actions";
-import Notifications from "../../../../Notifications/Notifications";
 import DropDown from "../../DropDown/DropDown";
+import Axios from "axios";
 
 const AdminSecondContainer = props => {
 
-  // function goToBusinessSchedule() {
-  //   props.history.push(`/admin/${props.businessId}/businessSchedule`)
-  // }
+  function goToEditBusiness() {
+    props.history.push(`/admin/${props.admin.admin.id}/createeditprofile`)
+  } 
 
-  
+
+  function goToAdminNotifications() {
+    props.history.push(`/admin/${props.admin.admin.id}/notifications`)
+   } 
+
+  React.useEffect(function () {
+    Axios.get("/api/")
+  }, [])
 
   return (
     <React.Fragment>
@@ -25,9 +32,16 @@ const AdminSecondContainer = props => {
             <p
             style={{ cursor: "pointer" }}
             className={styles.links}
-            onClick={() => props.setShowCreateBooking()}
+            onClick={goToEditBusiness}
             >
-            Add Booking
+            Edit Business
+            </p>
+            <p
+            style={{ cursor: "pointer" }}
+            className={styles.links}
+            onClick={goToAdminNotifications}
+            >
+            Notifications
             </p>
         <DropDown/>
       </div>
@@ -38,8 +52,7 @@ const AdminSecondContainer = props => {
 const mapDispatchToProps = dispatch => {
   return {
     adminLogout: () => dispatch({ type: ADMIN_LOGOUT }),
-    showNotifications: () => dispatch({ type: SHOW_NOTIFICATIONS }),
-    setShowCreateBooking: () => dispatch({type: SHOW_CREATE_BOOKING})
+    showNotifications: () => dispatch({ type: SHOW_NOTIFICATIONS })
   };
 };
 
@@ -47,6 +60,7 @@ const mapStateToProps = state => {
   return {
     showDropDownState: state.booleanReducers.showDropDown,
     showNotificationsState: state.booleanReducers.showNotifications,
+    admin: state.authReducer.admin
   };
 };
 

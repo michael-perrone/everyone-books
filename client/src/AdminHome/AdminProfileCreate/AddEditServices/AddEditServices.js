@@ -120,8 +120,7 @@ function AddEditServices(props) {
         else {
             setError("");
             setTimeout(() => setError("Please fill in all fields"), 200);
-        }
-        
+        }  
     }
 
     return (

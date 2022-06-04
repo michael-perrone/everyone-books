@@ -14,8 +14,8 @@ const WeekSelector = (props) => {
     const [thursday, setThursday] = React.useState([])
     const [friday, setFriday] = React.useState([])
     const [saturday, setSaturday] = React.useState([])
-    const [dateObtained, setDateObtained] = React.useState(new Date());
-    const [dayNum, setDayNum] = React.useState('')
+    const [dateObtained, setDateObtained] = React.useState(new Date().toDateString());
+    const [dayNum, setDayNum] = React.useState(new Date().getDate())
 
    function getDate(dayNumber, type) {
        return () => {  
@@ -35,33 +35,41 @@ const WeekSelector = (props) => {
 
    function addYear() {
        setDaysOfMonth(new Date(year + 1, monthIndex + 1, 0).getDate())
-        setYear((prevYear) => prevYear + 1)
+       setYear((prevYear) => prevYear + 1);
+       setDayNum();
+
     }
     function subYear() {
-        setDaysOfMonth(new Date(year - 1, monthIndex + 1, 0).getDate())
-        setYear((prevYear) => prevYear - 1)
+       setDaysOfMonth(new Date(year - 1, monthIndex + 1, 0).getDate())
+       setYear((prevYear) => prevYear - 1);
+       setDayNum();
+
     }
 
     function addMonth() {
         if (monthIndex !== 11) {
             setDaysOfMonth(new Date(year, monthIndex + 2, 0).getDate())
             setMonthIndex((prevMonth) => prevMonth + 1)
+            setDayNum();
         }
         else {
-            setDaysOfMonth(new Date(year + 1, 1, 0).getDate())
-            setMonthIndex(0)
-            setYear((prevYear) => prevYear + 1)
+            setDaysOfMonth(new Date(year + 1, 1, 0).getDate());
+            setMonthIndex(0);
+            setYear((prevYear) => prevYear + 1);
+            setDayNum();
         }
     }
     function subMonth() {
         if (monthIndex !== 0) {
-            setDaysOfMonth(new Date(year, monthIndex, 0).getDate())
-            setMonthIndex((prevMonth) => prevMonth - 1)
+            setDaysOfMonth(new Date(year, monthIndex, 0).getDate());
+            setMonthIndex((prevMonth) => prevMonth - 1);
+            setDayNum();
         }
         else {
-            setDaysOfMonth(new Date(year - 1, 12, 0).getDate())
-            setMonthIndex(11)
-            setYear((prevYear) => prevYear - 1)
+            setDaysOfMonth(new Date(year - 1, 12, 0).getDate());
+            setMonthIndex(11);
+            setYear((prevYear) => prevYear - 1);
+            setDayNum();
         }
     }
 

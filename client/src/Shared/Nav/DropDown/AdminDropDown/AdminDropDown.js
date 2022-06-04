@@ -5,20 +5,23 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 
 const AdminDropDown = (props) => {
-
+  
    function goHome() {
      console.log('HELLLOO')
     console.log(`/admin/${props.admin.admin.id}`)
     props.history.push(`/admin/${props.admin.admin.id}`)
    } 
 
-  function editProfile() {
-    console.log(props.admin.admin.id)
-    props.history.push(`/admin/${props.admin.admin.id}/createeditprofile`)
+  function goToShifts() {
+    props.history.push(`/admin/${props.admin.admin.businessId}/businessSchedule`)
   }
 
   function goToSettings() {
     props.history.push(`/admin/${props.admin.admin.id}/settings`)
+  }
+
+  function goToGroups() {
+    props.history.push(`/admin/${props.admin.admin.businessId}/groups`)
   }
 
   function adminLogout() {
@@ -32,11 +35,14 @@ const AdminDropDown = (props) => {
           <DropDownLink clickProp={goHome}>
             Home
           </DropDownLink>
+          <DropDownLink clickProp={goToGroups}>
+            Groups
+            </DropDownLink>
           <DropDownLink clickProp={goToSettings}>
             Settings
           </DropDownLink>
-          <DropDownLink clickProp={editProfile}>
-            Edit Business
+          <DropDownLink clickProp={goToShifts}>
+            Shifts
           </DropDownLink>
           <DropDownLink clickProp={adminLogout}>
             Logout

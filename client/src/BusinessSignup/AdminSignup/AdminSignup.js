@@ -7,12 +7,11 @@ import { withRouter } from "react-router-dom";
 import { SAVE_ADMIN_INFO, ADMIN_INFO_COMPLETE, SAVE_BUSINESS_INFO } from "../../actions/actions";
 import Alert from "../../Alert/Alert";
 import SubmitButton from '../../Shared/SubmitButton/SubmitButton';
-import { SSL_OP_NETSCAPE_DEMO_CIPHER_CHANGE_BUG } from "constants";
 import OtherAlert from '../../OtherAlerts/OtherAlerts';
 
 
 
-const AdminSignup = (props) => {
+function AdminSignup(props) {
     const [formError, setFormError] = React.useState(false)
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');

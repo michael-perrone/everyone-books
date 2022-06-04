@@ -1,8 +1,14 @@
 import React from "react";
 import styles from "../Nav.module.css";
+import {withRouter} from 'react-router';
 
-const Title = () => {
-  return <p id={styles.title}>Everyone Books</p>;
+function Title(props) {
+
+  function clickTitle() {
+    props.history.push("/")
+  }
+
+  return <p onClick={clickTitle} id={styles.title}>Everyone Books</p>;
 };
 
-export default Title;
+export default withRouter(Title);

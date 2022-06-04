@@ -13,26 +13,26 @@ class AdminHome extends React.Component {
     };
   }
 
-  componentDidMount() {
-    axios
-      .get("/api/businessProfile/mybusiness", {
-        headers: { "x-auth-token": this.props.adminToken }
-      })
-      .then(response => {
-        this.setState({ adminProfileCreated: response.data.profileCreated });
-      })
-      .catch(error => {
-        if (error.response.status === 406) {
-          this.props.history.push(
-            `/admin/${this.props.admin.admin.id}/createeditprofile`
-          );
-        }
-      });
-  }
+  // componentDidMount() {  // check this -- dont like how it pushes to thing setup profile and keeps u there
+  //   axios
+  //     .get("/api/businessProfile/mybusiness", {
+  //       headers: { "x-auth-token": this.props.adminToken }
+  //     })
+  //     .then(response => {
+  //       this.setState({ adminProfileCreated: response.data.profileCreated });
+  //     })
+  //     .catch(error => {
+  //       if (error.response.status === 406) {
+  //         this.props.history.push(
+  //           `/admin/${this.props.admin.admin.id}/createeditprofile`
+  //         );
+  //       }
+  //     });
+  // }
 
   render() {
     return (
-        this.state.adminProfileCreated === true && <Business />
+    <Business />
     );
   }
 }

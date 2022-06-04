@@ -8,7 +8,7 @@ function Maplist(props) {
         <div style={{maxHeight: props.small ? "180px": "", width: props.small ? "210px" : ""}}>
         {props.array.map((element, index) => {
             return (
-                <div id={styles.mainContainer} key={element["id"]}>
+                <div id={styles.mainContainer} key={element["id"] + index}>
                     <div id={props.small ? styles.otherSubContainer : styles.subContainer}>
                        <p style={{fontSize: props.small ? "16px" : "18px"}}>{element["displayName"]}</p>
                        <button onClick={props.name ? props.delete(element["displayName"]) : props.delete(element["id"])} id={styles.button}>

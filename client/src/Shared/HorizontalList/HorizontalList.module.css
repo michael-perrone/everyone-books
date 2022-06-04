@@ -1,0 +1,24 @@
+#mainContainer {
+    width: 200px;
+    max-width: 200px;
+    overflow: auto;
+    display: grid;
+    height: 45px;
+}
+
+.selected {
+    background-color: gray;
+    color: lavenderblush;
+    padding: 10px 5px;
+    cursor: pointer;
+}
+
+
+.unselected {
+    padding: 10px 5px;
+    cursor: pointer;
+}
+
+.unselected:hover {
+    background-color: lightgray;
+}

@@ -1,8 +1,8 @@
 #employeeHome {
-    background-color: rgb(243, 243, 243);
-    height: 97vh;
     display: flex;
-    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
 

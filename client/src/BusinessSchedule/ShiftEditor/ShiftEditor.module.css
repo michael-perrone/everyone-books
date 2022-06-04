@@ -1,0 +1,21 @@
+#scheduleContainer {
+    width: 330px;
+    margin-top: 15px;
+    padding-left: 9px;
+    height: 450px;
+    max-height: 450px;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    background-color: white;
+    box-shadow: 0px 0px 3px black;
+}
+
+.inputs {
+    margin-left: 5px;
+    width: 150px;
+}
+
+option {
+    background-color: black;
+}

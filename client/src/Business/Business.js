@@ -17,12 +17,13 @@ function Business(props) {
   const [bct, setBct] = useState("");
   const [openTime, setOpenTime] = useState("");
   const [closeTime, setCloseTime] = useState("");
-  const [sortedBookings, setsortedBookings] = useState([]);
+  const [sortedBookings, setSortedBookings] = useState([]);
   const [updateBookings, setUpdateBookings] = useState();
   const [showBackDrop, setShowBackDrop] = useState(false);
   const [bookingToView, setBookingToView] = useState({});
 
-  function bookingAdded() {
+
+  function loadSchedule() {
     axios
     .post("/api/adminSchedule", {
       date: props.dateChosen.toDateString()
@@ -49,7 +50,7 @@ function Business(props) {
         for (let e = 0; e < bookings.length; e++) {
             sorted[bookings[e].bcn - 1].push(bookings[e])
         }
-        setsortedBookings(sorted);
+        setSortedBookings(sorted);
       }
     })
   }
@@ -57,15 +58,14 @@ function Business(props) {
   useEffect(function() {
     axios.get("api/services/getServices", {headers: {'x-auth-token': props.adminToken}}).then(response => {
       if (response.status === 200) {
+        console.log("yooooo");
         setServices(response.data.services);
       }
     })
 }, [])
 
   function clickBooking(booking) {
-    console.log("anything");
     return () => {
-      console.log(booking)
       axios.post('/api/getBookings/moreBookingInfo', {bookingId: booking._id}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
           if (response.status === 200) {
             console.log(response.data)
@@ -85,15 +85,20 @@ function Business(props) {
   
 
   useEffect(function() { // check this
-    bookingAdded();
+    loadSchedule();
   },[props.dateChosen])
+
+  function hide() {
+    setShowBackDrop(false);
+    loadSchedule() // check this dont love how much this runs;
+  }
 
 
     return (
           <div id={styles.businessContainer}>
-           {showBackDrop && <div style={{display: "flex", position: "absolute", top: 0, lef: 0, width: "100%", justifyContent: "center"}}><div onClick={() => setShowBackDrop(false)} id={styles.backDrop}></div> <ViewBooking reload={bookingAdded} products={products} services={services} hide={() => setShowBackDrop(false)} booking={bookingToView}/></div>}
+           {showBackDrop && <div style={{display: "flex", position: "absolute", top: 0, lef: 0, width: "100%", justifyContent: "center"}}><div onClick={() => setShowBackDrop(false)} id={styles.backDrop}></div> <ViewBooking reload={loadSchedule} products={products} services={services} hide={hide} booking={bookingToView}/></div>}
                 <AdminBooking
-                  bookingAdded={bookingAdded}
+                  loadSchedule={loadSchedule}
                   services={services}
                   eq={eq}
                   bct={bct}    
