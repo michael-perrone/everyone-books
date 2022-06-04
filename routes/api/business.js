@@ -267,14 +267,29 @@ router.post("/startEndTime", authAdmin, async (req, res) => {
 
 router.post('/businessschedule', async (req, res) => {
     const businessForEmployees = await BusinessProfile.findOne({ business: req.body.businessId }).select(['employeesWhoAccepted']);
-    const employees = await Employee.find({ _id: businessForEmployees.employeesWhoAccepted }).select(['fullName', '_id'])
-    const businessSchedule = await Business.findOne({ _id: req.body.businessId }).select(['schedule', 'bookingColumnType', 'bookingColumnNumber']);
+    if (businessForEmployees) {
+        const employees = await Employee.find({ _id: businessForEmployees.employeesWhoAccepted }).select(['fullName', '_id'])
+        const businessSchedule = await Business.findOne({ _id: req.body.businessId }).select(['schedule', 'bookingColumnType', 'bookingColumnNumber']);
     if (businessSchedule) {
         res.status(200).json({
             employees, schedule: businessSchedule.schedule, bookingColumnsType: businessSchedule.bookingColumnType,
             bookingColumnNumber: businessSchedule.bookingColumnNumber
-        })
+            })
+        }
     }
+    else {
+        const businessSchedule = await Business.findOne({ _id: req.body.businessId }).select(['schedule', 'bookingColumnType', 'bookingColumnNumber']);
+        if (businessSchedule) {
+            res.status(206).json({
+                schedule: businessSchedule.schedule, bookingColumnsType: businessSchedule.bookingColumnType,
+                bookingColumnNumber: businessSchedule.bookingColumnNumber
+                })
+            }
+        else {
+            return res.status(400).send( )
+        }
+    }
+    
 
 })
 

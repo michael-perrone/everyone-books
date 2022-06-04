@@ -9,13 +9,13 @@ const utils = require('../../utils/utils');
 const adminAuth = require("../../middleware/authAdmin");
 
 router.post('/multiplecreate', async (req, res) => {
-  console.log(req.body)
   let date = new Date(req.body.shiftDate).toDateString(); // get the date string
   let newShiftCloneDates = []  // empty array to hold clone shifts in
   let dateForLoop = new Date(date); // purple date
   for (let i = 0; i < req.body.cloneNumber; i++) {
     newShiftCloneDates.push(new Date(dateForLoop.getFullYear(), dateForLoop.getMonth(), dateForLoop.getDate() + (i * 7)).toDateString()); // doing the * 7 thing to change the dates
   }
+  console.log(newShiftCloneDates);
   const employeeForBusiness = await Employee.findOne({_id: req.body.employeeId}).select(["businessWorkingAt"]);
   const businessForEq = await Business.findOne({_id: employeeForBusiness.businessWorkingAt}).select(["eq"]);
   for (let i = 0; i < newShiftCloneDates.length; i++) { // number of clones based on clone num
@@ -73,7 +73,7 @@ router.post('/multiplecreate', async (req, res) => {
 
       if (req.body.bookingColumnNumber) {
         newShift = new Shift({
-          shiftDate: date,
+          shiftDate: newShiftCloneDates[i],
           timeStart: req.body.timeStart,
           timeEnd: req.body.timeEnd,
           employeeId: req.body.employeeId,
@@ -444,7 +444,6 @@ router.post('/getEmployeeBookingsForDay', async (req, res) => {
   const business = await Business.findOne({ _id: employee.businessWorkingAt });
   const shift = await Shift.findOne({ employeeId: req.body.employeeId, shiftDate: date });
   if (business.eq === "y" && !shift) {
-    console.log("no");
       console.log("NO SHIFT")
       return res.status(406).send()
   }
@@ -463,7 +462,6 @@ router.post('/getEmployeeBookingsForDay', async (req, res) => {
     }
     const bct = business.bookingColumnType;
     if (bookings.length) {
-      console.log(bookings)
       for (let i = 0; i < bookings.length; i++) {
         let user = await User.findOne({ _id: bookings[i].customer });
         let updatedWithNameBooking = {};
@@ -514,8 +512,8 @@ router.post('/getEmployeeBookingsForDay', async (req, res) => {
       else {
         if (bcn) {
           console.log(bcn, bct, shiftTimes)
-          console.log("ABOUT TO SEND")
-          return res.status(204).json({shiftTimes, bcn, bct});
+          console.log("ABOUT TO SEND") // 204 not working
+          return res.status(204).json({shiftTimes, bcn, bct,});
         }
         else {
           console.log("YOOOOO")

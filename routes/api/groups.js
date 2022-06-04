@@ -7,8 +7,10 @@ const Business = require("../../models/Business");
 const BookedNotification = require('../../models/BookedNotification');
 const Employee = require("../../models/Employee");
 const userAuth = require("../../middleware/authUser");
+const Admin = require("../../models/Admin");
 
 router.post("/create", adminAuth, async (req, res) => {
+    console.log(req.body);
     const otherDate = new Date();
     const date = new Date(req.body.date).toDateString();
     const customers = await User.find({_id: req.body.customers}).select(["fullName", "bookedNotifications"]);
@@ -57,7 +59,7 @@ router.post("/create", adminAuth, async (req, res) => {
     }
 
     if (bcnArray.every(element => element !== Number(req.body.bcn))) {
-        return res.status(403).json({bcnArray, bct: business.bookingColumnType});
+        return res.status(406).json({bcnArray, bct: business.bookingColumnType});
     }
 
     let price = req.body.price;
@@ -81,7 +83,7 @@ router.post("/create", adminAuth, async (req, res) => {
             finalPrice = "$" + priceArray[0]+ "." + secondHalf[0] + "0";
         }
     }
-
+    console.log(req.body);
     const group = new Group({
         price: finalPrice,
         time: `${req.body.startTime}-${req.body.endTime}`,
@@ -196,6 +198,28 @@ router.post("/join", userAuth, async (req, res) => {
     else {
         return res.status(401).send();
     }
+})
+
+router.post("/list", adminAuth, async (req, res) => {
+    const admin = await Admin.findOne({_id: req.admin.id}).select(["business"]);
+    const business = await Business.findOne({_id: admin.business});
+    const groups = await Group.find({businessId: admin.business, date: req.body.dateString});
+    const newGroups = []
+    for (let i = 0; i < groups.length; i++) {
+        let employee = await Employee.findOne({_id: groups[i].employeeBooked}).select(["fullName"]);
+        let newGroup = {};
+        let customers = await User.find({_id: groups[i].customers}).select("fullName");
+        newGroup.customers = customers;
+        newGroup.time = groups[i].time;
+        newGroup._id = groups[i]._id;
+        newGroup.employeeName = employee.fullName
+        newGroup.bcn = groups[i].bcn;
+        newGroup.openToPublic = groups[i].openToPublic;
+        newGroup.groupLimitNumber = groups[i].groupLimitNumber;
+        newGroup.name = groups[i].type;
+        newGroups.push(newGroup)
+    }
+    res.status(200).json({groups: newGroups, bct: business.bookingColumnType});
 })
 
 module.exports = router;

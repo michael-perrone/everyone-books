@@ -67,7 +67,7 @@ router.post("/leaveBusiness", authEmployee, async (req, res) => {
         const leftNoti = new Notification({
             date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
             fromString: req.employee.fullName,
-            type: "ELB"
+            type: "ELB" // employee left business
         });
         const bookings = await Booking.find({employeeBooked: employee._id, businessId: req.body.bId});
         for (let i = 0; i < bookings.length; i++) {

@@ -75,7 +75,7 @@ router.post("/admin", async (req, res) => {
                 date: utils.cutDay(`${dateo.toDateString()}, ${utils.convertTime(dateo.getHours(), dateo.getMinutes())}`),
                 fromString: business.businessName,
                 fromId: req.body.businessId,
-                type: "BBY"
+                type: "BBY" // Business Booked You
             })
             const customerNotis = [newNoti, ...customer.notifications];
             customer.notifications = customerNotis;

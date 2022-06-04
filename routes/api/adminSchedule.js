@@ -40,7 +40,10 @@ router.post('/', adminAuth, async (req, res) => {
             num = 6;
         }
         const bp = await BusinessProfile.findOne({business: business._id});
-        const products = await Product.find({_id: bp.products});
+        let products = []
+        if (bp) {
+            products = await Product.find({_id: bp.products});
+        }
         if (business.schedule[num].open === "Closed" || business.schedule[num].close === "Closed") {
           return res.status(202).json({eq: business.eq, bcn: business.bookingColumnNumber, bct: business.bookingColumnType, products});
         }

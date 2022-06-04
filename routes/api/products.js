@@ -23,15 +23,12 @@ router.post("/removeProducts", async (req, res) => {
         const booking = await Booking.findOne({_id: req.body.bookingId});
         const bookingProducts = [...booking.products];
         const product = await Product.findOne({_id: req.body.productId});
-        const newBookingProducts = bookingProducts.filter((e, i, a) => {
-            return req.body.productId.toString() !== e._id.toString()  
-        })
-        booking.products = newBookingProducts;
-        console.log(product)
+        const index = bookingProducts.findIndex(e => e.toString() === req.body.productId.toString());
+        bookingProducts.splice(index, 1);
+        booking.products = bookingProducts;
         await booking.save();
         console.log(booking.products);
         console.log(bookingProducts);
-        if (booking.products.length !== bookingProducts.length) {
             let cost = utils.removeDollarSign(booking.cost);
             let newCost = cost - parseFloat(product.cost);
             console.log(product.cost);
@@ -40,7 +37,6 @@ router.post("/removeProducts", async (req, res) => {
             console.log(product.cost);
             await booking.save();
             res.status(200).json({newCost: utils.addDollarSign(newCost)});
-        }
     }
     catch(error) {
         console.log(error)
@@ -51,7 +47,7 @@ router.post("/removeProducts", async (req, res) => {
 router.post("/addProducts", async (req, res) => {
     try {
         const booking = await Booking.findOne({_id: req.body.bookingId});;
-        console.log(booking.products);
+        console.log(booking)
         bookingProducts = [...booking.products, ...req.body.productIds];
         const products = await Product.find({_id: req.body.productIds});
         let productsCost = 0;

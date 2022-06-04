@@ -26,7 +26,11 @@ router.post("/moreBookingInfo", adminAuth, async (req, res) => {
   const serviceTypes = await ServiceType.find({ _id: booking.serviceType });
   const customer = await User.findOne({ _id: booking.customer }).select(["phoneNumber", "fullName"]);
   const employee = await Employee.findOne({ _id: booking.employeeBooked }).select(["fullName"]);
-  const products = await Product.find({ _id: booking.products});
+  let products = [];
+  for (let i = 0; i < booking.products.length; i++) {
+    let prod = await Product.findOne({_id: booking.products[i]});
+    products.push(prod);
+  }
   if (employee) {
     res.status(200).json({ services: serviceTypes, customer: customer, employeeName: employee.fullName, products});
   }
@@ -39,7 +43,6 @@ router.post("/moreBookingInfo", adminAuth, async (req, res) => {
 router.post("/moreGroupInfo", async (req, res) => {
   const group = await Group.findOne({_id: req.body.groupId});
   const customers = await User.find({ _id: group.customers }).select(["phoneNumber", "fullName"]);
-  console.log(customers)
   const employee = await Employee.findOne({ _id: group.employeeBooked }).select(["fullName"]);
   res.status(200).json({ customers: customers, employeeName: employee.fullName}); 
 })
@@ -1210,7 +1213,7 @@ router.post("/editBooking", adminAuth, async (req, res) => {
   try {
     let booking = await Booking.findOne({ _id: req.body.bookingId }); // booking
     let bookingTimeArray = booking.time.split("-"); // array split
-    let business = await Business.findOne({ _id: booking.businessId }).select(["eq"]); // business
+    let business = await Business.findOne({ _id: booking.businessId }).select(["eq", "schedule"]); // business
     const previousServiceTypes = [...booking.serviceType]; // previous
     const newServiceTypes = [...previousServiceTypes, ...req.body.servicesToAdd]; // serviceIDsAdded Together
     let newServices = await ServiceType.find({ _id: newServiceTypes });
@@ -1236,16 +1239,25 @@ router.post("/editBooking", adminAuth, async (req, res) => {
           
           
           if (utils.intToStringTime[index] === utils.intToStringTime[utils.stringToIntTime[timeArray[0]]]) {
-            console.log(bookingTimeArray)
-            console.log("big error mate", utils.intToStringTime[index], utils.intToStringTime[utils.stringToIntTime[timeArray[0]] + 1], index)
             return res.status(400).send();
           }
         }
       }
-      console.log("got through");
-    let timeNum = 0;
 
+      const day = new Date(booking.date).getDay();
+      const timeEnd = utils.stringToIntTime[business.schedule[day].close];
+      console.log(timeEnd);
+      console.log(utils.stringToIntTime[booking.time.split("-")[0]] + counterNum > timeEnd)
+      if (utils.stringToIntTime[booking.time.split("-")[0]] + counterNum > timeEnd) {
+        return res.status(406).send();
+      }
+
+      
+
+  
+    let timeNum = 0;
     let costNum = 0;
+
     for (let i = 0; i < newServices.length; i++) {
       timeNum += utils.timeDurationStringToInt[newServices[i].timeDuration];
       costNum += newServices[i].cost;

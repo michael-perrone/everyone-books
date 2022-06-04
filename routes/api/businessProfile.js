@@ -236,7 +236,7 @@ router.post("/employeeDeleteFromBusiness", adminAuth, async (req, res) => {
       _id: req.body.employeeId
     });
     let firedNoti = new Notification({
-      type: "BRE",
+      type: "BRE", // business removed employee
       date: utils.notificationDate,
       fromString: business.businessName
     })
@@ -402,7 +402,7 @@ router.post('/addEmployeeToBusinessApp', adminAuth, async (req, res) => {   // u
         employee.requestPending = true;
         console.log(business)
         let newNotification = new Notification({
-          type: "BAE",
+          type: "BAE", // Business Added Employee
           date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
           notificationFromBusiness: req.admin.businessId,
           fromId: req.admin.businessId,
@@ -430,7 +430,7 @@ router.post('/addEmployeeToBusinessApp', adminAuth, async (req, res) => {   // u
       });
       employeesForInstantAdd.push(employeeForInstant);
       let newNotification = new Notification({
-        type: "BAE",
+        type: "BAE", // Business Added Employee
         date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
         notificationFromBusiness: business._id,
         fromId: req.admin.businessId,
@@ -508,7 +508,7 @@ router.post("/addEmployeeToBusiness", async (req, res) => {
 
           let newNotification = new Notification({
             employeeId: employee._id,
-            type: "BAE",
+            type: "BAE", // Jeez
             date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
             notificationFromBusiness: business._id,
             notificationMessage: `You have been added as an employee by ${business.businessName}. If you work here, accept this request and you will now be a registered employee of this Business.`
