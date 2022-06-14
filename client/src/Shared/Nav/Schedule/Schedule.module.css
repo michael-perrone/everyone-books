@@ -2,24 +2,52 @@
     position: relative;
     top: 20px;
     width: 450px;
-    height: 500px;
+    height: 670px;
     padding: 20px 10px 10px 10px;
-    z-index: 999;
-    background-color: rgb(224, 224, 250);
+    background-color: #f9e9f9;
     border: 1px solid black;
-    overflow: auto;
     font-family: sans-serif;
     font-size: 20px;
+  }
+
+  .sn {
+    font-size: 14px;
+  }
+
+  .littleDiv {
+    border-bottom: .4px solid black;
+    padding-bottom: 4px;
+    padding-top: 8px;
+  }
+
+  .employeeBookingContainer {
+    font-size: 16px;
+    padding: 20px;
+    border-bottom: 1px solid black;
+    height: 160px;
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .bold {
+    font-weight: bold;
+    text-decoration: underline;
+    margin-bottom: 10px;
+  }
+
+  .secondBox {
+    width: 190px;
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+  }
+
+  .padABit {
+    padding-bottom: 12px;
   }
 
   @media (max-width: 500px) {
     .scheduleContainer {
       width: 88%;
-    }
-  }
-
-  @media(min-height: 640px) {
-    .scheduleContainer {
-      height: 560px;
     }
   }

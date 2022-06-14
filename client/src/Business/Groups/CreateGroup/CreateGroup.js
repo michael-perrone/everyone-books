@@ -40,14 +40,13 @@ function CreateGroup(props) {
     const [groupLimit, setGroupLimit] = useState("No Limit");
     
     function createGroup() {
-        console.log(props.businessId)
         if (groupName === "") {
             setError("");
             setTimeout(() => setError("Group name cannot be blank"), 200);
             return;
         }
         if (Number(price) !== Number(price) || price === "") {
-            console.log("yo/")
+
             setError("");
             setTimeout(() => setError("Price must be a number"), 200);
             return;
@@ -91,7 +90,6 @@ function CreateGroup(props) {
                      else {
                          let bcnStr = ``;
                          for (let i = 0; i < error.response.data.bcnArray.length; i++) {
-                             console.log(i)
                             if (i !== error.response.data.bcnArray.length - 1) {
                                 bcnStr += bct + " " + error.response.data.bcnArray[i] + ", ";
                             }

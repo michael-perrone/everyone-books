@@ -61,16 +61,18 @@ const EmployeeSecondContainer = props => {
   //     });
   // }, []);
 
+  
+
   return (
     <React.Fragment>
       <div id={styles.secondContainer}>        
-      {businessName !== "None" &&       
+      
         <Link
           className={styles.links}
-          to={`/businesses/${businessWorkingAt}`}
+          to={`/employee/${props.employee.employee.id}/notifications`}
           >
-          {businessName}
-        </Link> }
+          Notifications
+        </Link>
           {/* {newNotificationsState.length > 0 && !props.showDropDownState && <NotificationNumber num={newNotificationsState.length}/>} */}
         <DropDown clearNotis={clearNotis} notiNum={newNotificationsState.length} employeeProfile={employeeProfile} />
       </div>

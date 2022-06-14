@@ -10,6 +10,10 @@
     top: 20px;
 }
 
+.fontFourteen {
+    font-size: 14px;
+}
+
 #leftContainer {
     margin-top: 40px;
     display: flex;

@@ -70,9 +70,8 @@ function AddEmployees(props) {
                 }
             }
         ).catch(error => {
-            console.log(error)
             setError("");
-                setTimeout(() => setError("Something went wrong"), 200);
+            setTimeout(() => setError("Something went wrong"), 200);
         })
     },[selected])
 

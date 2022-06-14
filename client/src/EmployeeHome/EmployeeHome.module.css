@@ -1,13 +1,25 @@
 #employeeHome {
+    height: 95vh;
     display: flex;
-    align-items: center;
-    flex-direction: column;
     justify-content: space-around;
 }
 
+#backDrop {
+    position: fixed;
+    z-index: 5;
+    background-color: rgba(0, 0, 0, 0.801);
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
 
-@media(max-height: 580px) {
-    #employeeHome {
-        height: 580px;
-    }
-}
+
+  @media (max-width: 800px) {
+      #employeeHome {
+          flex-direction: column-reverse;
+          align-items: center;
+      }
+  }

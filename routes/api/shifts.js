@@ -15,7 +15,7 @@ router.post('/multiplecreate', async (req, res) => {
   for (let i = 0; i < req.body.cloneNumber; i++) {
     newShiftCloneDates.push(new Date(dateForLoop.getFullYear(), dateForLoop.getMonth(), dateForLoop.getDate() + (i * 7)).toDateString()); // doing the * 7 thing to change the dates
   }
-  console.log(newShiftCloneDates);
+
   const employeeForBusiness = await Employee.findOne({_id: req.body.employeeId}).select(["businessWorkingAt"]);
   const businessForEq = await Business.findOne({_id: employeeForBusiness.businessWorkingAt}).select(["eq"]);
   for (let i = 0; i < newShiftCloneDates.length; i++) { // number of clones based on clone num
@@ -108,6 +108,7 @@ router.post('/multiplecreate', async (req, res) => {
 
 router.post('/edit', async (req, res) => {
   try {
+
     let date = new Date(req.body.shiftDate).toDateString();
     const originalShift = await Shift.findOne({_id: req.body.shiftId});
     const areaConflict = await Shift.find({ businessId: req.body.businessId, bookingColumnNumber: req.body.bookingColumnNumber, shiftDate: date });
@@ -120,17 +121,14 @@ router.post('/edit', async (req, res) => {
     const shiftConflict = await Shift.find({ employeeId: req.body.employeeId, shiftDate: date });
     
     const shiftConflictIndex = shiftConflict.findIndex(e => {
-      console.log(e._id, "shiftConflict")
-      console.log(originalShift._id, "originalShift")
+
+
       return e._id.toString() === originalShift._id.toString();
     })
     if (shiftConflictIndex !== -1) {
       shiftConflict.splice(shiftConflictIndex, 1);
     }
-    console.log(shiftConflict[0], "shiftconflictID");
-    console.log(originalShift, "originalshiftID");
-    console.log(req.body.employeeId, "reqbodyem");
-    console.log(req.body.employeeName, "req.body.employeeName")
+ 
    // console.log(shiftConflict[0].employeeId, "shiftconem")
     const employeeForBusiness = await Employee.findOne({_id: req.body.employeeId}).select(["businessWorkingAt"]);
     const businessForEq = await Business.findOne({_id: employeeForBusiness.businessWorkingAt}).select(["eq"]);
@@ -166,19 +164,15 @@ router.post('/edit', async (req, res) => {
         let alreadyExistingEnd = utils.stringToIntTime[shiftConflict[i].timeEnd];
 
         if (startNum >= alreadyExistingStart && endNum <= alreadyExistingEnd) {
-          console.log("YOOO1")
           return res.status(406).json({error: `ee`, date: shiftConflict[i].shiftDate});
         }
         else if (startNum <= alreadyExistingStart && endNum >= alreadyExistingStart) {
-          console.log("YOOO2")
           return res.status(406).json({error: `ee`, date: shiftConflict[i].shiftDate});
         }
         else if (startNum >= alreadyExistingStart && startNum <= alreadyExistingEnd) {
-          console.log("YOOO3")
           return res.status(406).json({error: `ee`, date: shiftConflict[i].shiftDate});
         }
         else if (endNum >= alreadyExistingStart && endNum <= alreadyExistingEnd) {
-          console.log("YOOO4")
           return res.status(406).json({error: `ee`, date: shiftConflict[i].shiftDate});
         }
       }
@@ -190,10 +184,12 @@ router.post('/edit', async (req, res) => {
     originalShift.employeeId = req.body.employeeId;
     originalShift.employeeName = req.body.employeeName;
     originalShift.businessId = req.body.businessId;
+    console.log(req.body);
     if (req.body.isBreak && req.body.breakStart && req.body.breakEnd) {
       originalShift.isBreak = req.body.isBreak;
       originalShift.breakStart = req.body.breakStart;
       originalShift.breakEnd = req.body.breakEnd;
+      console.log(req.body);
     }
     if (originalShift.isBreak && !req.body.isBreak) {
         originalShift.isBreak = false;
@@ -247,17 +243,13 @@ router.post('/edit', async (req, res) => {
 
 router.post("/breaksForDay", adminAuth, async (req, res) => {
   const date = new Date(req.body.date).toDateString();
-  console.log(date);
-  console.log(req.admin)
   const shifts = await Shift.find({businessId: req.admin.businessId, shiftDate: date});
-  console.log(shifts)
   const breaksForDay = [];
   shifts.forEach(function(eachShift) {
     if (eachShift.breakStart && eachShift.breakEnd) {
       breaksForDay.push({time: `${eachShift.breakStart}-${eachShift.breakEnd}`, bcn: eachShift.bookingColumnNumber});
     }
   });
-  console.log(breaksForDay)
  return res.status(200).json({breaks: breaksForDay})
 })
 
@@ -267,7 +259,6 @@ router.post('/create', async (req, res) => {
     const areaConflict = await Shift.find({ businessId: req.body.businessId, bookingColumnNumber: req.body.bookingColumnNumber, shiftDate: date });
     const shiftConflict = await Shift.find({ employeeId: req.body.employeeId, shiftDate: date });
     const employeeForBusiness = await Employee.findOne({_id: req.body.employeeId}).select(["businessWorkingAt"]);
-    console.log(employeeForBusiness)
     const businessForEq = await Business.findOne({_id: employeeForBusiness.businessWorkingAt}).select(["eq"]);
     if (businessForEq.eq === "y") {
     if (areaConflict.length > 0) {
@@ -301,7 +292,6 @@ router.post('/create', async (req, res) => {
         let alreadyExistingEnd = utils.stringToIntTime[shiftConflict[i].timeEnd];
 
         if (startNum >= alreadyExistingStart && endNum <= alreadyExistingEnd) {
-          console.log();
           return res.status(406).json({error: `ee`, date: shiftConflict[i].shiftDate});
         }
         else if (startNum <= alreadyExistingStart && endNum >= alreadyExistingStart) {
@@ -350,7 +340,6 @@ router.post('/create', async (req, res) => {
     }
   
     await newShift.save();
-    console.log(newShift)
     res.status(201).send()
   }
   catch (error) {
@@ -428,8 +417,7 @@ router.post('/employee', async (req, res) => {
 router.post('/get', async (req, res) => {
   try {
      let date = new Date(req.body.shiftDate).toDateString();
-     console.log(date)
-     const shifts = await Shift.find({ shiftDate: date, businessId: req.body.businessId }).select(["employeeName", "timeStart", "timeEnd", "shiftDate", "breakStart", "breakEnd", "bookingColumnNumber"]);
+     const shifts = await Shift.find({ shiftDate: date, businessId: req.body.businessId }).select(["employeeName", "timeStart", "timeEnd", "shiftDate", "breakStart", "breakEnd", "bookingColumnNumber", "employeeId"]);
      return res.status(200).json({ shifts });
   }
   catch(error) {
@@ -444,7 +432,6 @@ router.post('/getEmployeeBookingsForDay', async (req, res) => {
   const business = await Business.findOne({ _id: employee.businessWorkingAt });
   const shift = await Shift.findOne({ employeeId: req.body.employeeId, shiftDate: date });
   if (business.eq === "y" && !shift) {
-      console.log("NO SHIFT")
       return res.status(406).send()
   }
   else {
@@ -485,12 +472,13 @@ router.post('/getEmployeeBookingsForDay', async (req, res) => {
         updatedWithNameBooking._id = bookings[i]._id;
         updatedWithNameBookings.push(updatedWithNameBooking);
       }
+      let shiftTimes = { start: shift.timeStart, end: shift.timeEnd };
       if (breakStart && breakEnd) {
-        return res.status(200).json({ bookings: updatedWithNameBookings, bct, breakTime: `${breakStart}-${breakEnd}` })
+        return res.status(200).json({shiftTimes, bookings: updatedWithNameBookings, bct, breakTime: `${breakStart}-${breakEnd}` })
       }
-      return res.status(200).json({ bookings: updatedWithNameBookings, bct })
+      return res.status(200).json({shiftTimes, bookings: updatedWithNameBookings, bct })
     } else if (!bookings.length && business.eq === "n") {
-      return res.status(202).send();
+      return res.status(205).send();
     }
     else {
       let bcn;
@@ -500,26 +488,21 @@ router.post('/getEmployeeBookingsForDay', async (req, res) => {
         bct = business.bookingColumnType;
       }
       let shiftTimes = { start: shift.timeStart, end: shift.timeEnd };
-      console.log(shift)
       if (shift.breakStart && shift.breakEnd) {
         if (bcn) {
           return res.status(206).json({shiftTimes, breakStart: shift.breakStart, breakEnd: shift.breakEnd, bcn, bct});
         }
         else {
-          return res.status(205).json({shiftTimes, breakStart: shift.breakStart, breakEnd: shift.breakEnd});
+          return res.status(202).json({shiftTimes, breakStart: shift.breakStart, breakEnd: shift.breakEnd});
         }
       }
       else {
         if (bcn) {
-          console.log(bcn, bct, shiftTimes)
-          console.log("ABOUT TO SEND") // 204 not working
-          return res.status(204).json({shiftTimes, bcn, bct,});
+          return res.status(201).json({shiftTimes, bcn, bct,});
         }
         else {
-          console.log("YOOOOO")
           return res.status(203).json({shiftTimes});
         }
-        
       }
     }
   }

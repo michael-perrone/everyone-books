@@ -2,6 +2,20 @@ const router = require('express').Router();
 const adminAuth = require('../../middleware/authAdmin')
 const BusinessProfile = require('../../models/BusinessProfile')
 const ServiceType = require('../../models/ServiceType');
+const Product = require('../../models/Product');
+const employeeAuth = require("../../middleware/authEmployee");
+
+router.get("/getServicesAndProducts", employeeAuth, async (req, res) => {
+  const businessProfile = await BusinessProfile.findOne({business: req.employee.businessId});
+  if (businessProfile) {
+    let serviceTypes = await ServiceType.find({ _id: businessProfile.serviceTypes });
+    let products = await Product.find({_id: businessProfile.products});
+    return res.status(200).json({ services: serviceTypes, products });
+  }
+  else {
+    return res.status(406).send();
+  }
+})
 
 
 router.get('/', adminAuth, async (req, res) => {
@@ -20,9 +34,9 @@ router.get('/', adminAuth, async (req, res) => {
   }
 })
 
-router.get("/getServices", adminAuth, async (req, res) => {
+router.post("/getServices", async (req, res) => {
   try {
-    let businessProfile = await BusinessProfile.findOne({ business: req.admin.businessId}).select(["serviceTypes"]);
+    let businessProfile = await BusinessProfile.findOne({ business: req.body.businessId}).select(["serviceTypes"]);
     if (businessProfile) {
       let serviceTypes = await ServiceType.find({ _id: businessProfile.serviceTypes });
       res.status(200).json({ services: serviceTypes });
@@ -35,6 +49,7 @@ router.get("/getServices", adminAuth, async (req, res) => {
     console.log(error)
   }
 })
+
 
 router.post('/delete', adminAuth, async (req, res) => {
   try {

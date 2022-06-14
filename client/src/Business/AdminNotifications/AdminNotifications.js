@@ -10,16 +10,14 @@ import Axios from 'axios';
 function AdminNotifications(props) {
 
     const [notifications, setNotifications] = useState();
+    const [fakeNotifications, setFakeNotifications] = useState([]);
     const [type, setType] = useState("");
     const [chosen, setChosen] = useState();
 
     function changeNotis(newNoti) {
         const notiRep = [...notifications];
-        for (let i = 0; i < notiRep.length; i++) {
-            if (newNoti._id === notiRep[i]._id) {
-                notiRep[i].type = newNoti.type;
-            }
-        }
+        notiRep.shift();
+        notiRep.unshift(newNoti);
         setNotifications(notiRep);
     }
 
@@ -28,9 +26,8 @@ function AdminNotifications(props) {
             setChosen(notification)
     }
 
-    function notiClicked(notification) {
-        console.log(notification)
-        if (notification.type === "ERY" || notification.type === "BAR" || notification.type === "ELB" || notification.type === "BBY" || notification.type === "YURA" || notification.type === "UATG" || notification.type === "ERN") {
+    function notiClicked(notification) { // check this... this is lazy to request so much back and bad practice
+        if (notification.type === "ERY" || notification.type === "BAW" || notification.type === "ELB" || notification.type === "BBY" || notification.type === "YURA" || notification.type === "UATG" || notification.type === "ERN") {
             Axios.post('/api/notifications/changeToRead', {notificationId: notification._id}).then(response => {
                 if (response.status === 200) {
                     axios.get("/api/notifications/getAdminNotis", {headers: {'x-auth-token' : props.adminToken}}).then(
@@ -41,10 +38,8 @@ function AdminNotifications(props) {
                                 let i = response.data.notifications.length - 1;
                                 while (i >= 0) {
                                     flippedNotis.push(data[i]);
-                                    console.log(data[i])
                                     i--;
                                 }
-                                console.log(flippedNotis)
                                 setNotifications(flippedNotis);
                             }
                         }
@@ -67,10 +62,8 @@ function AdminNotifications(props) {
                     let i = response.data.notifications.length - 1;
                     while (i >= 0) {
                         flippedNotis.push(data[i]);
-                        console.log(data[i])
                         i--;
                     }
-                    console.log(flippedNotis)
                     setNotifications(flippedNotis);
                     setChosen(flippedNotis[0]);
                     if (flippedNotis[0].type === "ESIDDR") { 
@@ -97,6 +90,9 @@ function AdminNotifications(props) {
                     else if (flippedNotis[0].type === "ADUR") { 
                         setType("Alert")
                     }
+                    else if (flippedNotis[0].type === "UBU") {
+                        setType("Booking");
+                    }
                 }
             }
         )
@@ -111,6 +107,7 @@ function AdminNotifications(props) {
                 {notifications && notifications.length > 0 && (
                     <div>
                         {notifications.map(notification => {
+                            console.log(notification)
                             return (
                                 <AdminNotification notificationClicked={notiClicked} chosen={chosen} toSetChosen={toSetChosen} notification={notification}/> 
                             )

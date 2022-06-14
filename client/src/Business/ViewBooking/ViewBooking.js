@@ -8,6 +8,7 @@ import StatementAppear from '../../Shared/StatementAppear/StatementAppear';
 import OtherAlert from '../../OtherAlerts/OtherAlerts';
 import Axios from 'axios';
 import {connect} from 'react-redux';
+import {EXIT_NUM} from '../../actions/actions';
 
 function ViewBooking(props) {
     const [showProducts, setShowProducts] = useState(false);
@@ -30,7 +31,12 @@ function ViewBooking(props) {
                 props.hide();
                 setSuccessMessage("");
                 setTimeout(setSuccessMessage("Booking successfully deleted"));
-                props.reload()
+                if (props.adminToken) {
+                    props.reload();
+                }
+                else {
+                    //props.addExitNum();
+                }
             }
         }).catch(error => {
             console.log(error);
@@ -51,7 +57,7 @@ function ViewBooking(props) {
             if (response.status === 200) {
                 const productsHere = [...createMaplist(selectedProducts, "name"), ...productsInBooking];
                 setProductsInBooking(productsHere);
-                setCost(response.data.newCost);  
+                setCost(response.data.newCost);
             }
         }).catch(error => {
             console.log(error)
@@ -69,28 +75,52 @@ function ViewBooking(props) {
                 }
             }
         }
-        Axios.post('api/getBookings/editBooking', {bookingId: props.booking._id, servicesToAdd: selectedServiceIds}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
-            if (response.status === 200) {
-                setSuccessMessage("");
-                setTimeout(() => setSuccessMessage("Services sucessfully updated"));
-                const servicesHere = [...createMaplist(selectedServices, "serviceName"), ...servicesInBooking];
-                setServicesInBooking(servicesHere);
-                setTime(response.data.time);
-                setCost(response.data.cost);
-                props.reload();
+        if (props.adminToken) {
+            Axios.post('api/getBookings/editBooking', {bookingId: props.booking._id, servicesToAdd: selectedServiceIds}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
+                if (response.status === 200) {
+                    setSuccessMessage("");
+                    setTimeout(() => setSuccessMessage("Services sucessfully updated"));
+                    const servicesHere = [...createMaplist(selectedServices, "serviceName"), ...servicesInBooking];
+                    setServicesInBooking(servicesHere);
+                    setTime(response.data.time);
+                    setCost(response.data.cost);
+                }
             }
-        }
-    ).catch(error => {
-        if (error.response.status === 400) {
-            setError("");
-            setTimeout(() => setError("Adding these service(s) to this booking will make the booking overlap with the next booking."),200);
-            return;
+        ).catch(error => {
+            if (error.response.status === 400) {
+                setError("");
+                setTimeout(() => setError("Adding these service(s) to this booking will make the booking overlap with the next booking."),200);
+                return;
+                }
+            if (error.response.status === 406) {
+                setError("");
+                setTimeout(() => setError("Adding these service(s) to this booking will extend the time of the service past the business closing time."),200);
             }
-        if (error.response.status === 406) {
-            setError("");
-            setTimeout(() => setError("Adding these service(s) to this booking will extend the time of the service past the business closing time."),200);
+          })
         }
-      })
+        else {
+            Axios.post('api/getBookings/editBookingEmployee', {bookingId: props.booking._id, servicesToAdd: selectedServiceIds}, {headers: {'x-auth-token': props.employeeToken}}).then(response => {
+                if (response.status === 200) {
+                    setSuccessMessage("");
+                    setTimeout(() => setSuccessMessage("Services sucessfully updated"));
+                    const servicesHere = [...createMaplist(selectedServices, "serviceName"), ...servicesInBooking];
+                    setServicesInBooking(servicesHere);
+                    setTime(response.data.time);
+                    setCost(response.data.cost);
+                }
+            }
+        ).catch(error => {
+            if (error.response.status === 400) {
+                setError("");
+                setTimeout(() => setError("Adding these service(s) to this booking will make the booking overlap with the next booking."),200);
+                return;
+                }
+            if (error.response.status === 406) {
+                setError("");
+                setTimeout(() => setError("Adding these service(s) to this booking will extend the time of the service past the business closing time."),200);
+            }
+          })
+        }
     }
 
     function toSetProducts() {
@@ -115,14 +145,11 @@ function ViewBooking(props) {
                         const index = newProducts.findIndex(e => {
                          return e.id === productId
                         })
-                        console.log(index);
                         newProducts.splice(index, 1);
-                        console.log(newProducts.length);
                         setProductsInBooking(newProducts);
                         setSuccessMessage("");
                         setTimeout(() => setSuccessMessage("Product deleted successfully"), 200);
                         setCost(response.data.newCost);
-                        
                     }
                 }
             ).catch(error => {
@@ -149,7 +176,7 @@ function ViewBooking(props) {
                             setSuccessMessage("");
                             setTimeout(() => setSuccessMessage("Service deleted successfully"), 200);
                             setCost(response.data.cost);
-                            setTime(response.data.time)
+                            setTime(response.data.time);
                         }
                     }
                 }
@@ -204,34 +231,42 @@ function ViewBooking(props) {
          }
     }
 
+    function hide() {
+        props.hide();
+        if (props.employeeToken) {
+            props.addExitNum();
+            console.log("yoooo");
+        }
+    }
+
     return (
         <div id={styles.viewBookingContainer}>
             <p style={{fontWeight: "bold", fontSize: "18px", position: "absolute", top: 5}}>Booking Info</p>
-            <img onClick={props.hide} style={{position: "absolute", right: 20, top: 20, cursor: "pointer"}} src={x}/>
+            <img onClick={hide} style={{position: "absolute", right: 20, top: 20, cursor: "pointer"}} src={x}/>
             <div id={styles.leftContainer}>
                 <div>
                     <p className={styles.bolder}>Employee Name:</p>
-                    <p>{props.booking.employeeName}</p>
+                    <p className={styles.fontFourteen}>{props.booking.employeeName}</p>
                 </div>
                 <div>
                     <p className={styles.bolder}>Customer Name:</p>
-                    <p>{props.booking.customer.fullName}</p>
+                    <p className={styles.fontFourteen}>{props.booking.customer.fullName}</p>
                 </div>
                  <div>
                     <p className={styles.bolder}>Customer Phone:</p>
-                    <p>{props.booking.customer.phoneNumber}</p>
+                    <p className={styles.fontFourteen}>{props.booking.customer.phoneNumber}</p>
                 </div>
                 <div>
                     <p className={styles.bolder}>Time of Service:</p>
-                    <p>{time}</p>
+                    <p className={styles.fontFourteen}>{time}</p>
                 </div>
                 <div>
                     <p className={styles.bolder}>Date of Service:</p>
-                    <p>{props.booking.date}</p>
+                    <p className={styles.fontFourteen}>{props.booking.date}</p>
                 </div>
                  <div>
                     <p className={styles.bolder}>Cost of Service:</p>
-                    <p>{cost}</p>
+                    <p className={styles.fontFourteen}>{cost}</p>
                 </div>
                 <button onClick={deleteBooking} style={{backgroundColor: "salmon", height: "35px", width: "120px", position: "absolute", bottom: "40px", fontWeight: "bold", boxShadow: "0px 0px 2px black", border: "none"}}>Delete Booking</button>
             </div>
@@ -247,7 +282,7 @@ function ViewBooking(props) {
                     <Maplist small={true} delete={deleteService} array={servicesInBooking}/>
                 </div>
                 }
-                <div style={{position: "absolute", top: "270px", width: "220px"}}>
+                <div style={{position: "absolute", top: "270px", width: "221px", right: "5px"}}>
                     <div style={{display: "flex", justifyContent: "space-between", position: "relative", top: "1px"}}>
                         <p onClick={toSetServices} style={{paddingBottom: "8px", cursor: "pointer"}} className={showProducts ? styles.unselected : styles.selected}>Add Services</p>
                         <p onClick={toSetProducts} style={{paddingBottom: "8px", cursor: "pointer"}} className={showProducts ? styles.selected : styles.unselected}>Add Products</p>
@@ -285,9 +320,18 @@ function ViewBooking(props) {
 
 const mapStateToProps = state => {
     return {
-      adminToken: state.authReducer.adminToken
+      adminToken: state.authReducer.adminToken,
+      employeeToken: state.authReducer.employeeToken,
     };
 };
+
+const mapDispatchToProps = dispatch => {
+    return {
+        addExitNum: () => dispatch({type: EXIT_NUM})
+    }
+}
+
+
   
 
-export default connect(mapStateToProps)(ViewBooking);
+export default connect(mapStateToProps, mapDispatchToProps)(ViewBooking);

@@ -102,7 +102,7 @@ function selectEditingShift(id) {
         <div id={styles.container}>
             <div id={styles.leftHolder}>
                 <WeekSelector/>
-                {props.editingShift && <ShiftEditor getShifts={getShifts} shiftBeingEdited={shiftBeingEdited} bookingColumnsNumber={bookingColumnsNumber} bookingColumnsType={bookingColumnsType} schedule={schedule} admin={props.admin.admin} employees={employees}/>}
+                {props.editingShift && <ShiftEditor selectEditingShift={selectEditingShift} getShifts={getShifts} shiftBeingEdited={shiftBeingEdited} bookingColumnsNumber={bookingColumnsNumber} bookingColumnsType={bookingColumnsType} schedule={schedule} admin={props.admin.admin} employees={employees}/>}
                 {!props.editingShift && <ShiftCreator bookingColumnsNumber={bookingColumnsNumber} bookingColumnsType={bookingColumnsType} schedule={schedule} admin={props.admin.admin} employees={employees} getNewShifts={getNewShifts}/>}
             </div>
             <div id={styles.rightHolder}>

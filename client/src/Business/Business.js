@@ -32,7 +32,6 @@ function Business(props) {
     }})
     .then(response => {
       if (response.status === 200) {
-        console.log(response.data)
         setBcn(response.data.bcn);
         setBct(response.data.bct);
         setOpenTime(response.data.open);
@@ -56,9 +55,8 @@ function Business(props) {
   }
 
   useEffect(function() {
-    axios.get("api/services/getServices", {headers: {'x-auth-token': props.adminToken}}).then(response => {
+    axios.post("api/services/getServices", {businessId: props.admin.admin.businessId}).then(response => {
       if (response.status === 200) {
-        console.log("yooooo");
         setServices(response.data.services);
       }
     })
@@ -68,7 +66,6 @@ function Business(props) {
     return () => {
       axios.post('/api/getBookings/moreBookingInfo', {bookingId: booking._id}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
           if (response.status === 200) {
-            console.log(response.data)
               const newBooking = booking;
               newBooking.services = response.data.services;
               newBooking.customer = response.data.customer;
@@ -105,7 +102,6 @@ function Business(props) {
                 />
                 <CourtContainer clickBooking={clickBooking} sortedBookings={sortedBookings} openTime={openTime} closeTime={closeTime} bct={bct} bcn={bcn}/>
           </div>
-  
     );
   }
 

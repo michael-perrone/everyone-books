@@ -15,14 +15,17 @@ function EmployeeNotification(props) {
 
     useEffect(function() {
         let type = props.notification.type;
-            if (type === "ESIDDR") { 
-                setNotiMessage(props.notification.fromString + " was denied from becoming an employee at your business.");
-                setType("Alert");
+            if (type === "BAE") { 
+                setNotiMessage(props.notification.fromString + " has invited you to join their business as an employee.");
+                setType("Choice");
             }
-            
-            else if (type === "ESID") { 
-                setNotiMessage(props.notification.fromString + " has asked to be added as an employee.");
-                setType("Choice")
+            else if (type === "BAER") { 
+                setNotiMessage(`You have accepted an invite from ${props.notification.fromString} to join their business as an employee.`);
+                setType("Alert")
+            }
+            else if (type === "BAW" || type === "BAWR") {
+                setNotiMessage(`Your request to join ${props.notification.fromString}'s business has been accepted.`);
+                setType("Alert")
             }
             else if (type === "ERY" || type === "ERYR") { 
                 setNotiMessage(props.notification.fromString + " has accepted your request to join your business as an employee");;

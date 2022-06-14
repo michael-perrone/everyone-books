@@ -29,9 +29,8 @@ function AddEditPayroll(props) {
         Axios.post("api/payroll/getEmployeePayroll", {employeeId: selectedEmployee}, {headers: {"x-auth-token": props.adminToken}}).then(response => {
             if(response.data) {
                 if (response.data.emPayroll) {
-                    console.log("nice");
+                    
                     const emPayroll  = response.data.emPayroll;
-                    console.log(emPayroll)
                     setSalary(emPayroll.paidSalary);
                     setSalaryEarned(emPayroll.salary);
                     setHourly(emPayroll.paidHourly);
@@ -47,7 +46,6 @@ function AddEditPayroll(props) {
                 }
             }
         }).catch(error => {
-                console.log(error);
                 setSalary();
                 setSalaryEarned("");
                 setHourly();
@@ -75,7 +73,7 @@ function AddEditPayroll(props) {
             setTimeout(() => setError("Please enter hourly wage earned"), 200);
             return;
         }
-        if (commission) {
+        if (commission) { // check this
             console.log(productCommission);
             console.log(serviceCommission);
         }

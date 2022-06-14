@@ -1,6 +1,5 @@
 import Axios from 'axios';
 import React, {useState, useEffect} from 'react';
-import SubmitButton from '../../Shared/SubmitButton/SubmitButton';
 import styles from './MessageView.module.css';
 import {connect} from 'react-redux';
 import OtherAlert from '../../OtherAlerts/OtherAlerts';
@@ -16,11 +15,37 @@ function MessageView(props) {
             if (response.status === 200) {
                 setSuccess("");
                 setTimeout(() => setSuccess("Employee successfully added"), 200);
+                props.toSetChosen(response.data.notification, "Alert");
+                props.changeNotis(response.data.notification);
+                
             }
         }).catch(error => {
             console.log(error)
         })
     }
+
+    useEffect(function() {
+        if (props.type === "Booking") {
+            Axios.post("/api/notifications/getExtraInfo", {notificationId: props.notification._id}).then(response => {
+                if (response.status === 200) {
+                    let servicesString = "";
+                    for (let i = 0; i < response.data.services.length; i++) {
+                        if (i !== response.data.services.length - 1 && i !== response.data.services.length - 2) {
+                            servicesString += response.data.services[i].serviceName + ", ";
+                        }
+                        else if (i === response.data.services.length - 2) {
+                            servicesString += response.data.services[i].serviceName + " ";
+                        }
+                        else {
+                            servicesString += "and " + response.data.services[i].serviceName;
+                        }
+                    }
+                    setMessage(`Your business has a booking request from ${props.notification.fromString}. They have requested that the employee ${response.data.employee.fullName} perfrom the services ${servicesString} at the time of ${props.notification.potentialStartTime}. If you click book below this booking will be added into your schedule.`)
+                    
+                }
+            })
+        }
+    }, [props.type])
 
     function denyEmployeeRequest() {
         Axios.post("api/notifications/employerDeniedEmployee", {notificationId: props.notification._id, employeeId: props.notification.fromId}, {headers: {"x-auth-token": props.adminToken}}).then(response => {
@@ -61,7 +86,7 @@ function MessageView(props) {
             let type = props.notification.type;
                 if (type === "ESIDDR") {
                     console.log("YOOOOO");
-                    setMessage("You denied " + props.notification.fromString + "'s request to become an employee at your business. If this was a mistake, you can add them to your business in the edit business profile menu");
+                    setMessage("You denied " + props.notification.fromString + "'s request to become an employee at your business. If this was a mistake, you can add them to your business in the edit business profile menu.");
                     setHeader("Employee Denied");
                 }
                 else if (type === "BAED" || type === "BAEDR") {
@@ -82,6 +107,10 @@ function MessageView(props) {
                     setMessage(props.notification.fromString + " has used your unique id to add you as an employee to their business. If you accept this request, this employer will be able to add you to their shift schedule right away. Would you like to confirm youself as an employee?");
                     setHeader("Business Join Request")
                 }
+                else if (type === "BAER") {
+                    setMessage(props.notification.fromString + " has accepted your request to join their business. You are now an employee at this business and can be booked for shifts (if applicable) and will be available to be booked by customers and the business admin.");
+                    setHeader("Business Join Request")
+                }
                 else if (type === "EA" || type == "EAR"){
                     // checking this does EAR mean employee Accepted Request
                     setMessage("You accepted this request from " + props.notification.fromString + " to join there business as an employee! You will now be able to be added to their shift schedule.");
@@ -91,7 +120,7 @@ function MessageView(props) {
                     setMessage("Your business accepted a request from " + props.notification.fromString + " to join your business as an employee. They can now be added to your shift schedule.");
                     setHeader("Employee Accepted");
                 }
-                else if (type === "BAR" || type === "BARR") {
+                else if (type === "BAW" || type === "BAWR") {
                     setHeader("Business Accepted");
                     setMessage(props.notification.fromString + " has accepted your request to join their business as an employee. You can now be added to their shift schedule!");
                 }
@@ -118,6 +147,9 @@ function MessageView(props) {
                 else if (type === "UATG" || type === "UATGR") {
                     setHeader("Group Addition");
                     setMessage("You have been added as a member of a group on " + props.notification.fromString + " at " + props.notification.fromString + " at the time of " + props.notification.fromString + ". You can find this information on your bookings page.");
+                }
+                else if (type === "UBU") {
+                    setHeader("Booking Request");
                 }
             }
     }, [props.notification])
@@ -163,8 +195,8 @@ function MessageView(props) {
                  
                  <p  className={styles.message}>{message}</p>
                  <div style={{display: "flex", width: "370px", justifyContent: "space-around", marginTop: "50px"}}>
-                 <button className={styles.bu}>Book</button>
-                 <button className={styles.bu}>Decline</button>
+                 <button onClick={} className={styles.bu}>Book</button>
+                 <button onClick={} className={styles.bu}>Decline</button>
                  </div>
              </div>
              </div>}

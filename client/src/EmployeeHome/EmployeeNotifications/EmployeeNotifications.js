@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import styles from './AdminNotifications.module.css';
+import styles from './EmployeeNotifications.module.css';
 import axios from 'axios';
 import {connect} from 'react-redux';
-import AdminNotification from '../../Notifications/EmployeeNotification/EmployeeNotification';
+import EmployeeNotification from '../../Notifications/EmployeeNotification/EmployeeNotification';
 import MessageView from './../../Notifications/MessageView/MessageView';
 import Axios from 'axios';
 
@@ -11,6 +11,7 @@ function EmployeeNotifications(props) {
     const [notifications, setNotifications] = useState();
     const [type, setType] = useState("");
     const [chosen, setChosen] = useState();
+    const [noNotis, setNoNotis] = useState("");
 
     function changeNotis(newNoti) {
         const notiRep = [...notifications];
@@ -27,80 +28,73 @@ function EmployeeNotifications(props) {
             setChosen(notification)
     }
 
-    function notiClicked(notification) {
-        console.log(notification)
-        if (notification.type === "ERY" || notification.type === "BAR" || notification.type === "ELB" || notification.type === "BBY" || notification.type === "YURA" || notification.type === "UATG") {
-            Axios.post('/api/notifications/changeToRead', {notificationId: notification._id}).then(response => {
-                if (response.status === 200) {
-                    axios.get("/api/notifications/getAdminNotis", {headers: {'x-auth-token' : props.adminToken}}).then(
-                        response => {
-                            if (response.status === 200) {
-                                const data = response.data.notifications;
-                                const flippedNotis = [];
-                                let i = response.data.notifications.length - 1;
-                                while (i >= 0) {
-                                    flippedNotis.push(data[i]);
-                                    console.log(data[i])
-                                    i--;
-                                }
-                                console.log(flippedNotis)
-                                setNotifications(flippedNotis);
-                            }
-                        }
-                    )
-                }
-            }).catch(error => {
-                console.log(error);
-            })
-        }
+    function notiClicked(notification) { // check this no reason to send so much back
+        axios.post("/api/notifications/changeToRead", {notificationId: notification._id}).then(response => {
+            if (response.status == 200) {
+                const newerNotis = [...notifications];
+                newerNotis.shift();
+                newerNotis.unshift(response.data.notification);
+                setNotifications(newerNotis);
+            }
+        })
     }
 
     
 
     useEffect(function() {
-        axios.get("/api/notifications/getAdminNotis", {headers: {'x-auth-token' : props.adminToken}}).then(
+        axios.get("/api/notifications/employeeNotifications", {headers: {'x-auth-token' : props.employeeToken}}).then(
             response => {
                 if (response.status === 200) {
-                    const data = response.data.notifications;
-                    const flippedNotis = [];
-                    let i = response.data.notifications.length - 1;
-                    while (i >= 0) {
-                        flippedNotis.push(data[i]);
-                        console.log(data[i])
-                        i--;
+                    if (response.data.notifications.length) {
+                        const data = response.data.notifications;
+                        const flippedNotis = [];
+                        let i = response.data.notifications.length - 1;
+                        while (i >= 0) {
+                            flippedNotis.push(data[i]);
+                            console.log(data[i])
+                            i--;
+                        }
+                        console.log(flippedNotis)
+                        setNotifications(flippedNotis);
+                        setChosen(flippedNotis[0]);
+                        if (flippedNotis[0].type === "BAE") { 
+                            setType("Choice");
+                        }
+                        else if (flippedNotis[0].type === "BAER" || flippedNotis[0].type === "BAW" || flippedNotis[0].type === "BAWR") { 
+                            setType("Alert");
+                        }
                     }
-                    console.log(flippedNotis)
-                    setNotifications(flippedNotis);
+                    else {
+                        setNoNotis(true);
+                    }
                 }
             }
         )
     },[])
 
     return (
-        <div style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
-            <div style={{display: "flex", justifyContent: 'space-around', width: "100%", marginTop: "20px"}}>
+            <div id={styles.frame}>
              <div id={styles.notificationsContainer}>
              <p style={{fontSize: "28px", marginTop: "10px", position: "absolute", top: "-50px", left: "100px"}}>Notifications</p>
-                {notifications && notifications.length === 0 && <p>You do not have any notifications!</p>}
+                {noNotis && <p style={{padding: "20px", lineHeight: "22px"}}>You do not have any notifications yet! When a business invites you to join their business or when a business accepts or declines your request to join their business as an employee you will see it here!</p>}
                 {notifications && notifications.length > 0 && (
                     <div>
                         {notifications.map(notification => {
                             return (
-                                <AdminNotification notificationClicked={notiClicked} chosen={chosen} toSetChosen={toSetChosen} notification={notification}/> 
+                                <EmployeeNotification notificationClicked={notiClicked} chosen={chosen} toSetChosen={toSetChosen} notification={notification}/> 
                             )
                         })}
                     </div>
                 )}
             </div>
-            <MessageView changeNotis={changeNotis} toSetChosen={toSetChosen} notification={chosen} type={type}/>
+            {!noNotis && <MessageView changeNotis={changeNotis} toSetChosen={toSetChosen} notification={chosen} type={type}/>}
             </div>
-        </div>
     )
 }
 
 const mapStateToProps = state => {
     return {
-        adminToken: state.authReducer.adminToken
+        employeeToken: state.authReducer.employeeToken
     }
 }
 

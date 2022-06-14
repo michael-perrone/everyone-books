@@ -4,6 +4,7 @@
     border: none;
     font-size: 14px;
     margin-left: 10px;
+    background-color: white;
 }
 
 #subButton:hover {

@@ -4,6 +4,7 @@ import styles from './ShiftEditor.module.css';
 import { connect } from 'react-redux';
 import OtherAlert from '../../OtherAlerts/OtherAlerts';
 import {stringToIntTime, intToStringTime, getDateInFormat, getTimes} from '../../feutils/feutils';
+import {DONE_EDITING} from '../../actions/actions';
 
 
 function ShiftEditor(props) {
@@ -57,6 +58,7 @@ function ShiftEditor(props) {
         )
     }, []);
 
+
     React.useEffect(function () {
         if (props.editingShift) {
             if (props.editingShift.breakStart && props.editingShift.breakEnd) {
@@ -69,9 +71,11 @@ function ShiftEditor(props) {
             }
             setShiftStart(props.editingShift.timeStart);
             setEndOfShift(props.editingShift.timeEnd)
+            setEmployeeId(props.editingShift.employeeId);
             setEmployeeName(props.editingShift.employeeName);
             setOptionsNumber(props.editingShift.bookingColumnNumber);
             setDate(getDateInFormat(props.dateChosen));
+            console.log(props.editingShift);
         }
     }, [props.editingShift])
 
@@ -153,11 +157,12 @@ function ShiftEditor(props) {
             if (response.status === 200) {
                 setSuccess("");
                 setTimeout(() => setSuccess("The shift has been updated!"));
-                props.getShifts()
+                props.getShifts();
+                props.doneEditing();
+                props.selectEditingShift("");
             }
         }
         ).catch(error => {
-           // setShiftError("");
             if (error.response.status === 406) {
                 setShiftError("");
                 if (error.response.data.error === "ebcn") {
@@ -173,6 +178,9 @@ function ShiftEditor(props) {
     function breakHandler(e) {
         if (e.target.value === "Yes") {
             setBreak(true)
+            const dayNum = new Date(props.dateChosen).getDay();
+            setBreakStart(intToStringTime[stringToIntTime[shiftStart] + 1]);
+            setBreakEnd(intToStringTime[stringToIntTime[shiftStart] + 2]);
         }
         else if (e.target.value === "No") {
             setBreak(false)
@@ -197,7 +205,7 @@ function ShiftEditor(props) {
     return (
         <div id={styles.scheduleContainer}>
             <p style={{ position: 'absolute', left: '40px', bottom: "10px", color: 'darkred' }}>{breakError}</p>
-            <p style={{ width: '100%', textAlign: 'center', fontSize: '20px' }}>Edit Shift</p>
+            <p style={{ width: '100%', textAlign: 'center', fontSize: '20px', position: "relative", top: "8px" }}>Edit Shift</p>
             <div style={{marginTop: "20px"}}>
                 <span >Shift Date:</span>
                 <input style={{ position: 'relative', top: '-2px' }} className={styles.inputs} onChange={setDateHandler} value={date} placeholder="select date" type="date" />
@@ -270,6 +278,12 @@ function ShiftEditor(props) {
     )
 }
 
+const mapDispatchToProps = dispatch => {
+    return {
+        doneEditing: () => dispatch({type: DONE_EDITING})
+    }
+}
+
 
 
 
@@ -281,4 +295,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(ShiftEditor);
+export default connect(mapStateToProps, mapDispatchToProps)(ShiftEditor);

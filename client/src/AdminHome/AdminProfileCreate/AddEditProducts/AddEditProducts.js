@@ -75,13 +75,10 @@ function AddEditProducts(props) {
                 setTimeout(() => setError("Cost must be a number"), 200);
             }
             else {
-                console.log(products);
                 if (products.length > 0) {
-                    console.log("yo")
+
                     products.forEach(element => {
-                        console.log(element)
                         if (element.displayName === productName) {
-                            console.log(element)
                             setError("");
                             setTimeout(() => setError("Product already exists"), 200);
                             exit = true;
@@ -98,7 +95,6 @@ function AddEditProducts(props) {
                             setTimeout(() => setSuccessMessage("Product Created"), 200);
                             const newProducts = [...products];
                             newProducts.push(createMaplistElement({name: productName, _id: Math.random() * Math.random()}, "name"));
-                            console.log(newProducts);
                             setProducts(newProducts);
                         }
                     }

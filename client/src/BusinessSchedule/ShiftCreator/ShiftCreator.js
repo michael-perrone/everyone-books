@@ -264,7 +264,7 @@ function ShiftCreator(props) {
     return (
         <div id={styles.scheduleContainer}>
             <p style={{ position: 'absolute', left: '40px', bottom: "10px", color: 'darkred' }}>{breakError}</p>
-            <p style={{ width: '100%', textAlign: 'center', fontSize: '20px' }}>Add New Shift</p>
+            <p style={{ width: '100%', textAlign: 'center', fontSize: '20px', position: "relative", top: "8px" }}>Add New Shift</p>
             <div style={{marginTop: "20px"}}>
                 <span >Shift Date:</span>
                 <input style={{ position: 'relative', top: '-2px' }} className={styles.inputs} onChange={setDateHandler} value={date} placeholder="select date" type="date" />

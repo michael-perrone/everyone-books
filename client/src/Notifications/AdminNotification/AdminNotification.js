@@ -15,8 +15,6 @@ function AdminNotification(props) {
     }
 
     useEffect(function() {
-        console.log(props.notification)
-        console.log(props.notification.type);
         let type = props.notification.type;
             if (type === "ESIDDR") { 
                 setNotiMessage(props.notification.fromString + " was denied from becoming an employee at your business.");
@@ -52,6 +50,10 @@ function AdminNotification(props) {
             else if (type === "ADUR") { 
                 setNotiMessage("This booking request from " + props.notification.fromString + " was denied");
                 setType("Alert")
+            }
+            else if (type === "UBU") {
+                setNotiMessage("Your business has a booking request from " + props.notification.fromString + ".")
+                setType("Booking");
             }
     },[props.notification]);
 

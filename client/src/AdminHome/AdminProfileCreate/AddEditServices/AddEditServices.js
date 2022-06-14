@@ -54,7 +54,6 @@ function AddEditServices(props) {
     function requiresEmployeeSet(bool) {
         return function () {
             setRequiresEmployee(bool)
-            console.log(bool)
         }
     }
 
@@ -86,13 +85,9 @@ function AddEditServices(props) {
                 setTimeout(() => setError("Cost must be a number"), 200);
             }
             else {
-                console.log(services);
                 if (services.length > 0) {
-                    console.log("yo")
                     services.forEach(element => {
-                        console.log(element)
                         if (element.displayName === serviceName) {
-                            console.log(element)
                             setError("");
                             setTimeout(() => setError("Service already exists"), 200);
                             exit = true;

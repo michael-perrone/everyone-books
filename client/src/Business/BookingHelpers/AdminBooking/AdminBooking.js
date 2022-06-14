@@ -180,7 +180,7 @@ import e from "cors";
     }
 
     function findGuest() {
-      console.log("hello")
+
       Axios.post("api/getCustomers/addNewCustomer", {phoneNumber}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
           if (response.status === 200) {
             setCustomerFound(response.data.user);
@@ -387,7 +387,6 @@ import e from "cors";
              props.slideLeft()
            }
            if (response.status === 201) {
-             console.log(response.data)
             setError("");
             setTimeout(() => setError("The business will close before the service can end"))
            }
@@ -498,10 +497,10 @@ import e from "cors";
               <div>
               <div style={{marginTop: "18px", display: "flex", flexDirection: "column", alignItems: "center"}}>
               <p style={{fontSize: "18px", fontWeight: 'bold', marginTop: "20px", textAlign: "center", position: 'relative', right: "20px", marginBottom: "20px"}}>Choose Services:</p>
-                <ServiceList minusService={(id) => minusService(id)} selectedServices={selectedServices} addService={(id) => selectService(id)} array={props.services} />
+                <ServiceList minusService={(id) => minusService(id)} selectedServices={selectedServices} addService={(id) => selectService(id)} array={props.services ? props.services : []} />
               </div>
                 <div style={{marginTop: "22px", textAlign: "center"}}>
-                  {props.services.length > 0 ? <SubmitButton onClick={getAvailableEmployees}>Check Availability</SubmitButton> : <p style={{width: "350px", marginLeft: "10px"}}>Your business has no services, please edit your business profile to create services and add employees!</p>}
+                  {props.services && props.services.length > 0 ? <SubmitButton onClick={getAvailableEmployees}>Check Availability</SubmitButton> : <p style={{width: "350px", marginLeft: "10px"}}>Your business has no services, please edit your business profile to create services and add employees!</p>}
                 </div>
               </div>
               <div style={{display: "flex", flexDirection: 'column',}}>
