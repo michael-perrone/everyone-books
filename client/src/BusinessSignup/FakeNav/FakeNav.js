@@ -3,7 +3,8 @@ import styles from '../BusinessSignup.module.css'
 import {withRouter} from 'react-router-dom';
 
 
-const FakeNav = (props) => {
+function FakeNav(props){
+    
     function goHome() {
         props.history.push('/')
     }

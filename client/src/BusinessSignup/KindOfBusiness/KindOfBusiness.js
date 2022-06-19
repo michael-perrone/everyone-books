@@ -5,6 +5,7 @@ import TemporaryStatement from '../../Shared/TemporaryStatement/TemporaryStateme
 import styles from '../BusinessSignup.module.css';
 import SubmitButton from '../../Shared/SubmitButton/SubmitButton';
 import StatementAppear from '../../Shared/StatementAppear/StatementAppear';
+import {withRouter} from 'react-router';
 
 
 
@@ -25,6 +26,13 @@ const KindOfBusiness = (props) => {
 
     function submitName() {
         props.getNameOfBusiness(nameOfBusiness);
+    }
+
+    function checkThis() {
+        props.kindBusinessCompleted();
+        if (props.kindOfBusiness === "Restaurant") {
+            props.history.push("/restaurantBuilder");
+        }
     }
 
     return (
@@ -52,7 +60,7 @@ const KindOfBusiness = (props) => {
         </StatementAppear>
         <StatementAppear marginTop={'40px'} appear={props.nameOfBusiness !== "" && props.kindOfBusiness !== ""}>
         <p>Great, next we need some information about you. Would you like to continue?</p>
-        <SubmitButton marginTop={'30px'} onClick={props.kindBusinessCompleted}>Yes, lets do it!</SubmitButton>
+        <SubmitButton marginTop={'30px'} onClick={checkThis}>Yes, lets do it!</SubmitButton>
         </StatementAppear>
     </div>
     )
@@ -73,4 +81,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(KindOfBusiness);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(KindOfBusiness));

@@ -40,12 +40,20 @@ function EmployeeNotification(props) {
                 setType("Alert");
             }
             else if (type === "AAUR") { 
-                setNotiMessage("This booking request from " + props.notification.fromString + " was accepted");
+                setNotiMessage("This booking request from " + props.notification.fromString + " was accepted by your business.");
                 setType("Alert")
-            } 
+            }
+            else if (type === "EAUR") { 
+                setNotiMessage("This booking request from " + props.notification.fromString + " was accepted by you.");
+                setType("Alert")
+            }  
             else if (type === "ADUR") { 
                 setNotiMessage("This booking request from " + props.notification.fromString + " was denied");
                 setType("Alert")
+            }
+            else if (type === "UBU") {
+                setNotiMessage("Your business has a booking request from " + props.notification.fromString + " for the date of " + props.notification.potentialDate + ".")
+                setType("Booking");
             }
     },[props.notification]);
 

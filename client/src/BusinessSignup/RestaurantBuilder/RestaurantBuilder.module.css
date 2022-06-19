@@ -1,0 +1,58 @@
+#rBuilderHeader {
+    font-size: 26px;
+    padding-top: 14px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    text-align: center;
+}
+
+
+#whole {
+    background-color: rgb(236, 236, 236);
+    width: 100%;
+    height: 200vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+#layoutBlock {
+    background-color: white;
+    margin-top: 70px;
+    position: relative;
+}
+
+.cornerButton {
+    height: 24px;
+    width: 24px;
+    background-color: transparent;
+    border: none;
+    cursor: grab;
+}
+
+#directions {
+    width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.subDirections {
+    padding: 10px;
+    width: 400px;
+}
+
+.divo {
+    background-color: black;
+    cursor: grab;
+    border: none;
+}
+
+.divo:focus{
+    cursor: grabbing;
+}
+
+
+
+

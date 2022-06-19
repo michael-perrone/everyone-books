@@ -5,6 +5,7 @@ const userAuth = require('../../middleware/authUser');
 const ServiceType = require("../../models/ServiceType");
 const utils = require("../../utils/utils");
 const Employee = require("../../models/Employee");
+const employeeAuth = require('../../middleware/authEmployee');
 const Shift = require("../../models/Shift");
 const User = require("../../models/User");
 const Notification = require("../../models/Notification");
@@ -573,10 +574,11 @@ router.post("/user", userAuth, async (req, res) => {
     }
 })
 
-router.post("/acceptedUserRequest", async (req, res) => {
+router.post("/acceptedUserRequest", authAdmin, async (req, res) => {
     let notification = await BookedNotification.findOne({_id: req.body.notiId});
     const date = utils.getStringDateTime(notification.potentialStartTime, notification.potentialDate);
     if (date.date < new Date()) {
+        await BookedNotification.deleteOne({_id: notification._id});
         return res.status(409).send();
     }
     let customer = await User.findOne({_id: notification.fromId}).select(["bookings"]);
@@ -591,13 +593,7 @@ router.post("/acceptedUserRequest", async (req, res) => {
             const endTime = utils.intToStringTime[utils.stringToIntTime[notification.potentialStartTime] + timeNum];
             let bcn;
             let business;
-            if (req.body.businessId) {
-                business = await Business.findOne({_id: req.body.businessId})
-            }
-            else if (req.body.employeeId) {
-                const employee = await Employee.findOne({_id: req.body.employeeId});
-                business = await Business.findOne({_id: employee.businessWorkingAt})
-            }
+            business = await Business.findOne({_id: req.body.businessId})
             if (business.eq === "y") {
                 const shifts = await Shift.find({shiftDate: date.dateString});
                 if (shifts.length > 1) {
@@ -627,117 +623,57 @@ router.post("/acceptedUserRequest", async (req, res) => {
 
             return res.status(200).send();
         }
-    //         let bookings = await Booking.find({ businessId: req.body.businessId, customer: customer._id, date: date.dateString });
-    //         let timeNum = 0;
-    //         let cost = 0;
-    //         let numOfFiveMinServices = 0;
-    //         let numOfTenMinServices = 0;
-    //         let numOfTwentyMinServices = 0;
-    //         for (let i = 0; i < req.body.serviceIds.length; i++) {
-    //             let service = await ServiceType.findOne({ _id: req.body.serviceIds[i] });
-    //             if (service.timeDuration === "5 Minutes") {
-    //                 numOfFiveMinServices += 1;
-    //             }
-    //             else if (service.timeDuration === "10 Minutes") {
-    //                 numOfTenMinServices += 1;
-    //                 console.log("ITS ME I RAN")
-    //             }
-    //             else if (service.timeDuration === "20 Minutes") {
-    //                 numOfTwentyMinServices += 1;
-    //             }
-    //             else {
-    //                 timeNum += utils.timeDurationStringToInt[service.timeDuration];
-    //             }
-    //             cost += Number(service.cost);
-    //             console.log(cost, "cant be me")
-    //         }
+})
 
-    //         let extraMinutesForBooking = 0;
+router.post("/acceptedUserRequestEmployee", employeeAuth, async (req, res) => {
+    let notification = await BookedNotification.findOne({_id: req.body.notiId});
+    const date = utils.getStringDateTime(notification.potentialStartTime, notification.potentialDate);
+    if (date.date < new Date()) {
+        return res.status(409).send();
+    }
+    let customer = await User.findOne({_id: notification.fromId}).select(["bookings"]);
+        if (customer) {
+            let services = await ServiceType.find({_id: notification.ps});
+            let timeNum = 0;
+            let cost = 0;
+            for (let i = 0; i < services.length; i++) {
+                timeNum += utils.timeDurationStringToInt[services[i].timeDuration];
+                cost += services[i].cost;
+            }
+            const endTime = utils.intToStringTime[utils.stringToIntTime[notification.potentialStartTime] + timeNum];
+            let bcn;
+            let business;
+            const employee = await Employee.findOne({_id: req.employee.id});
+            business = await Business.findOne({_id: employee.businessWorkingAt})
+            if (business.eq === "y") {
+                const shifts = await Shift.find({shiftDate: date.dateString});
+                if (shifts.length > 1) {
+                    console.log("double shifts")
+                    return;
+                }
+                else if (shifts.length === 1) {
+                    bcn = shifts[0].bookingColumnNumber;
+                }
+                console.log(bcn)
+            }
+            else {
+                bcn = req.body.bcn;
+            }
+        
+            let newBooking = new Booking({
+                time: `${notification.potentialStartTime}-${endTime}`,
+                serviceType: notification.ps,
+                businessId: business._id,
+                cost: `$${cost}`,
+                date: date.dateString,
+                customer: notification.fromId,
+                employeeBooked: notification.potentialEmployee,
+                bcn
+            })
+            await newBooking.save();
 
-    //         if (numOfFiveMinServices !== 0 || numOfTenMinServices !== 0 || numOfTwentyMinServices !== 0) {
-    //             let minutes = 0;
-    //             if (numOfFiveMinServices !== 0) {
-    //                 let fiveCounter = 0;
-    //                 while (fiveCounter < numOfFiveMinServices) {
-    //                     fiveCounter++;
-    //                     minutes += 5;
-    //                 }
-    //             }
-    //             if (numOfTenMinServices !== 0) {
-    //                 let tenCounter = 0;
-    //                 while (tenCounter < numOfTenMinServices) {
-    //                     tenCounter++;
-    //                     minutes += 10;
-    //                 }
-    //             }
-    //             if (numOfTwentyMinServices !== 0) {
-    //                 let twentyCounter = 0;
-    //                 while (twentyCounter < numOfTwentyMinServices) {
-    //                     twentyCounter++;
-    //                     minutes += 20;
-    //                 }
-    //             }
-    //             console.log(numOfFiveMinServices);
-    //             console.log(numOfTenMinServices);
-    //             extraMinutesForBooking = minutes % 15;
-    //             console.log("LOOK HERE");
-    //             console.log(extraMinutesForBooking, minutes);
-    //             const numToAdd = Math.ceil(minutes / 15);
-    //             console.log(numToAdd);
-    //             console.log(minutes)
-    //             console.log(Math.ceil(minutes / 15));
-    //             console.log("ABOVE")
-    //             timeNum += numToAdd;
-    //         }
-
-    //         const endTime = utils.intToStringTime[utils.stringToIntTime[req.body.timeStart] + timeNum];
-    //         console.log(endTime, "im endtime");
-    //         const costString = cost.toString();
-    //         const splitCostString = costString.split('.');
-    //         let goodCost = "";
-    //         if (splitCostString.length > 1) {
-    //             console.log("ANYTHING??")
-    //             if (splitCostString[1].length === 1) {
-    //                 splitCostString[1] = splitCostString[1] + "0";
-    //                 goodCost = "$" + splitCostString[0] + "." + splitCostString[1];
-    //                 console.log(goodCost)
-    //             }
-    //             else {
-    //                 goodCost = "$" + costString;
-    //             }
-    //         }
-    //         else {
-    //             goodCost = "$" + costString + ".00";
-    //         }
-    //         console.log(goodCost)
-    //         console.log("BELOW GOOD COST")
-    //         const shift = await Shift.findOne({ shiftDate: date.dateString, employeeId: req.body.employeeId });
-    //         const bcn = shift.bookingColumnNumber;
-    //         let newBooking = new Booking({
-    //             extraMinutes: extraMinutesForBooking,
-    //             serviceType: req.body.serviceIds,
-    //             time: `${req.body.timeStart}-${endTime}`,
-    //             businessId: req.body.businessId,
-    //             customer: customer._id,
-    //             date: date.dateString,
-    //             employeeBooked: req.body.employeeId,
-    //             cost: goodCost,
-    //             bcn: bcn
-    //         });
-    //         await newBooking.save();
-    //         if (newBooking) {
-    //             return res.status(200).json({ newBooking });
-    //         }
-    //     } else {
-    //         console.log("stupid")
-    //         res.status(406).send();
-    //     }
-    // }
-
-    // catch (error) {
-    //     console.log(error)
-    // }
-    
+            return res.status(200).send();
+        }
 })
 
 

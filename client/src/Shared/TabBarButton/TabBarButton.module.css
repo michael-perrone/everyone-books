@@ -38,10 +38,10 @@
      margin-top: 7px;
  }
 
- img {
+ /* img { // check this this shit is fucked up
      height: 30px;
      width: 30px;
- }
+ } */
 
  .tabLabel {
      font-size: 16px;

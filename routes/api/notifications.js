@@ -298,14 +298,16 @@ router.get('/getUserNotis', userAuth, async (req, res) => {
   res.status(200).json({allNotis});
 })
 
+
 router.post("/changeAcceptedUserRequestNoti", async (req, res) => {
   let date = new Date();
   let notification = await BookedNotification.findOne({_id: req.body.notiId});
-  notification.type = "AAUR";
-  await notification.save();
+ 
   const user = await User.findOne({_id: notification.fromId}).select(["notifications"]);
   if (req.body.employeeId) {
-    const employee = await Employee.findOne({_id: req.body.employeeId}).select(["fullName"])
+    const employee = await Employee.findOne({_id: req.body.employeeId}).select(["fullName"]);
+    notification.type = "EAUR";
+    await notification.save();
     let newNoti = new Notification({
       date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
       fromString: employee._id,
@@ -318,6 +320,8 @@ router.post("/changeAcceptedUserRequestNoti", async (req, res) => {
   }
   else if (req.body.businessId) {
     const business = await Business.findOne({_id: req.body.businessId}).select(["businessName"]);
+    notification.type = "AAUR";
+    await notification.save();
     let newNoti = new Notification({
        date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
       fromString: business.businessName,
@@ -329,12 +333,12 @@ router.post("/changeAcceptedUserRequestNoti", async (req, res) => {
     user.notifications = userNotis;
   }
   await user.save();
-  res.status(200).send();
+  res.status(200).json({notification});
 })
 
 router.post("/changeDeniedUserRequestNoti", async (req, res) => {
   let notification = await BookedNotification.findOne({_id: req.body.notiId});
-  notification.type = "ADUR";
+  notification.type = "ADUR"; // check this was being lazy and didnt make it employee / admin -- just admit
   await notification.save();
   const user = await User.findOne({_id: notification.fromId}).select(["notifications"]);
   if (req.body.employeeId) {
@@ -346,6 +350,7 @@ router.post("/changeDeniedUserRequestNoti", async (req, res) => {
       type: "YURD"
     })
     let userNotis = [newNoti, ...user.notifications];
+    await user.save();
     await newNoti.save();
     user.notifications = userNotis;
   }
@@ -359,10 +364,11 @@ router.post("/changeDeniedUserRequestNoti", async (req, res) => {
     })
     let userNotis = [newNoti, ...user.notifications];
     user.notifications = userNotis;
-  }
-  await user.save();
+    await user.save();
   await newNoti.save();
-  res.status(200).send();
+  }
+  
+  res.status(200).json({notification});
 })
 
 router.post('/employeeSendingId', async (req, res) => {

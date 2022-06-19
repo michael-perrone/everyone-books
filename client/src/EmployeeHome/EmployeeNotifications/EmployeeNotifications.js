@@ -15,11 +15,8 @@ function EmployeeNotifications(props) {
 
     function changeNotis(newNoti) {
         const notiRep = [...notifications];
-        for (let i = 0; i < notiRep.length; i++) {
-            if (newNoti._id === notiRep[i]._id) {
-                notiRep[i].type = newNoti.type;
-            }
-        }
+        notiRep.shift();
+        notiRep.unshift(newNoti);
         setNotifications(notiRep);
     }
 
@@ -61,6 +58,15 @@ function EmployeeNotifications(props) {
                             setType("Choice");
                         }
                         else if (flippedNotis[0].type === "BAER" || flippedNotis[0].type === "BAW" || flippedNotis[0].type === "BAWR") { 
+                            setType("Alert");
+                        }
+                        else if (flippedNotis[0].type === "UBU") {
+                            setType("Booking");
+                        }
+                        else if (flippedNotis[0].type === "AAUR") { 
+                            setType("Alert")
+                        }
+                        else if (flippedNotis[0].type === "EAUR") {
                             setType("Alert");
                         }
                     }

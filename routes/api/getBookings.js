@@ -559,17 +559,17 @@ router.post('/userChecking', userAuth, async (req, res) => {
       console.log("OH NO")
       return res.status(409).send();
     }
-    if (req.body.fromUser) {
-      const admin = await Admin.findOne({ business: req.body.businessId });
-      const prevNotis = await BookedNotification.find({_id: admin.bookedNotifications});
-      const user = await User.findOne({_id: req.body.userId});
-      console.log(user)
-      for (let i = 0; i < prevNotis.length; i++) {
-          if (prevNotis[i].potentialDate === date1.dateString && prevNotis[i].fromId.toString() === user._id.toString()) {
-              return res.status(403).send();
-          }
-       }
-    }
+    // if (req.body.fromUser) {
+    //   const admin = await Admin.findOne({ business: req.body.businessId });
+    //   const prevNotis = await BookedNotification.find({_id: admin.bookedNotifications});
+    //   const user = await User.findOne({_id: req.body.userId});
+    //   console.log(user)
+    //   for (let i = 0; i < prevNotis.length; i++) {
+    //       if (prevNotis[i].potentialDate === date1.dateString && prevNotis[i].fromId.toString() === user._id.toString()) {
+    //           return res.status(403).send();
+    //       }
+    //    }
+    // }
 
     let services = await ServiceType.find({ _id: req.body.serviceIds });
     let serviceDurationNum = 0;

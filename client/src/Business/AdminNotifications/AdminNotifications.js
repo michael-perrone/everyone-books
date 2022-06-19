@@ -87,6 +87,9 @@ function AdminNotifications(props) {
                     else if (flippedNotis[0].type === "AAUR") { 
                         setType("Alert")
                     }
+                    else if (flippedNotis[0].type === "EAUR") {
+                        setType("Alert");
+                    }
                     else if (flippedNotis[0].type === "ADUR") { 
                         setType("Alert")
                     }

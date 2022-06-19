@@ -41,12 +41,14 @@ function AdminNotification(props) {
                 setNotiMessage(props.notification.fromString + " was denied from becoming an employee.");
                 setType("Alert");
             }
-
             else if (type === "AAUR") { 
-                setNotiMessage("This booking request from " + props.notification.fromString + " was accepted");
+                setNotiMessage("This booking request from " + props.notification.fromString + " was accepted by you.");
                 setType("Alert")
             }
-                 
+            else if (type === "EAUR") { 
+                setNotiMessage("This booking request from " + props.notification.fromString + " was accepted by the employee.");
+                setType("Alert")
+            }  
             else if (type === "ADUR") { 
                 setNotiMessage("This booking request from " + props.notification.fromString + " was denied");
                 setType("Alert")

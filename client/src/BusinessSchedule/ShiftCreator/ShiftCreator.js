@@ -116,6 +116,11 @@ function ShiftCreator(props) {
     }, [date])
 
     function addShifts() {
+        if(isBreak === "") {
+            setBreakError("Please enter if there is a break");
+            return;
+        }
+
         if (stringToIntTime[breakStart] < stringToIntTime[shiftStart]) {
             console.log(breakStart);
             setBreakError("Break cannot start before shift.")
@@ -175,6 +180,18 @@ function ShiftCreator(props) {
     }
 
     function addShift() {
+        if (employeeId === "") {
+            setBreakError("Please select an employee for this shift");
+            return
+        }
+        if (isBreak === "") {
+            setBreakError("Please select if there is a break for this shift");
+            return;
+        }
+        if (clone === "") {
+            setBreakError("Please select if this shift will be cloned");
+            return;
+        }
         if (stringToIntTime[breakStart] < stringToIntTime[shiftStart]) {
             console.log(breakStart);
             setBreakError("Break cannot start before shift.")

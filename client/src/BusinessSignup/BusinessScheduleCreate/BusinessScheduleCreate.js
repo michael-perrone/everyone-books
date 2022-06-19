@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import {ENTER_BUSINESS_SCHEDULE} from '../../actions/actions';
 import Alert from '../../Alert/Alert';
 import {badTimes} from '../../feutils/feutils';
+import {withRouter} from 'react-router';
 
 const BusinessScheduleCreate = (props) => {
    const [sundayOpen, setSundayOpen] = useState('Open');
@@ -51,7 +52,10 @@ const BusinessScheduleCreate = (props) => {
       {open: fridayOpen, close: fridayClose},
       {open: saturdayOpen, close: saturdayClose}
    ]
-      props.enterBusinessSchedule(businessArray)
+      props.enterBusinessSchedule(businessArray);
+      if (props.typeOfBusiness === "Restaurant") {
+         props.history.push("/restaurantBuilder");
+      }
    }
 
    function sundayOpenHandler(e){
@@ -886,10 +890,16 @@ const BusinessScheduleCreate = (props) => {
     )
 }
 
+const mapStateToProps = state => {
+   return {
+      typeOfBusiness: state.newReducers.kindOfBusiness
+   }
+}
+
 const mapDispatchToProps = (dispatch) => {
    return {
       enterBusinessSchedule: (businessSchedule) => dispatch({type: ENTER_BUSINESS_SCHEDULE, payload: businessSchedule})  
    }
 }
 
-export default connect(null, mapDispatchToProps)(BusinessScheduleCreate);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BusinessScheduleCreate));

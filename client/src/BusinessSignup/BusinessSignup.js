@@ -6,7 +6,7 @@ import AdminSignup from './AdminSignup/AdminSignup';
 import BusinessInfoEnter from './BusinessInfoEnter/BusinessInfoEnter';
 import BusinessScheduleCreate from './BusinessScheduleCreate/BusinessScheduleCreate'
 import BookingColumnsEnter from './BookingColumnsEnter/BookingColumnsEnter';
-
+import RestaurantBuilder from './RestaurantBuilder/RestaurantBuilder';
 import FakeNav from './FakeNav/FakeNav'
 import BackButton from './BackButton/BackButton';
 
@@ -34,9 +34,8 @@ const BusinessSignup = (props) => {
                 {props.kindBusinessCompleted && !props.adminInfoComplete && <AdminSignup/>}
                 {props.adminInfoComplete && !props.businessInfoComplete && <BusinessInfoEnter/>}
                 {props.businessInfoComplete && !props.businessScheduleComplete && <BusinessScheduleCreate/>}
-                {props.businessScheduleComplete && !props.showAdminDropDown && <BookingColumnsEnter/>}
+                {props.businessScheduleComplete && !props.showAdminDropDown && props.kindOfBusiness !== "Restaurant" && <BookingColumnsEnter/>}
             </div>
-            
         </div>
     </React.Fragment>
     )

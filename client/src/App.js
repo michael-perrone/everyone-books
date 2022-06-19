@@ -17,6 +17,7 @@ import { HIDE_DROP_DOWN } from "./actions/actions";
 import Groups from './Business/Groups/Groups';
 import AdminNotifications from './Business/AdminNotifications/AdminNotifications';
 import EmployeeNotifications from "./EmployeeHome/EmployeeNotifications/EmployeeNotifications";
+import RestaurantBuilder from "./BusinessSignup/RestaurantBuilder/RestaurantBuilder";
 
 class App extends React.Component {
   constructor(props) {
@@ -52,6 +53,7 @@ class App extends React.Component {
       {(token || employeeToken || adminToken) && <Nav/>}
       <div onClick={this.props.hideDropDown}>
       <Switch>
+        <Route path="/restaurantBuilder" exact component={RestaurantBuilder}></Route>
       <Route path="/employee/:employeeId/notifications" exact component={EmployeeNotifications}></Route>
         <Route path="/admin/:adminId/notifications" exact component={AdminNotifications}></Route>
         <Route path="/admin/:businessId/groups" exact component={Groups}></Route>

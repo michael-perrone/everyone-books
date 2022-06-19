@@ -9,6 +9,8 @@ function MessageView(props) {
     const [header, setHeader] = useState("");
     const [success, setSuccess] = useState("");
     const [hideButtons, setHideButtons] = useState(false);
+    const [bcn, setBcn] = useState("");
+    const [error, setError] = useState("");
 
     function acceptEmployeeRequest() {
         Axios.post("api/notifications/employerAcceptedEmployee", {"employeeId": props.notification.fromId, "notificationId": props.notification._id, businessId: props.admin.admin.businessId}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
@@ -40,7 +42,7 @@ function MessageView(props) {
                             servicesString += "and " + response.data.services[i].serviceName;
                         }
                     }
-                    setMessage(`Your business has a booking request from ${props.notification.fromString}. They have requested that the employee ${response.data.employee.fullName} perfrom the services ${servicesString} at the time of ${props.notification.potentialStartTime}. If you click book below this booking will be added into your schedule.`)
+                    setMessage(`Your business has a booking request from ${props.notification.fromString}. They have requested that the employee ${response.data.employee.fullName} perfrom the services ${servicesString} at the time of ${props.notification.potentialStartTime} on the date of ${props.notification.potentialDate}. If you click book below this booking will be added into your schedule.`)
                     
                 }
             })
@@ -124,9 +126,9 @@ function MessageView(props) {
                     setHeader("Business Accepted");
                     setMessage(props.notification.fromString + " has accepted your request to join their business as an employee. You can now be added to their shift schedule!");
                 }
-                else if (type === "AAU" || type === "AAUR") {
+                else if (type === "AAUR") {
                     setHeader("Booking Request Accepted");
-                    setMessage("A booking request from  " + props.notification.fromString + " has been accepted. This booking is now in your schedule.");
+                    setMessage("A booking request from  " + props.notification.fromString + " has been accepted by the business. This booking is now in the schedule.");
                 }
                 else if (type === "ADU" || type === "ADUR") {
                     setHeader("Booking Request Denied");
@@ -151,8 +153,71 @@ function MessageView(props) {
                 else if (type === "UBU") {
                     setHeader("Booking Request");
                 }
+                else if (type === "EAUR") {
+                    setHeader("Booking Request Accepted");
+                    setMessage("A booking request from  " + props.notification.fromString + " has been accepted by the employee. This booking is now in the schedule.");
+                }
             }
     }, [props.notification])
+
+    function book() {
+        if (props.adminToken) {
+            Axios.post('/api/iosBooking/acceptedUserRequest', {notiId: props.notification._id, businessId: props.admin.admin.businessId, bcn: bcn}, {headers: {'x-auth-token': props.adminToken}}).then(
+                response => {
+                    if (response.status === 200) {
+                        setSuccess("");
+                        setTimeout(() => setSuccess("This booking has been added to your schedule."), 200);
+                        Axios.post('/api/notifications/changeAcceptedUserRequestNoti', {notiId: props.notification._id, businessId: props.admin.admin.businessId}).then(response => {
+                            if (response.status === 200) {
+                                props.toSetChosen(response.data.notification, "Alert");
+                                props.changeNotis(response.data.notification);
+                            }
+                        })
+                    }
+                }
+            ).catch(error => {
+                if (error.response.status === 409) {
+                    setError("");
+                    setTimeout(() => setError("The time of this booking has already passed and this booking request will be deleted."), 200);
+                }
+            })
+        }
+        else if (props.employeeToken) {
+            Axios.post('/api/iosBooking/acceptedUserRequestEmployee', {notiId: props.notification._id, employeeId: props.employee.employee.id, bcn: bcn}, {headers: {'x-auth-token': props.employeeToken}}).then(
+                response => {
+                    if (response.status === 200) {
+                        setSuccess("");
+                        setTimeout(() => setSuccess("This booking has been added to your schedule."), 200);
+                        Axios.post('/api/notifications/changeAcceptedUserRequestNoti', {notiId: props.notification._id, employeeId: props.employee.employee.id}).then(response => {
+                            if (response.status === 200) {
+                                props.toSetChosen(response.data.notification, "Alert");
+                                props.changeNotis(response.data.notification);
+                            }
+                        })
+                    }
+                }
+            ).catch(error => {
+                if (error.status === 409) {
+                    setError("");
+                    setTimeout(() => setError("The time of this booking has already passed and this booking request will be deleted."), 200);
+                
+                }
+            })
+        }
+    }
+
+    function decline() {
+        Axios.post("/api/notifications/changeDeniedUserRequestNoti", {notiId: props.notification._id}).then(response => {
+            if (response.status === 200) {
+                setSuccess("");
+                setTimeout(() => setSuccess("Booking request denied successfully."), 200);
+                props.toSetChosen(response.data.notification, "Alert");
+                props.changeNotis(response.data.notification);
+            }
+        }).catch(error => {
+            console.log(error);
+        })
+    }
 
     return (
         <div style={{width: "370px", height: props.height ? props.height : ""}}>  
@@ -195,12 +260,13 @@ function MessageView(props) {
                  
                  <p  className={styles.message}>{message}</p>
                  <div style={{display: "flex", width: "370px", justifyContent: "space-around", marginTop: "50px"}}>
-                 <button onClick={} className={styles.bu}>Book</button>
-                 <button onClick={} className={styles.bu}>Decline</button>
+                 <button onClick={book} className={styles.bu}>Book</button>
+                 <button onClick={decline} className={styles.bu}>Decline</button>
                  </div>
              </div>
              </div>}
              <OtherAlert alertType={"success"} alertMessage={success} showAlert={success !== ""}/>
+             <OtherAlert alertType={"error"} alertMessage={error} showAlert={error !== ""}/>
         </div>
     )
 }
