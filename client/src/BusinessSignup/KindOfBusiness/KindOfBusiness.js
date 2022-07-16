@@ -30,9 +30,6 @@ const KindOfBusiness = (props) => {
 
     function checkThis() {
         props.kindBusinessCompleted();
-        if (props.kindOfBusiness === "Restaurant") {
-            props.history.push("/restaurantBuilder");
-        }
     }
 
     return (

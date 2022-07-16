@@ -5,9 +5,17 @@
     text-align: center;
 }
 
+#finishButton {
+    background-color: white;
+}
+
+#finishButton:hover {
+    background-color: rgb(227, 227, 227);
+}
+
 
 #whole {
-    background-color: rgb(236, 236, 236);
+    background-color: white;
     width: 100%;
     height: 120vh;
     display: flex;

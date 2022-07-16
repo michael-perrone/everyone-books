@@ -60,12 +60,16 @@ function AdminNotifications(props) {
                     const data = response.data.notifications;
                     const flippedNotis = [];
                     let i = response.data.notifications.length - 1;
+                   
                     while (i >= 0) {
                         flippedNotis.push(data[i]);
                         i--;
                     }
                     setNotifications(flippedNotis);
                     setChosen(flippedNotis[0]);
+                    if (data.length === 0) {
+                        return;
+                    }
                     if (flippedNotis[0].type === "ESIDDR") { 
                         setType("Alert");
                     }
@@ -103,10 +107,10 @@ function AdminNotifications(props) {
 
     return (
         <div style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
-            <div style={{display: "flex", justifyContent: 'space-around', width: "100%", marginTop: "20px"}}>
+             <p style={{marginTop: "20px", fontSize: "20px", fontWeight: "bold"}}>Notifications Center</p>
+            <div style={{display: "flex", justifyContent: 'space-around', width: "100%", marginTop: "20px"}}> 
              <div id={styles.notificationsContainer}>
-             <p style={{fontSize: "28px", marginTop: "10px", position: "absolute", top: "-50px", left: "100px"}}>Notifications</p>
-                {notifications && notifications.length === 0 && <p>You do not have any notifications!</p>}
+                {notifications && notifications.length === 0 && <p style={{textAlign: "center", fontSize: "18px", fontWeight: "bold", marginTop: "10px"}}>You do not have any notifications!</p>}
                 {notifications && notifications.length > 0 && (
                     <div>
                         {notifications.map(notification => {

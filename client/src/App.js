@@ -18,6 +18,7 @@ import Groups from './Business/Groups/Groups';
 import AdminNotifications from './Business/AdminNotifications/AdminNotifications';
 import EmployeeNotifications from "./EmployeeHome/EmployeeNotifications/EmployeeNotifications";
 import RestaurantBuilder from "./BusinessSignup/RestaurantBuilder/RestaurantBuilder";
+import Restaurant from './Business/Restaurant/Restaurant';
 
 class App extends React.Component {
   constructor(props) {
@@ -53,6 +54,7 @@ class App extends React.Component {
       {(token || employeeToken || adminToken) && <Nav/>}
       <div onClick={this.props.hideDropDown}>
       <Switch>
+      <Route path="/restaurant/:adminId/" exact component={Restaurant}></Route>
         <Route path="/restaurantBuilder" exact component={RestaurantBuilder}></Route>
       <Route path="/employee/:employeeId/notifications" exact component={EmployeeNotifications}></Route>
         <Route path="/admin/:adminId/notifications" exact component={AdminNotifications}></Route>
@@ -116,24 +118,41 @@ class App extends React.Component {
             } else if (token) {
               return <Redirect to={`/user/${token.user.id}`} />;
             } else if (adminToken) {
-              return <Redirect to={`/admin/${adminToken.admin.id}`} />;
+              if (this.props.admin.admin.type === "Restaurant") {
+                return <Redirect to={`/restaurant/${adminToken.admin.id}`} />;
+              }
+              else {
+                return <Redirect to={`/admin/${adminToken.admin.id}`} />;
+              }
             } else {
               return <Route exact path="/" component={LoginScreen} />;
             }
           }}
         />
-
-        {employeeToken.employee && (
+        {adminToken.admin && this.props.admin.admin.type === "Restaurant" && (
           <Redirect
             from="*"
             to={
-              localStorage.getItem("employeeToken") !== null
-                ? `/employee/${employeeToken.employee.id}`
+              localStorage.getItem("adminToken") !== null
+                ? `/restaurant/${adminToken.admin.id}`
                 : `/`
             }
           />
         )}
-        {token.user && (
+
+  
+        {adminToken.admin && this.props.admin.admin.type !== "Restaurant" && (
+          <Redirect
+            from="*"
+            to={
+              localStorage.getItem("adminToken") !== null
+                ? `/admin/${adminToken.admin.id}`
+                : `/`
+            }
+          />
+        )}
+   
+              {token.user && (
           <Redirect
             from="*"
             to={
@@ -143,12 +162,13 @@ class App extends React.Component {
             }
           />
         )}
-        {adminToken.admin && (
+
+        {employeeToken.employee && (
           <Redirect
             from="*"
             to={
-              localStorage.getItem("adminToken") !== null
-                ? `/admin/${adminToken.admin.id}`
+              localStorage.getItem("employeeToken") !== null
+                ? `/employee/${employeeToken.employee.id}`
                 : `/`
             }
           />

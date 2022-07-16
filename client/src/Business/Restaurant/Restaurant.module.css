@@ -1,0 +1,26 @@
+#wholeBox {
+    border: 2px solid black;
+    margin-top: 20px;
+    position: relative;
+    background-color: white;
+}
+
+#container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: rgb(246, 246, 246);
+    height: 110vh;
+}
+
+#backDrop {
+    position: fixed;
+    z-index: 5;
+    background-color: rgba(0, 0, 0, 0.801);
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }

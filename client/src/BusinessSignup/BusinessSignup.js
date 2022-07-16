@@ -33,7 +33,7 @@ const BusinessSignup = (props) => {
                 {(props.kindOfBusiness === "" || props.nameOfBusiness === "" || props.kindBusinessCompleted === false)  && <KindOfBusiness/>}
                 {props.kindBusinessCompleted && !props.adminInfoComplete && <AdminSignup/>}
                 {props.adminInfoComplete && !props.businessInfoComplete && <BusinessInfoEnter/>}
-                {props.businessInfoComplete && !props.businessScheduleComplete && <BusinessScheduleCreate/>}
+                {((props.businessInfoComplete && !props.businessScheduleComplete) || (props.kindOfBusiness === "Restaurant" && props.restaurantSendNotHit && props.businessInfoComplete && props.adminInfoComplete)) && <BusinessScheduleCreate/>}
                 {props.businessScheduleComplete && !props.showAdminDropDown && props.kindOfBusiness !== "Restaurant" && <BookingColumnsEnter/>}
             </div>
         </div>
@@ -43,6 +43,7 @@ const BusinessSignup = (props) => {
 
 const mapStateToProps = state => {
     return {
+        restaurantSendNotHit: state.newReducers.restaurantSendNotHit,
         businessScheduleComplete: state.newReducers.businessScheduleComplete,
         businessInfoComplete: state.newReducers.businessInfoComplete,
         adminInfoComplete: state.newReducers.adminInfoComplete,

@@ -169,12 +169,17 @@ router.get("/mybusiness", adminAuth, async (req, res) => {
   }
 });
 
-router.post("/employeesWorking", async (req, res) => {
+router.get("/employeesWorking", adminAuth, async (req, res) => {
   try {
-    let employees = await BusinessProfile.findOne({ business: req.body.businessId }).select(["employeesWhoAccepted"]);
-    let realEmployees = await Employee.find({ _id: employees.employeesWhoAccepted }).select(["fullName"]);
-    console.log(realEmployees);
-    res.status(200).send();
+    console.log("HELLLLLO");
+    let employees = await BusinessProfile.findOne({ business: req.admin.businessId }).select(["employeesWhoAccepted"]);
+    if (employees) {
+      let realEmployees = await Employee.find({ _id: employees.employeesWhoAccepted }).select(["fullName"]);
+    res.status(200).json({realEmployees});
+    }
+    else {
+      res.status(200).json({realEmployees: []});
+    }
   }
   catch (error) {
     console.log(error)

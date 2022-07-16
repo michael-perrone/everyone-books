@@ -29,7 +29,7 @@ const BookingColumnsEnter = (props) => {
            adminInfo: props.adminInfo, businessInfo: props.businessInfo, schedule: props.businessSchedule,
            businessName: props.nameOfBusiness, typeOfBusiness: props.kindOfBusiness, bookingColumnNumber: bookingColumnNumber, bookingColumnType: bookingColumnType, eq: usesShifts ? "y" : "n"
         }
-        console.log(allInfo)
+
         axios.post('/api/adminSignup', allInfo).then(
             response => {
                 if (response.data.token) {

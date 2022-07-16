@@ -88,6 +88,166 @@ function addDollarSign(cost) {
     return `$${cost}`;
 }
 
+function compareDates(year, otherYear, month, otherMonth, day, otherDay) { 
+    if (otherYear === year) {
+        if (otherMonth === month) {
+            if (otherDay === day) {
+                return "sameDay";
+            }
+            else if (otherDay > day) {
+                return "futureDay";
+            }
+        }
+        else if (otherMonth > month) {
+            return "futureDay";
+        }
+    }
+    else if (otherYear > year) {
+        return "futureDay";
+    }
+    else {
+        return false;
+    }
+    return false;
+}
+
+function getTime() {
+    const date = new Date();
+    let time = "";
+    let hour = "";
+    let minute = date.getMinutes();
+    let raiseHour = false;
+    while (minute % 5 !== 0) {
+        minute++;
+    }
+    if (minute === 60) {
+        console.log("hi!")
+        minute = "00";
+    }
+    if (minute === 0 || minute === "00") {
+        minute = "00";
+        raiseHour = true;
+    }
+    if (minute === 5) {
+        minute = "05";
+    }
+    let ampm = "";
+    console.log(date.getHours());
+    if (date.getHours() === "0") {
+        hour = 12;
+        ampm = "AM";
+    }
+    else if (date.getHours() === 1) {
+        hour = 1;
+        ampm = "AM";
+    }
+    else if (date.getHours() === 2) {
+        hour = 2;
+        ampm = "AM";
+    }
+    else if (date.getHours() === 3) {
+        hour = 3;
+        ampm = "AM";
+    }
+    else if (date.getHours() === 4) {
+        hour = 4;
+        ampm = "AM";
+    }
+    else if (date.getHours() === 5) {
+        hour = 5;
+        ampm = "AM";
+    }
+    else if (date.getHours() === 6) {
+        hour = 6;
+        ampm = "AM";
+    }
+    else if (date.getHours() === 7) {
+        hour = 7;
+        ampm = "AM";
+    }
+    else if (date.getHours() === 8) {
+        hour = 8;
+        ampm = "AM";
+    }
+    else if (date.getHours() === 9) {
+        hour = 9;
+        ampm = "AM";
+    }
+    else if (date.getHours() === 10) {
+        hour = 10;
+        ampm = "AM";
+    }
+    else if (date.getHours() === 11) {
+        hour = 11;
+        ampm = "AM";
+    }
+    else if (date.getHours() === 12) {
+        hour = 12;
+        ampm = "PM";
+    }
+    else if (date.getHours() === 13) {
+        hour = 1;
+        ampm = "PM";
+    }
+    else if (date.getHours() === 14) {
+        hour = 2;
+        ampm = "PM";
+    }
+    else if (date.getHours() === 15) {
+        hour = 3;
+        ampm = "PM";
+    }
+    else if (date.getHours() === 16) {
+        hour = 4;
+        ampm = "PM";
+    }
+    else if (date.getHours() === 17) {
+        hour = 5;
+        ampm = "PM";
+    }
+    else if (date.getHours() === 18) {
+        hour = 6;
+        ampm = "PM";
+    }
+    else if (date.getHours() === 19) {
+        hour = 7;
+        ampm = "PM";
+    }
+    else if (date.getHours() === 20) {
+        hour = 8;
+        ampm = "PM";
+    }
+    else if (date.getHours() === 21) {
+        hour = 9;
+        ampm = "PM";
+    }
+    else if (date.getHours() === 22) {
+        hour = 10;
+        ampm = "PM";
+    }
+    else if (date.getHours() === 23) {
+        hour = 11;
+        ampm = "PM";
+    }
+    if (hour === 12 && raiseHour) {
+        hour = 1;
+    }
+    if (hour !== 12 && raiseHour) {
+        hour++;
+    }
+    if (hour === 11 && raiseHour && ampm === "PM") {
+        ampm = "AM";
+    }
+    if (hour === 11 && raiseHour && ampm === "AM") {
+        ampm = "PM";
+    }
+    time = `${hour}:${minute} ${ampm}`
+    return time;
+}
+
+
+
+
 
 function convertShiftTimes(numberTime) {
     let num = null;
@@ -616,5 +776,7 @@ module.exports = {
     milisToDays,
     daysToMilis,
     convertNumToStringDollars,
-    removeComma
+    removeComma,
+    getTime, 
+    compareDates
 }

@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
-const TennisClub = require("../../models/TennisClub");
 const Admin = require("../../models/Admin");
 const jwt = require("jsonwebtoken");
 const config = require("config");
@@ -29,6 +28,7 @@ router.post('/check', async (req, res) => {
 router.post('/',
   async (req, res) => {
     try {
+      console.log(req.body);
       console.log(req.body.eq)
       if (req.body.monOpen) {
         console.log('WDW')
@@ -51,27 +51,52 @@ router.post('/',
           { open: req.body.friOpen, close: req.body.friClose },
           { open: req.body.satOpen, close: req.body.satClose }]
 
-        let newBusiness = new Business({
-          bookingColumnType: req.body.bookingColumnType,
-          businessNameAllLower: req.body.businessName
-            .split(" ")
-            .reduce((accum, element) => {
-              return (accum += element);
-            }).toLowerCase(),
-          typeOfBusiness: req.body.typeOfBusiness,
-          businessName: req.body.businessName,
-          address: req.body.address,
-          city: req.body.city,
-          zip: req.body.zip,
-          state: req.body.state,
-          bookingColumnNumber: req.body.bookingColumnNumber,
-          schedule: schedule,
-          website: req.body.website,
-          phoneNumber: req.body.phoneNumber,
-          eq: req.body.eq
-        });
+       
+        let newBusiness;
+
+        if (req.body.typeOfBusiness === "Restaurant") {
+          newBusiness = new Business({
+            bookingColumnType: req.body.bookingColumnType,
+            businessNameAllLower: req.body.businessName
+              .split(" ")
+              .reduce((accum, element) => {
+                return (accum += element);
+              }).toLowerCase(),
+            typeOfBusiness: req.body.typeOfBusiness,
+            businessName: req.body.businessName,
+            address: req.body.address,
+            city: req.body.city,
+            zip: req.body.zip,
+            state: req.body.state,
+            bookingColumnNumber: req.body.bookingColumnNumber,
+            schedule: schedule,
+            website: req.body.website,
+            phoneNumber: req.body.phoneNumber,
+            eq: req.body.eq,
+            tables: req.body.tables
+          });
+        }
+
+        else {
+          newBusiness = new Business({
+            bookingColumnType: req.body.bookingColumnType,
+            typeOfBusiness: req.body.typeOfBusiness,
+            businessName: req.body.businessName,
+            address: req.body.address,
+            city: req.body.city,
+            zip: req.body.zip,
+            state: req.body.state,
+            bookingColumnNumber: req.body.bookingColumnNumber,
+            schedule: schedule,
+            website: req.body.website,
+            phoneNumber: req.body.phoneNumber,
+            eq: req.body.eq
+          });
+        }
+
+
         let newAdmin = new Admin({
-          businessName: newBusiness.businessNameAllLower,
+          businessName: newBusiness.businessName,
           firstName: req.body.firstName,
           lastName: req.body.lastName,
           email: req.body.email.toLowerCase(),
@@ -91,7 +116,6 @@ router.post('/',
         const payload = {
           admin: {
             bn: newBusiness.businessName,
-            businessName: newBusiness.businessAllLower,
             name: `${newAdmin.firstName} ${newAdmin.lastName}`,
             isAdmin: true,
             id: newAdmin.id,
@@ -127,25 +151,54 @@ router.post('/',
             .status(400)
             .json({ errors: [{ msg: "That email is being used" }] });
         }
-        let newBusiness = new Business({
-          bookingColumnType: req.body.bookingColumnType,
-          businessNameAllLower: req.body.businessName
-            .split(" ")
-            .reduce((accum, element) => {
-              return (accum += element);
-            }),
-          typeOfBusiness: req.body.typeOfBusiness,
-          businessName: req.body.businessName,
-          address: req.body.businessInfo.address,
-          city: req.body.businessInfo.city,
-          zip: req.body.businessInfo.zip,
-          state: req.body.businessInfo.state,
-          bookingColumnNumber: req.body.bookingColumnNumber,
-          schedule: req.body.schedule || schedule,
-          website: req.body.businessInfo.website,
-          phoneNumber: req.body.businessInfo.phoneNumber,
-          eq: req.body.eq
-        });
+        let newBusiness;
+        if (req.body.typeOfBusiness === "Restaurant") {
+          newBusiness = new Business({
+            bookingColumnType: req.body.bookingColumnType,
+            businessNameAllLower: req.body.businessName
+              .split(" ")
+              .reduce((accum, element) => {
+                return (accum += element);
+              }).toLowerCase(),
+            typeOfBusiness: req.body.typeOfBusiness,
+            businessName: req.body.businessName,
+            address: req.body.businessInfo.address,
+            city: req.body.businessInfo.city,
+            zip: req.body.businessInfo.zip,
+            state: req.body.businessInfo.state,
+            bookingColumnNumber: req.body.bookingColumnNumber,
+            schedule: req.body.schedule || schedule,
+            boxHeight: req.body.boxHeight,
+            boxWidth: req.body.boxWidth,
+            phoneNumber: req.body.businessInfo.phoneNumber,
+            website: req.body.businessInfo.website,
+            eq: req.body.eq,
+            tables: req.body.tables
+          });
+        }
+        else {
+          newBusiness = new Business({
+            bookingColumnType: req.body.bookingColumnType,
+            businessNameAllLower: req.body.businessName
+              .split(" ")
+              .reduce((accum, element) => {
+                return (accum += element);
+              }),
+            typeOfBusiness: req.body.typeOfBusiness,
+            businessName: req.body.businessName,
+            address: req.body.businessInfo.address,
+            city: req.body.businessInfo.city,
+            zip: req.body.businessInfo.zip,
+            state: req.body.businessInfo.state,
+            bookingColumnNumber: req.body.bookingColumnNumber,
+            schedule: req.body.schedule || schedule,
+            website: req.body.businessInfo.website,
+            phoneNumber: req.body.businessInfo.phoneNumber,
+            eq: req.body.eq
+          });
+        }
+
+    
 
         let newAdmin = new Admin({
           businessName: newBusiness.businessNameAllLower,
@@ -164,7 +217,7 @@ router.post('/',
         const payload = {
           admin: {
             bn: newBusiness.businessName,
-            businessName: newBusiness.businessAllLower,
+            type: newBusiness.typeOfBusiness,
             name: `${newAdmin.firstName} ${newAdmin.lastName}`,
             isAdmin: true,
             id: newAdmin.id,

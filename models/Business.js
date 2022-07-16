@@ -5,6 +5,12 @@ const BusinessSchema = new mongoose.Schema({
   schedule: [
     Object
   ],
+  tables: [
+    Object
+  ],
+  menu: [],
+  boxHeight: Number,
+  boxWidth: Number,
   phoneNumber: {
     type: String
   },
@@ -35,7 +41,6 @@ const BusinessSchema = new mongoose.Schema({
   },
   bookingColumnNumber: {
     type: String,
-    required: true
   },
   website: {
     type: String

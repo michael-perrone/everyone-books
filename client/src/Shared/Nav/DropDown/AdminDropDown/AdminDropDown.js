@@ -7,9 +7,7 @@ import {withRouter} from 'react-router-dom';
 const AdminDropDown = (props) => {
   
    function goHome() {
-     console.log('HELLLOO')
-    console.log(`/admin/${props.admin.admin.id}`)
-    props.history.push(`/admin/${props.admin.admin.id}`)
+    props.history.push("/")
    } 
 
   function goToShifts() {

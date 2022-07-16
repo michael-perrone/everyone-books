@@ -44,7 +44,6 @@ router.post("/login", async (req, res) => {
           admin: {
             bn: business.businessName,
             businessId: adminLoggingIn.business,
-            businessName: business.businessNameAllLower,
             id: adminLoggingIn.id,
             isAdmin: true,
             name: `${adminLoggingIn.firstName} ${adminLoggingIn.lastName}`

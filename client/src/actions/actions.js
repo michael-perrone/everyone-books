@@ -49,3 +49,4 @@ export const SHOW_CREATE_BOOKING = "SHOW_CREATE_BOOKING";
 export const EDIT_SHIFT = "EDIT_SHIFT";
 export const DONE_EDITING = "DONE_EDITING";
 export const EXIT_NUM = "EXIT_NUM";
+export const RESTAURANT_SEND_HIT = "RESTAURANT_SEND_HIT";
