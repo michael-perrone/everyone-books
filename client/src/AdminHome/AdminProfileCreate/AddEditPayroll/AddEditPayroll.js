@@ -103,8 +103,10 @@ function AddEditPayroll(props) {
                 }
             }
         ).catch(error => {
-                setError("");
-                setTimeout(() => setError("Something went wrong"), 200);
+            setError("");
+            if (error.response.status === 406) {
+                setTimeout(() => setError("Something went wrong."), 200);
+            }
         })
     }
 
@@ -155,7 +157,7 @@ function AddEditPayroll(props) {
             }
         ).catch(error => {
             setError("");
-            setTimeout(() => setError("Something went wrong."), 200);
+            setTimeout(() => setError("You can not add payroll information to your business until an employee has been added."), 200);
         })
     },[]);
     

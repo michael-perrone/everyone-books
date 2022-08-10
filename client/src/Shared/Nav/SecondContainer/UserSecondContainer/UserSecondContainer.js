@@ -8,34 +8,11 @@ import DropDown from "../../DropDown/DropDown";
 import {withRouter} from 'react-router-dom';
 
 const UserSecondContainer = props => {
-  const [notifications, setNotifications] = React.useState([]);
-  const [newNotifications, setNewNotifications] = React.useState([]);
-  React.useEffect(() => {
-    axios
-      .get("/api/notifications/user", {
-        headers: { "x-auth-token": props.token }
-      })
-      .then(response => {
-        if (response.data.userNotifications) {
-        setNotifications(response.data.userNotifications);
-        let newNotificationsArray = [];
-        for (let i = 0; i < response.data.userNotifications.length; i++) {
-          if (response.data.userNotifications[i].notificationRead === false) {
-            newNotificationsArray.push(1)
-          }
-        }
-        }
-      })
-      .catch(error => {
-        console.log("thhere was an error");
-      });
-  }, []);
 
   function viewClubs() {
     props.history.push('/businesslist')
   }
 
-  console.log(notifications)
 
   return (
     <div id={styles.secondContainer}>
@@ -44,7 +21,7 @@ const UserSecondContainer = props => {
       {/* {props.showNotifications && (
         <Notifications notifications={notifications} />
       )} */}
-      <DropDown notiNum={newNotifications.length}/>
+      <DropDown/>
     </div>
   );
 };

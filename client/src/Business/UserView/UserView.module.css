@@ -1,14 +1,29 @@
 #userViewContainer {
     display: flex;
-    align-items: center;
-    height: 100vh;
     justify-content: space-around;
-    background-color: rgb(231, 231, 231); 
+    background-color: #e7e7e7; 
+    padding-top: 10px;
 }
 
-@media (max-width: 700px) {
+@media (min-width: 1150px) {
+    #userViewContainer {
+       height: 100vh;
+    }
+}
+
+@media (max-width: 1150px) {
     #userViewContainer {
         flex-direction: column;
-        height: 1200px;
+        align-items: center;
+    }
+    
+    #marginTop {
+        margin-top: 20px;
+    }
+
+    #coreContainer {
+        padding-top: 20px;
+        padding-bottom: 20px;
+       
     }
 }

@@ -336,6 +336,22 @@ export function getTime() {
     return time;
 }
 
+export function getTs(open, close) {
+    const times = [];
+    let current = stringToIntTime[getTime()];
+    if (current > stringToIntTime[open] && current < stringToIntTime[close]) {
+        for (let i = current; i < stringToIntTime[close]; i++ ) {
+            times.push(i);
+        }
+    }
+    else {
+        for (let i = stringToIntTime[open]; i < stringToIntTime[close]; i++) {
+            times.push(i);
+        }
+    }
+    return times;
+}
+
 
 export function convertShiftTimes(numberTime) {
     let num = null;

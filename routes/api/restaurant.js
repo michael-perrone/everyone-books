@@ -179,10 +179,10 @@ router.post("/addMenuCategory", adminAuth, async (req, res) => {
         let menu;
         if (business.menu) {
             menu = business.menu;
-            menu.push({catName: req.body.menuCategoryValue, catItems: []});
+            menu.push({menuCategoryValue: req.body.menuCategoryValue, catItems: []});
         }
         else {
-            menu = [{catName: req.body.menuCategoryValue, catItems: []}];
+            menu = [{menuCategoryValue: req.body.menuCategoryValue, catItems: []}];
         }
         business.menu = menu;
         await business.save();
@@ -198,7 +198,7 @@ router.post("/addMenuItem", adminAuth, async (req, res) => {
     try {
         const business = await Business.findOne({_id: req.admin.businessId});
         const index = req.body.index;
-        business.menu[index].catItems.push({"name": req.body.name, "des": req.body.description, "price": req.body.price});
+        business.menu[index].catItems.push({"name": req.body.name, "description": req.body.description, "price": req.body.price});
         business.markModified("menu");
         await business.save();
         return res.status(200).send();
@@ -213,7 +213,8 @@ router.post("/addMenuItem", adminAuth, async (req, res) => {
 router.get("/getMenu", adminAuth, async (req, res) => {
     const business = await Business.findOne({_id: req.admin.businessId});
     const menu = business.menu;
-    return res.status(200).send(menu);
+    console.log(menu);
+    return res.status(200).send({menu});
 });
 
 

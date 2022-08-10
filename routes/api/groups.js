@@ -98,7 +98,7 @@ router.post("/create", adminAuth, async (req, res) => {
 
     });
     const employee = await Employee.findOne({_id: req.body.employeeBooked});
-    const employeeName = employee.name;
+    const employeeName = employee ? employee.name : "None";
     const noti = new BookedNotification({
         date: utils.cutDay(`${otherDate.toDateString()}, ${utils.convertTime(otherDate.getHours(), otherDate.getMinutes())}`),
         fromString: business.businessName,
@@ -157,28 +157,34 @@ router.post("/delete", adminAuth, async (req, res) => {
 })
 
 router.post("/toJoin", userAuth, async (req, res) => {
-    let groups = await Group.find({openToPublic: true, businessId: req.body.businessId}).select(["price", "time", "date", "groupLimitNumber", "customers", "type"]);
-    // console.log(groups);
-    const groupsToSend = [];
-    let myGroups = await Group.find({customers: req.user.id})
+    console.log(req.body);
+    const groups = await Group.find({openToPublic: true, businessId: req.body.businessId}).select(["price", "time", "date", "groupLimitNumber", "customers", "type"]);
+    const filteredByDate = [];
     for (let i = 0; i < groups.length; i++) {
+        if (new Date(groups[i].date) > new Date()) {
+            filteredByDate.push(groups[i]);
+        }
+    }
+    const groupsToSend = [];
+    const myGroups = await Group.find({customers: req.user.id})
+    const groupsAlreadyIn = [];
+    for (let i = 0; i < filteredByDate.length; i++) {
         myGroups.forEach(group => {
-            if (group._id.toString() === groups[i]._id.toString()) {
-                groups.splice(i,1)
-
+            if (group._id.toString() === filteredByDate[i]._id.toString()) {
+                groupsAlreadyIn.push(filteredByDate[i]);
+                filteredByDate.splice(i,1)
             }
         })
     }
-    console.log(groups);
-    if (groups.length) {
+    if (filteredByDate.length) {
         // console.log(groups);
-        for (let i = 0; i < groups.length; i++) {
-            if (Number(groups[i].groupLimitNumber) > groups[i].customers.length || groups[i].groupLimitNumber === "None") {
-                groupsToSend.push({price: groups[i].price, time: groups[i].time, date: groups[i].date, type: groups[i].type, _id: groups[i]._id });
+        for (let i = 0; i < filteredByDate.length; i++) {
+            if (Number(groups[i].groupLimitNumber) > filteredByDate[i].customers.length || filteredByDate[i].groupLimitNumber === "None") {
+                groupsToSend.push({price: filteredByDate[i].price, time: filteredByDate[i].time, date: filteredByDate[i].date, type: filteredByDate[i].type, _id: filteredByDate[i]._id });
             }
         }
     }
-    res.status(200).json({groups: groupsToSend});
+    res.status(200).json({groups: groupsToSend, groupsAlreadyIn});
 })
 
 router.post("/join", userAuth, async (req, res) => {
@@ -198,6 +204,25 @@ router.post("/join", userAuth, async (req, res) => {
     else {
         return res.status(401).send();
     }
+})
+
+router.post("/leave", userAuth, async function(req, res) {
+    try {
+        const group = await Group.findOne({_id: req.body.groupId});
+        console.log(group.customers, "hi");
+        for (let i = 0; i < group.customers.length; i++) {
+            if (group.customers[i].toString() === req.user.id.toString()) {
+                console.log("hello")
+                group.customers.splice(i, 1);
+            }
+        }
+        await group.save();
+        res.status(200).send();
+    }
+    catch(error) {
+        res.status(400).send();
+    }
+
 })
 
 router.post("/list", adminAuth, async (req, res) => {

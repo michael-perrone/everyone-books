@@ -72,14 +72,16 @@ router.post("/admin", async (req, res) => {
             let business = await Business.findOne({_id: req.body.businessId});
             console.log(dateo.getHours())
             console.log(utils.cutDay(`${dateo.toDateString()}, ${utils.convertTime(dateo.getHours(), dateo.getMinutes())}`))
-            let newNoti = new Notification({
+            let newNoti = new BookedNotification({
                 date: utils.cutDay(`${dateo.toDateString()}, ${utils.convertTime(dateo.getHours(), dateo.getMinutes())}`),
                 fromString: business.businessName,
                 fromId: req.body.businessId,
-                type: "BBY" // Business Booked You
+                type: "BBY",
+                potentialDate: date.dateString,
+                potentialStartTime: req.body.timeStart
             })
-            const customerNotis = [newNoti, ...customer.notifications];
-            customer.notifications = customerNotis;
+            const customerNotis = [newNoti, ...customer.bookedNotifications];
+            customer.bookedNotifications = customerNotis;
             await customer.save();
             await newNoti.save();
             await newBooking.save();
@@ -93,60 +95,78 @@ router.post("/admin", async (req, res) => {
 })
 
 router.post("/admin/area", async (req, res) => {
-    console.log(req.body);
-    const date = utils.getStringDateTime(req.body.timeStart, req.body.date);
-    let customer;
-    if (req.body.phone && req.body.phone !== "") {
-        let phoneArray = req.body.phone.split("");
-        console.log(phoneArray)
-        for (let i = 0; i < phoneArray.length; i++) {
-            if (phoneArray[i] !== "0" && phoneArray[i] !== "1" && phoneArray[i] !== "2" && phoneArray[i]
-             !== "3" && phoneArray[i] !== "4" && phoneArray[i] !== "5" && phoneArray[i] !== "6"
-             && phoneArray[i] !== "7" && phoneArray[i] !== "8" && phoneArray[i] !== "9") {
-                delete phoneArray[i];
+    try {
+        console.log("AM I BEING HIT");
+        const date = utils.getStringDateTime(req.body.timeStart, req.body.date);
+        let customer;
+        if (req.body.phone && req.body.phone !== "") {
+            let phoneArray = req.body.phone.split("");
+            console.log(phoneArray)
+            for (let i = 0; i < phoneArray.length; i++) {
+                if (phoneArray[i] !== "0" && phoneArray[i] !== "1" && phoneArray[i] !== "2" && phoneArray[i]
+                 !== "3" && phoneArray[i] !== "4" && phoneArray[i] !== "5" && phoneArray[i] !== "6"
+                 && phoneArray[i] !== "7" && phoneArray[i] !== "8" && phoneArray[i] !== "9") {
+                    delete phoneArray[i];
+                }
             }
+            let realPhone = phoneArray.join("");
+            console.log(realPhone)
+            console.log(phoneArray)
+            customer = await User.findOne({ phoneNumber: realPhone });
         }
-        let realPhone = phoneArray.join("");
-        console.log(realPhone)
-        console.log(phoneArray)
-        customer = await User.findOne({ phoneNumber: realPhone });
-    }
-    if (customer) {
-        let bookings = await Booking.find({ businessId: req.body.businessId, customer: customer._id, date: date.dateString });
-        let timeNum = 0;
-        let cost = 0;
-        for (let i = 0; i < req.body.serviceIds.length; i++) {
-            let service = await ServiceType.findOne({ _id: req.body.serviceIds[i] });
-                timeNum += utils.timeDurationStringToInt[service.timeDuration];
-                cost += service.cost;
+        if (customer) {
+            let bookings = await Booking.find({ businessId: req.body.businessId, customer: customer._id, date: date.dateString });
+            let timeNum = 0;
+            let cost = 0;
+            for (let i = 0; i < req.body.serviceIds.length; i++) {
+                let service = await ServiceType.findOne({ _id: req.body.serviceIds[i] });
+                    timeNum += utils.timeDurationStringToInt[service.timeDuration];
+                    cost += service.cost;
+                }
+            const endTime = utils.intToStringTime[utils.stringToIntTime[req.body.timeStart] + timeNum];
+    
+            const shift = await Shift.findOne({ shiftDate: date.dateString, employeeId: req.body.employeeId });
+            console.log(req.body.serviceIds);
+            console.log("BELOW SERVICE IDS")
+            let newBooking = new Booking({
+                serviceType: req.body.serviceIds,
+                time: `${req.body.timeStart}-${endTime}`,
+                businessId: req.body.businessId,
+                customer: customer._id,
+                date: date.dateString,
+                cost: req.body.cost ? req.body.cost : cost,
+                bcn: req.body.bcn
+            });
+            let business = await Business.findOne({_id: req.body.businessId});
+            const dateo = new Date();
+            let newNoti = new BookedNotification({
+                date: utils.cutDay(`${dateo.toDateString()}, ${utils.convertTime(dateo.getHours(), dateo.getMinutes())}`),
+                fromString: business.businessName,
+                fromId: req.body.businessId,
+                type: "BBY",
+                potentialDate: date.dateString,
+                potentialStartTime: req.body.timeStart
+            })
+            const customerNotis = [newNoti, ...customer.bookedNotifications];
+            customer.bookedNotifications = customerNotis;
+            await customer.save();
+            await newNoti.save();
+            await newBooking.save();
+            if (newBooking) {
+                return res.status(200).json({ newBooking });
             }
-        const endTime = utils.intToStringTime[utils.stringToIntTime[req.body.timeStart] + timeNum];
-
-        const shift = await Shift.findOne({ shiftDate: date.dateString, employeeId: req.body.employeeId });
-        console.log(req.body.serviceIds);
-        console.log("BELOW SERVICE IDS")
-        let newBooking = new Booking({
-            serviceType: req.body.serviceIds,
-            time: `${req.body.timeStart}-${endTime}`,
-            businessId: req.body.businessId,
-            customer: customer._id,
-            date: date.dateString,
-            cost: req.body.cost ? req.body.cost : cost,
-            bcn: req.body.bcn
-        });
-        await newBooking.save();
-        if (newBooking) {
-            return res.status(200).json({ newBooking });
+        } else {
+            console.log("stupid")
+            res.status(406).send();
         }
-    } else {
-        console.log("stupid")
-        res.status(406).send();
+    } catch(error) {
+        console.log(error);
     }
+  
 })
 
 router.post("/user/area", userAuth, async (req, res) => {
     try {
-        console.log("potato chip")
         const date = new Date();
         const dateNeeded = new Date(req.body.date);
         console.log(req.user)
@@ -377,6 +397,61 @@ router.post("/admin/newGuest", async (req, res) => {
     }
 })
 
+router.post("/admin/newGuest/area", async (req, res) => {
+    try {
+        console.log(req.body);
+        const date = utils.getStringDateTime(req.body.timeStart, req.body.date);
+        const preExistingCustomer = await User.findOne({ phoneNumber: req.body.phone });
+        if (preExistingCustomer) {
+            res.status(409).send();
+            return;
+        }
+        let customer = new User({
+            newGuest: true,
+            phoneNumber: req.body.phone,
+            fullName: req.body.name
+        })
+        if (customer) {
+            // let bookings = await Booking.find({ businessId: req.body.businessId, customer: customer._id, date: date.dateString });
+            let timeNum = 0;
+            for (let i = 0; i < req.body.serviceIds.length; i++) {
+                let service = await ServiceType.findOne({ _id: req.body.serviceIds[i] });
+                console.log(service)
+                timeNum += utils.timeDurationStringToInt[service.timeDuration];
+            }
+            const endTime = utils.intToStringTime[utils.stringToIntTime[req.body.timeStart] + timeNum];
+
+            let bcn = req.body.bcn;
+            if (!bcn) {
+                return res.status(409).send();
+            }
+            let newBooking = new Booking({
+                serviceType: req.body.serviceIds,
+                time: `${req.body.timeStart}-${endTime}`,
+                businessId: req.body.businessId,
+                customer: customer._id,
+                date: date.dateString,
+                cost: req.body.cost,
+                bcn: bcn
+            });
+            await newBooking.save();
+            if (newBooking) {
+                const bookings = [...customer.bookings, newBooking];
+                customer.bookings = bookings;
+                await customer.save();
+                return res.status(200).json({ newBooking });
+            }
+        } else {
+            console.log("stupid")
+            res.status(406).send();
+        }
+    }
+
+    catch (error) {
+        console.log(error)
+    }
+})
+
 router.post("/admin/newGuest/clone", async (req, res) => {
     try {
         const date = utils.getStringDateTime(req.body.timeStart, req.body.date);
@@ -430,7 +505,6 @@ router.post("/admin/newGuest/clone", async (req, res) => {
             res.status(406).send();
         }
     }
-
     catch (error) {
         console.log(error)
     }
@@ -487,7 +561,20 @@ router.post("/sendNotiFromUser", userAuth, async (req, res) => {
 
 router.post("/delete", authAdmin, async (req, res) => {
     try {
+        const date = new Date();
         const booking = await Booking.findOne({ _id: req.body.bookingId, businessId: req.admin.businessId });
+        const business = await Business.findOne({_id: booking.businessId});
+        const customer = await User.findOne({_id: booking.customer});
+        console.log(customer, "I AM THE CUSTOMER");
+        const newNoti = new Notification({
+            type: "BDB",
+            date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
+            fromId: booking.businessId,
+            fromString: business.businessName,
+        })
+        customer.notifications.push(newNoti);
+        await newNoti.save();
+        await customer.save();
         if (booking) {
             await booking.deleteOne();
         }
@@ -575,7 +662,9 @@ router.post("/user", userAuth, async (req, res) => {
 })
 
 router.post("/acceptedUserRequest", authAdmin, async (req, res) => {
+    console.log(req.body.notiId);
     let notification = await BookedNotification.findOne({_id: req.body.notiId});
+    console.log(notification);
     const date = utils.getStringDateTime(notification.potentialStartTime, notification.potentialDate);
     if (date.date < new Date()) {
         await BookedNotification.deleteOne({_id: notification._id});

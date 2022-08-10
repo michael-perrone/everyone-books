@@ -21,11 +21,16 @@ const UserDropDown = props => {
     props.history.push(`/settings`);
   }
 
+  function goToNotifications() {
+    props.history.push(`/user/${props.user.user.id}/notifications`);
+    props.hideDropDown();
+  }
+
   return (
     <React.Fragment>
       <DropDownLink clickProp={goHome}>Home</DropDownLink>
       <DropDownLink clickProp={goToSettings}>Settings</DropDownLink>
-      <DropDownLink clickProp={props.showNotificationsFunction}>
+      <DropDownLink clickProp={goToNotifications}>
         Notifications
       </DropDownLink>
       <DropDownLink clickProp={userLogoutFunction}>Logout</DropDownLink>

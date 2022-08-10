@@ -11,10 +11,6 @@ const BusinessInsideUserHome = props => {
     props.history.push(`/businesses/${props.business._id}`);
   }
 
-  function goToBusiness() {
-    props.history.push(`/businesses/${props.business._id}`);
-  }
-
   function unfollowBusiness() {
     let objectToSend = {
       businessId: props.business._id,
@@ -22,7 +18,7 @@ const BusinessInsideUserHome = props => {
     };
     Axios.post("/api/userSubscribe/unfollow", objectToSend).then(response => {
       if (response.status === 200) {
-        props.setNewBusinesses(response.data.businessesAfterFilter);
+        props.unfollowBusiness();
       }
     });
   }
@@ -63,7 +59,7 @@ const BusinessInsideUserHome = props => {
           else if (index === 6) {
             day ="Sat:"
           }  
-         return <div style={{marginTop: '8px', marginBottom: '8px', display: 'flex'}}> <p style={{marginRight: '3px'}}>{day}</p><p>{daySchedule.open}-{daySchedule.close}</p></div>                  
+         return <div key={index} style={{marginTop: '8px', marginBottom: '8px', display: 'flex', position: "relative", left: "40px"}}> <p style={{marginRight: '3px'}}>{day}</p><p>{daySchedule.open}-{daySchedule.close}</p></div>                  
          })}
       </div>
       <div
@@ -71,14 +67,11 @@ const BusinessInsideUserHome = props => {
         className={styles.userSubContainer}
         id={styles.buttonsContainer}
       >
-        <button className={styles.clubButton} onClick={unfollowBusiness}>
+           <button className={styles.clubButton} onClick={bookACourt}>
+          View Business
+        </button>
+        <button style={{backgroundColor: "lavenderblush"}} className={styles.clubButton} onClick={unfollowBusiness}>
           Unfollow Business
-        </button>
-        <button className={styles.clubButton} onClick={goToBusiness}>
-          View This Business
-        </button>
-        <button className={styles.clubButton} onClick={bookACourt}>
-          Book A Service
         </button>
       </div>
     </div>

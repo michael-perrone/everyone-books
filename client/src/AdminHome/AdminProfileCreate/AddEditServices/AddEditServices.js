@@ -136,7 +136,6 @@ function AddEditServices(props) {
                         <option>20 Minutes</option>
                         <option>25 Minutes</option>
                         <option>30 Minutes</option>
-                        <option>30 Minutes</option>
                         <option>45 Minutes</option>
                         <option>1 Hour</option>
                         <option>1 Hour 15 Minutes</option>

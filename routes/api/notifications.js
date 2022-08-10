@@ -295,6 +295,9 @@ router.get('/getUserNotis', userAuth, async (req, res) => {
   const userNotis = await Notification.find({_id: user.notifications});
   const userBookedNotis = await BookedNotification.find({_id: user.bookedNotifications});
   const allNotis = [...userNotis, ...userBookedNotis];
+  allNotis.sort(function(a,b) {;
+    return new Date(`${a.date}`) - new Date(`${b.date}`)
+  })
   res.status(200).json({allNotis});
 })
 
@@ -431,47 +434,58 @@ router.post("/getExtraInfo", async (req, res) => {
 router.post("/changeToRead", async (req, res) => {
   try {
     const notification = await Notification.findOne({_id: req.body.notificationId });
-    console.log(req.body);
     if (notification) {
       console.log(notification);
       if (notification.type === "ERY") {
         notification.type = "ERYR";
         await notification.save();
-       res.status(200).json({notification});
+        return res.status(200).json({notification});
+      }
+      else if (notification.type === "BDB") {
+        console.log("YOOOO");
+        notification.type = "BDBR";
+        await notification.save();
+        return res.status(200).json({notification});
       }
       else if (notification.type === "BAW") {
         notification.type = "BAWR";
         await notification.save();
-        res.status(200).json({notification});
+        return res.status(200).json({notification});
       }
       else if (notification.type === "ELB") {
         notification.type = "ELBR";
         await notification.save();
-        res.status(200).json({notification});
+        return res.status(200).json({notification});
       }
       else if (notification.type === "BBY") {
         notification.type = "BBYR";
         await notification.save();
-        res.status(200).josn({notification});
+        return res.status(200).json({notification});
       }
       else if (notification.type === "YURA") {
          notification.type = "YURAR";
          await notification.save();
-         res.status(200).json({notification});
+         return res.status(200).json({notification});
       }
       else if (notification.type === "ERN") {
         notification.type = "ERNR";
         await notification.save();
-        res.status(200).json({notification});
+        return res.status(200).json({notification});
       }
     }
     else {
-      console.log("yojijijijijijijij")
       const bookedNoti = await BookedNotification.findOne({_id: req.body.notificationId});
+      console.log(bookedNoti);
       if (bookedNoti.type === "UATG") { // check this seems problematic
         bookedNoti.type = "UATGR";
         await bookedNoti.save();
-        res.status(200).send();
+        return res.status(200).json({bookedNoti});
+      }
+      else if (bookedNoti.type === "BBY" || bookedNoti.type === "BBYR") {
+        bookedNoti.type = "BBYR";
+        console.log("YOOOO");
+        await bookedNoti.save();
+        return res.status(200).json({bookedNoti});
       }
     }
   }

@@ -61,7 +61,7 @@ router.post("/moreGroupInfo", async (req, res) => {
   const group = await Group.findOne({_id: req.body.groupId});
   const customers = await User.find({ _id: group.customers }).select(["phoneNumber", "fullName"]);
   const employee = await Employee.findOne({ _id: group.employeeBooked }).select(["fullName"]);
-  res.status(200).json({ customers: customers, employeeName: employee.fullName}); 
+  res.status(200).json({ customers: customers, employeeName: employee ? employee.fullName : "None"}); 
 })
 
 
@@ -129,10 +129,13 @@ router.get("/userHistory", userAuth, async (req, res) => {
 })
 
 router.get("/", userAuth, async (req, res) => {
+  console.log(req.user.id);
   try {
     console.log("anything at all")
     let user = await User.findOne({ _id: req.user.id });
-    let bookings = await Booking.find({ _id: user.bookings });
+    console.log(req.user.id);
+    let bookings = await Booking.find({ customer: req.user.id });
+    console.log(bookings);
     if (bookings.length) {
       const newBookings = [];
       console.log("ANYTHING")
@@ -209,6 +212,7 @@ router.get("/ios", userAuth, async (req, res) => {
             let realCustomer = await User.findOne({_id: customer}).select(['fullName']);
             customers.push(realCustomer.fullName);
           })
+          let name = newGroups[t].type;
           let price = newGroups[t].price;
           let business = await Business.findOne({ _id: newGroups[t].businessId }).select(["businessName"]);
           let time = newGroups[t].time;
@@ -219,7 +223,7 @@ router.get("/ios", userAuth, async (req, res) => {
             employeeName = employee.fullName;
           }
           let _id = newGroups[t]._id;
-          let obj = { _id, time: time, price: price, customerNames: customers, businessName: businessName, employeeName: employeeName, date: newGroups[t].date };
+          let obj = { _id, time: time, price: price, customerNames: customers, businessName: businessName, employeeName: employeeName, date: newGroups[t].date, name};
           console.log(obj);
           actualGroups.push(obj);
         }
@@ -266,6 +270,7 @@ router.get("/ios", userAuth, async (req, res) => {
             let realCustomer = await User.findOne({_id: customer}).select(['fullName']);
             customers.push(realCustomer.fullName);
           })
+          let name = newGroups[t].type;
           let price = newGroups[t].price;
           let business = await Business.findOne({ _id: newGroups[t].businessId }).select(["businessName"]);
           let time = newGroups[t].time;
@@ -276,7 +281,7 @@ router.get("/ios", userAuth, async (req, res) => {
             employeeName = employee.fullName;
           }
           let _id = newGroups[t]._id;
-          let obj = { _id, time: time, customerNames: customers, price: price, businessName: businessName, employeeName: employeeName, date: newGroups[t].date };
+          let obj = { _id, time: time, customerNames: customers, price: price, businessName: businessName, employeeName: employeeName, date: newGroups[t].date, name };
           console.log(obj)
           actualGroups.push(obj);
           actualGroups.sort((a,b) => {
@@ -287,6 +292,7 @@ router.get("/ios", userAuth, async (req, res) => {
       res.status(200).json({groups: actualGroups, bookings: []})
     }
     else if (!groups.length && bookings.length) {
+      const actualBookings = [];
       const newBookings = [];
       bookings.forEach(booking => {
         if (new Date(booking.date) >= new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())) {
@@ -1090,9 +1096,11 @@ router.post('/clone', async (req, res) => {
 
 router.post("/areas", async (req, res) => {
   let date1 = utils.getStringDateTime(req.body.timeChosen, req.body.date);
+  console.log(req.body.timeChosen, req.body.date);
+  console.log(new Date());
   let dateToUse = new Date(date1.date);
+  console.log(dateToUse)
   if (new Date() > dateToUse) {
-    console.log("OH NO")
     return res.status(409).send();
   }
 
@@ -1194,9 +1202,7 @@ router.post("/areas", async (req, res) => {
               nums.push(whiley);
               whiley++;
           }
-          // if (timeNums.some(iNum => nums.includes(iNum))) {
-          //     takenColumns.push(Number(bookings[i].bcn));
-          // }
+    
           for (let t = 0; t < timeNums.length; t++) {
             for (let z = 0; z < nums.length; z++) {
               if (timeNums[t] === nums[z]) {
@@ -1218,15 +1224,12 @@ router.post("/areas", async (req, res) => {
           bcnArray.push(i);
           i++;
       }
-
        for (let t = 0; t < takenColumns.length; t++) {
         console.log(takenColumns[t])
         let index = bcnArray.indexOf(takenColumns[t]);
         bcnArray.splice(index, 1);
         console.log(index)
       }
-      
-
       if (bcnArray.length > 0) {
         return res.status(200).json({ bcnArray: bcnArray, date: date1.dateString})
       }

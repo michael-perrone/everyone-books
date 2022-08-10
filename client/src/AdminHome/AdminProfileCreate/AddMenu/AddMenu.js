@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import styles from './AddMenu.module.css';
 import {connect} from 'react-redux';
 import axios from 'axios';
@@ -21,6 +21,11 @@ function AddMenu(props) {
     const [itemDescription, setItemDescription] = useState("");
     const [error, setError] = useState("");
     const [newCategories, setNewCategories] = useState([]);
+    const [menu, setMenu] = useState([]);
+    const [selectedIndex, setSelectedIndex] = useState();
+    const [cheatNum, setCheatNum] = useState(1);
+    const [heightNeeded, setHeightNeeded] = useState(600);
+    const [chosenCategory, setChosenCategory] = useState();
 
     function handleItemPrice(e) {
         setItemPrice(e.target.value);
@@ -48,6 +53,9 @@ function AddMenu(props) {
 
     function handleButton() {
         if (showMenuCategoryInput) {
+            if (menuCategoryValue === "") {
+                return;
+            }
             axios.post("/api/restaurant/addMenuCategory", {menuCategoryValue}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
                 if (response.status === 200) {
                     const menuCats = [...menuCategories];
@@ -68,12 +76,11 @@ function AddMenu(props) {
         }
     }
 
-    function addMenuItem(index) {
+    function addMenuItem() {
         if (!addingMenuItem) {
             setAmiv("Save Menu Item");
             setShowInputs(true);
             setAddingMenuItem(true);
-            console.log("yo?");
         }
         if (addingMenuItem) {
             if (parseInt(itemPrice).toString() === "NaN") {
@@ -86,11 +93,11 @@ function AddMenu(props) {
                 setTimeout(() => setError("Please enter item name."));
                 return;
             }
-       
-            axios.post("/api/restaurant/addMenuItem", {name: itemName, price: itemPrice, description: itemDescription, index}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
+            console.log(selectedIndex);
+            axios.post("/api/restaurant/addMenuItem", {name: itemName, price: itemPrice, description: itemDescription, index: selectedIndex}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
                 if (response.status === 200) {
                     const oldMenuCategories = [...menuCategories];
-                    oldMenuCategories[index].catItems.push({name: itemName, price: itemPrice, description: itemDescription});
+                    oldMenuCategories[selectedIndex].catItems.push({name: itemName, price: itemPrice, description: itemDescription});
                     setMenuCategories(oldMenuCategories);
                     setSuccessMessage("");
                     setTimeout(() => setSuccessMessage("Menu Item added successfully"));
@@ -100,6 +107,9 @@ function AddMenu(props) {
                     setItemPrice("");
                     setItemDescription("");
                     setAddingMenuItem(false);
+                    let oldCheatNum = cheatNum;
+                    oldCheatNum++;
+                    setCheatNum(oldCheatNum);
                 }
             }).catch(error => {
                 setError("Menu Item Not Saved");
@@ -107,6 +117,26 @@ function AddMenu(props) {
         }
     }
 
+    function chooseCategory(cat, index) {
+        setChosenCategory(cat);
+        setSelectedIndex(index);
+        setShowInputs(false);
+        setItemName("");
+        setItemPrice("");
+        setItemDescription("");
+        setAmiv("Add Menu Item");
+        setAddingMenuItem(false);
+    }
+
+    
+    useEffect(function() {
+        axios.get('/api/restaurant/getMenu', {headers: {'x-auth-token': props.adminToken}}).then(response => {
+            if (response.status === 200 || response.status === 304) {
+                setChosenCategory(response.data.menu[0]);
+                setMenuCategories(response.data.menu);
+            }
+        })
+    }, [])
 
 
     return (
@@ -115,16 +145,27 @@ function AddMenu(props) {
             <p style={{marginTop: "10px"}}>1. Create a section of items that belong to a single category. For example: lunch, dessert, dinner, beverages etc.</p>
             <p>2. Create individual menu items for that section by clicking on the plus sign in that section. You can add a description and price.</p>
             <p>3. You can add as many sections as you want, the menu builder will add new pages so that you do not run out of room.</p>
-            <div style={{width: "100%", display: "flex", justifyContent: "center", marginTop: "20px"}}>
-            <div id={styles.singlePage}>
-            <p style={{fontSize: "24px", fontWeight: "bold", textAlign: "center", fontFamily: "Josefin Sans", marginTop: "8px"}}>{props.admin.admin.bn}</p>
-            <div style={{display: "flex", marginTop: "12px", width: "100%"}}>
-            {menuCategories.map((mc,index) => {
-                return <div style={{width: "100%"}}>
-                    <p style={{textAlign: "center", width: "100%", fontSize: "18px", marginBottom: "18px"}}>{mc.menuCategoryValue}</p>
-                    {mc.catItems.map((catItem,index) => {
-                        return <div style={{marginLeft: "20px", marginTop: index === 0 ? "" : "12px"}}>
-                            <div style={{display: "flex"}}><p style={{fontWeight: "bold", marginRight: "20px"}}>{catItem.name}</p><p>{catItem.price}</p></div>
+            <div style={{width: "100%", display: "flex", justifyContent: "center", marginTop: "20px", alignItems: "center", flexDirection: "column"}}>
+            <div>
+            <button onClick={handleButton} id={styles.mcb} style={{border: "none", boxShadow: "0px 0px 2px black", height: "28px", fontSize: "16px", width: "120px"}}>{menuCategoryButtonValue}</button>
+            {showMenuCategoryInput && <input style={{height: "24px", marginLeft: "20px", paddingLeft: "4px", marginRight: "20px"}} onChange={manageMenuCategoryValue} value={menuCategoryValue} placeholder={"Enter Category Name"}/>}
+            </div>
+            <div style={{display: "flex"}}>
+            <div style={{width: "200px"}}>
+                <p style={{marginBottom: "20px", fontWeight: "bold", textAlign: "center"}}>Menu Categories</p>
+                {menuCategories.map((mc,index) => {
+                    return <div className={styles.selectors} style={{borderBottom: "1.5px solid black"}} onClick={() => chooseCategory(mc, index)}><p style={{textAlign: "center", paddingTop: "15px", paddingBottom: "15px"}}>{mc.menuCategoryValue}</p></div>
+                })}
+            </div>
+            <div style={{display: "flex", width: "100%", justifyContent: "center", height: `${heightNeeded}px`}}>
+            {menuCategories.length > 0 &&
+                  <div id={styles.singlePage}>
+                   <div style={{display: "flex", marginTop: "12px", width: "100%", flexDirection: "column"}}>
+                <div style={{width: "100%"}}>
+                    <p style={{textAlign: "center", width: "100%", fontSize: "26px", fontFamily: "Josefin Sans", marginBottom: "18px"}}>{chosenCategory.menuCategoryValue}</p>
+                    {chosenCategory.catItems.map((catItem,index) => {
+                        return <div style={{marginLeft: "20px", marginTop: index === 0 ? "" : "18px"}}>
+                            <div style={{display: "flex"}}><p style={{fontWeight: "bold", marginRight: "20px"}}>{catItem.name}</p><p>${catItem.price}</p></div>
                             <p style={{width: "350px", marginTop: "10px"}}>{catItem.description}</p>
                         </div>
                     })}
@@ -135,18 +176,17 @@ function AddMenu(props) {
                        </div>
                         <textarea onChange={handleItemDescription} value={itemDescription} placeholder="Item Description" style={{marginTop: "15px", paddingLeft: "3px", fontFamily: "initial", width: "292px"}} rows={4}/>
                         </div>}
-                    
-               
-                    <button onClick={() => addMenuItem(index)} style={{border: "none", alignSelf: "flex-start", boxShadow: "0px 0px 2px black", height: "24px", fontSize: "12px", width: "100px", backgroundColor: "lightgreen", marginLeft: "20px", marginTop: "20px"}}>{amiv}</button> 
+                    <button onClick={addMenuItem} style={{border: "none", alignSelf: "flex-start", boxShadow: "0px 0px 2px black", height: "24px", fontSize: "12px", width: "100px", backgroundColor: "lightgreen", marginLeft: "20px", marginTop: "20px"}}>{amiv}</button> 
                 </div>
-            })}
+                </div>
+
             </div>
-            <div style={{display: "flex", marginTop: menuCategories.length > 0 ? "30px" : ""}}>
-            {showMenuCategoryInput && <input style={{height: "24px", paddingLeft: "4px", marginRight: "20px"}} onChange={manageMenuCategoryValue} value={menuCategoryValue} placeholder={"Enter Category Name"}/>}
-            <button onClick={handleButton} id={styles.mcb} style={{border: "none", boxShadow: "0px 0px 2px black", height: "28px", fontSize: "16px", width: "120px"}}>{menuCategoryButtonValue}</button>
-            </div>
+            }
             </div>
             </div>
+            </div>
+          
+           
             <OtherAlert showAlert={successMessage !== ""} alertMessage={successMessage} alertType={"success"}/>
             <OtherAlert alertType={"fail"} alertMessage={error} showAlert={error !== ""}/>
         </div>

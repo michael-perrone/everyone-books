@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import OtherAlert from "../../OtherAlerts/OtherAlerts";
 import axios from 'axios';
 
-class TennisClub extends React.Component {
+class BusinessInList extends React.Component {
   constructor(props) {
     super(props);
     this.state = { errorArray: [], following: props.following};
@@ -115,7 +115,7 @@ class TennisClub extends React.Component {
              }
            })}
           </div>
-          <div id={styles.buttonContainer}>
+          <div className={styles.buttonContainer}>
             {!this.state.following && <button onClick={this.follow(this.props.business._id)} className={styles.sectionButton}>Follow Business</button>}
             {this.state.following &&  <button onClick={this.unfollow(this.props.business._id)} className={styles.sectionButton} id={styles.unfollow}>Unfollow Business</button>}
             <button onClick={this.viewBusiness} className={styles.sectionButton} id={styles.marginLeft}>View Business</button>
@@ -132,4 +132,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default withRouter(connect(mapStateToProps)(TennisClub));
+export default withRouter(connect(mapStateToProps)(BusinessInList));

@@ -6,6 +6,7 @@
   height: 70px;
   border-top: 1px solid gray;
   display: flex;
+  z-index: 100000;
 }
 
 #mainContainer {

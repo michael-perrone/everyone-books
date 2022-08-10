@@ -191,7 +191,7 @@ const BookingColumnsEnter = (props) => {
             </div>
             </StatementAppear>
             <StatementAppear appear={bcnChosen && bookingColumnNumber !== ""}>
-                <p style={{marginTop: "20px", padding: "5px 5px 20px 5px", textAlign: 'left'}}>"Will your employees be working scheduled shifts from one set time to another in one of the {bookingColumnType}'s listed above? (Is a shift needed for an employee to be booked?) </p>
+                <p style={{marginTop: "20px", padding: "5px 5px 20px 5px", textAlign: 'left'}}>Will your employees be working scheduled shifts from one set time to another in one of the {bookingColumnType}'s listed above? (Is a shift needed for an employee to be booked?) </p>
                 <ColorButton backgroundColor={usesShifts === true ? "darkGray" : ""} clicked={setShiftsYes}>Yes</ColorButton>
                 <ColorButton backgroundColor={usesShifts === false ? "darkGray" : ""} clicked={setShiftsNo}>No</ColorButton>
             </StatementAppear>

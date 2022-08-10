@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import AdvancedSearch from "./AdvancedSearch/AdvancedSearch";
 import OtherAlert from "../OtherAlerts/OtherAlerts";
 
-class TennisClubsList extends React.Component {
+class BusinessList extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -44,10 +44,14 @@ class TennisClubsList extends React.Component {
         .then(response => {
           this.setState({ businesses: response.data.businessesBack });
           this.setState({ advancedSearchHit: true });
+          if (response.data.businessesBack.length === 0) {
+            this.setState({searchError: "There were no businesses found."})
+          }
         })
         .catch(error => {
           if (error.response.status === 406) {
-            this.setState({ searchError: error.response.data.message });
+            this.setState({ searchError: "There were no businesses found." });
+            this.setState({businesses: []})
           }
         });
     };
@@ -98,5 +102,5 @@ const mapStateToProps = state => {
   };
 };
 
-export default withRouter(connect(mapStateToProps)(TennisClubsList));
+export default withRouter(connect(mapStateToProps)(BusinessList));
 

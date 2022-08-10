@@ -4,13 +4,15 @@ import Axios from "axios";
 import { connect } from "react-redux";
 import BusinessInsideUserHome from "./BusinessInsideUserHome/BusinessInsideUserHome";
 import UserBooking from "./UserBooking/UserBooking";
+import UserGroup from './UserGroup/UserGroup';
 
 
 const UserHomeContainer = props => {
   const [businesses, setBusinesses] = useState([]);
   const [noBusinesses, setNoBusinesses] = useState(false);
-  const [bookings, setBookings] = useState([]);
   const [noBookings, setNoBookings] = useState(false);
+  const [groupsAndBookings, setGroupsAndBookings] = useState([]);
+  const [height, setHeight] = useState("");
 
 
   useEffect(() => {
@@ -25,13 +27,27 @@ const UserHomeContainer = props => {
     });
   }, []);
 
+  function unfollowBusiness(id) {
+    const nbs = [...businesses];
+    const businessesNeeded = nbs.filter(business => business._id !== id);
+    setBusinesses(businessesNeeded);
+    if (businessesNeeded.length === 0) {
+      setNoBusinesses(true);
+    }
+  }
+
   useEffect(() => {
-    Axios.get("/api/getBookings", {
+    Axios.get("/api/getBookings/ios", {
       headers: { "x-auth-token": props.userToken }
     }).then(response => {
       if (response.status === 200) {
-        setBookings(response.data.bookings);
-      } else {
+          const allezBookingsAndGroups = [...response.data.bookings, ...response.data.groups];
+          allezBookingsAndGroups.sort(function(a,b) {
+            return new Date(`${a.date}, ${a.time.split("-")[0]}`) - new Date(`${b.date}, ${b.time.split("-")[0]}`)
+          })
+          setGroupsAndBookings(allezBookingsAndGroups);
+      }
+      else if (response.status === 204) {
         setNoBookings(true);
       }
     });
@@ -41,12 +57,22 @@ const UserHomeContainer = props => {
     setBusinesses(newClubs);
   }
 
+  useEffect(function() {
+      if (groupsAndBookings.length > 2 || businesses.length > 2) {
+        setHeight("");
+      }
+      else if (window.innerWidth < 725 && groupsAndBookings.length + businesses.length > 1) {
+        setHeight("");
+      }
+      else {
+        setHeight("100vh")
+      }
+  }, [groupsAndBookings.length, businesses.length])
+
   return (
     <div
       id={styles.userHomeContainer}
-      className={
-        bookings.length > 3 || businesses.length > 3 ? "" : styles.homeContainerClass
-      }
+      style={{height: height}}
     >
       <div
         style={{
@@ -61,17 +87,20 @@ const UserHomeContainer = props => {
         <p
           style={{
             marginBottom: "6px",
-            fontFamily: '"Josefin Sans", sans-serif'
+            fontFamily: '"Josefin Sans", sans-serif',
+            fontSize: "20px"
           }}
         >
          Places you follow
         </p>
-        {businesses.length > 0 &&
+        {businesses.length !== undefined && businesses.length > 0 &&
           businesses.map(individualBusiness => {
             return (
               <BusinessInsideUserHome
+                key={individualBusiness._id}
                 setNewBusinesses={setNewBusinesses}
                 business={individualBusiness}
+                unfollowBusiness={() => unfollowBusiness(individualBusiness._id)}
               />
             );
           })}
@@ -93,7 +122,8 @@ const UserHomeContainer = props => {
         <p
           style={{
             marginBottom: "6px",
-            fontFamily: '"Josefin Sans", sans-serif'
+            fontFamily: '"Josefin Sans", sans-serif',
+            fontSize: "20px"
           }}
         >
           Your bookings coming up
@@ -107,8 +137,13 @@ const UserHomeContainer = props => {
             like to book with.
           </p>
         )}
-        {bookings.map(booking => {
-          return <UserBooking bookingInfo={booking} />;
+        {groupsAndBookings.map(bOrG => {
+          if (bOrG.serviceNames && bOrG.serviceNames.length > 0) {
+            return <UserBooking key={bOrG._id} bookingInfo={bOrG} />;
+          }
+          else {
+            return <UserGroup key={bOrG._id} groupInfo={bOrG}/>;
+          }
         })}
       </div>
     </div>

@@ -51,7 +51,6 @@
 .searchContainer {
   display: flex;
   flex-direction: column;
-  background-color: rgb(212,212,255);
   width: 100%;
 }
 

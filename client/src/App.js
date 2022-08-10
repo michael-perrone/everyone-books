@@ -19,6 +19,8 @@ import AdminNotifications from './Business/AdminNotifications/AdminNotifications
 import EmployeeNotifications from "./EmployeeHome/EmployeeNotifications/EmployeeNotifications";
 import RestaurantBuilder from "./BusinessSignup/RestaurantBuilder/RestaurantBuilder";
 import Restaurant from './Business/Restaurant/Restaurant';
+import UserView from './Business/UserView/UserView';
+import UserNotifications from './Notifications/UserNotifications/UserNotifications';
 
 class App extends React.Component {
   constructor(props) {
@@ -57,6 +59,7 @@ class App extends React.Component {
       <Route path="/restaurant/:adminId/" exact component={Restaurant}></Route>
         <Route path="/restaurantBuilder" exact component={RestaurantBuilder}></Route>
       <Route path="/employee/:employeeId/notifications" exact component={EmployeeNotifications}></Route>
+      <Route path="/user/:userId/notifications" exact component={UserNotifications}></Route>
         <Route path="/admin/:adminId/notifications" exact component={AdminNotifications}></Route>
         <Route path="/admin/:businessId/groups" exact component={Groups}></Route>
         <Route path="/admin/:businessId/businessSchedule" exact component={BusinessSchedule}></Route>
@@ -70,7 +73,7 @@ class App extends React.Component {
           exact
           component={
             this.props.user || okayToView
-              ? Business
+              ? UserView
               : NeedToLoginPage
           }
         />

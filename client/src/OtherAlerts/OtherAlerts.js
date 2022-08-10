@@ -6,7 +6,7 @@ const OtherAlert = props => {
     <div
       className={styles.otherAlertContainer}
       id={props.showAlert === true ? styles.otherAlertContainerAnimation : ""}
-      style={{
+      style={{zIndex: 50000000,
         backgroundColor:
           props.alertType === "success" ? "lightgreen" : "salmon",
           width: props.alertMessage.length > 40 ? "300px" : ""

@@ -36,12 +36,15 @@ router.get('/', adminAuth, async (req, res) => {
 
 router.post("/getServices", async (req, res) => {
   try {
+    console.log("YOOOOO");
     let businessProfile = await BusinessProfile.findOne({ business: req.body.businessId}).select(["serviceTypes"]);
     if (businessProfile) {
+      console.log(businessProfile);
       let serviceTypes = await ServiceType.find({ _id: businessProfile.serviceTypes });
       res.status(200).json({ services: serviceTypes });
     }
     else {
+      console.log("AHHH");
       res.status(204).send()
     }
   }

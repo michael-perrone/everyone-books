@@ -140,7 +140,11 @@ function MessageView(props) {
                 }
                 else if (type === "BBY" || type === "BBYR") {
                     setHeader("Business Added Booking");
-                    setMessage(props.notification.fromString + " has booked you at their business. You can find information about this booking on your bookings home page. Enjoy!");
+                    setMessage(props.notification.fromString + " has booked you for a booking at their business on the date of " + props.notification.potentialDate + " at " + props.notification.potentialStartTime  + ". You can find information about this booking on your bookings home page. Enjoy!");
+                }
+                else if (type === "BDB" || type === "BDBR") {
+                    setHeader("Business Deleted Booking");
+                    setMessage(props.notification.fromString + " has deleted a booking that you had scheduled at their business. This will be reflected in your upcoming bookings list on your home bookings page.");
                 }
                 else if (type === "YURA" || type === "YURAR") {
                     setHeader("User Request Accepted");
@@ -148,7 +152,7 @@ function MessageView(props) {
                 }
                 else if (type === "UATG" || type === "UATGR") {
                     setHeader("Group Addition");
-                    setMessage("You have been added as a member of a group on " + props.notification.fromString + " at " + props.notification.fromString + " at the time of " + props.notification.fromString + ". You can find this information on your bookings page.");
+                    setMessage("You have been added as a member of a group by " + props.notification.fromString + " on the date of " + props.notification.potentialDate + " at " + props.notification.potentialStartTime + ". You can find this information on your bookings page.");
                 }
                 else if (type === "UBU") {
                     setHeader("Booking Request");
