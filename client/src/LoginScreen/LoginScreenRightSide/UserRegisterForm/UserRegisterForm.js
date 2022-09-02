@@ -37,7 +37,8 @@ class UserRegisterForm extends React.Component {
         gender: false
       },
       showOptionals: false,
-      loggingInError: false
+      loggingInError: false,
+      phoneAlreadyInUse: false
     };
     this.setDirty = this.setDirty.bind(this);
   }
@@ -97,6 +98,9 @@ class UserRegisterForm extends React.Component {
           this.props.history.push(`/user/${this.props.user.id}`);
         })
         .catch(error => {
+          if (error.response && error.response.status === 405) {
+            this.setState({phoneAlreadyInUse: true})
+          }
           console.log(error);
         });
     }
@@ -202,6 +206,7 @@ class UserRegisterForm extends React.Component {
                 this.state.dirty.phoneNumber === true && (
                   <Alert alertPhrase={"Please enter a valid phone number"} />
                 )}
+                {this.state.phoneAlreadyInUse && <Alert alertPhrase={"This phone number is already registered"}/>}
             </div>
 
             <div className={styles.divWidthControl}>

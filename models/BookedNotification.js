@@ -11,7 +11,9 @@ const bookedNotificationSchema = new mongoose.Schema({
   },
   potentialStartTime: String,
   potentialDate: String,
-  potentialEmployee: String
+  potentialEmployee: String,
+  numPeople: Number,
+  estDuration: String
 });
 
 const Notification = mongoose.model("bookedNotification", bookedNotificationSchema);

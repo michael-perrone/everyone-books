@@ -22,7 +22,7 @@ function AddMenu(props) {
     const [error, setError] = useState("");
     const [newCategories, setNewCategories] = useState([]);
     const [menu, setMenu] = useState([]);
-    const [selectedIndex, setSelectedIndex] = useState();
+    const [selectedIndex, setSelectedIndex] = useState(0);
     const [cheatNum, setCheatNum] = useState(1);
     const [heightNeeded, setHeightNeeded] = useState(600);
     const [chosenCategory, setChosenCategory] = useState();
@@ -59,9 +59,10 @@ function AddMenu(props) {
             axios.post("/api/restaurant/addMenuCategory", {menuCategoryValue}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
                 if (response.status === 200) {
                     const menuCats = [...menuCategories];
-                    const newCats = [...newCategories];
                     menuCats.push({menuCategoryValue, catItems: []});
-                    newCats.push({menuCategoryValue, catItems: []});
+                    if (menuCats.length === 1) {
+                        setChosenCategory(menuCats[0]);
+                    }
                     setMenuCategories(menuCats);
                     setShowMenuCategoryInput(false);
                     setMenuCategoryButtonValue("Add Category");
@@ -147,19 +148,19 @@ function AddMenu(props) {
             <p>3. You can add as many sections as you want, the menu builder will add new pages so that you do not run out of room.</p>
             <div style={{width: "100%", display: "flex", justifyContent: "center", marginTop: "20px", alignItems: "center", flexDirection: "column"}}>
             <div>
-            <button onClick={handleButton} id={styles.mcb} style={{border: "none", boxShadow: "0px 0px 2px black", height: "28px", fontSize: "16px", width: "120px"}}>{menuCategoryButtonValue}</button>
             {showMenuCategoryInput && <input style={{height: "24px", marginLeft: "20px", paddingLeft: "4px", marginRight: "20px"}} onChange={manageMenuCategoryValue} value={menuCategoryValue} placeholder={"Enter Category Name"}/>}
+            <button onClick={handleButton} id={styles.mcb} style={{border: "none", boxShadow: "0px 0px 2px black", height: "28px", fontSize: "16px", width: "120px"}}>{menuCategoryButtonValue}</button>
             </div>
             <div style={{display: "flex"}}>
             <div style={{width: "200px"}}>
                 <p style={{marginBottom: "20px", fontWeight: "bold", textAlign: "center"}}>Menu Categories</p>
                 {menuCategories.map((mc,index) => {
-                    return <div className={styles.selectors} style={{borderBottom: "1.5px solid black"}} onClick={() => chooseCategory(mc, index)}><p style={{textAlign: "center", paddingTop: "15px", paddingBottom: "15px"}}>{mc.menuCategoryValue}</p></div>
+                    return <div className={styles.selectors} style={{borderBottom: "1.5px solid black"}} onClick={() => chooseCategory(mc, index)}><p style={{textAlign: "center", paddingTop: "15px", paddingBottom: "15px", backgroundColor: mc === chosenCategory ? "#f9e9f9" : ""}}>{mc.menuCategoryValue}</p></div>
                 })}
             </div>
             <div style={{display: "flex", width: "100%", justifyContent: "center", height: `${heightNeeded}px`}}>
-            {menuCategories.length > 0 &&
                   <div id={styles.singlePage}>
+                  {menuCategories.length > 0 &&
                    <div style={{display: "flex", marginTop: "12px", width: "100%", flexDirection: "column"}}>
                 <div style={{width: "100%"}}>
                     <p style={{textAlign: "center", width: "100%", fontSize: "26px", fontFamily: "Josefin Sans", marginBottom: "18px"}}>{chosenCategory.menuCategoryValue}</p>
@@ -179,9 +180,10 @@ function AddMenu(props) {
                     <button onClick={addMenuItem} style={{border: "none", alignSelf: "flex-start", boxShadow: "0px 0px 2px black", height: "24px", fontSize: "12px", width: "100px", backgroundColor: "lightgreen", marginLeft: "20px", marginTop: "20px"}}>{amiv}</button> 
                 </div>
                 </div>
+            }
 
             </div>
-            }
+            
             </div>
             </div>
             </div>

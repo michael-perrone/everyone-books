@@ -27,6 +27,16 @@ function MessageView(props) {
     }
 
     useEffect(function() {
+        if (props.type === "Choice" && props.admin.admin.tob === "Restaurant") {
+            Axios.post("/api/restaurant/getExtraInfo", {notificationId: props.notification._id}).then(response => {
+                if (response.status === 200) {
+                    
+                }
+            })
+        }
+    }, [props.type])
+
+    useEffect(function() {
         if (props.type === "Booking") {
             Axios.post("/api/notifications/getExtraInfo", {notificationId: props.notification._id}).then(response => {
                 if (response.status === 200) {
@@ -43,7 +53,6 @@ function MessageView(props) {
                         }
                     }
                     setMessage(`Your business has a booking request from ${props.notification.fromString}. They have requested that the employee ${response.data.employee.fullName} perfrom the services ${servicesString} at the time of ${props.notification.potentialStartTime} on the date of ${props.notification.potentialDate}. If you click book below this booking will be added into your schedule.`)
-                    
                 }
             })
         }
@@ -85,13 +94,18 @@ function MessageView(props) {
 
     useEffect(function() {
         if (props.notification) {
-            let type = props.notification.type;
+            let type = props.notification.type;     
                 if (type === "ESIDDR") {
                     console.log("YOOOOO");
                     setMessage("You denied " + props.notification.fromString + "'s request to become an employee at your business. If this was a mistake, you can add them to your business in the edit business profile menu.");
                     setHeader("Employee Denied");
                 }
+                else if (type === "UBT") {
+                    setHeader("Table Booking Request");
+                    setMessage(props.notification.fromString + ` has requested a table at your restaurant. The requested time is at ${props.notification.potentialStartTime} on ${props.notification.potentialDate}. The estimated duration of stay at the table is ${props.notification.estDuration}. If you click accept, they will be booked at an unreserved table that fits the needs of their reservation.`)
+                }
                 else if (type === "BAED" || type === "BAEDR") {
+                    setHeader("Employment Invite Denied");
                     setMessage("You denied an employment invite from " + props.notification.fromString + ". If this was a mistake please contact your employer and ask them for another invite.");
                 }
                 else if (type === "ERN" || type === "ERNR") {
@@ -223,8 +237,13 @@ function MessageView(props) {
         })
     }
 
+    function bookTable() {
+        const obj = {date: props.notification.potentialDate, selectedTime: props.notification.potentialStartTime, }
+        Axios.post("/api/restaurant/bookTable", obj, {headers: {'x-auth-token': props.adminToken}})
+    }
+
     return (
-        <div style={{width: "370px", height: props.height ? props.height : ""}}>  
+        <div style={{width: "360px", height: props.height ? props.height : ""}}>  
             {props.type === "Alert" &&
             <div id={styles.messageViewContainer}>
                 <p className={styles.date}>{props.notification.date}</p>

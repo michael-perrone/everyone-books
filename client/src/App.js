@@ -97,8 +97,15 @@ class App extends React.Component {
             component={EmployeeHome}
           />
         )}
+        {adminToken && adminToken.admin.tob === "Restaurant" && (
+              <Route
+              path={`/restaurant/${adminToken.admin.id}`}
+              exact
+              component={AdminHome}
+            />
+        )};
 
-        {adminToken && (
+        {adminToken && adminToken.admin.tob !== "Restaurant" && (
           <Route
             path={`/admin/${adminToken.admin.id}`}
             exact
@@ -121,7 +128,7 @@ class App extends React.Component {
             } else if (token) {
               return <Redirect to={`/user/${token.user.id}`} />;
             } else if (adminToken) {
-              if (this.props.admin.admin.type === "Restaurant") {
+              if (this.props.admin.admin.tob === "Restaurant") {
                 return <Redirect to={`/restaurant/${adminToken.admin.id}`} />;
               }
               else {

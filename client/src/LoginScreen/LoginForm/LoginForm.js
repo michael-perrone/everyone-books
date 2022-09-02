@@ -41,7 +41,6 @@ class LoginForm extends React.Component {
           // this.props.loginFailed();
         }
         const token = decoder(response.data.token);
-
         if (token.employee) {
           this.props.employeeLoginSuccess(response.data.token);
           this.props.history.push(
@@ -52,7 +51,12 @@ class LoginForm extends React.Component {
           this.props.history.push(`/user/${this.props.user.user.id}`);
         } else if (token.admin) {
           this.props.adminLoginSuccess(response.data.token);
-          this.props.history.push(`/admin/${this.props.admin.admin.id}`);
+          if (token.admin.tob === "Restaurant") {
+            this.props.history.push(`/restaurant/${token.admin.id}`);
+          }
+          else {
+            this.props.history.push(`/admin/${this.props.admin.admin.id}`);
+          }
         }
       })
       .catch(error => {

@@ -7,13 +7,22 @@ const MenuTab = props => {
       props.menu.length > 0 ?
         <div id={styles.userMenuContainer}>
             {props.menu.map(menuCategory => {
-                return <div style={{width: "200px", marginTop: "10px"}}>
-                    <p style={{fontWeight: "bold", fontSize: "16px"}}>{menuCategory.menuCategoryName}</p>
+                return <div style={{width: "260px", marginTop: "10px"}}>
+                    <p style={{fontSize: "24px", marginTop: "10px", textAlign: "center"}}>{menuCategory.menuCategoryValue}</p>
+                    {menuCategory.catItems.map(item => {
+                        return <div style={{marginTop: "12px"}}>
+                            <div style={{display: "flex"}}>
+                            <p style={{fontWeight: "bold"}}>{item.name}</p>
+                            <p style={{marginLeft: "20px"}}>${item.price}</p>
+                            </div>
+                            <p style={{marginTop: "4px"}}>{item.description}</p>
+                        </div>
+                    })}
                 </div>
             })}
         </div>
         :
-        <p style={{textAlign: "center", marginTop: "20px"}}>This business has no services.</p>
+        <p style={{textAlign: "center", marginTop: "20px"}}>This business has not added its menu yet.</p>
     )
 }
 

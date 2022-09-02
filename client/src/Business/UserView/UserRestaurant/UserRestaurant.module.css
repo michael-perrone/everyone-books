@@ -1,5 +1,8 @@
 #urContainer {
     background-color: lightgray;
     width: 100%;
-    height: 1500px;
+    height: 100vh;
+    display: flex;
+    padding-top: 30px;
+    justify-content: space-around;
 }

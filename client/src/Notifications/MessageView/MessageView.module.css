@@ -1,8 +1,12 @@
 #messageViewContainer {
-    width: 370px;
+    width: 340px;
     height: 600px;
-    margin-top: 40px;
+    margin-top: 20px;
     position: relative;
+    box-shadow: 0px 0px 2px black;
+    padding: 0px 10px;
+    background-color: whitesmoke;
+    
 }
 
 .bu {
@@ -20,6 +24,7 @@
 
 .date {
     position: absolute;
+    right: 8px;
     font-size: 16px;
 }
 

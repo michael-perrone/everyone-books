@@ -31,6 +31,8 @@ function AddLayout(props) {
     const [tableId, setTableId] = React.useState(1);
     const [realTables, setRealTables] = React.useState([]);
     const [successMessage, setSuccessMessage] = React.useState("");
+    const [deletedTables, setDeletedTables] = React.useState([]);
+    const [cNum, setCNum] = React.useState();
 
 
     React.useEffect(function() {
@@ -47,6 +49,9 @@ function AddLayout(props) {
             newRealTables.push(newRealTable);
             setRealTables(newRealTables);
         }
+        if (tables.length === 0) {
+            setRealTables([]);
+        }
     }, [tables.length])
 
 
@@ -56,15 +61,8 @@ function AddLayout(props) {
                 if (response.status === 200) {
                     setHeight(response.data.restaurant.boxHeight);
                     setTables(response.data.restaurant.tables);
+                    setCNum(response.data.restaurant.c);
                     setWidth(response.data.restaurant.boxWidth);
-                    let num = 0;
-                    for (let i = 0; i < response.data.restaurant.tables.length; i++) {
-                        if (response.data.restaurant.tables[i].id > num) {
-                            num = response.data.restaurant.tables[i].id;
-                        }
-                    }
-                    num++;
-                    setTableId(num);
                 }
             }
         ).catch(
@@ -87,8 +85,6 @@ function AddLayout(props) {
     }, [showBlock]);
 
   
-    
-
     function grabAny(e) {
         if (moving === "right") {
             if (e.pageX !== 0) {
@@ -175,16 +171,28 @@ function AddLayout(props) {
         const newTables = [...tables];
         const tableCords = table.current.getBoundingClientRect();
         const boxCords = box.current.getBoundingClientRect();
-        const left = tableCords.left - boxCords.left;
+        let left = tableCords.left - boxCords.left;
         const top = tableCords.top - boxCords.top;
-        const newTable = {height: tableHeight, width: tableWidth, left, top, id: tableId};
+        if (left % 20 >= 10) {
+            console.log(left);
+            left = left + (20 - (left % 20));
+            console.log(left)
+        }
+        else {
+            console.log(left)
+            left = left - (left % 20);
+            console.log(left);
+        }
+        const newTable = {height: tableHeight, width: tableWidth, left: left, top , id: cNum};
         console.log(newTable);
+        console.log(top, left);
         newTables.push(newTable);
         setTables(newTables);
         setTranslate({x: 0, y: 0});
         setShowButton(false);
-        const idPlusOne = tableId + 1;
-        setTableId(idPlusOne);
+        setCNum(prevNum => {
+            return prevNum + 1;
+        })
     }
 
     function rotateTable() {
@@ -249,6 +257,11 @@ function AddLayout(props) {
     function deleteTable(id) {
         const cloneTables = [...tables];
         const tablesNeeded = cloneTables.filter(table => {
+            if (table.id === id) {
+                const newDeleted = [...deletedTables];
+                newDeleted.push(table);
+                setDeletedTables(newDeleted);
+            }
             return table.id !== id;
         })
         setTables(tablesNeeded);
@@ -256,7 +269,7 @@ function AddLayout(props) {
 
     function sendTableInfo() {
         const tables = realTables;
-        Axios.post('/api/restaurant/updateTables', {tables}, {headers: {'x-auth-token': props.adminToken}}).then(
+        Axios.post('/api/restaurant/updateTables', {tables, cNum}, {headers: {'x-auth-token': props.adminToken}}).then(
             response => {
                 if (response.status === 200) {
                     setSuccessMessage("");
@@ -271,7 +284,7 @@ function AddLayout(props) {
             <div style={{alignItems: showBlock ? "flex-start" : "center"}} onDragOver={grabAny} id={styles.whole}>
                 {showBlock && <div ref={box} id={styles.layoutBlock} style={{height: `${height}px`, width: `${width}px`}}>
                 {showButton && <button id={styles.setTableButton} onClick={setTable} style={{position: "absolute", right: 0, top: "-40px", zIndex: 1002020}}>Set Table</button>}
-                    <div draggable={false} onMouseLeave={pointerIsUp} onPointerUp={pointerIsUp} onPointerMove={pointerIsMoving} onPointerDown={pointerIsDown} id={'yoo'} style={{transform: `translateX(${translate.x}px) translateY(${translate.y}px)`, zIndex: 1000, position: "absolute", cursor: "grab", top: "-60px", right: `${-10 - (numOfPeople * 4)}px`, height: tableHeight * 2, width: tableWidth * 2, display: 'flex', justifyContent: "center", alignItems: "center"}}>
+                    <div draggable={false} onMouseLeave={pointerIsUp} onPointerUp={pointerIsUp} onMouseMove={pointerIsMoving} onPointerDown={pointerIsDown} id={'yoo'} style={{transform: `translateX(${translate.x}px) translateY(${translate.y}px)`, zIndex: 1000, position: "absolute", cursor: "grab", top: "-60px", right: `${-10 - (numOfPeople * 4)}px`, height: tableHeight * 2, width: tableWidth * 2, display: 'flex', justifyContent: "center", alignItems: "center"}}>
                        <div draggable={false} ref={table} style={{ backgroundColor: "rgb(249, 233, 249)", height: tableHeight, width: tableWidth, border: "2px solid black"}}></div>
                     </div>
                     <div style={{position: "absolute", top: "-50px"}}>
@@ -290,7 +303,7 @@ function AddLayout(props) {
                             <option>20</option>
                         </select>      
                     </div>
-                    {tables.length > 0 && <button id={styles.finishButton} onClick={sendTableInfo} style={{border: "none", boxShadow: "0px 0px 2px black", height: "30px", width: "140px", fontWeight: "bold", fontSize: "18px", position: "absolute", bottom: "-45px", left: width / 2 - 50}}>Update Tables</button>}
+                    {(tables.length > 0 || deletedTables.length) > 0 && <button id={styles.finishButton} onClick={sendTableInfo} style={{border: "none", boxShadow: "0px 0px 2px black", height: "30px", width: "140px", fontWeight: "bold", fontSize: "18px", position: "absolute", bottom: "-45px", left: width / 2 - 50}}>Update Tables</button>}
                     {tables.map(table => {
                           return <div onDoubleClick={(id) => deleteTable(table.id)} ref={table} style={{ backgroundColor: "rgb(229, 229, 229)", height: table.height, width: table.width, position: "absolute", top: table.top, left: table.left, border: "2px solid black", display: "flex", justifyContent: "center", alignItems: "center"}}><p style={{fontSize: "20px", fontWeight: "bold"}}>{getNum(table.width, table.height)}</p></div>
                         })}

@@ -10,7 +10,6 @@
     align-items: center;
     flex-direction: column;
     background-color: rgb(246, 246, 246);
-    height: 110vh;
 }
 
 #backDrop {
@@ -23,4 +22,39 @@
     width: 100%;
     display: flex;
     justify-content: center;
+  }
+
+  #topPart {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    margin-left: 30px;
+    align-items: center;
+    width: 1000px;
+  }
+
+  @media (max-width: 1000px) {
+      #topPart {
+          flex-direction: column;
+          height: 300px;
+          width: 365px;
+      }
+  }
+
+
+  @media (max-width: 500px) {
+      #trickyBox {
+          width: 365px;
+          border: 2px solid black;
+          margin-top: 10px;
+      }
+
+      #topPart {
+          margin-left: 0;
+      }
+
+      #wholeBox {
+          border: none;
+          margin-top: 0px;
+      }
   }

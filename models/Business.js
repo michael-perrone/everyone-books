@@ -62,7 +62,8 @@ const BusinessSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "clubProfile"
   },
-  eq: String
+  eq: String,
+  c: Number
 });
 const Business = mongoose.model("business", BusinessSchema);
 

@@ -16,6 +16,10 @@ function AdminNotification(props) {
 
     useEffect(function() {
         let type = props.notification.type;
+            if (type === "UBT") {
+                setNotiMessage(props.notification.fromString + " has requested a table at your restaurant.");
+                setType("Choice");
+            }
             if (type === "ESIDDR") { 
                 setNotiMessage(props.notification.fromString + " was denied from becoming an employee at your business.");
                 setType("Alert");

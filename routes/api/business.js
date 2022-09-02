@@ -197,7 +197,7 @@ router.post("/performance", authAdmin, async (req, res) => {
 
 
 router.post('/', async (req, res) => {
-    const business = await Business.findOne({ _id: req.body.businessId }).select(['schedule', "menu", 'businessName', 'bookingColumnType', 'typeOfBusiness', 'address', 'city', 'zip', 'state', 'bookingColumnNumber', 'website', 'phoneNumber']);
+    const business = await Business.findOne({ _id: req.body.businessId }).select(['schedule', 'businessName', 'bookingColumnType', 'typeOfBusiness', 'address', 'city', 'zip', 'state', 'website', 'phoneNumber', 'bookingColumnNumber', "menu", "tables"]);
     console.log(business);
     const profile = await BusinessProfile.findOne({ business: req.body.businessId })
     if (profile && business) {

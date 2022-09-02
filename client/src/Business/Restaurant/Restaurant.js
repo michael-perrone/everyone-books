@@ -18,7 +18,7 @@ function Restaurant(props) {
     const [selectedHeight, setSelectedHeight] = React.useState();
     const [selectedWidth, setSelectedWidth] = React.useState();
     const [schedule, setSchedule] = React.useState([]);
-    const [tableColor, setTableColor] = React.useState();
+    const [tableColor, setTableColor] = React.useState('lightgreen');
     const [businessClosed, setBusinessClosed] = React.useState(false);
     const [times, setTimes] = React.useState([]);
     const [selectedTime, setSelectedTime] = React.useState();
@@ -150,26 +150,23 @@ function Restaurant(props) {
 
     React.useEffect(function() {
         if (schedule.length > 0) {
-            const timeNum = stringToIntTime[selectedTime];
+            const timeNum = stringToIntTime[getTime()];
             const dateChosen = new Date(dateString);
-            console.log(dateChosen);
             const day = dateChosen.getDay();
-            console.log(timeNum);
-            console.log(stringToIntTime[schedule[day].close])
-            console.log(day);
             if (timeNum < stringToIntTime[schedule[day].open] || timeNum > stringToIntTime[schedule[day].close]) {
-                setBusinessClosed(true);
-                setTableColor("lightgray");
+
                 setSelectedTime(schedule[day].open)
             }
             else {
-                setBusinessClosed(false);
-                setTableColor('lightgreen');
+
                 setSelectedTime(getTime())
             }
             setTimes(getTimes(schedule[day].open, schedule[day].close));
         }
     }, [dateString, schedule])
+
+
+
 
     function createRed(time, estDuration) {
         return `rgb(255,0,0,${1 - (stringToIntTime[selectedTime] - stringToIntTime[time]) / estDurationToNum[estDuration] + .08}`;
@@ -284,17 +281,19 @@ function Restaurant(props) {
 
     return (
     <div id={styles.container}>
-        <div style={{display: "flex", width: boxWidth, justifyContent: "space-around", marginTop: "20px", marginLeft: "30px", alignItems: "center", width: "1000px"}}>
+        <div id={styles.topPart}>
             <div style={{marginTop: "3px", display: "flex"}}>
                 <p style={{marginRight: "10px", fontSize: "20px"}}>Date:</p>
                 <DateDrop setDateString={(dateString) => toSetDateString(dateString)}/>
                 </div>
+                <div style={{display: "flex"}}>
             <p style={{fontSize: "20px", marginTop: "4px", marginLeft: "-10px"}}>Table Schedule Time: </p>
-             <select onChange={toSetSelectedTime} value={selectedTime} style={{fontSize: "16px", height: "30px", border: "none", marginLeft: "-30px", boxShadow: "0px 0px 2px black", width: "100px"}}>
+             <select onChange={toSetSelectedTime} value={selectedTime} style={{fontSize: "16px", height: "30px", border: "none", marginLeft: "10px", boxShadow: "0px 0px 2px black", width: "100px"}}>
                 {times.map(time => {
                     return <option>{time}</option>
                 })}
             </select>
+            </div>
             <div style={{width: "365px", boxShadow: "0px 0px 3px black", height: "120px", backgroundColor: "#f9e9f9", position: "relative"}}>
                {hoverTable.timeStart && <div style={{marginLeft: "8px", paddingTop: "4px", height: "116px", display: "flex", flexDirection: "column", justifyContent: "space-around"}}>
                    <p>Time Start: {hoverTable.timeStart}</p>
@@ -308,12 +307,14 @@ function Restaurant(props) {
             </div>
         </div>
         {businessClosed && <p style={{fontWeight: "bold", fontSize: "26px", marginTop: "20px"}}>Restaurant Closed</p>}
-        <div style={{height: boxHeight, width: boxWidth}} id={styles.wholeBox}>
+        <div id={styles.trickyBox} style={{overflow: "auto"}}>
+        <div style={{height: boxHeight, minWidth: boxWidth, overflow: "auto"}} id={styles.wholeBox}>
            {tables.map(table => {
                return <div onClick={() => hoverOver(table.id, booked(table.id))} onDoubleClick={() => clickTable(table)} style={{border: "2px solid black", cursor: "pointer", backgroundColor: booked(table.id), height: table.height, width: table.width, position: "absolute", left: table.left, top: table.top, display: "flex", justifyContent: "center", alignItems: "center"}}><p style={{fontSize: "20px", fontWeight: "bold"}}>{getNum(table.width, table.height)}</p>
                </div>     
            })}
-           {showBackDrop && <div style={{display: "flex", position: "absolute", top: 0, lef: 0, width: "100%", justifyContent: "center"}}><div id={styles.backDrop}><ViewTable exitTableView={exitTableView} fakeId={selectedId} dateString={dateString} times={times} num={getNum(selectedWidth, selectedHeight)} check={checkIfTakenOrReserved2(selectedId)} hide={() => setShowBackDrop(false)}/></div> </div>}
+           {showBackDrop && <div style={{display: "flex", position: "absolute", top: 0, lef: 0, width: "100%", justifyContent: "center"}}><div id={styles.backDrop}><ViewTable exitTableView={exitTableView} fakeId={selectedId} dateString={dateString} times={times} num={getNum(selectedWidth, selectedHeight)} check={checkIfTakenOrReserved2(selectedId)} selectedTime={selectedTime} hide={() => setShowBackDrop(false)}/></div> </div>}
+        </div>
         </div>
         <OtherAlert showAlert={successMessage !== ""} alertMessage={successMessage} alertType={"success"}/>
     </div>

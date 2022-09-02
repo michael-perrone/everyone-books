@@ -7,9 +7,11 @@ const Business = require('../../models/Business');
 const adminAuth = require("../../middleware/authAdmin");
 const TableBooking = require("../../models/TableBooking");
 const utils = require("../../utils/utils");
+const userAuth = require("../../middleware/authUser");
+const BookedNotification = require("../../models/BookedNotification");
 
 router.get("/", adminAuth, async (req, res) => {
-    const restaurant = await Business.findOne({_id: req.admin.businessId}).select(["tables", "boxHeight", "boxWidth", "schedule"]);
+    const restaurant = await Business.findOne({_id: req.admin.businessId}).select(["tables", "boxHeight", "boxWidth", "schedule", "c"]);
     if (restaurant) {
         res.status(200).json({restaurant});
     }
@@ -43,6 +45,9 @@ router.post("/bookTable", adminAuth, async (req, res) => {
         }
         for (let z = 0; z < bookedTables.length; z++) {
             if (req.body.fakeId === bookedTables[z].fakeId) {
+                if (utils.stringToIntTime[bookedTables[z].timeStart] + estDurationToNum[tableBookings[z].estDuration] === utils.stringToIntTime[req.body.selectedTime]) {
+                    break;
+                }
                 return res.status(406).send();
             }
         }
@@ -50,7 +55,6 @@ router.post("/bookTable", adminAuth, async (req, res) => {
         const currentTime = utils.getTime();
         const selectedDate = new Date(req.body.date + ", " + req.body.selectedTime);
         const selectedTime = req.body.selectedTime;
-      
         const checker = utils.compareDates(currentDate.getFullYear(), selectedDate.getFullYear(), currentDate.getMonth(), selectedDate.getMonth(), currentDate.getDate(), selectedDate.getDate())
 
         if (!checker) {
@@ -153,6 +157,7 @@ router.post("/updateTables", adminAuth, async (req, res) => {
     const business = await Business.findOne({_id: req.admin.businessId});
     console.log(req.body);
     business.tables = req.body.tables;
+    business.c = req.body.cNum;
     await business.save();
     res.status(200).send();
 })
@@ -198,6 +203,8 @@ router.post("/addMenuItem", adminAuth, async (req, res) => {
     try {
         const business = await Business.findOne({_id: req.admin.businessId});
         const index = req.body.index;
+        console.log(business.menu);
+        console.log(index);
         business.menu[index].catItems.push({"name": req.body.name, "description": req.body.description, "price": req.body.price});
         business.markModified("menu");
         await business.save();
@@ -216,6 +223,205 @@ router.get("/getMenu", adminAuth, async (req, res) => {
     console.log(menu);
     return res.status(200).send({menu});
 });
+
+
+router.post("/userTableRequest", userAuth, async (req, res) => {
+    const currentDate = new Date();
+    const currentTime = utils.getTime();
+    const selectedDate = new Date(req.body.dateString + ", " + req.body.time);
+    const selectedTime = req.body.time;
+    let check;
+    const checker = utils.compareDates(currentDate.getFullYear(), selectedDate.getFullYear(), currentDate.getMonth(), selectedDate.getMonth(), currentDate.getDate(), selectedDate.getDate());
+    if (checker === "sameDay") {
+        console.log(utils.stringToIntTime[selectedTime], utils.stringToIntTime[currentTime]);
+        if (utils.stringToIntTime[selectedTime] < utils.stringToIntTime[currentTime]) {
+           return res.status(405).send();
+        }
+        else {
+            check = true;
+        }
+    }
+    else if (checker === "futureDay") {
+        check = true;
+    }
+    if (!check) {
+        return res.status(405).send();
+    }
+    const business = await Business.findOne({_id: req.body.businessId});
+    const tablesHavePotential = [];
+    for (let i = 0; i < business.tables.length; i++) {
+        let biggestNum = business.tables[i].height > business.tables[i].width ? business.tables[i].height : business.tables[i].width;
+        console.log(utils.biggestNumConverter[biggestNum]);
+        if (utils.biggestNumConverter[biggestNum] >= Number(req.body.numOfPeople)) {
+            tablesHavePotential.push(business.tables[i]);
+        }
+    }
+    const tableBookings = await TableBooking.find({businessId: business._id, date: req.body.dateString});
+    console.log(tableBookings);
+    if (tablesHavePotential.length > 0) {
+        const badTables = [];
+        for (let i = 0; i < tablesHavePotential.length; i++) { // check tableBookings against tablesHavePotential first lets change the id thing 
+            let z = 0;
+            while (z < tableBookings.length) {
+                if (tablesHavePotential[i].id === tableBookings[z].fakeId) {
+                    badTables.push(tablesHavePotential[i]);
+                }
+                z++;
+            }
+        }
+        if (tablesHavePotential.length !== badTables.length) {
+            return res.status(200).send();
+        }
+        else {
+            const tableBookingsArray = [];
+            for (let i = 0; i < business.c; i++) {
+                if (tableBookings[i].fakeId == i) {
+                    let test = false;
+                    let placeHolderSpot;
+                    for (let t = 0; t < tableBookingsArray.length; t++) {
+                        if (tableBookingsArray[i][0].fakeId === i) {
+                            test = true;
+                            placeHolderSpot = tableBookingsArray[i];
+                        }
+                    }
+                    if (test) {
+                        placeHolderSpot.push(tableBookings[i])
+                    }
+                    else {
+                        tableBookingsArray.push([tableBookings[i]]);
+                    }
+                }
+            }
+            
+            const timesComingIn = [];
+            for (let i = 0; i < utils.timeDurationStringToInt[req.body.estTime]; i++) {
+                timesComingIn.push(utils.timeDurationStringToInt[req.body.ft] + i);
+            }
+            let availableTables = [];
+            for (let i = 0; i < tableBookingsArray.length; i++) {
+                console.log(i);
+                let isAvailable = true;
+                for (let t = 0; t < tableBookingsArray[i].length; t++) {
+                    let loopTimeNum = utils.stringToIntTime[tableBookingsArray[i][t].timeStart];
+                    while (loopTimeNum <= utils.stringToIntTime[tableBookingsArray[i][t].timeStart] + utils.timeDurationIntToString[tableBookingsArray[i][t].estDuration]) {
+                        timesComingIn.forEach(function(element) {
+                            if (element === loopTimeNum) {
+                                isAvailable = false;
+                            }
+                        })
+                        startTimeNum++;
+                    }
+                     
+                }
+                if (isAvailable) {
+                    availableTables.push(tableBookingsArray[i]);
+                }
+            }
+
+            if (availableTables.length === 0) {
+                res.status(406).send();
+            }
+            else {
+                let tableString = "";
+                for (let i = 0; i < availableTables.length; i++) {
+                    if (tableString === "") {
+                        tableString += availableTables[i].fakeId.toString();
+                    }
+                    if (i === availableTables.length - 1) {
+                        tableString += availableTables[i].fakeId.toString();
+                    }
+                    else {
+                        tableString += ` ${availableTables[i].fakeId.toString()}`;
+                    }
+                }
+                res.status(200).send({tables: tableString});
+            }
+        }
+    }
+    else {
+        return res.status(406).send();
+    }
+})
+
+
+router.post("/sendRequest", userAuth, async (req, res) => {
+    const admin = await Admin.findOne({business: req.body.businessId});
+    const user = await User.findOne({_id: req.body.userId});
+    const date = new Date();
+    const newNoti = new BookedNotification({
+        date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
+        fromId: req.body.userId,
+        fromString: user.fullName,
+        potentialStartTime: req.body.ft,
+        potentialDate: req.body.dateString,
+        type: "UBT",
+        numPeople: req.body.numOfPeople,
+        estDuration:req.body.estTime
+    })
+    const newAdminNotis = [...admin.bookedNotifications];
+    newAdminNotis.push(newNoti);
+    admin.bookedNotifications = newAdminNotis;
+    await newNoti.save();
+    await admin.save();
+    return res.status(200).send();
+})
+
+router.post("/getExtraInfo", adminAuth, async (req, res) => {
+    const currentDate = new Date();
+    const currentTime = utils.getTime();
+    const selectedDate = new Date(req.body.dateString + ", " + req.body.time);
+    const selectedTime = req.body.time;
+    let check;
+    const checker = utils.compareDates(currentDate.getFullYear(), selectedDate.getFullYear(), currentDate.getMonth(), selectedDate.getMonth(), currentDate.getDate(), selectedDate.getDate());
+    if (checker === "sameDay") {
+        console.log(utils.stringToIntTime[selectedTime], utils.stringToIntTime[currentTime]);
+        if (utils.stringToIntTime[selectedTime] < utils.stringToIntTime[currentTime]) {
+           return res.status(405).send();
+        }
+        else {
+            check = true;
+        }
+    }
+    else if (checker === "futureDay") {
+        check = true;
+    }
+    if (!check) {
+        return res.status(405).send();
+    }
+    const business = await Business.findOne({_id: req.body.businessId});
+    const tablesHavePotential = [];
+    for (let i = 0; i < business.tables.length; i++) {
+        let biggestNum = business.tables[i].height > business.tables[i].width ? business.tables[i].height : business.tables[i].width;
+        console.log(utils.biggestNumConverter[biggestNum]);
+        if (utils.biggestNumConverter[biggestNum] >= Number(req.body.numOfPeople)) {
+            tablesHavePotential.push(business.tables[i]);
+        }
+    }
+    const tableBookings = await TableBooking.find({businessId: business._id, date: req.body.dateString});
+    console.log(tableBookings);
+    if (tablesHavePotential.length > 0) {
+        const badTables = [];
+        for (let i = 0; i < tablesHavePotential.length; i++) { // check tableBookings against tablesHavePotential first lets change the id thing 
+            let z = 0;
+            while (z < tableBookings.length) {
+                if (tablesHavePotential[i].id === tableBookings[z].fakeId) {
+                    badTables.push(tablesHavePotential[i]);
+                }
+                z++;
+            }
+        }
+        if (tablesHavePotential.length !== badTables.length) {
+            return res.status(200).send();
+        } 
+        else {
+            
+        }
+    }
+    else {
+        return res.status(406).send();
+    }
+})
+
 
 
 // router.post('/tableStatus', async (req, res) => {

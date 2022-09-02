@@ -73,17 +73,19 @@ const Core = (props) => {
        }
       }
 
-
       useEffect(function() {
           if (dateString && props.business.schedule) {
             console.log("yoooo");
+            console.log("SPIDERMANNNNN");
             console.log(props.business);
             const day = new Date(dateString).getDay();
             console.log(day);
             const open = props.business.schedule[day].open;
             const close = props.business.schedule[day].close;
+            console.log(open);
             console.log(getTs(open,close));
           setTimes(getTs(open, close));
+          console.log(open,close);
           }
       },[dateString, props.business])
 
@@ -121,7 +123,7 @@ const Core = (props) => {
         }
   
         if (employeeNeeded === true) {
-        Axios.post('api/getBookings', {date: dateString, serviceIds: selectedServices, timeChosen: time, businessId: props.admin.admin.businessId}, {headers: {'x-auth-token': props.adminToken}}).then(
+        Axios.post('api/getBookings/userChecking', {date: dateString, serviceIds: selectedServices, timeChosen: time, businessId: props.business._id}, {headers: {'x-auth-token': props.userToken}}).then(
           response => {
              if (response.status === 200) {
                setBookingType("Regular")

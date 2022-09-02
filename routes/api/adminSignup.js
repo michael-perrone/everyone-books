@@ -25,8 +25,7 @@ router.post('/check', async (req, res) => {
   }
 })
 
-router.post('/',
-  async (req, res) => {
+router.post('/', async (req, res) => {
     try {
       console.log(req.body);
       console.log(req.body.eq)
@@ -73,7 +72,8 @@ router.post('/',
             website: req.body.website,
             phoneNumber: req.body.phoneNumber,
             eq: req.body.eq,
-            tables: req.body.tables
+            tables: req.body.tables,
+            c: req.body.tables.length
           });
         }
 
@@ -104,14 +104,11 @@ router.post('/',
           business: newBusiness.id
         });
 
-        console.log('dwdwddwdd')
-
         const salt = await bcrypt.genSalt(10);
         newAdmin.password = await bcrypt.hash(
           req.body.password,
           salt
         );
-        console.log('wdwdw')
 
         const payload = {
           admin: {
@@ -119,7 +116,8 @@ router.post('/',
             name: `${newAdmin.firstName} ${newAdmin.lastName}`,
             isAdmin: true,
             id: newAdmin.id,
-            businessId: newBusiness.id
+            businessId: newBusiness.id,
+            tob: newBusiness.typeOfBusiness
           }
         };
 
@@ -173,7 +171,8 @@ router.post('/',
             phoneNumber: req.body.businessInfo.phoneNumber,
             website: req.body.businessInfo.website,
             eq: req.body.eq,
-            tables: req.body.tables
+            tables: req.body.tables,
+            c: req.body.tables.length 
           });
         }
         else {
@@ -217,11 +216,11 @@ router.post('/',
         const payload = {
           admin: {
             bn: newBusiness.businessName,
-            type: newBusiness.typeOfBusiness,
             name: `${newAdmin.firstName} ${newAdmin.lastName}`,
             isAdmin: true,
             id: newAdmin.id,
-            businessId: newBusiness.id
+            businessId: newBusiness.id,
+            tob: newBusiness.typeOfBusiness
           }
         };
 

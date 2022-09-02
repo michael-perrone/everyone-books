@@ -70,6 +70,9 @@ function AdminNotifications(props) {
                     if (data.length === 0) {
                         return;
                     }
+                    if (flippedNotis[0].type === "UBT") {
+                        setType("Choice");
+                    }
                     if (flippedNotis[0].type === "ESIDDR") { 
                         setType("Alert");
                     }
@@ -106,15 +109,14 @@ function AdminNotifications(props) {
     },[])
 
     return (
-        <div style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
+        <div id={styles.bigContainer} style={{display: "flex", alignItems: "center", flexDirection: "column", backgroundColor: "rgb(225, 225, 225)"}}>
              <p style={{marginTop: "20px", fontSize: "20px", fontWeight: "bold"}}>Notifications Center</p>
-            <div style={{display: "flex", justifyContent: 'space-around', width: "100%", marginTop: "20px"}}> 
+            <div id={styles.mainContainer}> 
              <div id={styles.notificationsContainer}>
                 {notifications && notifications.length === 0 && <p style={{textAlign: "center", fontSize: "18px", fontWeight: "bold", marginTop: "10px"}}>You do not have any notifications!</p>}
                 {notifications && notifications.length > 0 && (
                     <div>
                         {notifications.map(notification => {
-                            console.log(notification)
                             return (
                                 <AdminNotification notificationClicked={notiClicked} chosen={chosen} toSetChosen={toSetChosen} notification={notification}/> 
                             )

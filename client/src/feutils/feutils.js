@@ -320,11 +320,11 @@ export function getTime() {
         hour = 11;
         ampm = "PM";
     }
-    if (hour === 12 && !dontRaise && raiseHour) {
-        hour = 1;
-    }
     if (hour !== 12 && !dontRaise && raiseHour) {
         hour++;
+    }
+    if (hour === 12 && !dontRaise && raiseHour) {
+        hour = 1;
     }
     if (hour === 11 && raiseHour && !dontRaise && ampm === "PM") {
         ampm = "AM";

@@ -1,5 +1,5 @@
 #userMenuContainer {
-    max-height: 500px;
+    max-height: 440px;
     overflow: auto;
     display: flex;
     flex-direction: column;

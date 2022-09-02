@@ -15,7 +15,7 @@ const AdminDropDown = (props) => {
   }
 
   function goToSettings() {
-    props.history.push(`/admin/${props.admin.admin.id}/settings`)
+    props.history.push(`/`);
   }
 
   function goToGroups() {

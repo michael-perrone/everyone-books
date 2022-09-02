@@ -116,17 +116,13 @@ function RestaurantBuilder(props) {
         console.log(e)
     }
 
-    function draggingTable() {
-        if (moving !== table) {
-            setMoving("table");
-        }
-
-    }
-
     function pointerIsMoving(e) {
         if (clickedDown) {
+            console.log(e.pageX);
+            console.log(e.screenX);
             setTranslate({x: translate.x + e.movementX, y: translate.y + e.movementY});
             const tableCords = table.current.getBoundingClientRect();
+            console.log(tableCords);
             const boxCords = box.current.getBoundingClientRect();
             if (!showButton && tableCords.top > boxCords.top && tableCords.left > boxCords.left && tableCords.right < boxCords.right && tableCords.bottom < boxCords.bottom) {
                 setShowButton(true);
@@ -144,6 +140,7 @@ function RestaurantBuilder(props) {
     }
 
     function pointerIsUp(e) {
+        console.log("yoooo");
         if (clickedDown) {
             setClickedDown(false);
         }  
@@ -153,10 +150,19 @@ function RestaurantBuilder(props) {
         const newTables = [...tables];
         const tableCords = table.current.getBoundingClientRect();
         const boxCords = box.current.getBoundingClientRect();
-        const left = tableCords.left - boxCords.left;
+        let left = tableCords.left - boxCords.left;
         const top = tableCords.top - boxCords.top;
+        if (left % 20 >= 10) {
+            console.log(left);
+            left = left + (20 - (left % 20));
+            console.log(left)
+        }
+        else {
+            console.log(left)
+            left = left - (left % 20);
+            console.log(left);
+        }
         const newTable = {height: tableHeight, width: tableWidth, left, top, id: tableId};
-        console.log(newTable);
         newTables.push(newTable);
         setTables(newTables);
         setTranslate({x: 0, y: 0});
@@ -171,8 +177,6 @@ function RestaurantBuilder(props) {
         setTableHeight(oldWidth);
         setTableWidth(oldHeight);
     }
-
-
 
 
     React.useEffect(() => {
@@ -219,11 +223,11 @@ function RestaurantBuilder(props) {
 
     }, [numOfPeople])
 
-    React.useEffect(function () {
-        if (!props.adminInfoComplete || !props.businessInfoComplete || !props.kindBusinessCompleted || !props.businessScheduleComplete) {
-            props.history.push("/registerBusiness");
-        }
-    }, [props.adminInfoComplete, props.businessInfoComplete, props.kindBusinessCompleted, props.businessScheduleComplete])
+    // React.useEffect(function () {
+    //     if (!props.adminInfoComplete || !props.businessInfoComplete || !props.kindBusinessCompleted || !props.businessScheduleComplete) {
+    //         props.history.push("/registerBusiness");
+    //     }
+    // }, [props.adminInfoComplete, props.businessInfoComplete, props.kindBusinessCompleted, props.businessScheduleComplete])
 
 
 
@@ -254,8 +258,6 @@ function RestaurantBuilder(props) {
     }, [props.admin])
 
     function sendTableInfo() {
-        console.log(tables);
-        console.log(realTables);
         const dimensions = box.current.getBoundingClientRect();
         const allInfo = {
             adminInfo: props.adminInfo, businessInfo: props.businessInfo, schedule: props.businessSchedule,
@@ -291,7 +293,7 @@ function RestaurantBuilder(props) {
                 {showBlock && <button onClick={helpHit} style={{border: "none", boxShadow: "0px 0px 2px black", backgroundColor: "salmon", height: "30px", width: "80px", fontWeight: "bold", fontSize: "18px", position: "absolute", right: 100, top: "15px"}}>Help</button>}
                 {showBlock && <div ref={box} id={styles.layoutBlock} style={{height: `${height}px`, width: `${width}px`}}>
                 {showButton && <button id={styles.setTableButton} onClick={setTable} style={{position: "absolute", right: 0, top: "-40px", zIndex: 1002020}}>Set Table</button>}
-                    <div draggable={false} onMouseLeave={pointerIsUp} onPointerUp={pointerIsUp} onPointerMove={pointerIsMoving} onPointerDown={pointerIsDown} id={'yoo'} style={{transform: `translateX(${translate.x}px) translateY(${translate.y}px)`, zIndex: 1000, position: "absolute", cursor: "grab", top: "-60px", right: `${-10 - (numOfPeople * 4)}px`, height: tableHeight * 2, width: tableWidth * 2, display: 'flex', justifyContent: "center", alignItems: "center"}}>
+                    <div draggable={false} onMouseLeave={pointerIsUp} onPointerUp={pointerIsUp} onMouseMove={pointerIsMoving} onPointerDown={pointerIsDown} id={'yoo'} style={{transform: `translateX(${translate.x}px) translateY(${translate.y}px)`, zIndex: 1000, position: "absolute", cursor: "grab", top: "-60px", right: `${-10 - (numOfPeople * 4)}px`, height: tableHeight * 2, width: tableWidth * 2, display: 'flex', justifyContent: "center", alignItems: "center"}}>
                        <div draggable={false} ref={table} style={{ backgroundColor: "rgb(249, 233, 249)", height: tableHeight, width: tableWidth, border: "2px solid black"}}></div>
                     </div>
                     <div style={{position: "absolute", top: "-50px"}}>

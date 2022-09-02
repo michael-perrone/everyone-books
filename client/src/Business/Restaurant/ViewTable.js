@@ -13,7 +13,7 @@ import {getTime, getTimes, timesArray} from '../../feutils/feutils';
 
 function ViewTable(props) {
     const [nums, setNums] = React.useState([]);
-    const [selectedTime, setSelectedTime] = React.useState(getTime());
+    const [selectedTime, setSelectedTime] = React.useState(props.selectedTime);
     const [selectedEmployee, setSelectedEmployee] = React.useState("");
     const [employees, setEmployees] = React.useState([]);
     const [customerName, setCustomerName] = React.useState("");
