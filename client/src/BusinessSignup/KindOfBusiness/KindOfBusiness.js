@@ -49,14 +49,14 @@ const KindOfBusiness = (props) => {
             <option>Tennis Club</option>
             <option>Other</option>
         </select>
-        <TemporaryStatement marginTop={'15px'} show={businessKindEntered && props.kindOfBusiness !== ""}>Cool, a {props.kindOfBusiness}, got it.</TemporaryStatement>
+        <TemporaryStatement marginTop={'15px'} show={businessKindEntered && props.kindOfBusiness !== ""}>Cool!  A {props.kindOfBusiness}.  You got it.</TemporaryStatement>
         <StatementAppear appear={props.kindOfBusiness !== ""}>
         <p>Now let's get the name of your business.</p>
         <input onChange={getNameOfBusinessFunction} style={{paddingLeft: "8px", width: '200px'}} id={styles.inputOrSelectKindBusiness} placeholder="Business Name"/>
         <SubmitButton onClick={submitName}>Submit</SubmitButton>
         </StatementAppear>
         <StatementAppear marginTop={'40px'} appear={props.nameOfBusiness !== "" && props.kindOfBusiness !== ""}>
-        <p>Great, next we need some information about you. Would you like to continue?</p>
+        <p>Great! Next we need some information about you. Would you like to continue?</p>
         <SubmitButton marginTop={'30px'} onClick={checkThis}>Yes, lets do it!</SubmitButton>
         </StatementAppear>
     </div>

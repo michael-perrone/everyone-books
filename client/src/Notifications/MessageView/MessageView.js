@@ -27,10 +27,12 @@ function MessageView(props) {
     }
 
     useEffect(function() {
-        if (props.type === "Choice" && props.admin.admin.tob === "Restaurant") {
-            Axios.post("/api/restaurant/getExtraInfo", {notificationId: props.notification._id}).then(response => {
-                if (response.status === 200) {
-                    
+        if (props.type === "Choice" && props.admin.admin.tob === "Restaurant" && props.notification.type === "UBT") {
+            Axios.post("/api/restaurant/getExtraInfo", {notificationId: props.notification._id}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
+              
+            }).catch(error => {
+                if (error.response.status === 405) {
+                    setMessage("The user booking request has been removed due to the time and/or date the user requested having already passed.");
                 }
             })
         }

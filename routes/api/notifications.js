@@ -667,4 +667,21 @@ router.post("/employeeclickedyes", async (req, res) => {
   }
 }); */
 
+
+router.get("/getAdminNotiNumber", authAdmin, async function(req, res) {
+    const admin = await Admin.findOne({_id: req.admin.id})
+    console.log(admin);
+    const adminNotis = await Notification.find({_id: admin.notifications});
+    let num = adminNotis.length;
+    for (let i = 0; i < adminNotis.length; i++) {
+        const lettersArray = adminNotis[i].type.split("");
+        if (lettersArray[lettersArray.length - 1] === "R") {
+          num = num - 1;
+        }
+    }
+    console.log(num);
+    console.log(adminNotis);
+    res.status(200).json({num});
+})
+
 module.exports = router;

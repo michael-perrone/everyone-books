@@ -30,21 +30,23 @@ function Restaurant(props) {
     const [successMessage, setSuccessMessage] = useState("");
 
     React.useEffect(function () {
-        Axios.get('/api/restaurant', {headers: {'x-auth-token': props.adminToken}}).then(
-            response => {
-                if (response.status === 200) {
-                    setBoxHeight(response.data.restaurant.boxHeight);
-                    setTables(response.data.restaurant.tables);
-                    setBoxWidth(response.data.restaurant.boxWidth);
-                    setSchedule(response.data.restaurant.schedule);
+        setTimeout(() => {
+            Axios.get('api/restaurant', {headers: {'x-auth-token': props.adminToken}}).then(
+                response => {
+                    if (response.status === 200) {
+                        setBoxHeight(response.data.restaurant.boxHeight);
+                        setTables(response.data.restaurant.tables);
+                        setBoxWidth(response.data.restaurant.boxWidth);
+                        setSchedule(response.data.restaurant.schedule);
+                    }
                 }
-            }
-        ).catch(
-            error => {
-                console.log(error)
-            }
-        )
-    },[]);
+            ).catch(
+                error => {
+                    console.log(error)
+                }
+            )
+        }, 100)
+    },[props.adminToken]);
 
     function reloadBookedTables() {
         Axios.post("/api/restaurant/checkIfBooked", {date: dateString, selectedTime}, {headers: {'x-auth-token': props.adminToken}}).then(function(response) {

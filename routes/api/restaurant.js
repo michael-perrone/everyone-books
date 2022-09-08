@@ -11,9 +11,15 @@ const userAuth = require("../../middleware/authUser");
 const BookedNotification = require("../../models/BookedNotification");
 
 router.get("/", adminAuth, async (req, res) => {
+    console.log(req.admin.businessId, "IM THE REQ.ADMIN")
     const restaurant = await Business.findOne({_id: req.admin.businessId}).select(["tables", "boxHeight", "boxWidth", "schedule", "c"]);
+    console.log(restaurant, "yooo");
     if (restaurant) {
+        console.log(restaurant);
         res.status(200).json({restaurant});
+    }
+    else {
+        console.log("hello?");
     }
 })
 

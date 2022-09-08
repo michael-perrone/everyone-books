@@ -114,7 +114,7 @@ function UserNotifications(props) {
                     </div>
                 )}
             </div>
-            <MessageView changeNotis={changeNotis} toSetChosen={toSetChosen} notification={chosen} type={type}/>
+            {notifications && notifications.length > 0 && <MessageView changeNotis={changeNotis} toSetChosen={toSetChosen} notification={chosen} type={type}/>}
             </div>
         </div>
     )
