@@ -420,7 +420,8 @@ import x from './x.png'
 
     useEffect(function() {
       if (dateString !== "") {
-        Axios.post("api/business/startEndTime", {date: dateString}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
+        if (props.adminToken && props.admin.admin) {
+          Axios.post("api/business/startEndTime", {date: dateString}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
             if (response.status === 200) {
                const newTimes = [];
                let i = response.data.open;
@@ -435,10 +436,14 @@ import x from './x.png'
                timeRightAway === "" ? setTime(intToStringTime[response.data.open]) : setTime(timeRightAway); 
                setTimes(newTimes)  
             }
+        }).catch(error => {
+          console.log(error);
         })
       }
+    }
+  
        
-    }, [dateString])
+    }, [dateString, props.adminToken, props.admin.admin])
 
     //appear={employeesBack.length > 0 && (bcnArray === undefined || (bcnArray && bcnArray.length > 0))}
 

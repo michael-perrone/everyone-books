@@ -230,7 +230,7 @@ router.post('/appBusiness', async (req, res) => { // check this
     }
 })
 
-router.post("/startEndTime", authAdmin, async (req, res) => {
+router.post("/startEndTime", authAdmin, async (req, res) => { // not working
     console.log("hello")
     const date = new Date(req.body.date).toDateString();
     const business = await Business.findOne({ _id: req.admin.businessId }).select(["schedule"]);

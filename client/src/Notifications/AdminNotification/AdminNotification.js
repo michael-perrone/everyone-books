@@ -16,7 +16,7 @@ function AdminNotification(props) {
 
     useEffect(function() {
         let type = props.notification.type;
-            if (type === "UBT") {
+            if (type === "UBT" || type === "UBTR") {
                 setNotiMessage(props.notification.fromString + " has requested a table at your restaurant.");
                 setType("Choice");
             }

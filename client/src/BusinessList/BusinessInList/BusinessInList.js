@@ -8,14 +8,27 @@ import axios from 'axios';
 class BusinessInList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { errorArray: [], following: props.following};
+    this.state = { errorArray: [], following: props.following, successMessage: "", error: ""};
     this.viewBusiness = this.viewBusiness.bind(this);
-    this.follow = this.follow.bind(this)
-    this.unfollow = this.unfollow.bind(this)
+    this.follow = this.follow.bind(this);
+    this.unfollow = this.unfollow.bind(this);
+    this.requestEmployeeInvite = this.requestEmployeeInvite.bind(this);
+    this.cancelRequest = this.cancelRequest.bind(this);
   }
 
   viewBusiness() {
     this.props.history.push(`/businesses/${this.props.business._id}`)
+  }
+
+  cancelRequest() {
+    axios.post("/api/getEmployee/cancelRequest", {}, {headers: {'x-auth-token': this.props.employeeToken}}).then(response => {
+        if (response.status === 200) {
+          this.setState({successMessage: "Business Join Request Canceled"})
+          this.props.changeSentTo("");
+        }
+    }).catch(error => {
+      // if this hits thats bad bc this should never fail
+    })
   }
 
   follow(businessId) {
@@ -58,8 +71,27 @@ class BusinessInList extends React.Component {
     }
 }
 
+  requestEmployeeInvite(businessId) {
+    return () => {
+      axios.post('/api/notifications/employeeSendingId', {businessId, employeeId: this.props.employee.employee.id}).then(response => {
+        if (response.status === 200) {
+            this.setState({successMessage: "ID successfully sent!"});
+            this.props.changeSentTo(businessId);
+        }
+      }).catch(error => {
+        if (error.response.status === 406) {
+            this.setState({error: "You cannot send your ID more than once."});
+          }
+          else if (error.response.status === 403) {
+            this.setState({error: "You have already sent an id to this business."});
+          }
+      })
+    }
+  }
+
   
   render() {
+    console.log(this.props);
     return (
       <React.Fragment>
        {this.state.errorArray.map(element => {
@@ -116,11 +148,16 @@ class BusinessInList extends React.Component {
            })}
           </div>
           <div className={styles.buttonContainer}>
-            {!this.state.following && <button onClick={this.follow(this.props.business._id)} className={styles.sectionButton}>Follow Business</button>}
-            {this.state.following &&  <button onClick={this.unfollow(this.props.business._id)} className={styles.sectionButton} id={styles.unfollow}>Unfollow Business</button>}
-            <button onClick={this.viewBusiness} className={styles.sectionButton} id={styles.marginLeft}>View Business</button>
+            {!this.props.notUser && !this.state.following && <button onClick={this.follow(this.props.business._id)} className={styles.sectionButton}>Follow Business</button>}
+            {!this.props.notUser && this.state.following && <button onClick={this.unfollow(this.props.business._id)} className={styles.sectionButton} id={styles.unfollow}>Unfollow Business</button>}
+            {!this.props.notUser && <button onClick={this.viewBusiness} className={styles.sectionButton} id={styles.marginLeft}>View Business</button>}
+            
+            {!this.props.alreadySent && this.props.notUser && <button className={styles.sectionButton} onClick={this.requestEmployeeInvite(this.props.business._id)}>Ask For Invite</button>}
+            {this.props.alreadySent && this.props.notUser && <button className={styles.sectionButton} style={{backgroundColor: "salmon"}} onClick={this.cancelRequest}>Cancel Request</button>}
           </div>
         </div>       
+        <OtherAlert showAlert={this.state.successMessage !== ""} alertType={"success"} alertMessage={this.state.successMessage}/>
+        <OtherAlert alertType={"fail"} alertMessage={this.state.error} showAlert={this.state.error !== ""}/>
   </React.Fragment>
     )
   }
@@ -128,7 +165,9 @@ class BusinessInList extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    user: state.authReducer.user
+    user: state.authReducer.user,
+    employee: state.authReducer.employee,
+    employeeToken: state.authReducer.employeeToken
   };
 };
 

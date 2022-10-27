@@ -7,6 +7,7 @@ import Spinner from '../Spinner/Spinner';
 import MessageView from '../Notifications/MessageView/MessageView';
 import OtherAlert from '../OtherAlerts/OtherAlerts';
 import ViewBooking from '../Business/ViewBooking/ViewBooking';
+import {withRouter} from 'react-router-dom';
 
 const EmployeeHome = (props) => {
     const [success, setSuccess] = React.useState("");
@@ -65,6 +66,10 @@ const EmployeeHome = (props) => {
       //  loadSchedule() // check this dont love how much this runs;
       }
 
+      function goToBusinessSearch() {
+          props.history.push("/businesslist")
+      }
+
     function viewBooking(booking) {
                 return () => {
                   Axios.post('/api/getBookings/moreBookingInfoEmployee', {bookingId: booking._id}, {headers: {'x-auth-token': props.employeeToken}}).then(response => {
@@ -94,8 +99,9 @@ const EmployeeHome = (props) => {
             {loading && <Spinner/>}
             {businessAddedYou && <MessageView fromEmployeeView={true} denyHit={denyHit} height={"375px"} notification={notification} type={"Choice"}/>}
             {(business === "None" && loading === false) &&
-             <div style={{width: '370px', padding:'8px', paddingTop: '17px', boxShadow: '0px 0px 2px black', height: '270px', marginTop: '20px'}}>
+             <div style={{width: '370px', padding:'8px', paddingTop: '17px', boxShadow: '0px 0px 2px black', height: '270px', marginTop: '20px', display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
                 <p style={{lineHeight: '30px'}}>Thanks for joining Everyone-Books! We are glad to have you with us. If you have an employer, you need to give them your unique ID that we have assigned you. Your unqiue Id is <span style={{fontWeight: 'bold'}}>{employeeId}</span>, your employer can use this Id to invite you to their business. {businessAddedYou && <label style={{fontWeight: "bold"}}>You have a pending invite from a business.</label>}</p>
+                <button onClick={goToBusinessSearch} id={styles.askButton}>Ask Employer for Invite To Business</button>
             </div>}
             {business !== "None" && loading === false && <Schedule viewBooking={viewBooking}/>}
             {showBackDrop && <div style={{display: "flex", position: "absolute", top: 0, lef: 0, width: "100%", justifyContent: "center"}}><div onClick={() => setShowBackDrop(false)} id={styles.backDrop}></div> <ViewBooking products={products} services={services} hide={hide} booking={bookingToView}/></div>}
@@ -111,4 +117,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(EmployeeHome);
+export default withRouter(connect(mapStateToProps)(EmployeeHome));

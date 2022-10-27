@@ -7,6 +7,7 @@ import LeftSide from './LeftSide/LeftSide';
 import Core from './Core/Core';
 import OpenGroups from './OpenGroups/OpenGroups';
 import UserRestaurant from './UserRestaurant/UserRestaurant';
+import Spinner from './../../Spinner/Spinner';
 
 const UserView = (props) => {
     const [business, setBusiness] = React.useState({});
@@ -44,6 +45,7 @@ const UserView = (props) => {
 
 
     return (
+        business.typeOfBusiness ?
         business.typeOfBusiness && business.typeOfBusiness !== "Restaurant" ?
         <div id={styles.userViewContainer}>
             <div style={{position: 'relative'}}>
@@ -59,7 +61,8 @@ const UserView = (props) => {
           <Core business={business} services={services} profile={profile} employees={employees}/>
           </div>
         </div> : 
-        <UserRestaurant business={business} profile={profile}/>
+        <UserRestaurant business={business} profile={profile}/> :
+        <Spinner/>
     )
 }
 

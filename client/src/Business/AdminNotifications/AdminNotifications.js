@@ -70,7 +70,7 @@ function AdminNotifications(props) {
                     if (data.length === 0) {
                         return;
                     }
-                    if (flippedNotis[0].type === "UBT") {
+                    if (flippedNotis[0].type === "UBT" || flippedNotis[0].type === "UBTR") {
                         setType("Choice");
                     }
                     if (flippedNotis[0].type === "ESIDDR") { 
@@ -124,7 +124,7 @@ function AdminNotifications(props) {
                     </div>
                 )}
             </div>
-            <MessageView changeNotis={changeNotis} toSetChosen={toSetChosen} notification={chosen} type={type}/>
+            {notifications && notifications.length > 0 && <MessageView changeNotis={changeNotis} toSetChosen={toSetChosen} notification={chosen} type={type}/>}
             </div>
         </div>
     )

@@ -56,11 +56,6 @@ router.post('/', async (req, res) => {
         if (req.body.typeOfBusiness === "Restaurant") {
           newBusiness = new Business({
             bookingColumnType: req.body.bookingColumnType,
-            businessNameAllLower: req.body.businessName
-              .split(" ")
-              .reduce((accum, element) => {
-                return (accum += element);
-              }).toLowerCase(),
             typeOfBusiness: req.body.typeOfBusiness,
             businessName: req.body.businessName,
             address: req.body.address,
@@ -153,11 +148,6 @@ router.post('/', async (req, res) => {
         if (req.body.typeOfBusiness === "Restaurant") {
           newBusiness = new Business({
             bookingColumnType: req.body.bookingColumnType,
-            businessNameAllLower: req.body.businessName
-              .split(" ")
-              .reduce((accum, element) => {
-                return (accum += element);
-              }).toLowerCase(),
             typeOfBusiness: req.body.typeOfBusiness,
             businessName: req.body.businessName,
             address: req.body.businessInfo.address,
@@ -178,11 +168,6 @@ router.post('/', async (req, res) => {
         else {
           newBusiness = new Business({
             bookingColumnType: req.body.bookingColumnType,
-            businessNameAllLower: req.body.businessName
-              .split(" ")
-              .reduce((accum, element) => {
-                return (accum += element);
-              }),
             typeOfBusiness: req.body.typeOfBusiness,
             businessName: req.body.businessName,
             address: req.body.businessInfo.address,

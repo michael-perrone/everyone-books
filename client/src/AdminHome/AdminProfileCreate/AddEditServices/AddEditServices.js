@@ -145,7 +145,7 @@ function AddEditServices(props) {
                     </select>
                 </div>
                 <div style={{display: "flex", marginTop: "24px", justifyContent: "space-between"}}>
-                    <p style={{fontSize: "18px"}}>Requires Employee:</p>
+                    <p style={{fontSize: "18px", marginTop: "4px"}}>Requires Employee:</p>
                     <ColorButton backgroundColor={requiresEmployee ? "#919191" : ""} clicked={requiresEmployeeSet(true)}>Yes</ColorButton>
                     <ColorButton backgroundColor={requiresEmployee === false ? "#919191" : ""} clicked={requiresEmployeeSet(false)}>No</ColorButton>
                 </div>   

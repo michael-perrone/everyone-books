@@ -66,7 +66,7 @@ class App extends React.Component {
         <Route
           path="/businesslist"
           exact
-          component={this.props.user ? BusinessList : NeedToLoginPage}
+          component={this.props.user || this.props.employee ? BusinessList : NeedToLoginPage}
         />
         <Route
           path="/businesses/:businessId"
@@ -139,7 +139,7 @@ class App extends React.Component {
             }
           }}
         />
-        {adminToken.admin && this.props.admin.admin.type === "Restaurant" && (
+        {adminToken.admin && this.props.admin.admin && this.props.admin.admin.type === "Restaurant" && (
           <Redirect
             from="*"
             to={
@@ -151,7 +151,7 @@ class App extends React.Component {
         )}
 
   
-        {adminToken.admin && this.props.admin.admin.type !== "Restaurant" && (
+        {adminToken.admin && this.props.admin.admin && this.props.admin.admin.type !== "Restaurant" && (
           <Redirect
             from="*"
             to={

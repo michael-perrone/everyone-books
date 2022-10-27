@@ -13,17 +13,36 @@ class BusinessList extends React.Component {
     this.state = {
       businesses: [],
       searchError: "",
-      user: {}
+      user: {},
+      idSentTo: ""
     };
     this.advancedSearchFunction = this.advancedSearchFunction.bind(this);
+    this.changeSentTo = this.changeSentTo.bind(this);
+  }
+
+  changeSentTo(newThing) {
+      this.setState({idSentTo: newThing});
   }
 
   componentDidMount() {
-    axios.get('/api/userprofile/myprofile',
-     {headers: {'x-auth-token': this.props.token}})
-     .then(response => {
-        this.setState({user: response.data.user})
-    })
+    if (this.props.token) {
+      axios.get('/api/userprofile/myprofile',
+      {headers: {'x-auth-token': this.props.token}})
+      .then(response => {
+         this.setState({user: response.data.user})
+     })
+    }
+    if (this.props.employeeToken) {
+      axios.get('/api/getEmployee/idsSent', {headers: {'x-auth-token': this.props.employeeToken}}).then(
+        response => {
+          if (response.status === 200) {
+            this.setState({idSentTo: response.data.bId});
+          } 
+        }
+      ).catch(error => {
+        // just catching 406 to do nothing
+      })
+    }
   } 
 
   advancedSearchFunction(city, state, zip, businessName, typeOfBusiness) {
@@ -38,9 +57,7 @@ class BusinessList extends React.Component {
       };
       this.setState({ searchError: "" });
       axios
-        .post("/api/businessList/businessSearch", objectToSend, {
-          headers: { "x-auth-token": this.props.token }
-        })
+        .post("/api/businessList/businessSearch", objectToSend)
         .then(response => {
           this.setState({ businesses: response.data.businessesBack });
           this.setState({ advancedSearchHit: true });
@@ -69,7 +86,7 @@ class BusinessList extends React.Component {
             alertType={"error"}
           />
           <div id={this.state.businesses.length > 3 ? "" : styles.defaultHeight} className={styles.actualClubsContainer}>
-          {this.state.businesses.map(element => {
+          {this.props.token && this.state.businesses.map(element => {
                 let following = false;
                 for (let i = 0; i < this.state.user.businessesFollowing.length; i++) {                  
                   if (element._id === this.state.user.businessesFollowing[i]) {
@@ -78,6 +95,7 @@ class BusinessList extends React.Component {
                 }
               return (
                    <BusinessInList
+             
                   following={following}
                   unfollow={this.unfollow}
                   follow={this.followBusiness}
@@ -86,6 +104,10 @@ class BusinessList extends React.Component {
                   key={element._id}
                 />
               );
+          })}
+          {this.props.employeeToken && this.state.businesses.map(business => {
+
+          return <BusinessInList changeSentTo={this.changeSentTo} alreadySent={business._id === this.state.idSentTo} notUser={true} business={business} key={business._id}/>
           })}
           </div>
         </div>
@@ -98,7 +120,8 @@ const mapStateToProps = state => {
   return {
     user: state.authReducer.user,
     admin: state.authReducer.admin,
-    token: state.authReducer.token
+    token: state.authReducer.token,
+    employeeToken: state.authReducer.employeeToken
   };
 };
 

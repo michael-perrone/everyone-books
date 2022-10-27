@@ -13,8 +13,8 @@ router.post('/', adminAuth, async (req, res) => {
     try {
         const date = new Date(req.body.date).toDateString();
         const business = await Business.findOne({ _id: req.admin.businessId });
+        console.log(business);
         const groups = await Group.find({businessId: business._id, date: date});
-        console.log(groups)
         const bookings = await Booking.find({ businessId: business._id, date: date });
         var num;
         let day = date.split(" ")[0];

@@ -10,6 +10,7 @@
     align-items: center;
     flex-direction: column;
     background-color: rgb(246, 246, 246);
+    padding-bottom: 50px;
 }
 
 #backDrop {

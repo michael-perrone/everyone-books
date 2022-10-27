@@ -487,6 +487,11 @@ router.post("/changeToRead", async (req, res) => {
         await bookedNoti.save();
         return res.status(200).json({bookedNoti});
       }
+      else if (bookedNoti.type === "UBT") {
+        bookedNoti.type = "UBTR";
+        await bookedNoti.save();
+        return res.status(200).json({bookedNoti});
+      }
     }
   }
   catch (error) {
@@ -672,15 +677,15 @@ router.get("/getAdminNotiNumber", authAdmin, async function(req, res) {
     const admin = await Admin.findOne({_id: req.admin.id})
     console.log(admin);
     const adminNotis = await Notification.find({_id: admin.notifications});
-    let num = adminNotis.length;
-    for (let i = 0; i < adminNotis.length; i++) {
-        const lettersArray = adminNotis[i].type.split("");
+    const adminBookedNotis = await BookedNotification.find({_id: admin.bookedNotifications});
+    const totalNotifications = [...adminBookedNotis, ...adminNotis];
+    let num = totalNotifications.length;
+    for (let i = 0; i < totalNotifications.length; i++) {
+        const lettersArray = totalNotifications[i].type.split("");
         if (lettersArray[lettersArray.length - 1] === "R") {
           num = num - 1;
         }
     }
-    console.log(num);
-    console.log(adminNotis);
     res.status(200).json({num});
 })
 

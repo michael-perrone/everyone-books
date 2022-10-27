@@ -15,10 +15,6 @@ const BusinessSchema = new mongoose.Schema({
     type: String
   },
   bookingColumnType: String,
-
-  businessNameAllLower: {
-    type: String
-  },
   businessName: {
     type: String,
     required: true

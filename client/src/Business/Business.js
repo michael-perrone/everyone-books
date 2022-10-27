@@ -5,6 +5,7 @@ import AdminBooking from "./BookingHelpers/AdminBooking/AdminBooking";
 import { connect } from "react-redux";
 import CourtContainer from "./CourtContainer/CourtContainer";
 import ViewBooking from './ViewBooking/ViewBooking';
+import Spinner from '../Spinner/Spinner';
 
 function Business(props) {
   const [business, setBusiness] = useState("");
@@ -21,6 +22,8 @@ function Business(props) {
   const [updateBookings, setUpdateBookings] = useState();
   const [showBackDrop, setShowBackDrop] = useState(false);
   const [bookingToView, setBookingToView] = useState({});
+  const [loading, setLoading] = useState(true);
+
 
 
   function loadSchedule() {
@@ -32,6 +35,7 @@ function Business(props) {
     }})
     .then(response => {
       if (response.status === 200) {
+        setLoading(false);
         setBcn(response.data.bcn);
         setBct(response.data.bct);
         setOpenTime(response.data.open);
@@ -82,7 +86,9 @@ function Business(props) {
   
 
   useEffect(function() { // check this
-    loadSchedule();
+    if (props.dateChosen) {
+      loadSchedule();
+    }
   },[props.dateChosen])
 
   function hide() {
@@ -100,7 +106,9 @@ function Business(props) {
                   eq={eq}
                   bct={bct}    
                 />
-                <CourtContainer clickBooking={clickBooking} sortedBookings={sortedBookings} openTime={openTime} closeTime={closeTime} bct={bct} bcn={bcn}/>
+                {!loading ? <CourtContainer clickBooking={clickBooking} sortedBookings={sortedBookings} openTime={openTime} closeTime={closeTime} bct={bct} bcn={bcn}/> : 
+                  <Spinner/>
+                }
           </div>
     );
   }

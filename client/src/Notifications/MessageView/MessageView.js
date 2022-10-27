@@ -27,12 +27,16 @@ function MessageView(props) {
     }
 
     useEffect(function() {
-        if (props.type === "Choice" && props.admin.admin.tob === "Restaurant" && props.notification.type === "UBT") {
+        if (props.admin && props.type === "Choice" && props.admin.admin.tob === "Restaurant" && (props.notification.type === "UBT" || props.notification.type === "UBTR ")) {
             Axios.post("/api/restaurant/getExtraInfo", {notificationId: props.notification._id}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
               
             }).catch(error => {
                 if (error.response.status === 405) {
                     setMessage("The user booking request has been removed due to the time and/or date the user requested having already passed.");
+                    setHideButtons(true);
+                    Axios.post("api/notifications/changeToRead", {notificationId: props.notification._id}).then(response => {
+                        console.log(response.status);
+                    })
                 }
             })
         }
@@ -96,15 +100,19 @@ function MessageView(props) {
 
     useEffect(function() {
         if (props.notification) {
-            let type = props.notification.type;     
+            let type = props.notification.type;
+            console.log(type, "YOOOOOO");   
                 if (type === "ESIDDR") {
-                    console.log("YOOOOO");
                     setMessage("You denied " + props.notification.fromString + "'s request to become an employee at your business. If this was a mistake, you can add them to your business in the edit business profile menu.");
                     setHeader("Employee Denied");
                 }
                 else if (type === "UBT") {
                     setHeader("Table Booking Request");
                     setMessage(props.notification.fromString + ` has requested a table at your restaurant. The requested time is at ${props.notification.potentialStartTime} on ${props.notification.potentialDate}. The estimated duration of stay at the table is ${props.notification.estDuration}. If you click accept, they will be booked at an unreserved table that fits the needs of their reservation.`)
+                }
+                else if (type === "UBTR") {
+                    setMessage(props.notification.fromString + ` requested a table at your restaurant. The requested time was ${props.notification.potentialStartTime} on ${props.notification.potentialDate} but this time has passed.`);
+                    setHeader("Table Request Expired")
                 }
                 else if (type === "BAED" || type === "BAEDR") {
                     setHeader("Employment Invite Denied");
@@ -264,7 +272,7 @@ function MessageView(props) {
                 <div style={{ position: "relative", top: "75px"}}>
                 
                 <p className={styles.message}>{message}</p>
-                {props.adminToken && <div style={{display: "flex", width: "370px", justifyContent: "space-around", marginTop: "50px"}}>
+                {props.adminToken && !hideButtons && <div style={{display: "flex", width: "370px", justifyContent: "space-around", marginTop: "50px"}}>
                 <button onClick={acceptEmployeeRequest} className={styles.bu}>Accept</button>
                 <button onClick={denyEmployeeRequest} className={styles.bu}>Decline</button>
                 </div>

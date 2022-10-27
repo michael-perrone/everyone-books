@@ -8,6 +8,7 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import { ADMIN_REGISTER_SUCCESS } from '../../actions/actions';
 import c from 'config';
+import Spinner from '../../Spinner/Spinner';
 
 const BookingColumnsEnter = (props) => {
     const [bookingColumnType, setBookingColumnType] = React.useState('')
@@ -15,6 +16,7 @@ const BookingColumnsEnter = (props) => {
     const [bctChosen, setBctChosen] = React.useState(false);
     const [bcnChosen, setBcnChosen] = React.useState(false);
     const [usesShifts, setUsesShifts] = React.useState();
+    const [loading, setLoading] = React.useState(false);
 
     function setShiftsYes() {
         setUsesShifts(true);
@@ -33,9 +35,12 @@ const BookingColumnsEnter = (props) => {
         axios.post('/api/adminSignup', allInfo).then(
             response => {
                 if (response.data.token) {
-                    props.adminRegister(response.data.token);
-                    console.log(props.admin)
-                    props.history.push(`/admin/${props.admin.admin.id}`)
+                    setLoading(true);
+                    setTimeout(() => {
+                        setLoading(false);
+                        props.adminRegister(response.data.token);
+                    }, 2000)
+                    
                 }
             }
         ).catch(error => {
@@ -73,6 +78,8 @@ const BookingColumnsEnter = (props) => {
    
     
     return (
+        loading ?
+        <Spinner/> :
         <div style={{marginTop: '70px'}}>
              <p style={{marginLeft: "5px"}}>Please enter the area which your business will be booked. For example: a massage parlor takes appointments in an individual room, a tattoo studio may conduct appointments in individual rooms or chairs, and a tennis club would book out individual tennis courts. (For tattoo studio you can type "Room", and tennis club type "Court") </p>
             <div style={{display: "flex", justifyContent: "center", marginTop: "20px"}}>   
