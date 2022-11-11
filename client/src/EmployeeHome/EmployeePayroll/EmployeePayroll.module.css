@@ -1,0 +1,35 @@
+.subContainer {
+    font-size: 15px;
+    display: flex;
+    justify-content: space-around;
+    width: 350px;
+    margin-top: 20px;
+}
+
+
+#top {
+    display: flex;
+    justify-content: space-around;
+}
+
+
+
+.payrollSubContainer {
+    height: 350px;
+    width: 100%;
+    border-bottom: 0.8px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.payrollSubContainer:last-child {
+    border-bottom: none;
+}
+
+
+.info {
+    font-size: 18px;
+    padding: 10px;
+}

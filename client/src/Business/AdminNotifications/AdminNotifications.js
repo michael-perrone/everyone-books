@@ -13,6 +13,9 @@ function AdminNotifications(props) {
     const [fakeNotifications, setFakeNotifications] = useState([]);
     const [type, setType] = useState("");
     const [chosen, setChosen] = useState();
+    const [eq, setEq] = useState("");
+    const [bct, setBct] = useState(""); 
+    const [bcn, setBcn] = useState("");
 
     function changeNotis(newNoti) {
         const notiRep = [...notifications];
@@ -57,6 +60,9 @@ function AdminNotifications(props) {
         axios.get("/api/notifications/getAdminNotis", {headers: {'x-auth-token' : props.adminToken}}).then(
             response => {
                 if (response.status === 200) {
+                    setBcn(response.data.bcn)
+                    setBct(response.data.bct);
+                    setEq(response.data.eq);
                     const data = response.data.notifications;
                     const flippedNotis = [];
                     let i = response.data.notifications.length - 1;
@@ -124,7 +130,7 @@ function AdminNotifications(props) {
                     </div>
                 )}
             </div>
-            {notifications && notifications.length > 0 && <MessageView changeNotis={changeNotis} toSetChosen={toSetChosen} notification={chosen} type={type}/>}
+            {notifications && notifications.length > 0 && <MessageView bcn={bcn} eq={eq} bct={bct} changeNotis={changeNotis} toSetChosen={toSetChosen} notification={chosen} type={type}/>}
             </div>
         </div>
     )

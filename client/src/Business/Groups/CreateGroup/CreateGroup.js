@@ -227,7 +227,7 @@ function CreateGroup(props) {
 
     return (
         <div id={styles.main}>
-            <p style={{fontSize: "24px", fontWeight: "bold", position: "absolute", top: "-34px", textAlign: "center"}}>Create Group</p>
+            <p style={{fontSize: "24px", fontWeight: "bold", textAlign: "center"}}>Create Group</p>
             <div style={{display: 'flex', justifyContent: "space-around", flexDirection: "column", alignItems: "center", height: "150px", position: "relative"}}>
                  <input onChange={(e) => setGroupName(e.target.value)} value={groupName} placeholder="Enter Group Name" className={styles.specialI}/>
                  <p style={{position: "absolute", fontSize: "22px", fontWeight: "bold", left: "-12px", top: "60px" }}>$</p>

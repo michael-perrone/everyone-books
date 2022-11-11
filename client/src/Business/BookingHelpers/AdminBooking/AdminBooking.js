@@ -243,15 +243,15 @@ import x from './x.png'
 
     function minusService(id) {
       return function() {
-      const selectedServiceIds = [...selectedServices].filter((e) => {
-        return e !== id
-      });
-      setSelectedServices(selectedServiceIds);
-      if (selectedServiceIds.length === 0) {
-        setEmployeeNeeded();
-        setBcnArray()
-        setEmployeesBack([]);
-      }
+        const selectedServiceIds = [...selectedServices].filter((e) => {
+            return e !== id
+         });
+        setSelectedServices(selectedServiceIds);
+        if (selectedServiceIds.length === 0) {
+          setEmployeeNeeded();
+          setBcnArray();
+          setEmployeesBack([]);
+        }
       }
     }
 
@@ -408,7 +408,6 @@ import x from './x.png'
   }
 
     function selectEmployee(id) {
-      console.log(id)
         setSelectedEmployee(id)
     }
 
@@ -473,20 +472,20 @@ import x from './x.png'
               </div>
               <div style={{marginTop: "24px"}}>
                   <p className={styles.ptags}>Clone Booking?</p>
-                  <ColorButton backgroundColor={cloneBooking === true ? "darkgray": ""} clicked={toSetCloneBooking(true)}>Yes</ColorButton>
-                  <ColorButton backgroundColor={cloneBooking === false ? "darkgray": ""} clicked={toSetCloneBooking(false)}>No</ColorButton>
+                  <ColorButton backgroundColor={cloneBooking === true ? "darkgray": "transparent"} clicked={toSetCloneBooking(true)}>Yes</ColorButton>
+                  <ColorButton backgroundColor={cloneBooking === false ? "darkgray": "transparent"} clicked={toSetCloneBooking(false)}>No</ColorButton>
               </div> 
                 <React.Fragment>
                   <div style={{marginTop: "24px"}}>
                     <p className={styles.ptags}>Number of Times to Clone:</p>
-                    <select onChange={toSetCloneNumber} value={numberOfTimesToClone} style={{width: "60px"}}>
+                    <select onChange={toSetCloneNumber} value={numberOfTimesToClone} style={{width: "60px", padding: "4px", border: "none", boxShadow: "0px 0px 2px black", backgroundColor: "transparent"}}>
                       {!cloneBooking && <option>0</option>}
                       {cloneBooking && days.map(element => <option key={element}>{element}</option>)}
                     </select>
                   </div>
                     <div style={{marginTop: "24px"}}>
                     <p className={styles.ptags}>Days Between Clones:</p>
-                    <select onChange={toSetDaysBetweenBookings} value={daysBetweenBookings}  style={{width: "60px"}}>
+                    <select onChange={toSetDaysBetweenBookings} value={daysBetweenBookings}  style={{width: "60px", padding: "4px", border: "none", boxShadow: "0px 0px 2px black", backgroundColor: "transparent"}}>
                       {cloneBooking && days.map(element => <option key={element}>{element}</option>)}
                       {!cloneBooking && <option>0</option>}
                     </select>

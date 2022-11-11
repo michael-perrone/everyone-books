@@ -26,6 +26,11 @@ const UserDropDown = props => {
     props.hideDropDown();
   }
 
+  function goToServiceFinder() {
+    props.history.push(`/user/serviceFinder`);
+    props.hideDropDown();
+  }
+
   return (
     <React.Fragment>
       <DropDownLink clickProp={goHome}>Home</DropDownLink>
@@ -33,6 +38,7 @@ const UserDropDown = props => {
       <DropDownLink clickProp={goToNotifications}>
         Notifications
       </DropDownLink>
+      <DropDownLink clickProp={goToServiceFinder}>Service Finder</DropDownLink>
       <DropDownLink clickProp={userLogoutFunction}>Logout</DropDownLink>
     </React.Fragment>
   );

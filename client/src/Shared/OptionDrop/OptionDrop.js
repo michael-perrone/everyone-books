@@ -7,7 +7,7 @@ function OptionDrop(props) {
         <select id={styles.optionDrop}>
             {props.options.map(element => {
                 return (
-                    <option key={element.id} onClick={props.select(element.id)}>{element.displayName}</option>
+                    <option key={element.id} onClick={() => props.select(element.id)}>{element.displayName}</option>
                 )
             })}
         </select>

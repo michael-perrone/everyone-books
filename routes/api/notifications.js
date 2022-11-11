@@ -674,6 +674,7 @@ router.post("/employeeclickedyes", async (req, res) => {
 
 
 router.get("/getAdminNotiNumber", authAdmin, async function(req, res) {
+    console.log(req.admin, " dqwdwqdkw");
     const admin = await Admin.findOne({_id: req.admin.id})
     console.log(admin);
     const adminNotis = await Notification.find({_id: admin.notifications});

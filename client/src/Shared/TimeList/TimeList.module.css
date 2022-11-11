@@ -1,0 +1,7 @@
+#timeList {
+    border: none;
+    background-color: transparent; /* watch this */
+    padding: 8px;
+    box-shadow: 0px 0px 3px black;
+    font-size: 14px;
+}

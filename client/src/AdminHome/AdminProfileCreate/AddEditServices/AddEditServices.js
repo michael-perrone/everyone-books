@@ -128,7 +128,7 @@ function AddEditServices(props) {
                 <div style={{display: "flex", marginTop: "24px", position: 'relative', right: "13px", width: "365px"}}>
                     <p style={{fontSize: "22px", marginTop: "4px"}}>$</p>
                     <input onChange={getCost} value={cost} className={styles.inputs} style={{width: "110px", marginLeft: "2px"}} placeholder={"Service Cost"}/>
-                    <select onChange={getTimeDuration} value={timeDuration} style={{width: "190px", marginLeft: "20px", backgroundColor: "white", border: "1px solid rgb(145, 145, 145)", borderRadius: "2px"}}>
+                    <select onChange={getTimeDuration} value={timeDuration} style={{width: "190px", paddingLeft: "8px", marginLeft: "20px", backgroundColor: "white", border: "1px solid rgb(145, 145, 145)", borderRadius: "2px"}}>
                         <option>Service Time Duration</option>
                         <option>5 Minutes</option>
                         <option>10 Minutes</option>

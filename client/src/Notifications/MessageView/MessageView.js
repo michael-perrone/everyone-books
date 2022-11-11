@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react';
 import styles from './MessageView.module.css';
 import {connect} from 'react-redux';
 import OtherAlert from '../../OtherAlerts/OtherAlerts';
+import BCAList from '../../Shared/BCAList/BCAList';
 
 function MessageView(props) {
     const [message, setMessage] = useState("");
@@ -11,6 +12,16 @@ function MessageView(props) {
     const [hideButtons, setHideButtons] = useState(false);
     const [bcn, setBcn] = useState("");
     const [error, setError] = useState("");
+    const [bcnArray, setBcnArray] = useState([]);
+
+
+    useEffect(function() {
+        if (props.bcn) {
+            for (let i = 1; i <= props.bcn; i++) {
+                bcnArray.push(i);
+            }
+        }
+    }, [props.bcn])
 
     function acceptEmployeeRequest() {
         Axios.post("api/notifications/employerAcceptedEmployee", {"employeeId": props.notification.fromId, "notificationId": props.notification._id, businessId: props.admin.admin.businessId}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
@@ -96,6 +107,12 @@ function MessageView(props) {
                 }
             }
         )
+    }
+
+    function toSetBcn(bcn) {
+        return function() {
+            setBcn(bcn);
+        }
     }
 
     useEffect(function() {
@@ -287,16 +304,19 @@ function MessageView(props) {
 
             {props.type === "Booking" &&
                  <div id={styles.messageViewContainer}>
-                 <p className={styles.date}>{props.notification.date}</p>
-                 <p className={styles.header}>{header}</p>
-                 <div style={{ position: "relative", top: "75px"}}>
-                 
+                    <p className={styles.date}>{props.notification.date}</p>
+                    <p className={styles.header}>{header}</p>
+                <div style={{ position: "relative", top: "75px"}}>
                  <p  className={styles.message}>{message}</p>
-                 <div style={{display: "flex", width: "370px", justifyContent: "space-around", marginTop: "50px"}}>
-                 <button onClick={book} className={styles.bu}>Book</button>
-                 <button onClick={decline} className={styles.bu}>Decline</button>
+                 <div style={{display: "flex", justifyContent: "space-around", marginTop: "20px"}}>
+                 <p style={{fontSize: "22px", marginTop: "8px", paddingRight: "15px"}}>{props.bct}:</p>
+                 {props.eq === "n" && <BCAList selectBcn={(bcn) => toSetBcn(bcn)} selectedBcn={bcn} bcnList={bcnArray}/>}
                  </div>
-             </div>
+                 <div style={{display: "flex", width: "370px", justifyContent: "space-around", marginTop: "50px"}}>
+                    <button disabled={props.eq === "n" && bcn === ""} onClick={book} className={styles.bu}>Book</button>
+                    <button onClick={decline} className={styles.bu}>Decline</button>
+                 </div>
+                 </div>
              </div>}
              <OtherAlert alertType={"success"} alertMessage={success} showAlert={success !== ""}/>
              <OtherAlert alertType={"error"} alertMessage={error} showAlert={error !== ""}/>

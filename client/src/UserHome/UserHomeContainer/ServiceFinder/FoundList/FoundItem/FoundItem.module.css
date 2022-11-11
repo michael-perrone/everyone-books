@@ -1,0 +1,21 @@
+.container {
+    border-bottom: 2px solid black;
+    font-family: 'Josefin Sans';
+    font-size: 20px;
+    width: 300px;
+    margin-left: 20px;
+    margin-top: 24px;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.butto {
+    box-shadow: 0px 2px 5px black;
+    right: 3px;
+}
+
+.butto:hover {
+    box-shadow: 0px 1px 3px black;
+    background-color: lightgray;
+}

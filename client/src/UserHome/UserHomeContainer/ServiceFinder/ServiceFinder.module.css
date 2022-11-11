@@ -1,0 +1,30 @@
+#inputHolder {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+.row {
+    display: flex;
+    width: 375px;
+}
+
+.subContainer {
+    height: 600px;
+}
+
+.p {
+    font-family: 'Josefin Sans';
+    font-size: 18px;
+    margin-top: 5px;
+}
+
+.inputo {
+    padding: 4px 4px 2px 4px;
+    margin-left: 6px;
+    width: 175px;
+    font-size: 14px;
+    border: 2px solid black;
+    height: 16px;
+}

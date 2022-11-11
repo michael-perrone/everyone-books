@@ -12,7 +12,8 @@ const EmployeeDropDown = (props) => {
       Axios.post('/api/employeeNotificationsRead', {id: props.employeeProfile.employee.id})
     }
     props.clearNotis();
-    props.showNotifications()
+    console.log("YOOOOOOOO");
+    props.history.push(`/employee/${props.employee.employee.id}/notifications`);
    }
 
   function goHome() {
@@ -28,16 +29,23 @@ const EmployeeDropDown = (props) => {
     props.history.push('/')
   }
 
+  function goToEmployeePayroll() {
+    props.history.push(`/employee/${props.employeeProfile.employee.id}/payroll`);
+  }
+
     return (
         <React.Fragment>
           <DropDownLink clickProp={goHome}>
             Home
           </DropDownLink>
-          <DropDownLink clickProps={goToSettings}>
+          <DropDownLink clickProp={goToSettings}>
             Settings
           </DropDownLink>
           <DropDownLink notiNum={props.notiNum} clickProp={goToNotifications}>
             Notifications
+          </DropDownLink>
+          <DropDownLink clickProp={goToEmployeePayroll}>
+            Payroll
           </DropDownLink>
           <DropDownLink clickProp={employeeLogout}>
             Logout
@@ -53,7 +61,13 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default withRouter(connect(null, mapDispatchToProps)(EmployeeDropDown));
+const mapStateToProps = state => {
+  return {
+    employee: state.authReducer.employee
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EmployeeDropDown));
 
 
 /*

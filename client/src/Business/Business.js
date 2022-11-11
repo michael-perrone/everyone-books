@@ -51,6 +51,7 @@ function Business(props) {
           i++;
         }
         for (let e = 0; e < bookings.length; e++) {
+            console.log(bookings[e]);
             sorted[bookings[e].bcn - 1].push(bookings[e])
         }
         setSortedBookings(sorted);

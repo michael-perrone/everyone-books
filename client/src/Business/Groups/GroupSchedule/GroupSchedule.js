@@ -25,8 +25,8 @@ function GroupSchedule(props) {
 
     return (
         <div id={styles.main}>
-            <p style={{position: "absolute", top: "-65px", width: "380px", textAlign: "center", fontWeight: "bold", fontSize: "24px"}}>Group Schedule</p>
-            <div style={{position: "absolute", top: "-26px",  width: "380px", textAlign: "center",}}>
+            <p style={{ width: "380px", textAlign: "center", fontWeight: "bold", fontSize: "24px"}}>Group Schedule</p>
+            <div style={{width: "380px", textAlign: "center", marginTop: "20px"}}>
                 <DateDrop setDateString={(dateString) => setDateString(dateString)}/>
             </div>
             {groups.length === 0 &&

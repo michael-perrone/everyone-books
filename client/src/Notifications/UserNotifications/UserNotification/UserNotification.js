@@ -68,6 +68,9 @@ function UserNotification(props) {
                 setNotiMessage("Your business has a booking request from " + props.notification.fromString + ".")
                 setActualType("Booking");
             }
+            else if (type === "YURA" || type === "YURAR") {
+                setNotiMessage("Your booking request at the business " + props.notification.fromString + " has been accepted.");
+            }
     },[props.notification]);
 
 

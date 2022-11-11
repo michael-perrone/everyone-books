@@ -6,12 +6,14 @@ import UserNotification from './UserNotification/UserNotification';
 import YesNoNotification from '../../Notifications/YesNoNotification/YesNoNotification';
 import MessageView from './../../Notifications/MessageView/MessageView';
 import Axios from 'axios';
+import Spinner from '../../Spinner/Spinner';
 
 function UserNotifications(props) {
 
     const [notifications, setNotifications] = useState();
     const [type, setType] = useState("");
     const [chosen, setChosen] = useState();
+    const [loading, setLoading] = useState(true);
 
     function changeNotis(newNoti) {
         const notiRep = [...notifications];
@@ -93,15 +95,21 @@ function UserNotifications(props) {
                     else if (flippedNotis[0].type === "UBU") {
                         setType("Booking");
                     }
+                    else if (flippedNotis[0].type === "YURA" || flippedNotis[0].type === "YURAR") {
+                        setType("Alert");
+                    }
                 }
+                if (loading) {
+                    setLoading(false);
+                }  
             }
         )
     },[])
 
     return (
         <div id={styles.main} style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
-             <p style={{marginTop: "20px", fontSize: "20px", fontWeight: "bold"}}>Notifications Center</p>
-            <div id={styles.holder} style={{display: "flex", justifyContent: 'space-around', width: "100%", marginTop: "20px"}}> 
+            <p style={{marginTop: "20px", fontSize: "20px", fontWeight: "bold"}}>Notifications Center</p>
+            {!loading ?  <div id={styles.holder} style={{display: "flex", justifyContent: 'space-around', width: "100%", marginTop: "20px"}}> 
              <div id={styles.notificationsContainer}>
                 {notifications && notifications.length === 0 && <p style={{textAlign: "center", fontSize: "18px", fontWeight: "bold", marginTop: "10px"}}>You do not have any notifications!</p>}
                 {notifications && notifications.length > 0 && (
@@ -115,7 +123,7 @@ function UserNotifications(props) {
                 )}
             </div>
             {notifications && notifications.length > 0 && <MessageView changeNotis={changeNotis} toSetChosen={toSetChosen} notification={chosen} type={type}/>}
-            </div>
+            </div> : <Spinner/> } 
         </div>
     )
 }

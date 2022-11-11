@@ -16,24 +16,20 @@ const BusinessSchema = new mongoose.Schema({
   },
   bookingColumnType: String,
   businessName: {
-    type: String,
-    required: true
+    type: String
   },
   address: {
     type: String,
-    required: true
+    
   },
   city: {
     type: String,
-    required: true
   },
   state: {
     type: String,
-    required: true
   },
   zip: {
     type: String,
-    required: true
   },
   bookingColumnNumber: {
     type: String,

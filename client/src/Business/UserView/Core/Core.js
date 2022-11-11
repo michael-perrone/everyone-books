@@ -15,7 +15,6 @@ import {connect} from 'react-redux';
 
 const Core = (props) => {
     const [dateChosen, setDateChosen] = React.useState('');
-    const [employeeChosen, setEmployeeChosen] = React.useState('');
     const [dateString, setDateString] = useState("");
     const [employees, setEmployees] = useState([]);
     const [time, setTime] = useState(getTimeRightAway);
@@ -25,7 +24,7 @@ const Core = (props) => {
     const [employeesBack, setEmployeesBack] = useState([]);
     const [error, setError] = useState("");
     const [bookingType, setBookingType] = useState("");
-    const [selectedEmployee, setSelectedEmployee] = useState();
+    const [selectedEmployee, setSelectedEmployee] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [selectedBcn, setSelectedBcn] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
@@ -41,8 +40,8 @@ const Core = (props) => {
             if (response.status === 200) {
               setEmployeesBack([]);
               setSelectedEmployee();
-            
-
+              setSelectedEmployee("");
+              setSelectedServices([]);
               setSelectedBcn("");
               setSuccessMessage("");
               setTimeout(() => setSuccessMessage("Your booking request has been sent and you will be notified if it is accepted."), 200);
@@ -122,7 +121,7 @@ const Core = (props) => {
           return;
         }
   
-        if (employeeNeeded === true) {
+       else if (employeeNeeded === true) {
         Axios.post('api/getBookings/userChecking', {date: dateString, serviceIds: selectedServices, timeChosen: time, businessId: props.business._id}, {headers: {'x-auth-token': props.userToken}}).then(
           response => {
              if (response.status === 200) {
@@ -163,17 +162,18 @@ const Core = (props) => {
     }
 
     function minusService(id) {
-        return function() {
+      return function() {
         const selectedServiceIds = [...selectedServices].filter((e) => {
           return e !== id
         });
         setSelectedServices(selectedServiceIds);
         if (selectedServiceIds.length === 0) {
-          setEmployeeNeeded();
-          setEmployeesBack([]);
-        }
-        }
+            setEmployeeNeeded();
+            setEmployeesBack([]);
+            
+          }
       }
+    }
 
       function unSelectEmployee() {
         setSelectedEmployee();
@@ -211,6 +211,7 @@ const Core = (props) => {
               setError("");
               setTimeout(() => setError("Please reselect your services, these cannot be combined due to employee requrements."))
               setSelectedServices([]);
+              
               setEmployeeNeeded();
               setEmployeesBack([]);
               return;
@@ -219,6 +220,7 @@ const Core = (props) => {
             setError("");
             setTimeout(() => setError("Please reselect your services, these cannot be combined due to employee requrements."))
             setSelectedServices([]);
+            
             setEmployeeNeeded();
             setEmployeesBack([]);
             return;
@@ -237,9 +239,10 @@ const Core = (props) => {
                 setEmployees(response.data.availableEmployees)
             }
           )
-          setEmployeeChosen('')
+          setSelectedEmployee('');
         }
     }, [dateChosen])
+
 
 
     return (
@@ -247,11 +250,11 @@ const Core = (props) => {
                <div id={styles.newContainer}>
               <div style={{display: "flex", flexDirection: "column", alignItems: "center"}} className={styles.holder}>
               <div style={{marginTop: "10px", display: "flex" }}>
-                <p className={styles.ptags}>Select Date:</p>
+                <p style={{marginTop: "6px"}} className={styles.ptags}>Select Date:</p>
                 <DateDrop setDateString={(dateString) => toSetDateString(dateString)}/>
               </div>
               <div style={{marginTop: "13px", display: "flex"}}>
-                   <p style={{position: "relative", top: "4px"}} className={styles.ptags}>Select Time:</p>
+                   <p style={{position: "relative", top: "6px"}} className={styles.ptags}>Select Time:</p>
                   <TimeList time={time} times={times} setTime={(time) => toSetTime(time)}/>
               </div>
               </div>
@@ -261,16 +264,20 @@ const Core = (props) => {
                 <ServiceList minusService={(id) => minusService(id)} selectedServices={selectedServices} addService={(id) => selectService(id)} array={props.services ? props.services : []} />
               </div>
                 <div style={{marginTop: "22px", display: "flex", justifyContent: "center"}}>
-                  {props.services && props.services.length > 0 ? <SubmitButton onClick={getAvailableEmployees}>Check Availability</SubmitButton> : <p style={{width: "330px", marginLeft: "10px"}}>This business has no services, please edit your business profile to create services and add employees!</p>}
+                  {props.services && props.services.length > 0 ? <SubmitButton onClick={getAvailableEmployees}>Check Availability</SubmitButton> : <p style={{width: "330px", marginLeft: "10px"}}>This business has no services, please check back later to see if this business has updated their service list.</p>}
                 </div>
               </div>
               <div style={{display: "flex", flexDirection: 'column',}}>
-              {/* <StatementAppear center={true} appear={employeeNeeded && employeesBack.length > 0 && selectedServices.length > 0 && (bcnArray === undefined) || employeesBack.length > 0 && selectedServices.length > 0 && (bcnArray && bcnArray.length > 0)}>
+              <StatementAppear center={true} appear={employeeNeeded && employeesBack.length > 0 && selectedServices.length > 0 || employeesBack.length > 0 && selectedServices.length > 0}>
                 <p style={{fontWeight: "bold", fontSize: "18px", marginBottom: "10px", marginTop: "26px"}}>Employees Available:</p>
                 <SelectOneList unSelectOne={unSelectEmployee} array={employeesBack} selected={selectedEmployee} selectOne={(id) => selectEmployee(id)}/>
-              </StatementAppear> */}
+              </StatementAppear>
               <StatementAppear appear={showAreaSuccess}>
               <p style={{marginTop: "20px"}}>There is availability at this time for the selected {selectedServices.length > 0 ? "services" : "service"}, click the button below to send your request.</p>
+              <div style={{width: "350px", marginTop: "20px"}}><SubmitButton onClick={createBooking}>Send Request</SubmitButton></div>
+              </StatementAppear>
+              <StatementAppear appear={selectedEmployee !== ""}>
+              <p style={{marginTop: "20px"}}>There is availability at this time for the selected {selectedServices.length > 0 ? "services" : "service"} with the selected employee, click the button below to send your request.</p>
               <div style={{width: "350px", marginTop: "20px"}}><SubmitButton onClick={createBooking}>Send Request</SubmitButton></div>
               </StatementAppear>
               <OtherAlert alertType={"error"} alertMessage={error} showAlert={error !== ""}/>

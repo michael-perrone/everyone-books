@@ -1,7 +1,7 @@
 .dropDownContainer {
     display: flex;
     position: absolute;
-    height: 220px;
+    height: 280px;
     width: 230px;
     border: 2px solid gray;
     border-top: none;

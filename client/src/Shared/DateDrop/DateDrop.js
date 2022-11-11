@@ -1,5 +1,6 @@
 
 import React from 'react';
+import styles from './DateDrop.module.css';
 
 function DateDrop(props) {
 
@@ -44,8 +45,7 @@ function DateDrop(props) {
         setDays(daysArray);
     }, [monthNum])
 
-    React.useEffect(function() {
-       
+    React.useEffect(function() { 
         props.setDateString(dateString)
     }, [dateString])
 
@@ -53,13 +53,13 @@ function DateDrop(props) {
 
     return (
         <div style={{display: "inline"}}>
-            <select value={month} onChange={setNewMonth}>
+            <select className={styles.cool} value={month} onChange={setNewMonth}>
                 {monthsArray.map(element => <option key={element}>{element}</option>)}
             </select>
-            <select style={{marginLeft: "8px"}} value={day} onChange={setNewDay}>
+            <select className={styles.cool} style={{marginLeft: "8px"}} value={day} onChange={setNewDay}>
                 {days.map(element => <option key={element}>{element}</option>)}
             </select>
-            <select style={{marginLeft: "8px"}} value={year} onChange={setNewYear}>
+            <select className={styles.cool} style={{marginLeft: "8px"}} value={year} onChange={setNewYear}>
                 {years.map(element => <option key={element}>{element}</option>)}
             </select>
         </div>

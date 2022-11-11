@@ -142,7 +142,7 @@ function AddEmployees(props) {
                 <SubmitButton onClick={findEmployee}>Find Employee</SubmitButton>
             </div>
             {employeeName !== "" && successMessage === "" && <div style={{display: 'flex', width: "300px", marginTop: "20px", justifyContent: "space-between", alignSelf: "center", boxShadow: "0px 0px 5px black", padding: "10px"}}>
-                <p style={{fontSize: "18px"}}>{employeeName}</p>
+                <p style={{fontSize: "18px", marginTop: "4px"}}>{employeeName}</p>
                 <SubmitButton onClick={addEmployee}>Add Employee</SubmitButton>       
             </div>}
             </React.Fragment>}

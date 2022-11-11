@@ -29,7 +29,6 @@ function AddEditPayroll(props) {
         Axios.post("api/payroll/getEmployeePayroll", {employeeId: selectedEmployee}, {headers: {"x-auth-token": props.adminToken}}).then(response => {
             if(response.data) {
                 if (response.data.emPayroll) {
-                    
                     const emPayroll  = response.data.emPayroll;
                     setSalary(emPayroll.paidSalary);
                     setSalaryEarned(emPayroll.salary);
@@ -50,8 +49,8 @@ function AddEditPayroll(props) {
                 setSalaryEarned("");
                 setHourly();
                 setHourlyEarned("");
-                setProductCommission("Product Commission %");
-                setServiceCommission("Service Commission %");
+                setProductCommission("");
+                setServiceCommission("");
                 setCommission();
 
         })
@@ -90,8 +89,11 @@ function AddEditPayroll(props) {
             productCommissionBool = false;
         }
 
-        if ((commission && productCommission === "" || productCommission === "None" || productCommission === "Product Commission %") && (commission && serviceCommission === "" || serviceCommission === "None" || serviceCommission === "Service Commission %")) {
+        if ((commission && productCommission === "" || productCommission === "Product Commission %") && (commission && serviceCommission === "" || serviceCommission === "Service Commission %")) {
             setError("");
+            console.log(commission);
+            console.log(productCommission);
+            console.log(serviceCommission);   
             setTimeout(() => setError("Please enter commission percentage(s)"), 200);
         }
         
@@ -113,9 +115,7 @@ function AddEditPayroll(props) {
 
 
     function selectEmployee(id) {
-        return () => {
             setSelectedEmployee(id);
-        }
     }
 
     function toSetSalary(bool) {
@@ -168,7 +168,16 @@ function AddEditPayroll(props) {
             <div style={{display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column"}}>
                 <div className={styles.miniContainer} style={{marginTop: "32px", marginLeft: "2px"}}>
                     <p className={styles.label}>Select Employee:</p>
-                    <OptionDrop options={employees} select={(id) => selectEmployee(id)}/>
+                    <select onChange={e => {
+                        console.log(e.target);
+                        setSelectedEmployee(e.target.value);
+                    }} id={styles.optionDrop}>
+                         {employees.map(element => {
+                     return (
+                    <option value={element.id} key={element.id}>{element.displayName}</option>
+                )
+            })}
+        </select>
                 </div>
                 <div className={styles.miniContainer} style={{justifyContent: "flex-start", marginTop: "10px"}}>
                     <p className={styles.label}>Does this Employee...</p>

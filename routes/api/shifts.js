@@ -472,7 +472,10 @@ router.post('/getEmployeeBookingsForDay', async (req, res) => {
         updatedWithNameBooking._id = bookings[i]._id;
         updatedWithNameBookings.push(updatedWithNameBooking);
       }
-      let shiftTimes = { start: shift.timeStart, end: shift.timeEnd };
+      let shiftTimes;
+      if (shift && shift.timeStart && shift.timeEnd) {
+        shiftTimes = { start: shift.timeStart, end: shift.timeEnd };
+      } 
       if (breakStart && breakEnd) {
         return res.status(200).json({shiftTimes, bookings: updatedWithNameBookings, bct, breakTime: `${breakStart}-${breakEnd}` })
       }

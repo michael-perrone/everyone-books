@@ -11,7 +11,7 @@ const AdminDropDown = (props) => {
    } 
 
   function goToShifts() {
-    props.history.push(`/admin/${props.admin.admin.businessId}/businessSchedule`)
+    props.history.push(`/admin/${props.admin.admin.businessId}/businessSchedule`);
   }
 
   function goToSettings() {
@@ -19,13 +19,17 @@ const AdminDropDown = (props) => {
   }
 
   function goToGroups() {
-    props.history.push(`/admin/${props.admin.admin.businessId}/groups`)
+    props.history.push(`/admin/${props.admin.admin.businessId}/groups`);
   }
 
   function adminLogout() {
     props.logoutAdmin()
     props.removeCreateState();
     props.history.push('/')
+  }
+
+  function goToPayroll() {
+    props.history.push(`/admin/${props.admin.admin.businessId}/payroll`);
   }
 
     return (
@@ -41,6 +45,9 @@ const AdminDropDown = (props) => {
           </DropDownLink>
           <DropDownLink clickProp={goToShifts}>
             Shifts
+          </DropDownLink>
+          <DropDownLink clickProp={goToPayroll}>
+            Payroll
           </DropDownLink>
           <DropDownLink clickProp={adminLogout}>
             Logout

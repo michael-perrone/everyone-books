@@ -31,6 +31,7 @@ const BookingColumnsEnter = (props) => {
            adminInfo: props.adminInfo, businessInfo: props.businessInfo, schedule: props.businessSchedule,
            businessName: props.nameOfBusiness, typeOfBusiness: props.kindOfBusiness, bookingColumnNumber: bookingColumnNumber, bookingColumnType: bookingColumnType, eq: usesShifts ? "y" : "n"
         }
+        console.log(props.nameOfBusiness, "BUSINESS NAMEO");
 
         axios.post('/api/adminSignup', allInfo).then(
             response => {
@@ -227,8 +228,6 @@ const mapDispatchToProps = dispatch => {
         adminRegister: (adminToken) => dispatch({type: ADMIN_REGISTER_SUCCESS, payload: {adminToken}})
     }
 }
-
-
 
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BookingColumnsEnter));
