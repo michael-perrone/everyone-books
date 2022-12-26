@@ -197,7 +197,7 @@ class EmployeeRegisterForm extends React.Component {
                 type="password"
               />
               {this.state.dirty.createPassword === true &&
-                this.state.employee.createPassword.length < 7 && (
+                this.state.employee.createPassword.length < 8 && (
                   <Alert
                     alertPhrase={"Password must be eight characters long"}
                   />

@@ -32,11 +32,11 @@ function PayrollCenter(props) {
             }
         ).catch(error => {
             if (error.response.status === 406) {
-                setError("You have no employees registered at your business.")
+                setError("We were not able to find payroll data for you..")
                 setLoading(false);
             }
             else if (error.response.status === 405) {
-                setError("No payroll information has been registered. You can enter this information in the edit business/payroll section.");
+                setError("Your employer has not entered any payroll information for you yet.");
                 setLoading(false);
             }
             setDidntWork(true);

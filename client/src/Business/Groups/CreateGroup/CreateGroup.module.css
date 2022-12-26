@@ -8,7 +8,7 @@
     flex-direction: column;
     align-items: center;
     position: relative;
-    background-color: white;
+    background-color: #f9e9f9;
     top: 30px;
 }
 
@@ -20,4 +20,5 @@
     width: 260px;
     padding-left: 6px;
     padding-bottom: 2px;
+    background-color: #f9e9f9;
 }

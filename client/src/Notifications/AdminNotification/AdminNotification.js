@@ -10,8 +10,7 @@ function AdminNotification(props) {
     const [type, setType] = useState()
 
     function notiClicked() {
-        props.toSetChosen(props.notification, type);
-        props.notificationClicked(props.notification);
+        props.notificationClicked(props.notification, type);
     }
 
     useEffect(function() {
@@ -34,7 +33,7 @@ function AdminNotification(props) {
             }
             else if (type === "ERY" || type === "ERYR") { 
             // fix this check this YAER is a problem
-                setNotiMessage(props.notification.fromString + " has accepted your request to join your business as an employee");;
+                setNotiMessage(props.notification.fromString + " has accepted your request to join your business as an employee.");;
                 setType("Alert");
             }
             else if (type === "ELBR" || type === "ELB") { 
@@ -54,24 +53,27 @@ function AdminNotification(props) {
                 setType("Alert")
             }  
             else if (type === "ADUR") { 
-                setNotiMessage("This booking request from " + props.notification.fromString + " was denied");
+                setNotiMessage("This booking request from " + props.notification.fromString + " was denied.");
                 setType("Alert")
             }
             else if (type === "UBU") {
                 setNotiMessage("Your business has a booking request from " + props.notification.fromString + ".")
                 setType("Booking");
             }
-    },[props.notification]);
+    },[props.notification.type]);
 
 
     useEffect(function() {
         let newArray = props.notification.type.split("");
         let lastLetter = newArray[newArray.length - 1];
-        console.log(lastLetter);
+        console.log("did i change??", props.index, props.notification.type);
         if (lastLetter === "R") {
             setIsRead(true);
         }
-    }, [props.notification]);
+        else {
+            setIsRead(false);
+        }
+    }, [props.notification.type]);
 
     return (
         <div onClick={notiClicked} id={styles.notificationContainer} className={props.chosen && props.chosen._id === props.notification._id ? styles.selected : ""}>

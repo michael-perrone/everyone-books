@@ -17,6 +17,21 @@
     cursor: pointer;
 }
 
+.groupContainer {
+    background-color: rgb(240, 255, 180);
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.groupContainer:hover {
+    background-color: rgb(241, 243, 122);
+}
+
 .bookingContainer:hover {
     background-color: rgb(246, 165, 156);
 }

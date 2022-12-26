@@ -61,7 +61,7 @@ function CourtContainer(props) {
                 </div>
                 <div style={{border: "2px solid black", height:`${heightNum * 16}px`, display: "flex", transform: "rotate(-180deg)"}}>
                     {bcnArray.map((bcn,index) => {
-                        return <CourtColumn clickBooking={props.clickBooking} openTime={props.openTime} sortedBookings={props.sortedBookings[index]} key={bcn} bct={props.bct} height={heightNum * 16} bcn={bcn}/>
+                        return <CourtColumn clickGroup={props.clickGroup} clickBooking={props.clickBooking} sortedGroups={props.sortedGroups[index]} openTime={props.openTime} sortedBookings={props.sortedBookings[index]} key={bcn} bct={props.bct} height={heightNum * 16} bcn={bcn}/>
                     })}
                 </div>
             </div>

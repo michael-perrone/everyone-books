@@ -13,12 +13,7 @@ import BCAList from '../../../Shared/BCAList/BCAList';
 import YesNoButton from '../../../Shared/ColorButton/ColorButton';
 import SubmitButton from '../../../Shared/SubmitButton/SubmitButton';
 
-
-
-
 function CreateGroup(props) {
-
-    const [successMessage, setSuccessMessage] = useState("");
     const [customersForGroup, setCustomersForGroup] = useState([]);
     const [customerIds, setCustomerIds] = useState([]);
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -39,68 +34,9 @@ function CreateGroup(props) {
     const [groupName, setGroupName] = useState("");
     const [groupLimit, setGroupLimit] = useState("No Limit");
     
-    function createGroup() {
-        if (groupName === "") {
-            setError("");
-            setTimeout(() => setError("Group name cannot be blank"), 200);
-            return;
-        }
-        if (Number(price) !== Number(price) || price === "") {
-
-            setError("");
-            setTimeout(() => setError("Price must be a number"), 200);
-            return;
-        }
-        if (!selectedEmployee) {
-            setError("");
-            setTimeout(() => setError(`Please select an employee`), 200);
-            return;
-        }
-        if (!selectedBcn) {
-            setError("");
-            setTimeout(() => setError(`Please select a ${bct} number`), 200);
-            return;
-        }
-        if (groupOpenToPublic === undefined) {
-            setError("");
-            setTimeout(() => setError(`Please choose if the group is open to the public`), 200);
-            return;
-        }
-        if (stringToIntTime[endTime] < stringToIntTime[startTime]) {
-            setError("");
-            setTimeout(() => setError(`The start time cannot be after the end time.`), 200);
-            return;
-        }
-        Axios.post("api/groups/create", {price, startTime, endTime, businessId: props.businessId, bcn: selectedBcn,
-             employeeBooked: selectedEmployee._id, date: dateString, type: groupName, customers: customerIds, groupOpen: groupOpenToPublic, groupLimitNumber: groupLimit}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
-                    if (response.status === 200) {
-                        setSuccess("");
-                        setTimeout(() => setSuccess("Group successfully created"), 200);
-                    }
-             }).catch(error => {
-                 if (error.response.status === 403) {
-                    setError("");
-                    setTimeout(() => setError(`${error.response.data.cName} is already booked for another booking at this time.`), 200);
-                 }
-                 else if (error.response.status === 406) {
-                     setError("")
-                     if (error.response.data.bcnArray.length === 0) {
-                        setTimeout(() => setError(`Could not create group, there are no available ${error.response.data.bcn}s at this time.`), 200);
-                     }
-                     else {
-                         let bcnStr = ``;
-                         for (let i = 0; i < error.response.data.bcnArray.length; i++) {
-                            if (i !== error.response.data.bcnArray.length - 1) {
-                                bcnStr += bct + " " + error.response.data.bcnArray[i] + ", ";
-                            }
-                            else {
-                                bcnStr += bct + " " + error.response.data.bcnArray[i];
-                            }
-                        }
-                        setTimeout(() => setError(`${bct} not available, however, ${bcnStr} is/are available.`), 200);
-                     }
-                 }
-             })
+    
+    function fire() {
+        props.createGroup(price, startTime, endTime, props.busienssId, selectedBcn, selectedEmployee._id, dateString, groupName, customerIds, groupOpenToPublic, groupLimit)
     }
 
     function setGroupOpenToPublicFalse() {
@@ -227,7 +163,7 @@ function CreateGroup(props) {
 
     return (
         <div id={styles.main}>
-            <p style={{fontSize: "24px", fontWeight: "bold", textAlign: "center"}}>Create Group</p>
+            <p style={{fontSize: "24px", textAlign: "center"}}>Create Group</p>
             <div style={{display: 'flex', justifyContent: "space-around", flexDirection: "column", alignItems: "center", height: "150px", position: "relative"}}>
                  <input onChange={(e) => setGroupName(e.target.value)} value={groupName} placeholder="Enter Group Name" className={styles.specialI}/>
                  <p style={{position: "absolute", fontSize: "22px", fontWeight: "bold", left: "-12px", top: "60px" }}>$</p>
@@ -239,11 +175,11 @@ function CreateGroup(props) {
                 <Maplist small={true} delete={deleteCustomer} array={customersForGroup}/>
             </div>
             <div>
-            <div style={{display: "flex", marginTop: "14px"}}>
+            <div style={{display: "flex", marginTop: "14px", alignItems: "center"}}>
                 <p style={{marginRight: "10px"}}>Date:</p>
                 <DateDrop setDateString={(dateString) => toSetDateString(dateString)}/>
             </div>
-            <div style={{display: "flex", marginTop: "30px"}}>
+            <div style={{display: "flex", marginTop: "30px", alignItems: "center"}}>
                 <p style={{ marginTop: "2px", marginRight: "8px"}}>Time:</p>
                 <TimeList time={startTime} times={times} setTime={(time) => toSetStartTime(time)}/>
                 <p style={{marginLeft: "5px", marginRight: "5px"}}>-</p>
@@ -264,7 +200,7 @@ function CreateGroup(props) {
             </div>
             <div style={{display: "flex", marginTop: "24px"}}>
                 <p style={{marginTop: "2px"}}>Group Limit Number:</p>
-                <select onChange={(e) => setGroupLimit(e.target.value)} value={groupLimit} style={{height: "24px", width: "90px", marginLeft: "10px"}}>
+                <select onChange={(e) => setGroupLimit(e.target.value)} value={groupLimit} style={{height: "24px", paddingLeft: "6px", width: "90px", marginLeft: "10px", border: "none", boxShadow: "0px 0px 2px black", backgroundColor: "transparent"}}>
                     <option>No Limit</option>
                     <option>1</option>
                     <option>2</option>
@@ -319,9 +255,8 @@ function CreateGroup(props) {
                 </select>
             </div>
             </div>
-            <SubmitButton onClick={createGroup} marginTop={"20px"}>Create Group</SubmitButton>
-            <OtherAlert showAlert={successMessage !== ""} alertType={"success"} alertMessage={successMessage}/>
-            <OtherAlert alertType={"fail"} alertMessage={error} showAlert={error !== ""}/>
+            <SubmitButton onClick={fire} marginTop={"20px"}>Create Group</SubmitButton>
+      
         </div>
     )
 }

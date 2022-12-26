@@ -4,21 +4,21 @@
     width: 380px;
     top: 30px;
     position: relative;
-    background-color: white;
+    background-color: #f9e9f9;
 }
 
 .groupHolder {
-    border-bottom: 1px solid black;
-    height: 200px;
+    border: 1px solid gray;
+    background-color: whitesmoke;
+    height: 214px;
     padding: 10px 0 10px 0;
+    width: 365px;
 }
 
 .halfDiv {
     width: 50%;
     padding-left: 10px;
-    height: 200px;
     display: flex;
-    justify-content: space-between;
     flex-direction: column;
 }
 

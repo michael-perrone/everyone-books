@@ -6,52 +6,42 @@ import {connect} from 'react-redux';
 import SmallList from '../../../Shared/SmallList/SmallList';
 
 function GroupSchedule(props) {
-    const [groups, setGroups] = useState([]);
-    const [dateString, setDateString] = useState(new Date().toDateString());
-    const [bct, setBct] = useState("");
-
-
-    useEffect(function () {
-        Axios.post("api/groups/list", {dateString}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
-            if (response.status === 200) {
-                setGroups(response.data.groups);
-                setBct(response.data.bct);
-            }
-        })
-    }, [dateString])
-
-
-    
-
     return (
         <div id={styles.main}>
-            <p style={{ width: "380px", textAlign: "center", fontWeight: "bold", fontSize: "24px"}}>Group Schedule</p>
+            <p style={{ width: "380px", textAlign: "center", fontSize: "24px"}}>Group Schedule</p>
             <div style={{width: "380px", textAlign: "center", marginTop: "20px"}}>
-                <DateDrop setDateString={(dateString) => setDateString(dateString)}/>
+                <DateDrop setDateString={(dateString) => props.setDateo(dateString)}/>
             </div>
-            {groups.length === 0 &&
+            {props.groups.length === 0 &&
             <div>
                 <p style={{textAlign: "center", marginTop: "10px"}}>There are no groups planned for today.</p>
             </div>
             }
-            {groups.length > 0 && 
-            <div style={{height: "630px", maxHeight: "630px", overflow: "auto"}}>
-            {groups.map(group => {
-                console.log(group);
-                return <div className={styles.groupHolder}>
+            {props.groups.length > 0 && 
+            <div style={{height: "590px", display: "flex", flexDirection: 'column', alignItems: "center", marginTop: "20px", maxHeight: "610px", overflow: "auto"}}>
+            {props.groups.map((group, index) => {
+                return <div style={{marginTop: index !== 0 ? "10px": ""}} className={styles.groupHolder}>
                     <div id={styles.fullDiv}>
                     <div className={styles.halfDiv}>
-                        <p>Group Name: {group.name}</p>
-                        <p>Time: {group.time}</p>
-                        <p>Employee: {group.employeeName}</p>
-                        <p>{bct}: {group.bcn}</p>
+                        <p>Group Name:</p>
+                        <p style={{fontWeight: "bold"}}>{group.name}</p>
+                        <p style={{marginTop: "20px"}}>Time:</p>
+                        <p style={{fontWeight: "bold"}}>{group.time}</p>
+                        <p style={{marginTop: "20px"}}>Employee:</p>
+                        <p style={{fontWeight: "bold"}}>{group.employeeName}</p>
+                        <p style={{marginTop: "20px"}}>{props.bct}:</p>
+                        <p style={{fontWeight: "bold"}}>{group.bcn}</p>
                     </div>
                     <div className={styles.halfDiv}>
-                        <p style={{textAlign: "center"}}>Customers: </p>
+                        <p style={{textAlign: "center"}}>Customers:</p>
+                        <div style={{marginTop: "7px"}}>
                         <SmallList list={group.customers} />
+                        </div>
                         
-                        <p>Group Limit: {group.groupLimitNumber}</p>
-                        <p>Open to Public: {group.openToPublic ? "Yes" : "No" }</p>
+                        <p style={{marginLeft: "15px"}}>Group Limit:</p>
+                        <p style={{fontWeight: "bold", marginLeft: "15px"}}>{group.groupLimitNumber}</p>
+                        <p style={{marginTop: "20px", marginLeft: "15px"}}>Open to Public: </p>
+                        <p style={{fontWeight: "bold", marginLeft: "15px"}}>{group.openToPublic ? "Yes" : "No"}</p>
                     </div>
                     <p></p>
                 </div>

@@ -5,15 +5,16 @@ import { connect } from "react-redux";
 import BusinessInsideUserHome from "./BusinessInsideUserHome/BusinessInsideUserHome";
 import UserBooking from "./UserBooking/UserBooking";
 import UserGroup from './UserGroup/UserGroup';
+import Spinner from "../../Spinner/Spinner";
 
 
 const UserHomeContainer = props => {
   const [businesses, setBusinesses] = useState([]);
   const [noBusinesses, setNoBusinesses] = useState(false);
-  const [noBookings, setNoBookings] = useState(false);
+
   const [groupsAndBookings, setGroupsAndBookings] = useState([]);
   const [height, setHeight] = useState("");
-
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     Axios.get("/api/userBusinesses", {
@@ -46,11 +47,11 @@ const UserHomeContainer = props => {
             return new Date(`${a.date}, ${a.time.split("-")[0]}`) - new Date(`${b.date}, ${b.time.split("-")[0]}`)
           })
           setGroupsAndBookings(allezBookingsAndGroups);
+          setLoading(false);
       }
-      else if (response.status === 204) {
-        setNoBookings(true);
-      }
-    });
+    }).catch(error => {
+      setLoading(false);
+    })
   }, []);
 
   function setNewBusinesses(newClubs) {
@@ -70,6 +71,7 @@ const UserHomeContainer = props => {
   }, [groupsAndBookings.length, businesses.length])
 
   return (
+    loading ? <Spinner/> :
     <div
       id={styles.userHomeContainer}
       style={{height: height}}
@@ -128,7 +130,7 @@ const UserHomeContainer = props => {
         >
           Your bookings coming up
         </p>
-        {noBookings && (
+        {groupsAndBookings.length === 0 && (
           <p
             className={styles.noClubsBookingsContainer}
           >

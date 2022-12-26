@@ -6,63 +6,153 @@ import AdminNotification from '../../Notifications/AdminNotification/AdminNotifi
 import YesNoNotification from '../../Notifications/YesNoNotification/YesNoNotification';
 import MessageView from './../../Notifications/MessageView/MessageView';
 import Axios from 'axios';
+import Spinner from '../../Spinner/Spinner';
 
 function AdminNotifications(props) {
 
     const [notifications, setNotifications] = useState();
-    const [fakeNotifications, setFakeNotifications] = useState([]);
-    const [type, setType] = useState("");
+    const [typeo, setType] = useState("");
     const [chosen, setChosen] = useState();
     const [eq, setEq] = useState("");
     const [bct, setBct] = useState(""); 
     const [bcn, setBcn] = useState("");
+    const [loading, setLoading] = useState(true);
+    const [notiNum, setNotiNum] = useState();
+    const [counter, setCounter] = useState(0);
 
     function changeNotis(newNoti) {
-        const notiRep = [...notifications];
-        notiRep.shift();
-        notiRep.unshift(newNoti);
-        setNotifications(notiRep);
+        const allNotis = [...notifications];
+        for (let i = 0; i < notifications.length; i++) {
+            if (newNoti._id === allNotis[i]._id) {
+                allNotis[i].type = newNoti.type;
+            }
+        }
+        setNotifications(allNotis);
     }
 
-    function toSetChosen(notification, type) {
-            setType(type)
-            setChosen(notification)
+    function alterType(type, notification) {
+        const allNotis = [...notifications];
+        for (let i = 0; i < notifications.length; i++) {
+            if (notification._id === allNotis[i]._id) {
+                console.log("yes")
+                allNotis[i].type = type;
+            }
+        }
+        setType("Alert");
+        reduceNotiNum();
+        setNotifications(allNotis);
     }
 
-    function notiClicked(notification) { // check this... this is lazy to request so much back and bad practice
-        if (notification.type === "ERY" || notification.type === "BAW" || notification.type === "ELB" || notification.type === "BBY" || notification.type === "YURA" || notification.type === "UATG" || notification.type === "ERN") {
-            Axios.post('/api/notifications/changeToRead', {notificationId: notification._id}).then(response => {
-                if (response.status === 200) {
-                    axios.get("/api/notifications/getAdminNotis", {headers: {'x-auth-token' : props.adminToken}}).then(
-                        response => {
-                            if (response.status === 200) {
-                                const data = response.data.notifications;
-                                const flippedNotis = [];
-                                let i = response.data.notifications.length - 1;
-                                while (i >= 0) {
-                                    flippedNotis.push(data[i]);
-                                    i--;
-                                }
-                                setNotifications(flippedNotis);
-                            }
-                        }
-                    )
+    function reduceNotiNum() {
+        setNotiNum(notiNum - 1);
+    }
+
+    function removeDeadNoti(id) {
+        const notificationsCopy = notifications;
+        const updatedNotis = notificationsCopy.filter(e => {
+            return e._id !== id;
+        })
+        setNotifications(updatedNotis);
+        if (chosen._id === id) {
+            setChosen(updatedNotis[0]);
+        }
+    }
+
+    React.useEffect(() => {
+        let num = setInterval(() => {
+          setCounter(counter + 1)
+        }, 20000);
+        return () => clearInterval(num);
+      })
+    
+      React.useEffect(function() {
+            if (!notifications) {
+                return
+            }
+            let numbo = 0;
+            for (let i = 0; i < notifications.length; i++) {
+                if (notifications[i].type.split("")[notifications[i].type.length - 1] !== "R") {
+                    numbo++;
                 }
-            }).catch(error => {
-                console.log(error);
+            }
+            Axios.post('/api/notifications/checkAdminNotis', {notiNum: numbo}, {headers: {'x-auth-token': props.adminToken}}).then(
+                response => {
+                    if (response.status === 201) {
+                        const newNotis = [...response.data.newNotis, ...notifications];
+                        setNotifications(newNotis);
+                     
+                    }
+                }
+              )
+      }, [counter])
+
+    // function notiClicked(notification) { // check this... this is lazy to request so much back and bad practice
+    //     if (notification.type === "ERY" || notification.type === "BAW" || notification.type === "ELB" || notification.type === "BBY" || notification.type === "YURA" || notification.type === "UATG" || notification.type === "ERN") {
+    //         Axios.post('/api/notifications/changeToRead', {notificationId: notification._id}).then(response => {
+    //             if (response.status === 200) {
+    //                 console.log("Hello?");
+    //                 reduceNotiNum();
+    //                 axios.get("/api/notifications/getAdminNotis", {headers: {'x-auth-token' : props.adminToken}}).then(
+    //                     response => {
+    //                         if (response.status === 200) {
+    //                             const data = response.data.notifications;
+    //                             const flippedNotis = [];
+    //                             let i = response.data.notifications.length - 1;
+    //                             while (i >= 0) {
+    //                                 flippedNotis.push(data[i]);
+    //                                 i--;
+    //                             }
+    //                             setNotifications(flippedNotis);
+    //                         }
+    //                     }
+    //                 )
+    //             }
+    //         }).catch(error => {
+    //             console.log(error);
+    //         })
+    //     }
+    // }
+
+    function notiClicked(notification, type) {
+        if (chosen._id !== notification._id) {
+             setChosen(notification); 
+        }
+        // check this no reason to send so much back --- awful
+        if (notification.type.split("")[notification.type.length - 1] !== "R" && typeo === "Alert" && type !== "Booking") {
+            axios.post("/api/notifications/changeToRead", {notificationId: notification._id}).then(response => {
+                if (response.status == 200) {
+                    reduceNotiNum();
+                    const newerNotis = [...notifications];
+                    for (let i = 0; i < newerNotis.length; i++) {
+                        if (newerNotis[i]._id === notification._id) {
+                            newerNotis[i].type = notification.type + "R";
+                        }
+                    }
+                    setNotifications(newerNotis);
+                }
             })
         }
+        setType(type);
     }
 
     
 
     useEffect(function() {
+        setLoading(true);
         axios.get("/api/notifications/getAdminNotis", {headers: {'x-auth-token' : props.adminToken}}).then(
             response => {
                 if (response.status === 200) {
                     setBcn(response.data.bcn)
                     setBct(response.data.bct);
                     setEq(response.data.eq);
+                    let dotiNum = response.data.notifications.length;
+                    for (let i = 0; i < response.data.notifications.length; i++) {
+                        const arr = response.data.notifications[i].type.split("");
+                        if (arr[arr.length - 1] === "R") {
+                            dotiNum = dotiNum - 1;
+                        }
+                    }
+                    setNotiNum(dotiNum);
                     const data = response.data.notifications;
                     const flippedNotis = [];
                     let i = response.data.notifications.length - 1;
@@ -110,11 +200,13 @@ function AdminNotifications(props) {
                         setType("Booking");
                     }
                 }
+                setLoading(false);
             }
         )
     },[])
 
     return (
+        loading ? <Spinner/> :
         <div id={styles.bigContainer} style={{display: "flex", alignItems: "center", flexDirection: "column", backgroundColor: "rgb(225, 225, 225)"}}>
              <p style={{marginTop: "20px", fontSize: "20px", fontWeight: "bold"}}>Notifications Center</p>
             <div id={styles.mainContainer}> 
@@ -122,15 +214,15 @@ function AdminNotifications(props) {
                 {notifications && notifications.length === 0 && <p style={{textAlign: "center", fontSize: "18px", fontWeight: "bold", marginTop: "10px"}}>You do not have any notifications!</p>}
                 {notifications && notifications.length > 0 && (
                     <div>
-                        {notifications.map(notification => {
+                        {notifications.map((notification,index) => {
                             return (
-                                <AdminNotification notificationClicked={notiClicked} chosen={chosen} toSetChosen={toSetChosen} notification={notification}/> 
+                                <AdminNotification count={notifications.length} notificationClicked={notiClicked} chosen={chosen} index={index} notification={notification}/> 
                             )
                         })}
                     </div>
                 )}
             </div>
-            {notifications && notifications.length > 0 && <MessageView bcn={bcn} eq={eq} bct={bct} changeNotis={changeNotis} toSetChosen={toSetChosen} notification={chosen} type={type}/>}
+            {notifications && notifications.length > 0 && <MessageView notiClicked={notiClicked} alterType={alterType} reduceNotiNum={reduceNotiNum} removeDeadNoti={removeDeadNoti} bcn={bcn} eq={eq} bct={bct} changeNotis={changeNotis} notification={chosen} type={typeo}/>}
             </div>
         </div>
     )

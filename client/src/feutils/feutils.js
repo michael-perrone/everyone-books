@@ -90,6 +90,7 @@ const notificationDate = cutDay(`${date.toDateString()}, ${-convertTime(date.get
 export function getTimeRightAway() {
     let ampm = "";
     let hour = new Date().getHours();
+    console.log(hour, "IM THE HOUR");
     if (hour > 12) {
         hour = hour - 12;
         ampm = "PM";
@@ -125,6 +126,9 @@ export function getTimeRightAway() {
          }
     }
     let minutes = minutesArray.join("");
+    if (hour === "0" || hour === 0) {
+        hour = 12;
+    }
     return `${hour}:${minutes} ${ampm}`
 
 }
@@ -212,7 +216,6 @@ export function getTime() {
         minute++;
     }
     if (minute === 60) {
-        console.log("hi!")
         minute = "00";
     }
     if (minute === 0 || minute === "00") {

@@ -409,7 +409,6 @@ router.post('/addEmployeeToBusinessApp', adminAuth, async (req, res) => {   // u
         let newNotification = new Notification({
           type: "BAE", // Business Added Employee
           date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
-          notificationFromBusiness: req.admin.businessId,
           fromId: req.admin.businessId,
           fromString: business.businessName
         });

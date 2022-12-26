@@ -9,12 +9,12 @@ function EmployeeNotification(props) {
     const [type, setType] = useState()
 
     function notiClicked() {
-        props.toSetChosen(props.notification, type);
-        props.notificationClicked(props.notification);
+        props.notificationClicked(props.notification, type);
     }
 
     useEffect(function() {
         let type = props.notification.type;
+        console.log(type);
             if (type === "BAE") { 
                 setNotiMessage(props.notification.fromString + " has invited you to join their business as an employee.");
                 setType("Choice");
@@ -22,6 +22,11 @@ function EmployeeNotification(props) {
             else if (type === "BAER") { 
                 setNotiMessage(`You have accepted an invite from ${props.notification.fromString} to join their business as an employee.`);
                 setType("Alert")
+            }
+            else if (type === "BAEDR") {
+                console.log("I SHOULD RUN");
+                setNotiMessage(`You denied this request to join ${props.notification.fromString} as an employee at their business.`)
+                setType("Alert");
             }
             else if (type === "BAW" || type === "BAWR") {
                 setNotiMessage(`Your request to join ${props.notification.fromString}'s business has been accepted.`);
@@ -55,17 +60,24 @@ function EmployeeNotification(props) {
                 setNotiMessage("Your business has a booking request from " + props.notification.fromString + " for the date of " + props.notification.potentialDate + ".")
                 setType("Booking");
             }
-    },[props.notification]);
+            else if (type === "BDS" || type === "BDSR") {
+                setType("Alert");
+                setNotiMessage("A shift that you were scheduled to work has been deleted.");
+                
+            }
+    },[props.notification.type]);
 
 
     useEffect(function() {
         let newArray = props.notification.type.split("");
         let lastLetter = newArray[newArray.length - 1];
-        console.log(lastLetter);
         if (lastLetter === "R") {
             setIsRead(true);
         }
-    }, [props.notification]);
+        else {
+            setIsRead(false);
+        }
+    }, [props.notification.type]);
 
     return (
         <div onClick={notiClicked} id={styles.notificationContainer} className={props.chosen && props.chosen._id === props.notification._id ? styles.selected : ""}>

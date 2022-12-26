@@ -54,6 +54,10 @@ const BusinessSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "clubProfile"
   },
+  advertisements: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'advertisement'
+  },
   eq: String,
   c: Number
 });

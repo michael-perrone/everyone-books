@@ -335,7 +335,7 @@ router.get("/ios", userAuth, async (req, res) => {
 
 router.post('/', adminAuth, async (req, res) => {
   try {
-    console.log("TULIP")
+
     let date1 = utils.getStringDateTime(req.body.timeChosen, req.body.date);
     let dateToUse = new Date(date1.date);
     if (new Date() > dateToUse) {
@@ -527,7 +527,6 @@ router.post('/', adminAuth, async (req, res) => {
           }
         }
         things.push(employeeArray);
-        console.log(employeeArray, "im employee array")
       }
 
       let employeesAvailable = [];
@@ -543,7 +542,6 @@ router.post('/', adminAuth, async (req, res) => {
         }
       }
       if (employeesAvailable.length > 0) {
-        console.log(employeesAvailable, "employees available here")
         let employees = await Employee.find({ _id: employeesAvailable }).select(["fullName"])
         return res.status(200).json({ employees, date: date1.dateString });
       } else {
@@ -558,7 +556,7 @@ router.post('/', adminAuth, async (req, res) => {
 
 router.post('/userChecking', userAuth, async (req, res) => {
   try {
-    console.log("TULIP")
+
     let date1 = utils.getStringDateTime(req.body.timeChosen, req.body.date);
     let dateToUse = new Date(date1.date);
     if (new Date() > dateToUse) {
@@ -750,7 +748,6 @@ router.post('/userChecking', userAuth, async (req, res) => {
           }
         }
         things.push(employeeArray);
-        console.log(employeeArray, "im employee array")
       }
 
       let employeesAvailable = [];
@@ -766,7 +763,6 @@ router.post('/userChecking', userAuth, async (req, res) => {
         }
       }
       if (employeesAvailable.length > 0) {
-        console.log(employeesAvailable, "employees available here")
         let employees = await Employee.find({ _id: employeesAvailable }).select(["fullName"])
         return res.status(200).json({ employees, date: date1.dateString });
       } else {
@@ -1067,7 +1063,6 @@ router.post('/clone', async (req, res) => {
           }
         }
         things.push(employeeArray);
-        console.log(employeeArray, "im employee array")
       }
 
       let employeesAvailable = [];

@@ -6,11 +6,10 @@ import { connect } from "react-redux";
 import CourtContainer from "./CourtContainer/CourtContainer";
 import ViewBooking from './ViewBooking/ViewBooking';
 import Spinner from '../Spinner/Spinner';
+import ViewGroup from "./ViewGroup/ViewGroup";
 
 function Business(props) {
-  const [business, setBusiness] = useState("");
-  const [timeOpen, setTimeOpen] = useState("");
-  const [timeClose, setTimeCLose] = useState("");
+  const [sortedBookings, setSortedBookings] = useState([]);
   const [services, setServices] = useState([]);
   const [products, setProducts] = useState([]);
   const [eq, setEq] = useState("");
@@ -18,12 +17,13 @@ function Business(props) {
   const [bct, setBct] = useState("");
   const [openTime, setOpenTime] = useState("");
   const [closeTime, setCloseTime] = useState("");
-  const [sortedBookings, setSortedBookings] = useState([]);
   const [updateBookings, setUpdateBookings] = useState();
-  const [showBackDrop, setShowBackDrop] = useState(false);
+  const [showBackDropBooking, setShowBackDropBooking] = useState(false);
+  const [showBackDropGroup, setShowBackDropGroup] = useState(false);
   const [bookingToView, setBookingToView] = useState({});
+  const [groupToView, setGroupToView] = useState({});
   const [loading, setLoading] = useState(true);
-
+  const [groups, setGroups] = useState([]);
 
 
   function loadSchedule() {
@@ -43,17 +43,31 @@ function Business(props) {
         setEq(response.data.eq);
         setProducts(response.data.products);
         const sorted = [];
+        const sortedGroups = [];
         const bookings = response.data.bookings;
-        let i = 1;
-        while(i <= Number(response.data.bcn)) {
+        const groups = response.data.groups;
+        let g = 1;
+        let t = 1;
+        while(t <= Number(response.data.bcn)) {
           const array = [];
           sorted.push(array);
-          i++;
+          t++;
         }
+        while(g <= Number(response.data.bcn)) {
+          const array = [];
+          sortedGroups.push(array);
+          g++;
+        }
+        console.log(sorted);
+        console.log(sortedGroups);
         for (let e = 0; e < bookings.length; e++) {
-            console.log(bookings[e]);
             sorted[bookings[e].bcn - 1].push(bookings[e])
         }
+        for (let i = 0 ; i < groups.length; i++) {
+          console.log(groups[i]);
+          sortedGroups[groups[i].bcn - 1].push(groups[i]);
+        }
+        setGroups(sortedGroups);
         setSortedBookings(sorted);
       }
     })
@@ -77,11 +91,18 @@ function Business(props) {
               newBooking.products = response.data.products;
               newBooking.employeeName = response.data.employeeName;
               setBookingToView(newBooking);
-              setShowBackDrop(true);
+              setShowBackDropBooking(true);
           }
       }).catch(error => {
         console.log(error);
       })  
+    }
+  }
+
+  function clickGroup(group) {
+    return () => {
+      setGroupToView(group);
+      setShowBackDropGroup(true);
     }
   }
   
@@ -93,21 +114,23 @@ function Business(props) {
   },[props.dateChosen])
 
   function hide() {
-    setShowBackDrop(false);
+    setShowBackDropBooking(false);
+    setShowBackDropGroup(false);
     loadSchedule() // check this dont love how much this runs;
   }
 
 
     return (
           <div id={styles.businessContainer}>
-           {showBackDrop && <div style={{display: "flex", position: "absolute", top: 0, lef: 0, width: "100%", justifyContent: "center"}}><div onClick={() => setShowBackDrop(false)} id={styles.backDrop}></div> <ViewBooking reload={loadSchedule} products={products} services={services} hide={hide} booking={bookingToView}/></div>}
+           {showBackDropBooking && <div style={{display: "flex", position: "absolute", top: 0, lef: 0, width: "100%", justifyContent: "center"}}><div onClick={() => setShowBackDropBooking(false)} id={styles.backDrop}></div> <ViewBooking reload={loadSchedule} products={products} services={services} hide={hide} booking={bookingToView}/></div>}
+           {showBackDropGroup && <div style={{display: "flex", position: "absolute", top: 0, lef: 0, width: "100%", justifyContent: "center"}}><div onClick={() => setShowBackDropGroup(false)} id={styles.backDrop}></div> <ViewGroup reload={loadSchedule} products={products} services={services} hide={hide} group={groupToView}/></div>}
                 <AdminBooking
                   loadSchedule={loadSchedule}
                   services={services}
                   eq={eq}
                   bct={bct}    
                 />
-                {!loading ? <CourtContainer clickBooking={clickBooking} sortedBookings={sortedBookings} openTime={openTime} closeTime={closeTime} bct={bct} bcn={bcn}/> : 
+                {!loading ? <CourtContainer clickGroup={clickGroup} sortedGroups={groups} clickBooking={clickBooking} sortedBookings={sortedBookings} openTime={openTime} closeTime={closeTime} bct={bct} bcn={bcn}/> : 
                   <Spinner/>
                 }
           </div>

@@ -11,26 +11,35 @@ import Spinner from '../../Spinner/Spinner';
 function UserNotifications(props) {
 
     const [notifications, setNotifications] = useState();
-    const [type, setType] = useState("");
+    const [type, setType] = useState("Alert");
     const [chosen, setChosen] = useState();
     const [loading, setLoading] = useState(true);
+    const [counter, setCounter] = useState(0);
+    const [notiNum, setNotiNum] = useState();
+
+    function reduceNotiNum() {
+        setNotiNum(notiNum - 1);
+    }
 
     function changeNotis(newNoti) {
         const notiRep = [...notifications];
-        notiRep.shift();
-        notiRep.unshift(newNoti);
+        for (let i = 0; i < notiRep.length; i++) {
+            if (notiRep[i]._id === newNoti._id) {
+                notiRep[i].type = notiRep[i].type + "R";
+            }
+        }
         setNotifications(notiRep);
     }
 
-    function toSetChosen(notification, type) {
-            setType(type)
+    function toSetChosen(notification) {
             setChosen(notification)
     }
 
-    function notiClicked(notification, index) { // check this... this is lazy to request so much back and bad practice
+    function notiClicked(notification, index) { 
         if (notification.type === "ERY" || notification.type === "BAW" || notification.type === "ELB" || notification.type === "BBY" || notification.type === "YURA" || notification.type === "UATG" || notification.type === "ERN" || notification.type === "BDB") {
             Axios.post('/api/notifications/changeToRead', {notificationId: notification._id}).then(response => {
                 if (response.status === 200) {
+                    reduceNotiNum();
                     const newNotis = [...notifications];
                     newNotis[index].type = notification.type + "R";
                     console.log(newNotis[index].type);
@@ -41,6 +50,28 @@ function UserNotifications(props) {
             })
         }
     }
+
+    React.useEffect(() => {
+        let num = setInterval(() => {
+          setCounter(counter + 1)
+        }, 20000);
+        return () => clearInterval(num);
+      })
+
+      React.useEffect(function() {
+        if (notiNum !== undefined) {
+            Axios.post('/api/notifications/checkUserNotis', {notiNum}, {headers: {'x-auth-token': props.userToken}}).then(
+                response => {
+                    if (response.status === 201) {
+                        const newNotis = [...response.data.newNotis, ...notifications];
+                        setNotifications(newNotis);
+                        setNotiNum(notiNum + 1);
+                    }
+                }
+              )
+          }
+      }, [counter])
+
 
   
     useEffect(function() {
@@ -57,6 +88,7 @@ function UserNotifications(props) {
                     setNotifications(flippedNotis);
                     setChosen(flippedNotis[0]);
                     if (data.length === 0) {
+                        setLoading(false);
                         return;
                     }
                     if (flippedNotis[0].type === "UATG" || flippedNotis[0].type === "UATGR") { 
@@ -70,9 +102,6 @@ function UserNotifications(props) {
                     }
                     else if (flippedNotis[0].type === "ERN" || flippedNotis[0].type === "ERNR") {
                         setType("Alert");
-                    }
-                    else if (flippedNotis[0].type === "ESID") { 
-                        setType("Choice")
                     }
                     else if (flippedNotis[0].type === "ERY" || flippedNotis[0].type === "ERYR") { 
                         setType("Alert");
@@ -92,24 +121,24 @@ function UserNotifications(props) {
                     else if (flippedNotis[0].type === "ADUR") { 
                         setType("Alert")
                     }
-                    else if (flippedNotis[0].type === "UBU") {
-                        setType("Booking");
-                    }
                     else if (flippedNotis[0].type === "YURA" || flippedNotis[0].type === "YURAR") {
                         setType("Alert");
                     }
-                }
-                if (loading) {
                     setLoading(false);
-                }  
+                   
+                }
+                   
             }
-        )
+        ).catch(function(error) {
+            console.log("POTATO");
+            setLoading(false);
+        })
     },[])
 
     return (
         <div id={styles.main} style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
             <p style={{marginTop: "20px", fontSize: "20px", fontWeight: "bold"}}>Notifications Center</p>
-            {!loading ?  <div id={styles.holder} style={{display: "flex", justifyContent: 'space-around', width: "100%", marginTop: "20px"}}> 
+            {!loading ? <div id={styles.holder} style={{display: "flex", justifyContent: 'space-around', width: "100%", marginTop: "20px"}}> 
              <div id={styles.notificationsContainer}>
                 {notifications && notifications.length === 0 && <p style={{textAlign: "center", fontSize: "18px", fontWeight: "bold", marginTop: "10px"}}>You do not have any notifications!</p>}
                 {notifications && notifications.length > 0 && (
@@ -122,7 +151,7 @@ function UserNotifications(props) {
                     </div>
                 )}
             </div>
-            {notifications && notifications.length > 0 && <MessageView changeNotis={changeNotis} toSetChosen={toSetChosen} notification={chosen} type={type}/>}
+            {notifications && notifications.length > 0 && <MessageView reduceNotiNum={reduceNotiNum} changeNotis={changeNotis} notification={chosen} type={type}/>}
             </div> : <Spinner/> } 
         </div>
     )

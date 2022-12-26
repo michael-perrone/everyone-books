@@ -87,10 +87,7 @@ router.post("/addNewCustomer", adminAuth, async (req, res) => {
   let realPhone = realPhoneArray.join("");
   const user = await User.findOne({ phoneNumber: realPhone }).select(["fullName"]);
   if (user) {
-    console.log(user)
-    let bookingsAlready = await Booking.find({ customer: user._id, date: date });
-    console.log(bookingsAlready);
-    console.log("USER USER USER")
+  //  let bookingsAlready = await Booking.find({ customer: user._id, date: date }); check this
     res.status(200).json({ user });
   } else {
     res.status(400).send();

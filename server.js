@@ -4,11 +4,13 @@ const cors = require("cors");
 const connectedDatabase = require("./config/db");
 const path = require("path");
 
+
 app.use(cors());
 connectedDatabase();
 
 app.use(express.json({ extended: false }));
 app.use('/api/encyclopedia', require("./routes/api/encyclopedia"));
+app.use('/api/ads', require("./routes/api/ads"));
 app.use("/api/restaurant", require("./routes/api/restaurant"));
 app.use("/api/payroll", require("./routes/api/payroll"));
 app.use("/api/connect", require("./routes/api/connect"));
@@ -61,9 +63,8 @@ app.get("*", function (request, response) {
 
 const PORT = process.env.PORT || 4000;
 
-
-
-
 app.listen(PORT, "0.0.0.0", () => {
   console.log("LISTENING ON PORT " + PORT);
 });
+
+

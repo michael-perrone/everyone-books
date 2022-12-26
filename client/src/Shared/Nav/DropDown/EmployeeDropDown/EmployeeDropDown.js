@@ -36,7 +36,7 @@ const EmployeeDropDown = (props) => {
     return (
         <React.Fragment>
           <DropDownLink clickProp={goHome}>
-            Home
+            Schedule
           </DropDownLink>
           <DropDownLink clickProp={goToSettings}>
             Settings

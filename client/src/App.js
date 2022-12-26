@@ -25,6 +25,7 @@ import PayrollCenter from './Business/PayrollCenter/PayrollCenter';
 import EmployeePayroll from './EmployeeHome/EmployeePayroll/EmployeePayroll';
 import ServiceFinder from "./UserHome/UserHomeContainer/ServiceFinder/ServiceFinder";
 import BusinessesByService from "./UserHome/BusinessesByService/BusinessesByService";
+import AdBuilder from './AdminHome/AdBuilder/AdBuilder';
 
 class App extends React.Component {
   constructor(props) {
@@ -64,6 +65,7 @@ class App extends React.Component {
         <Route path="/restaurantBuilder" exact component={RestaurantBuilder}></Route>
       <Route path="/employee/:employeeId/notifications" exact component={EmployeeNotifications}></Route>
       <Route path="/user/:userId/notifications" exact component={UserNotifications}></Route>
+      <Route path="/admin/:adminId/AdBuilder" exact component={AdBuilder}></Route>
         <Route path="/admin/:adminId/notifications" exact component={AdminNotifications}></Route>
         <Route path="/admin/:businessId/payroll" exact component={PayrollCenter}></Route>
         <Route path="/employee/:employeeId/payroll" exact component={EmployeePayroll}></Route>

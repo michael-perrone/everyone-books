@@ -4,7 +4,7 @@ import styles from './ServiceList.module.css';
 function ServiceList(props) {
     return (
         props.array ?
-        <div style={{width: props.small ? "218px" : "", height: props.small ? "202px" : "", boxShadow: props.small ? "none" : ""}} id={styles.otherMainContainer}>
+        <div style={{width: props.small ? "218px" : "", height: props.small ? "202px" : "", boxShadow: props.small ? "none" : ""}} id={props.smaller ? styles.otha : styles.otherMainContainer}>
         {props.array.map((element, index) => {
             return (
                     props.selectedServices.indexOf(element["_id"]) === -1 ?

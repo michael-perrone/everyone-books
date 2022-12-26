@@ -32,10 +32,19 @@ const AdminDropDown = (props) => {
     props.history.push(`/admin/${props.admin.admin.businessId}/payroll`);
   }
 
+  function goToEditBusiness() {
+    props.history.push(`/admin/${props.admin.admin.id}/createeditprofile`)
+    console.log("HERLLDOWODOQIWFDIQWJFWF");
+    console.log("HERLLDOWODOQIWFDIQWJFWF");
+    console.log("HERLLDOWODOQIWFDIQWJFWF");
+    console.log("HERLLDOWODOQIWFDIQWJFWF");
+  } 
+
+
     return (
         <React.Fragment>
-          <DropDownLink clickProp={goHome}>
-            Home
+         <DropDownLink clickProp={goToEditBusiness}>
+            Edit Business
           </DropDownLink>
           <DropDownLink clickProp={goToGroups}>
             Groups
@@ -64,4 +73,10 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default withRouter(connect(null, mapDispatchToProps)(AdminDropDown));
+const mapStateToProps = state => {
+  return {
+    admin: state.authReducer.admin
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AdminDropDown));

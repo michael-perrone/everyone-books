@@ -7,7 +7,22 @@
 
 .row {
     display: flex;
+    justify-content: space-between;
     width: 375px;
+}
+
+.down {
+    border-bottom: 1px solid black;
+    user-select: none;
+}
+
+.up {
+    border-top: 1px solid black;
+    user-select: none;
+}
+
+.clickDiv {
+    cursor: pointer;
 }
 
 .subContainer {

@@ -91,7 +91,7 @@ function AdminSignup(props) {
             </div>
             <div className={styles.inputContainer}>
             <input type="password" onBlur={passwordHandlerDirty} placeholder="Password" className={styles.adminInput} onChange={passwordHandler}/>
-            {password.length < 7 && passwordDirty === true && <Alert top={'25px'} alertPhrase={"Must be eight characters or more"}/>}
+            {password.length < 8 && passwordDirty === true && <Alert top={'25px'} alertPhrase={"Must be eight characters or more"}/>}
             </div>
             <div className={styles.inputContainer}>
             <input type='password' onFocus={confirmPasswordHandlerDirty} placeholder="Confirm Password" className={styles.adminInput} onChange={confirmPasswordHandler}/>

@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     width: 350px;
-    height: 500px;
+    height: 600px;
     box-shadow: 0px 0px 3px black;
     background-color: lavenderblush;
 }
@@ -17,7 +17,7 @@
 #infoContainer {
     width: 302px;
     border: 1px solid black;
-    height: 450px;
+    height: 500px;
     position: relative;
     z-index: 10000;
     top: -10px;

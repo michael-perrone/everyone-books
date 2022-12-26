@@ -1,7 +1,7 @@
 #actualCoreContainer {
     width: 350px;
     box-shadow: 0px 0px 3px black;
-    height: 650px;
+    height: 600px;
     background-color: lavenderblush;
     display: flex;
     flex-direction: column;

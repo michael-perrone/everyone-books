@@ -662,8 +662,12 @@ router.post("/user", userAuth, async (req, res) => {
 })
 
 router.post("/acceptedUserRequest", authAdmin, async (req, res) => {
-    console.log(req.body.notiId);
+    try {
     let notification = await BookedNotification.findOne({_id: req.body.notiId});
+    if (notification.type.split("")[notification.type.length - 1] === "R") {
+        const newType = notification.type;
+        return res.status(201).json({type: newType})
+      }
     console.log(notification);
     const date = utils.getStringDateTime(notification.potentialStartTime, notification.potentialDate);
     if (date.date < new Date()) {
@@ -684,10 +688,10 @@ router.post("/acceptedUserRequest", authAdmin, async (req, res) => {
             let business;
             business = await Business.findOne({_id: req.body.businessId})
             if (business.eq === "y") {
-                const shifts = await Shift.find({shiftDate: date.dateString});
+                const shifts = await Shift.find({shiftDate: date.dateString, employeeId: notification.potentialEmployee});
                 if (shifts.length > 1) {
                     console.log("double shifts")
-                    return;
+                    bcn = shifts[0].bookingColumnNumber; // COME BACK AND CHECK THIS -- NOT CORRECT BECAUSE COULD BE FIRST OR SECOND SHIFT
                 }
                 else if (shifts.length === 1) {
                     bcn = shifts[0].bookingColumnNumber;
@@ -709,15 +713,20 @@ router.post("/acceptedUserRequest", authAdmin, async (req, res) => {
                 bcn
             })
             await newBooking.save();
+            console.log("yoooo");
 
             return res.status(200).send();
         }
+    } catch(error) {
+        console.log(error);
+    }
 })
 
 router.post("/acceptedUserRequestEmployee", employeeAuth, async (req, res) => {
     let notification = await BookedNotification.findOne({_id: req.body.notiId});
     const date = utils.getStringDateTime(notification.potentialStartTime, notification.potentialDate);
     if (date.date < new Date()) {
+        await BookedNotification.deleteOne({_id: notification._id});
         return res.status(409).send();
     }
     let customer = await User.findOne({_id: notification.fromId}).select(["bookings"]);

@@ -4,6 +4,7 @@ import styles from './MessageView.module.css';
 import {connect} from 'react-redux';
 import OtherAlert from '../../OtherAlerts/OtherAlerts';
 import BCAList from '../../Shared/BCAList/BCAList';
+import Spinner from '../../Spinner/Spinner';
 
 function MessageView(props) {
     const [message, setMessage] = useState("");
@@ -13,6 +14,8 @@ function MessageView(props) {
     const [bcn, setBcn] = useState("");
     const [error, setError] = useState("");
     const [bcnArray, setBcnArray] = useState([]);
+    const [loading, setLoading] = useState(false);
+
 
 
     useEffect(function() {
@@ -28,7 +31,8 @@ function MessageView(props) {
             if (response.status === 200) {
                 setSuccess("");
                 setTimeout(() => setSuccess("Employee successfully added"), 200);
-                props.toSetChosen(response.data.notification, "Alert");
+                props.reduceNotiNum();
+                props.notiClicked(response.data.notification, "Alert");
                 props.changeNotis(response.data.notification);
                 
             }
@@ -40,7 +44,6 @@ function MessageView(props) {
     useEffect(function() {
         if (props.admin && props.type === "Choice" && props.admin.admin.tob === "Restaurant" && (props.notification.type === "UBT" || props.notification.type === "UBTR ")) {
             Axios.post("/api/restaurant/getExtraInfo", {notificationId: props.notification._id}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
-              
             }).catch(error => {
                 if (error.response.status === 405) {
                     setMessage("The user booking request has been removed due to the time and/or date the user requested having already passed.");
@@ -55,7 +58,8 @@ function MessageView(props) {
 
     useEffect(function() {
         if (props.type === "Booking") {
-            Axios.post("/api/notifications/getExtraInfo", {notificationId: props.notification._id}).then(response => {
+            setLoading(true);
+            Axios.post("/api/notifications/getExtraInfo", {notificationId: props.notification._id, type: props.notification.type}).then(response => {
                 if (response.status === 200) {
                     let servicesString = "";
                     for (let i = 0; i < response.data.services.length; i++) {
@@ -71,18 +75,31 @@ function MessageView(props) {
                     }
                     setMessage(`Your business has a booking request from ${props.notification.fromString}. They have requested that the employee ${response.data.employee.fullName} perfrom the services ${servicesString} at the time of ${props.notification.potentialStartTime} on the date of ${props.notification.potentialDate}. If you click book below this booking will be added into your schedule.`)
                 }
+                else if (response.status === 201) {
+                    props.alterType(response.data.type, props.notification);
+                    setError("");
+                    setTimeout(() => setError("This booking request was " + (response.data.type.includes("D") ? "denied" : "accepted") + " by another member of your business."), 200);
+                    
+                }
+                setLoading(false);
+            }).catch(error => {
+                setLoading(false);
             })
         }
-    }, [props.type])
+    }, [props.type, props.notification._id])
 
     function denyEmployeeRequest() {
         Axios.post("api/notifications/employerDeniedEmployee", {notificationId: props.notification._id, employeeId: props.notification.fromId}, {headers: {"x-auth-token": props.adminToken}}).then(response => {
             if (response.status === 200) {
-                props.toSetChosen(response.data.notification, "Alert");
+                props.notiClicked(response.data.notification, "Alert");
                 props.changeNotis(response.data.notification);
+                props.reduceNotiNum();
                 setSuccess("");
                 setTimeout(() => setSuccess("Employee Denied From Joining Business"), 200);
             }
+        }).catch(error => {
+            setError("");
+            setTimeout(() => setError("Something went wrong."))
         })
     }
 
@@ -90,8 +107,9 @@ function MessageView(props) {
         Axios.post('api/notifications/employeeClickedYesIos', {employeeId: props.employee.employee.id, notificationId: props.notification._id}).then(
             response => {
                 setSuccess("");
-                setTimeout(() => window.document.location.reload(), 300)
-                
+                props.reduceNotiNum();
+                setTimeout(() => setSuccess("You successfully accepted this employers request."), 200);
+                setTimeout(() => window.document.location.reload(), 600)
             }
         )
     }
@@ -100,13 +118,14 @@ function MessageView(props) {
         Axios.post("/api/notifications/employeeDeniedRequest", {notificationId: props.notification._id}, {headers: {'x-auth-token': props.employeeToken}}).then(
             response => {
                 if (response.status === 200) {
-                    setHideButtons(true);
-                    if (props.fromEmployeeView) {
-                        props.denyHit();
-                    }
+                    props.denied(props.notification._id);
+                    props.reduceNotiNum();
                 }
             }
-        )
+        ).catch(error => {
+            setError("")
+            setTimeout(() => setError("Something went wrong!"), 200);
+        })
     }
 
     function toSetBcn(bcn) {
@@ -118,7 +137,6 @@ function MessageView(props) {
     useEffect(function() {
         if (props.notification) {
             let type = props.notification.type;
-            console.log(type, "YOOOOOO");   
                 if (type === "ESIDDR") {
                     setMessage("You denied " + props.notification.fromString + "'s request to become an employee at your business. If this was a mistake, you can add them to your business in the edit business profile menu.");
                     setHeader("Employee Denied");
@@ -202,8 +220,12 @@ function MessageView(props) {
                     setHeader("Booking Request Accepted");
                     setMessage("A booking request from  " + props.notification.fromString + " has been accepted by the employee. This booking is now in the schedule.");
                 }
+                else if (type === "BDS" || type === "BDSR") {
+                    setHeader("Shift Deleted");
+                    setMessage("A shift you were sheduled for has been deleted. Please check your schedule and contact your employer if you believe this is a mistake.") // check this // i dont mention the date because it may be a pain to create a date for just this
+                }
             }
-    }, [props.notification])
+    }, [props.notification._id, props.notification.type])
 
     function book() {
         if (props.adminToken) {
@@ -211,17 +233,26 @@ function MessageView(props) {
                 response => {
                     if (response.status === 200) {
                         setSuccess("");
+                        props.reduceNotiNum();
                         setTimeout(() => setSuccess("This booking has been added to your schedule."), 200);
                         Axios.post('/api/notifications/changeAcceptedUserRequestNoti', {notiId: props.notification._id, businessId: props.admin.admin.businessId}).then(response => {
                             if (response.status === 200) {
-                                props.toSetChosen(response.data.notification, "Alert");
+                                props.notiClicked(response.data.notification, "Alert");
                                 props.changeNotis(response.data.notification);
                             }
                         })
                     }
+                    if(response.status === 201 ) {
+                        props.reduceNotiNum();
+                        props.alterType(response.data.type, props.notification);
+                        setError("");
+                        setTimeout(() => setError("This booking request was " + (response.data.type.includes("D") ? "denied" : "accepted") + " by another member of your business."), 200);
+                    }
                 }
             ).catch(error => {
                 if (error.response.status === 409) {
+                    props.removeDeadNoti(props.notification._id);
+                    props.reduceNotiNum();
                     setError("");
                     setTimeout(() => setError("The time of this booking has already passed and this booking request will be deleted."), 200);
                 }
@@ -232,20 +263,28 @@ function MessageView(props) {
                 response => {
                     if (response.status === 200) {
                         setSuccess("");
+                        props.reduceNotiNum();
                         setTimeout(() => setSuccess("This booking has been added to your schedule."), 200);
                         Axios.post('/api/notifications/changeAcceptedUserRequestNoti', {notiId: props.notification._id, employeeId: props.employee.employee.id}).then(response => {
                             if (response.status === 200) {
-                                props.toSetChosen(response.data.notification, "Alert");
+                                props.notiClicked(response.data.notification, "Alert");
                                 props.changeNotis(response.data.notification);
                             }
                         })
                     }
+                    if(response.status === 201 ) {
+                        props.reduceNotiNum();
+                        props.alterType(response.data.type, props.notification);
+                        setError("");
+                        setTimeout(() => setError("This booking request was " + (response.data.type.includes("D") ? "denied" : "accepted") + " by another member of your business."), 200);
+                    }
                 }
-            ).catch(error => {
-                if (error.status === 409) {
+            ).catch(error => {   
+                if (error.response.status === 409) {
                     setError("");
                     setTimeout(() => setError("The time of this booking has already passed and this booking request will be deleted."), 200);
-                
+                    props.removeDeadNoti(props.notification._id);
+                    props.reduceNotiNum();
                 }
             })
         }
@@ -254,10 +293,17 @@ function MessageView(props) {
     function decline() {
         Axios.post("/api/notifications/changeDeniedUserRequestNoti", {notiId: props.notification._id}).then(response => {
             if (response.status === 200) {
+                props.reduceNotiNum();
                 setSuccess("");
                 setTimeout(() => setSuccess("Booking request denied successfully."), 200);
-                props.toSetChosen(response.data.notification, "Alert");
+                props.notiClicked(props.notification, "Alert");
                 props.changeNotis(response.data.notification);
+            }
+            if(response.status === 201 ) {
+                props.reduceNotiNum();
+                props.alterType(response.data.type, props.notification);
+                setError("");
+                setTimeout(() => setError("This booking request was " + (response.data.type.includes("D") ? "denied" : "accepted") + " by another member of your business."), 200);
             }
         }).catch(error => {
             console.log(error);
@@ -273,7 +319,7 @@ function MessageView(props) {
         <div style={{width: "360px", height: props.height ? props.height : ""}}>  
             {props.type === "Alert" &&
             <div id={styles.messageViewContainer}>
-                <p className={styles.date}>{props.notification.date}</p>
+            {props.notification && <p className={styles.date}>{props.notification.date}</p>}
                 <p className={styles.header}>{header}</p>
                 <div style={{ position: "relative", top: "75px"}}>
                     
@@ -302,22 +348,23 @@ function MessageView(props) {
             </div>
             </div>}
 
-            {props.type === "Booking" &&
+            {props.type === "Booking" && !loading &&
                  <div id={styles.messageViewContainer}>
                     <p className={styles.date}>{props.notification.date}</p>
                     <p className={styles.header}>{header}</p>
                 <div style={{ position: "relative", top: "75px"}}>
                  <p  className={styles.message}>{message}</p>
                  <div style={{display: "flex", justifyContent: "space-around", marginTop: "20px"}}>
-                 <p style={{fontSize: "22px", marginTop: "8px", paddingRight: "15px"}}>{props.bct}:</p>
+                 {props.eq === "n" && <p style={{fontSize: "22px", marginTop: "8px", paddingRight: "15px"}}>{props.bct}:</p>}
                  {props.eq === "n" && <BCAList selectBcn={(bcn) => toSetBcn(bcn)} selectedBcn={bcn} bcnList={bcnArray}/>}
                  </div>
-                 <div style={{display: "flex", width: "370px", justifyContent: "space-around", marginTop: "50px"}}>
+                 <div style={{display: "flex", justifyContent: "space-around", marginTop: "50px"}}>
                     <button disabled={props.eq === "n" && bcn === ""} onClick={book} className={styles.bu}>Book</button>
                     <button onClick={decline} className={styles.bu}>Decline</button>
                  </div>
                  </div>
              </div>}
+             {loading && <Spinner/>}
              <OtherAlert alertType={"success"} alertMessage={success} showAlert={success !== ""}/>
              <OtherAlert alertType={"error"} alertMessage={error} showAlert={error !== ""}/>
         </div>

@@ -4,7 +4,7 @@ import Axios from 'axios';
 import StatementAppear from '../../../Shared/StatementAppear/StatementAppear';
 import DateDrop from "../../../Shared/DateDrop/DateDrop";
 import TimeList from "../../../Shared/TimeList/TimeList";
-import {intToStringTime, createMaplist, getTimeRightAway, getTs} from '../../../feutils/feutils';
+import {intToStringTime, createMaplist, getTimeRightAway, getTs, stringToIntTime} from '../../../feutils/feutils';
 import ColorButton from '../../../Shared/ColorButton/ColorButton';
 import SubmitButton from '../../../Shared/SubmitButton/SubmitButton';
 import ServiceList from "../../../Shared/ServiceList/ServiceList";
@@ -73,20 +73,40 @@ const Core = (props) => {
       }
 
       useEffect(function() {
+        const day = new Date().toDateString();
+        if (!time) {
+          setTime(getTimeRightAway());
+        }
+        if (dateString === day) {
+          if (times.length) {
+            if (time && stringToIntTime[time] < times[0]) {
+              console.log("yoooo");
+              setTime(intToStringTime[times[0]]);
+            }
+            else if (stringToIntTime[time] > times[times.length - 1]) {
+              setTime(intToStringTime[times[times.length - 1]])
+            }
+          }
+        }
+        else {  
+          setTime(intToStringTime[times[0]])
+        }
+   
+      }, [time, times, dateString])
+
+      useEffect(function() {
           if (dateString && props.business.schedule) {
-            console.log("yoooo");
-            console.log("SPIDERMANNNNN");
-            console.log(props.business);
             const day = new Date(dateString).getDay();
-            console.log(day);
             const open = props.business.schedule[day].open;
             const close = props.business.schedule[day].close;
-            console.log(open);
-            console.log(getTs(open,close));
           setTimes(getTs(open, close));
+          if (stringToIntTime[open] > stringToIntTime[time]) {
+            setTime(open);
+          }
           console.log(open,close);
           }
       },[dateString, props.business])
+
 
     function getAvailableEmployees() {
         if (selectedServices.length === 0) {
@@ -243,8 +263,6 @@ const Core = (props) => {
         }
     }, [dateChosen])
 
-
-
     return (
             <div id={styles.actualCoreContainer}>
                <div id={styles.newContainer}>
@@ -261,7 +279,7 @@ const Core = (props) => {
               <div>
               <div style={{marginTop: "10px", display: "flex", flexDirection: "column", alignItems: "center"}}>
               <p style={{fontSize: "18px", fontWeight: 'bold', marginTop: "12px", textAlign: "center", position: 'relative', right: "20px", marginBottom: "10px"}}>Choose Services:</p>
-                <ServiceList minusService={(id) => minusService(id)} selectedServices={selectedServices} addService={(id) => selectService(id)} array={props.services ? props.services : []} />
+                <ServiceList smaller={true} minusService={(id) => minusService(id)} selectedServices={selectedServices} addService={(id) => selectService(id)} array={props.services ? props.services : []} />
               </div>
                 <div style={{marginTop: "22px", display: "flex", justifyContent: "center"}}>
                   {props.services && props.services.length > 0 ? <SubmitButton onClick={getAvailableEmployees}>Check Availability</SubmitButton> : <p style={{width: "330px", marginLeft: "10px"}}>This business has no services, please check back later to see if this business has updated their service list.</p>}
@@ -272,12 +290,8 @@ const Core = (props) => {
                 <p style={{fontWeight: "bold", fontSize: "18px", marginBottom: "10px", marginTop: "26px"}}>Employees Available:</p>
                 <SelectOneList unSelectOne={unSelectEmployee} array={employeesBack} selected={selectedEmployee} selectOne={(id) => selectEmployee(id)}/>
               </StatementAppear>
-              <StatementAppear appear={showAreaSuccess}>
-              <p style={{marginTop: "20px"}}>There is availability at this time for the selected {selectedServices.length > 0 ? "services" : "service"}, click the button below to send your request.</p>
-              <div style={{width: "350px", marginTop: "20px"}}><SubmitButton onClick={createBooking}>Send Request</SubmitButton></div>
-              </StatementAppear>
-              <StatementAppear appear={selectedEmployee !== ""}>
-              <p style={{marginTop: "20px"}}>There is availability at this time for the selected {selectedServices.length > 0 ? "services" : "service"} with the selected employee, click the button below to send your request.</p>
+              <StatementAppear appear={selectedEmployee !== "" || showAreaSuccess}>
+              <p style={{marginTop: "20px"}}>There is availability at this time for the selected {selectedServices.length > 0 ? "services" : "service"}{selectedEmployee !== "" ? ` with the selected employee` : ""}, click the button below to send your request.</p>
               <div style={{width: "350px", marginTop: "20px"}}><SubmitButton onClick={createBooking}>Send Request</SubmitButton></div>
               </StatementAppear>
               <OtherAlert alertType={"error"} alertMessage={error} showAlert={error !== ""}/>

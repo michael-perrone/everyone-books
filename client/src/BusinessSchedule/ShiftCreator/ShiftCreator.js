@@ -283,15 +283,15 @@ function ShiftCreator(props) {
             <p style={{ position: 'absolute', left: '40px', bottom: "10px", color: 'darkred' }}>{breakError}</p>
             <p style={{ width: '100%', textAlign: 'center', fontSize: '20px', position: "relative", top: "8px" }}>Add New Shift</p>
             <div style={{marginTop: "20px"}}>
-                <span >Shift Date:</span>
-                <input style={{ position: 'relative', top: '-2px' }} className={styles.inputs} onChange={setDateHandler} value={date} placeholder="select date" type="date" />
+                <span style={{position: "relative", top: '-3px'}}>Shift Date:</span>
+                <input style={{ position: 'relative', top: '-2px', marginLeft: "8px"}} className={styles.inputs + " " + styles.seePink} onChange={setDateHandler} value={date} placeholder="select date" type="date" />
             </div>
             <div style={{ display: "flex", marginTop: "15px"}}>
                 <p>Employee:</p>
                 <select id='changer' onChange={(e) => {
                     setEmployeeName(e.target.options[e.target.options.selectedIndex].text)
                     setEmployeeId(e.target.options[e.target.options.selectedIndex].value)
-                }} className={styles.inputs}>
+                }} style={{backgroundColor: "transparent", marginLeft: "8px"}} className={styles.inputs + " " + styles.seePink}>
                     <option>{}</option>
                     {props.employees && props.employees.map(employee => {
                         return <option value={employee._id}>{employee.fullName}</option>
@@ -300,14 +300,14 @@ function ShiftCreator(props) {
             </div>
             <div style={{ display: 'flex', marginTop: "15px" }}>
                 <p>{props.bookingColumnsType} number:</p>
-                <select style={{ position: 'relative', top: '0px', left: '5px' }} onChange={getOptionsNumber}>
+                <select className={styles.seePink} style={{ position: 'relative', top: '-2px', left: '10px'}} onChange={getOptionsNumber}>
                     {createOptions()}
                 </select>
 
             </div>
             <div style={{marginTop: "15px"}}>
                 <span>Shift Time Start: </span>
-                <select className={styles.inputs} value={shiftStart} onChange={shiftStartHandler}>
+                <select className={styles.inputs + " " + styles.seePink} value={shiftStart} onChange={shiftStartHandler}>
                     {times.map(element => {
                         return <option style={{color: "black"}}>{element}</option>
                     })}
@@ -315,7 +315,7 @@ function ShiftCreator(props) {
             </div>
             <div style={{marginTop: "15px"}}>
                 <span>Shift Time End:</span>
-                <select style={{marginLeft: "10px"}} className={styles.inputs} value={endOfShift} onChange={shiftEndHandler}>
+                <select style={{marginLeft: "10px"}} className={styles.inputs + " " + styles.seePink} value={endOfShift} onChange={shiftEndHandler}>
                     {endTimes.map(element => {
                         return <option style={{color: "black"}}>{element}</option>
                     })}

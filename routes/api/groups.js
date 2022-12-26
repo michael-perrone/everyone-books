@@ -8,6 +8,7 @@ const BookedNotification = require('../../models/BookedNotification');
 const Employee = require("../../models/Employee");
 const userAuth = require("../../middleware/authUser");
 const Admin = require("../../models/Admin");
+const User = require('../../models/User');
 
 router.post("/create", adminAuth, async (req, res) => {
     console.log(req.body);
@@ -245,6 +246,76 @@ router.post("/list", adminAuth, async (req, res) => {
         newGroups.push(newGroup)
     }
     res.status(200).json({groups: newGroups, bct: business.bookingColumnType});
+})
+
+router.post("/info", async(req, res) => {
+    try {
+        const group = await Group.findOne({_id: req.body.groupId})
+        console.log(group);
+        if (group) {
+            const users = [];
+            for (let i = 0; i < group.customers.length; i++) {
+                const user = await User.findOne({_id: group.customers[i]}).select(["fullName"]);
+                users.push({userId: user._id, fullName: user.fullName});
+            }
+            console.log()
+            const employee = await Employee.findOne({_id: group.employeeBooked}).select(["fullName"]);
+            console.log(employee);
+            const groupBack = {users, employeeName: employee.fullName};
+            return res.status(200).json({groupBack});
+        
+        }
+    }
+    catch(error) {
+        console.log(error);
+    }
+})
+
+
+router.post("/addNewCustomer", adminAuth, async (req, res) => {
+    const date = new Date(req.body.date).toDateString();
+    let phoneArray = req.body.phoneNumber.split("");
+  for (let i = 0; i < phoneArray.length; i++) {
+    if (phoneArray[i] !== "0" && phoneArray[i] !== "1" && phoneArray[i] !== "2" && phoneArray[i] !== "3" && phoneArray[i] !== "4" && phoneArray[i] !== "5" && phoneArray[i] !== "6" && phoneArray[i] !== "7" && phoneArray[i] !== "8" && phoneArray[i] !== "9") {
+      phoneArray[i] = "";
+    }
+  }
+  let realPhoneArray = phoneArray.filter(e => e !== "");
+  console.log(phoneArray.length)
+  if (realPhoneArray.length === 0) {
+    return res.status(406).send();
+  }
+  let realPhone = realPhoneArray.join("");
+  const user = await User.findOne({ phoneNumber: realPhone }).select(["fullName"]);
+  if (user) {
+    const group = await Group.findOne({_id: req.body.groupId});
+    for (let i = 0; i < group.customers.length; i++) {
+        if (group.customers[i].toString() === user._id.toString()) {
+            return res.status(406).send();
+        }
+    }
+    const customers = [...group.customers];
+    customers.push(user._id);
+    group.customers = customers;
+    await group.save();
+
+  //  let bookingsAlready = await Booking.find({ customer: user._id, date: date }); check this
+    res.status(200).json({ user });
+  } else {
+    res.status(400).send();
+  }
+})
+
+router.post('/delete', adminAuth, async (req, res) => {
+    try {
+        const group = await Group.findOne({_id: req.body.groupId});
+        if (group) {
+            await group.deleteOne();
+            res.status(200).send();
+        }
+    } catch(error) {
+        res.status(500).send();
+    }
 })
 
 module.exports = router;

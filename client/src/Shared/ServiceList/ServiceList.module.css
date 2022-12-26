@@ -12,6 +12,13 @@
      width: 300px;
 }
 
+#otha {
+    max-height: 160px;
+    overflow: auto;
+    box-shadow: 0px 0px 2px black;
+     width: 300px;
+}
+
 #subContainer {
     width: 280px;
     display: flex;

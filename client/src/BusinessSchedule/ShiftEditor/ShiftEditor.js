@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
 import styles from './ShiftEditor.module.css';
+import otherstyles from '../ShiftCreator/ShiftCreator.module.css';
 import { connect } from 'react-redux';
 import OtherAlert from '../../OtherAlerts/OtherAlerts';
 import {stringToIntTime, intToStringTime, getDateInFormat, getTimes} from '../../feutils/feutils';
@@ -207,16 +208,16 @@ function ShiftEditor(props) {
             <p style={{ position: 'absolute', left: '40px', bottom: "10px", color: 'darkred' }}>{breakError}</p>
             <p style={{ width: '100%', textAlign: 'center', fontSize: '20px', position: "relative", top: "8px" }}>Edit Shift</p>
             <div style={{marginTop: "20px"}}>
-                <span >Shift Date:</span>
-                <input style={{ position: 'relative', top: '-2px' }} className={styles.inputs} onChange={setDateHandler} value={date} placeholder="select date" type="date" />
+                <span style={{position: "relative", top: "-3px"}}>Shift Date:</span>
+                <input style={{ position: 'relative', top: '-2px', marginLeft: "8px" }} className={styles.inputs + " " +  otherstyles.seePink} onChange={setDateHandler} value={date} placeholder="select date" type="date" />
             </div>
             <div style={{ display: "flex", marginTop: "15px"}}>
                 <p>Employee:</p>
-                <select id='changer' onChange={(e) => {
+                <select style={{marginLeft: "8px"}} id='changer' onChange={(e) => {
                     setEmployeeName(e.target.options[e.target.options.selectedIndex].text)
                     setEmployeeId(e.target.options[e.target.options.selectedIndex].value)
-                }} className={styles.inputs}>
-                    <option> </option>
+                }} className={styles.inputs + " " + otherstyles.seePink}>
+                    <option value={props.editingShift.employeeId}>{props.editingShift.employeeName}</option>
                     {props.employees && props.employees.map(employee => {
                         return <option value={employee._id}>{employee.fullName}</option>
                     })}
@@ -224,14 +225,14 @@ function ShiftEditor(props) {
             </div>
             <div style={{ display: 'flex', marginTop: "15px" }}>
                 <p>{props.bookingColumnsType} number:</p>
-                <select style={{ position: 'relative', top: '0px', left: '5px' }} value={optionsNumber} onChange={getOptionsNumber}>
+                <select className={otherstyles.seePink} style={{ position: 'relative', top: '-2px', left: '10px' }} value={optionsNumber} onChange={getOptionsNumber}>
                     {createOptions()}
                 </select>
 
             </div>
             <div style={{marginTop: "15px"}}>
                 <span>Shift Time Start: </span>
-                <select className={styles.inputs} value={shiftStart} onChange={shiftStartHandler}>
+                <select className={styles.inputs + " " + otherstyles.seePink} value={shiftStart} onChange={shiftStartHandler}>
                     {times.map(element => {
                         return <option style={{color: "black"}}>{element}</option>
                     })}
@@ -239,7 +240,7 @@ function ShiftEditor(props) {
             </div>
             <div style={{marginTop: "15px"}}>
                 <span>Shift Time End:</span>
-                <select style={{marginLeft: "10px"}} className={styles.inputs} value={endOfShift} onChange={shiftEndHandler}>
+                <select style={{marginLeft: "10px"}} className={styles.inputs + " " + otherstyles.seePink} value={endOfShift} onChange={shiftEndHandler}>
                     {endTimes.map(element => {
                         return <option style={{color: "black"}}>{element}</option>
                     })}

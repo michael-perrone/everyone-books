@@ -3,8 +3,9 @@ import React from 'react';
 
 function SmallList(props) {
     return (
-        <div style={{height: "100px", maxHeight: "100px", overflow: "auto", width: "180px"}}>
-            {props.list.map(listItem => {
+        <div style={{height: "90px", maxHeight: "90px", overflow: "auto", width: "180px"}}>
+            {props.list && props.list.map(listItem => {
+                console.log(props.list);
                 return (
                     <p style={{textAlign: "center", width: "180px", borderBottom: ".5px solid black", paddingTop: ""}}>{listItem.fullName}</p>
                 )

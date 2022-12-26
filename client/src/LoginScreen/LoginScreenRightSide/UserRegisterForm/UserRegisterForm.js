@@ -227,7 +227,7 @@ class UserRegisterForm extends React.Component {
                 type="password"
               />
               {this.state.dirty.createPassword === true &&
-                this.state.user.createPassword.length < 7 && (
+                this.state.user.createPassword.length < 8 && (
                   <Alert
                     alertPhrase={
                       "Must be at least eight characters"

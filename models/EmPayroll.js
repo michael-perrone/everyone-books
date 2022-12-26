@@ -13,7 +13,8 @@ const EmPayrollSchema = new mongoose.Schema({
   pcp: String,
   scp: String,
   salary: String,
-  hourly: String
+  hourly: String,  // check this should change all this to numbers
+  groupPercent: Number,
 });
 
 const EmPayroll = mongoose.model("emPayroll", EmPayrollSchema);

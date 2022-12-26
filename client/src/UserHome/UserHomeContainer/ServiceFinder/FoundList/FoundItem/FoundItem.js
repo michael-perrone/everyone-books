@@ -3,10 +3,10 @@ import styles from './FoundItem.module.css';
 
 function FoundList(props) {
     return (
-        <div className={styles.container}>
-            <p>{props.children}</p>
-            <button onClick={props.go(props.children)} className={styles.butto} style={{borderRadius: "50%", height: "30px", position: "relative", top: "-8px", width: "30px", border: "none"}}>
-            </button>
+        <div onClick={props.go(props.id)} className={styles.container}>
+            <p style={{paddingBottom: "-20px"}}>{props.children}</p>
+            <p>{props.bn}</p>
+            <p>${props.cost.toFixed(2)}</p>
         </div>
     )
 }

@@ -47,7 +47,7 @@ const Schedule = props => {
               setMessage(`You are scheduled to work today at ${response.data.shiftTimes.start} until ${response.data.shiftTimes.end}.`);
             }
             else {
-              setMessage(`You are scheduled to work today but your schedule is empty. You are scheduled to be in ${response.data.bct} ${response.data.bcn}. Your shift starts at ${response.data.shiftTimes.start} and ends at ${response.data.shiftTimes.end}.` );
+              setMessage(`You are scheduled to work today but your schedule is empty. You are scheduled to be in ${response.data.bct} ${response.data.bcn}. Your shift is from ${response.data.shiftTimes.start}-${response.data.shiftTimes.end}.` );
             }
           }
          else if (response.status === 206) {
@@ -134,8 +134,8 @@ const Schedule = props => {
             marginTop: "10px"
           }}
         >
-          {shift && <p style={{fontSize: '14px', paddingTop: '10px', paddingBottom: '10px', width: '100%', textAlign: 'center', borderBottom: '1px solid black'}}>{message}</p>}
-          {!shift && <p style={{fontSize: '14px', paddingTop: '10px', paddingBottom: '10px', width: '100%', textAlign: 'center', borderBottom: '1px solid black'}}>{message}</p>}
+          {shift && <p style={{fontSize: '14px', paddingTop: '10px',  lineHeight: "18px", paddingBottom: '10px', width: '100%', textAlign: 'center', borderBottom: '1px solid black'}}>{message}</p>}
+          {!shift && <p style={{fontSize: '14px', paddingTop: '10px', lineHeight: "18px",  paddingBottom: '10px', width: '100%', textAlign: 'center', borderBottom: '1px solid black'}}>{message}</p>}
           {bookings && bookings.length > 0 && bookings.map(booking => {
               return (
                 <div className={styles.employeeBookingContainer}>

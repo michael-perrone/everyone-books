@@ -18,13 +18,14 @@
     "express-validator": "^6.1.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.6.2",
-    "multer": "^1.4.2"
+    "multer": "^1.4.2",
+    "socket.io": "^4.5.4"
   },
   "devDependencies": {
     "concurrently": "^4.1.1",
     "nodemon": "^1.19.4"
   },
   "editor.bracketPairColorization.enabled": true,
-  "editor.guides.bracketPairs":"active",
+  "editor.guides.bracketPairs": "active",
   "proxy": "http://localhost:8080"
 }

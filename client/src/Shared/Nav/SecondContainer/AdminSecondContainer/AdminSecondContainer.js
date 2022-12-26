@@ -12,6 +12,7 @@ import DropDown from "../../DropDown/DropDown";
 import Axios from "axios";
 
 const AdminSecondContainer = props => {
+  const [counter, setCounter] = React.useState(1);
   const [notiNum, setNotiNum] = React.useState(0);
 
 
@@ -52,8 +53,9 @@ const AdminSecondContainer = props => {
   // }
 
 
-  function goToEditBusiness() {
-    props.history.push(`/admin/${props.admin.admin.id}/createeditprofile`)
+  function goToAdBuilder() {
+    props.history.push(`/admin/${props.admin.admin.id}/AdBuilder`)
+    console.log(`/admin/${props.admin.admin.id}/AdBuilder`);
   } 
 
 
@@ -69,15 +71,34 @@ const AdminSecondContainer = props => {
     })
   }, [])
 
+  React.useEffect(() => {
+    let num = setInterval(() => {
+      setCounter(counter + 1)
+    }, 20000);
+    return () => clearInterval(num);
+  })
+
+  React.useEffect(function() {
+    Axios.post('/api/notifications/checkAdminNotiNumber', {notiNum}, {headers: {'x-auth-token': props.adminToken}}).then(
+      response => {
+        if (response.status === 201) {
+          setNotiNum(response.data.num);
+        }
+      }
+    )
+  }, [counter])
+  
+
+
   return (
     <React.Fragment>
       <div id={styles.secondContainer}>
             <p
             style={{ cursor: "pointer" }}
             className={styles.links}
-            onClick={goToEditBusiness}
+            onClick={goToAdBuilder}
             >
-            Edit Business
+            Advertisements
             </p>
             <p
             style={{ cursor: "pointer" }}

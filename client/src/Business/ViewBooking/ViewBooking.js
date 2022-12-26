@@ -10,6 +10,7 @@ import Axios from 'axios';
 import {connect} from 'react-redux';
 import {EXIT_NUM} from '../../actions/actions';
 
+
 function ViewBooking(props) {
     const [showProducts, setShowProducts] = useState(false);
     const [selectedProducts, setSelectedProducts] = useState([]);
@@ -65,7 +66,6 @@ function ViewBooking(props) {
     }
 
     function addServices() {
-        console.log("yo?")
         for (let i = 0; i < selectedServices.length; i++) {
             for (let t = 0; t < servicesInBooking.length; t++) {
                 if (selectedServices[i]._id === servicesInBooking[t].id) {
@@ -257,15 +257,15 @@ function ViewBooking(props) {
                     <p className={styles.fontFourteen}>{props.booking.customer.phoneNumber}</p>
                 </div>
                 <div>
-                    <p className={styles.bolder}>Time of Service:</p>
+                    <p className={styles.bolder}>Time of Booking:</p>
                     <p className={styles.fontFourteen}>{time}</p>
                 </div>
                 <div>
-                    <p className={styles.bolder}>Date of Service:</p>
+                    <p className={styles.bolder}>Date of Booking:</p>
                     <p className={styles.fontFourteen}>{props.booking.date}</p>
                 </div>
                  <div>
-                    <p className={styles.bolder}>Cost of Service:</p>
+                    <p className={styles.bolder}>Cost of Booking:</p>
                     <p className={styles.fontFourteen}>{cost}</p>
                 </div>
                 <button onClick={deleteBooking} style={{backgroundColor: "salmon", height: "35px", width: "120px", position: "absolute", bottom: "40px", fontWeight: "bold", boxShadow: "0px 0px 2px black", border: "none"}}>Delete Booking</button>
@@ -291,9 +291,9 @@ function ViewBooking(props) {
                    <div style={{width: "218px", height: "200px", borderLeft: "1.5px solid black",
                     borderRight: "1.5px solid black", borderBottom: "1.5px solid black" }}>
                    {showProducts ?
-                        <ServiceList array={props.products} small={true} addService={(id) => selectProduct(id)} minusService={minusProduct} prod={true} small={true} selectedServices={selectedProductIds}/>
+                        <ServiceList array={props.products} small={true} addService={(id) => selectProduct(id)} minusService={minusProduct} prod={true}  selectedServices={selectedProductIds}/>
                            :
-                          <ServiceList array={props.services} small={true} addService={(id) => selectService(id)} minusService={minusService} small={true}  selectedServices={selectedServiceIds}/>
+                          <ServiceList array={props.services} small={true} addService={(id) => selectService(id)} minusService={minusService}  selectedServices={selectedServiceIds}/>
                    }
                     </div>
                 </div>
@@ -331,7 +331,5 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-
-  
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewBooking);

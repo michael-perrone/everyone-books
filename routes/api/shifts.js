@@ -7,6 +7,7 @@ const Employee = require('../../models/Employee');
 const ServiceType = require('../../models/ServiceType');
 const utils = require('../../utils/utils');
 const adminAuth = require("../../middleware/authAdmin");
+const Notification = require("../../models/Notification");
 
 router.post('/multiplecreate', async (req, res) => {
   let date = new Date(req.body.shiftDate).toDateString(); // get the date string
@@ -82,7 +83,8 @@ router.post('/multiplecreate', async (req, res) => {
           businessId: req.body.businessId,
           isBreak: req.body.isBreak,
           breakEnd: req.body.breakEnd,
-          breakStart: req.body.breakStart
+          breakStart: req.body.breakStart,
+          bookingColumnNumber: req.body.bookingColumnNumber
         })
       }
       else {
@@ -513,7 +515,21 @@ router.post('/getEmployeeBookingsForDay', async (req, res) => {
 
 router.post('/deleteOne', adminAuth, async (req, res) => {
   if (req.admin) {
-    let shift = await Shift.findOne({ _id: req.body.shiftId });
+    const shift = await Shift.findOne({ _id: req.body.shiftId });
+    const employee = await Employee.findOne({_id: shift.employeeId});
+    const business = await Business.findOne({_id: req.admin.businessId})
+    let date = new Date();
+    const notification = new Notification({
+      date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
+      fromId: business.businessId,
+      type: "BDS",
+      fromString: business.businessName
+    });
+    await notification.save();
+    const employeeNotifications = [...employee.notifications];
+    employeeNotifications.push(notification);
+    employee.notifications = employeeNotifications;
+    await employee.save();
     if (shift) {
       await Shift.deleteOne({ _id: req.body.shiftId });
       res.status(200).send();

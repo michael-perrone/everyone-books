@@ -7,7 +7,12 @@ const Admin = require('../../models/Admin');
 
 router.get('/', employeeAuth, async (req, res) => {
     const employee = await Employee.findOne({ _id: req.employee.id }).select(['business', 'businessWorkingAt', '_id']);
-    res.status(200).json({ employee })
+    if (employee.businessWorkingAt) {
+        return res.status(200).json({ employee })
+    }
+    else {
+        return res.status(204).send();
+    }
 })
 
 router.post('/cancelRequest', employeeAuth, async (req, res) => {
