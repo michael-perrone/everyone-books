@@ -63,7 +63,6 @@ const BusinessInsideUserHome = props => {
          })}
       </div>
       <div
-        id={styles.rightContainer}
         className={styles.userSubContainer}
         id={styles.buttonsContainer}
       >

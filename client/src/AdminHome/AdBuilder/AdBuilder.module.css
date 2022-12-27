@@ -32,4 +32,6 @@
 
 #savedAdsContainer {
     max-height: 500px;
+    width: 375px;
+    overflow: auto;
 }

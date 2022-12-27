@@ -5,7 +5,7 @@ import trash from './trash.png';
 function Maplist(props) {
     return (
         props.array ?
-        <div style={{maxHeight: props.small ? "180px": "", width: props.small ? "210px" : ""}}>
+        <div style={{maxHeight: props.small ? "180px": "400px", width: props.small ? "210px" : "", overflow: "auto"}}>
         {props.array.map((element, index) => {
             return (
                 <div id={styles.mainContainer} key={element["id"] + index}>

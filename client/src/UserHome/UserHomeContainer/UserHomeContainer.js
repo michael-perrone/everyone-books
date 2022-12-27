@@ -72,6 +72,7 @@ const UserHomeContainer = props => {
 
   return (
     loading ? <Spinner/> :
+    <div>
     <div
       id={styles.userHomeContainer}
       style={{height: height}}
@@ -148,6 +149,10 @@ const UserHomeContainer = props => {
           }
         })}
       </div>
+    </div>
+    <div>
+      
+    </div>
     </div>
   );
 };

@@ -13,6 +13,7 @@ function AdBuilder(props) {
     const [adDetails, setAdDetails] = React.useState("");
     const [targetAudience, setTargetAudience] = React.useState("");
     const [success, setSuccess] = React.useState("");
+    const [error, setError] = React.useState("");
     const [showSavedAds, setShowSavedAds] = React.useState(false);
     const [ads, setAds] = React.useState([]);
 
@@ -38,13 +39,13 @@ function AdBuilder(props) {
     }
 
     function toSetAdHeader(e) {
-        if (e.target.value.length < 54) {
+        if (e.target.value.length < 45) {
             setAdHeader(e.target.value);
         }
     }
 
     function toSetAdDetails(e) {
-        if (e.target.value.length < 400) {
+        if (e.target.value.length < 330) {
             setAdDetails(e.target.value);
         }
         
@@ -55,12 +56,31 @@ function AdBuilder(props) {
     }
 
     function saveAd() {
+        if (!targetAudience) {
+            setError("");
+            setTimeout(() => setError("Please choose a target audience."))
+            return;
+        }
+        if (!adHeader) {
+            setError("");
+            setTimeout(() => setError("Please create a header for your ad!"))
+            return;
+        }
+        if (!adDetails) {
+            setError("");
+            setTimeout(() => setError("Please enter some details about your ad!"))
+            return;
+        }
         if (targetAudience && adHeader && adDetails) {
             axios.post('/api/ads/create', {adHeader, adDetails, targetAudience}, {headers: {'x-auth-token': props.adminToken}}).then(
                 response => {
                     if (response.status === 200) {
                         setSuccess("");
                         setTimeout(() => setSuccess("Ad successfully created"), 200);
+                        const oldAds = [...ads];
+                        const newAd = {adHeader, adDetails};
+                        oldAds.push(newAd);
+                        setAds(oldAds);
                     }
                 }
             )
@@ -91,17 +111,19 @@ function AdBuilder(props) {
                 <div className={styles.halfo}>
                         <p>{showSavedAds ? "Saved Advertisements" : "Example Advertisement"}</p>
                         {!showSavedAds &&
-                        <div style={{marginTop:"3px"}} id={styles.modelAd}>
+                        <div style={{marginTop:"3px", position: "relative"}} id={styles.modelAd}>
                             <p style={{marginTop: "4px", fontWeight: "bold", padding: "8px", fontSize: "22px", textAlign: "center"}}>{adHeader}</p>
                             <p style={{marginTop: "5px", fontSize: "18px", padding: "10px"}}>{adDetails}</p>
+                            <p style={{position: "absolute", bottom: "3px"}}>{props.businessName}</p>
                         </div>
                         }
                         {showSavedAds && 
                         <div id={styles.savedAdsContainer}>
                             {ads && ads.map(ad => {
-                                return <div id={styles.modelAd}>
-                                         <p style={{marginTop: "10px", fontWeight: "bold", fontSize: "22px"}}>{ad.adHeader}</p>
-                            <p style={{marginTop: "50px"}}>{ad.adDetails}</p>
+                                return <div style={{position: "relative", border: "1px solid black", boxShadow: "none"}} id={styles.modelAd}>
+                                         <p style={{marginTop: "2px", fontWeight: "bold", fontSize: "22px", padding: "8px"}}>{ad.adHeader}</p>
+                                         <p style={{marginTop: "10px", paddingLeft: "6px", paddingTop: "15px", paddingBottom: "15px", paddingRight: "6px"}}>{ad.adDetails}</p>
+                                         <p style={{position: "absolute", bottom: "3px"}}>{props.businessName}</p>
                                     </div>
                             })}
                         </div>    
@@ -109,14 +131,16 @@ function AdBuilder(props) {
                         <button onClick={toSetShowSavedAds} style={{backgroundColor: "lightgray", marginTop: "30px", border: "none", boxShadow: "0px 0px 3px black", height: "30px", fontSize:"18px", width: "260px"}}>{showSavedAds ? "Show Example Advertisement" : "Show Saved Advertisements"}</button>
                 </div>
             </div>
-            <OtherAlert alertType={"sucess"} showAlert={success != ""} alertMessage={success}/>
+            <OtherAlert alertType={"success"} showAlert={success != ""} alertMessage={success}/>
+            <OtherAlert alertType={"bad"} showAlert={error != ""} alertMessage={error}/>
         </div>
     )
 }
 
 const mapStateToProps = state => {
     return {
-        adminToken: state.authReducer.adminToken
+        adminToken: state.authReducer.adminToken,
+        businessName: state.authReducer.admin.admin.bn
     }
 }
 
