@@ -8,6 +8,7 @@ import MessageView from '../Notifications/MessageView/MessageView';
 import OtherAlert from '../OtherAlerts/OtherAlerts';
 import ViewBooking from '../Business/ViewBooking/ViewBooking';
 import {withRouter} from 'react-router-dom';
+import Advertisement from '../Shared/Advertisement/Advertisement';
 
 const EmployeeHome = (props) => {
     const [success, setSuccess] = React.useState("");
@@ -22,6 +23,13 @@ const EmployeeHome = (props) => {
     const [products, setProducts] = React.useState([]);
     const [services, setServices] = React.useState([]);
     const [type, setType] = React.useState("Choice");
+    const [ads, setAds] = React.useState([]);
+
+    React.useEffect(function() {
+        Axios.post("/api/ads/getRandomE", {limit: 3}).then(response => {
+            setAds(response.data.ads);
+        })
+    }, [])
 
     React.useEffect(() => {
         Axios.get('/api/getEmployee', {headers: {'x-auth-token': props.employeeToken}}).then(
@@ -83,6 +91,11 @@ const EmployeeHome = (props) => {
           props.history.push("/businesslist")
       }
 
+      function goToEmployeePortal() {
+        props.history.push(`/employee/${props.employee.id}/employeePortal`);
+        console.log(`/employee/${props.employee.id}/employeePortal`);
+      }
+
     function viewBooking(booking) {
                 return () => {
                   Axios.post('/api/getBookings/moreBookingInfoEmployee', {bookingId: booking._id}, {headers: {'x-auth-token': props.employeeToken}}).then(response => {
@@ -112,9 +125,21 @@ const EmployeeHome = (props) => {
             {loading && <Spinner/>}
             {businessAddedYou && <MessageView fromEmployeeView={true} denied={denied} height={"375px"} notification={notification} type={type}/>}
             {(business === "None" && loading === false) &&
-             <div style={{width: '370px', padding:'8px', paddingTop: '17px', boxShadow: '0px 0px 2px black', height: '270px', marginTop: '20px', display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
+            <div id={styles.secret}>
+             <div style={{width: '370px', padding:'8px', paddingTop: '17px', minHeight: "270px", height: "600px", marginTop: '20px', display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
                 <p style={{lineHeight: '30px'}}>Thanks for joining Everyone-Books! We are glad to have you with us. If you have an employer, you need to give them your unique ID that we have assigned you. Your unqiue Id is <span style={{fontWeight: 'bold'}}>{employeeId}</span>, your employer can use this Id to invite you to their business. {businessAddedYou && <label style={{fontWeight: "bold"}}>You have a pending invite from a business.</label>}</p>
                 <button onClick={goToBusinessSearch} id={styles.askButton}>Ask Employer for Invite To Business</button>
+                <div style={{width: "100%", height: "2px", backgroundColor: "black"}}></div>
+                <p style={{lineHeight: '30px'}}>If you do not have an employer, you can click the button below to enter the careers portal. In the careers portal, you can enter your skills and past experiences and find employers looking to find a great employee like you! Good luck in your search. </p>
+                <button onClick={goToEmployeePortal} id={styles.askButton}>Enter the Employee Careers Portal</button>
+             </div>
+              {!businessAddedYou && <div style={{paddingBottom: "30px"}} id={styles.adverContainer}>
+                {ads.map(ad => {
+                   return  <div style={{marginTop: "30px"}}>
+                             <Advertisement ad={ad}/>
+                          </div>
+                })}
+              </div>}
             </div>}
             {business !== "None" && loading === false && <Schedule viewBooking={viewBooking}/>}
             {showBackDrop && <div style={{display: "flex", position: "absolute", top: 0, lef: 0, width: "100%", justifyContent: "center"}}><div onClick={() => setShowBackDrop(false)} id={styles.backDrop}></div> <ViewBooking products={products} services={services} hide={hide} booking={bookingToView}/></div>}

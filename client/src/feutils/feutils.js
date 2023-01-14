@@ -935,6 +935,25 @@ export function createGridList(list) {
     return str;
 }
 
+export function createGridList2(list) {
+    let str = "";
+    let i = 0;
+    if (list) {
+        while (i < list.length) {
+            if (i === list.length - 1) {
+                const num = 30 - list[i].length;
+                str += `${list[i].length * num}px`;
+            }
+            else {
+                const num = 30 - list[i].length;
+                str += `${list[i].length * num}px `;
+            }
+            i++;
+            
+        }
+    }
+    return str;
+}
 
     export function createMaplist(arrayOfObjects, displayedName) {
         if (arrayOfObjects.length > 0) {

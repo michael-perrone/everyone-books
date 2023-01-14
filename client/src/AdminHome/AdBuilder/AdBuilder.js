@@ -72,7 +72,7 @@ function AdBuilder(props) {
             return;
         }
         if (targetAudience && adHeader && adDetails) {
-            axios.post('/api/ads/create', {adHeader, adDetails, targetAudience}, {headers: {'x-auth-token': props.adminToken}}).then(
+            axios.post('/api/ads/create', {adHeader, adDetails, target: targetAudience}, {headers: {'x-auth-token': props.adminToken}}).then(
                 response => {
                     if (response.status === 200) {
                         setSuccess("");
@@ -90,7 +90,7 @@ function AdBuilder(props) {
 
     return (
         <div id={styles.main}>
-            <p style={{fontSize: "26px", fontFamily: "Josefin Sans", marginTop: "6px"}}>Advertisement Center</p>
+            <p style={{fontSize: "26px", fontFamily: "Josefin Sans", marginTop: "12px"}}>Advertisement Center</p>
             <div id={styles.mainInside}>
                 <div className={styles.halfo}>
                     <p style={{fontSize: "20px", fontWeight: "bold"}}>Build your advertisement</p>
@@ -101,18 +101,18 @@ function AdBuilder(props) {
                         <option>Potential Employees</option>
                         <option>Potential Customers</option>
                     </select>
-                    <p style={{marginTop: "50px"}}>Step Two: Enter Advertisement Header</p>
+                    <p style={{marginTop: "30px"}}>Step Two: Enter Advertisement Header</p>
                     <input style={{height: "20px", width: "250px", marginTop: "10px", paddingLeft: "4px"}} placeholder={"Advertisement Header"} onChange={toSetAdHeader}/>
-                    <p style={{marginTop: "50px"}}>Step Three: Enter Advertisement Details</p>
+                    <p style={{marginTop: "30px"}}>Step Three: Enter Advertisement Details</p>
                     <textarea onChange={toSetAdDetails} placeholder="Advertisement Details" style={{height: "300px", marginTop: "10px", width: "260px"}}/>
                     </div>
                     <button onClick={saveAd} style={{backgroundColor: "lavenderblush", marginTop: "10px", border: "none", boxShadow: "0px 0px 3px black", height: "30px", fontSize:"18px", width: "80px"}}>Save</button>
                 </div>
-                <div className={styles.halfo}>
-                        <p>{showSavedAds ? "Saved Advertisements" : "Example Advertisement"}</p>
+                <div id={styles.borderr} className={styles.halfo}>
+                        <p style={{fontWeight: "bold", fontSize: "18px", marginBottom: "6px"}}>{showSavedAds ? "Saved Advertisements" : "Example Advertisement"}</p>
                         {!showSavedAds &&
                         <div style={{marginTop:"3px", position: "relative"}} id={styles.modelAd}>
-                            <p style={{marginTop: "4px", fontWeight: "bold", padding: "8px", fontSize: "22px", textAlign: "center"}}>{adHeader}</p>
+                            <p style={{marginTop: "4px", fontWeight: "bold", padding: "8px", fontSize: "22px"}}>{adHeader}</p>
                             <p style={{marginTop: "5px", fontSize: "18px", padding: "10px"}}>{adDetails}</p>
                             <p style={{position: "absolute", bottom: "3px"}}>{props.businessName}</p>
                         </div>

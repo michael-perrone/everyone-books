@@ -9,7 +9,7 @@ router.post('/create', adminAuth, async (req, res) => {
     const ad = new Advertisement({
         adHeader: req.body.adHeader,
         adDetails: req.body.adDetails,
-        target: req.body.target
+        target: req.body.target === "Potential Customers" ? "C" : "E"
     })
     const business = await Business.findOne({_id: req.admin.businessId});
     const businessAds = [...business.advertisements];
@@ -28,6 +28,23 @@ router.get("/", adminAuth, async (req, res) => {
     }
     else {
         res.status(204).send();
+    }
+})
+
+router.post("/getRandom", async (req, res) => {
+    const ads = await Advertisement.find({target: "C"}, null, {limit: req.body.limit});
+    return res.status(200).json({ads});
+})
+
+router.post("/getRandomE", async (req, res) => {
+    const ads = await Advertisement.find({target: "E"}, null, {limit: req.body.limit});
+    return res.status(200).json({ads});
+})
+
+router.post("/goToBusiness", async (req, res) => {
+    const business = await Business.findOne({advertisements: req.body.id})
+    if (business) {
+        return res.status(200).json({bId: business._id});
     }
 })
 

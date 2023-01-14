@@ -7,7 +7,7 @@
 
 .row {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     width: 375px;
 }
 
@@ -37,7 +37,6 @@
 
 .inputo {
     padding: 4px 4px 2px 4px;
-    margin-left: 6px;
     width: 175px;
     font-size: 14px;
     border: 2px solid black;

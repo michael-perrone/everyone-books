@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './BusinessSignup.module.css';
 import KindOfBusiness from './KindOfBusiness/KindOfBusiness';
 import {connect} from 'react-redux';
@@ -9,13 +9,20 @@ import BookingColumnsEnter from './BookingColumnsEnter/BookingColumnsEnter';
 import RestaurantBuilder from './RestaurantBuilder/RestaurantBuilder';
 import FakeNav from './FakeNav/FakeNav'
 import BackButton from './BackButton/BackButton';
+import logo500 from './logo-500.jpeg';
+import logo200 from './logo-250.jpeg';
 
 
 const BusinessSignup = (props) => {
+    const [showNet, setShowNet] = useState(false);
+    const [logo,setLogo] = useState("");
+    
+
     return (
     <React.Fragment>
-        <FakeNav/>
+        <FakeNav/> 
         <div id={styles.bSignupContainer}> 
+        <img className={window.innerWidth > 800 ? styles.large : styles.small} src={window.innerWidth > 800 ? logo500 : logo200}/>
             <div id={styles.welcomeContainer}>
                 <div style={{position: 'relative'}}>
                     {(props.showAdminDropDown || props.businessScheduleComplete || props.businessInfoComplete || props.adminInfoComplete || props.kindBusinessCompleted) && <BackButton marginTop={!!props.showAdminDropDown}/>}

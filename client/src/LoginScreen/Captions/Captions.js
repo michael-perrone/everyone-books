@@ -13,7 +13,7 @@ class Captions extends React.Component {
           </p>
           <p className={styles.captions}>
             <i className="fas fa-user-friends" id={styles.icons2} />
-            Easily schedule an appointment.
+            Easily schedule a booking.
           </p>
 
           <p className={styles.captions}>

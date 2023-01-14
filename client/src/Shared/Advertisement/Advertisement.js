@@ -1,15 +1,29 @@
 import React from 'react';
 import styles from './Advertisement.module.css';
+import axios from 'axios';
+import {withRouter} from 'react-router-dom';
 
 
 function Advertisement(props) {
+
+    function clicked() {
+        axios.post("/api/ads/goToBusiness", {id: props.ad._id}).then(response => {
+            if (response.status === 200) {
+                props.history.push("/businesses/" + response.data.bId);
+            }
+        })
+    }
+
     return (
-        <div id={styles.adContainer}>
-            <p style={{fontSize: "22px", fontWeight: "bold", textAlign: "center"}}>{props.ad.header}</p>
-            <p style={{fontSize: "18px", paddingLeft: "6px", paddingTop: "20px", paddingBottom: "20px"}}>{props.ad.details}</p>
+        <div>
+        <div style={{cursor: "pointer"}} onClick={clicked} id={styles.adContainer}>
+            <p style={{fontSize: "22px", marginTop: "15px", fontWeight: "bold", textAlign: "center"}}>{props.ad.adHeader}</p>
+            <p style={{fontSize: "15px", paddingLeft: "6px", paddingLeft: "12px", paddingRight: "12px", paddingTop: "16px", paddingBottom: "20px"}}>{props.ad.adDetails}</p>
             <p style={{position: "absolute", bottom: "3px"}}>{props.businessName}</p>
+            <p style={{textAlign: "center", fontFamily: "Josefin Sans", position: 'absolute', bottom: "5px", color: "gray"}}>Advertisement</p>
+        </div>
         </div>
     )
 }
 
-module.exports = Advertisement;
+export default withRouter(Advertisement);

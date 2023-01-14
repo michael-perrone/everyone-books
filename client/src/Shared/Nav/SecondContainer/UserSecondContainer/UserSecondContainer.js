@@ -11,7 +11,7 @@ const UserSecondContainer = props => {
   const [notiNum, setNotiNum] = React.useState(0);
   const [counter, setCounter] = React.useState(0);
 
-  function viewClubs() {
+  function viewBusinesses() {
     props.history.push('/businesslist')
   }
 
@@ -35,7 +35,7 @@ const UserSecondContainer = props => {
 
   return (
     <div id={styles.secondContainer}>
-      <p onClick={viewClubs} className={styles.links}>View Businesses</p>
+      <p onClick={viewBusinesses} className={styles.links}>View Businesses</p>
       {/* {newNotifications.length > 0 && !props.showDropDownState && <NotificationNumber user={true} num={newNotifications.length}/>} */}
       {/* {props.showNotifications && (
         <Notifications notifications={notifications} />

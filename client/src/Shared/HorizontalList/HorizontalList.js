@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './HorizontalList.module.css';
-import {createGridList, createNumList} from '../../feutils/feutils';
+import {createGridList} from '../../feutils/feutils';
 
 function HorizontalList(props) {
     return (

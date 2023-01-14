@@ -240,33 +240,25 @@ function ServiceFinder(props) {
 
     return (
         <div>
-            <p style={{textAlign: "center", fontWeight: "bold", fontSize: "20px", marginTop: "10px"}}>Welcome to the EveryoneBooks Consumer Encyclopedia</p>
+            <p style={{textAlign: "center", fontWeight: "bold", fontSize: "26px", paddingTop: "20px", fontFamily: "Josefin Sans"}}>Service Finder</p>
             <div id={styles.inputHolder}>
                 <div className={styles.subContainer}>
                     <div className={styles.row}>
                          <p className={styles.p}>Search for Services:</p>
                         <input style={{fontFamily: "Josefin Sans"}} onChange={searchForServices} className={styles.inputo}  placeholder={"Enter Service Name"}/>
                     </div>
-                    {servicesFound.length > 0 && <div style={{display: "flex", marginTop: "20px", justifyContent: "space-between"}}>
+                    {servicesFound.length > 0 && <div style={{display: "flex", marginTop: "50px", justifyContent: "space-between"}}>
                         <div className={styles.clickDiv} onClick={sortServiceNames} style={{display: "flex"}}>
-                            <p className={serviceDown ? styles.down : serviceUp ? styles.up : ""}>Service Name</p>
+                            <p style={{fontWeight: "bold"}} className={serviceDown ? styles.down : serviceUp ? styles.up : ""}>Service Name</p>
                         </div>
                         <div className={styles.clickDiv} onClick={sortBusinessNames} style={{display: "flex"}}>
-                            <p className={businessNameDown ? styles.down : businessNameUp ? styles.up : ""}>Business Name</p>
+                            <p style={{fontWeight: "bold"}} className={businessNameDown ? styles.down : businessNameUp ? styles.up : ""}>Business Name</p>
                         </div>
                         <div className={styles.clickDiv} onClick={sortCosts} style={{display: "flex"}}>
-                            <p className={costDown ? styles.down : costUp ? styles.up : ""}>Cost</p>
+                            <p style={{fontWeight: "bold"}}  className={costDown ? styles.down : costUp ? styles.up : ""}>Cost</p>
                         </div>
                     </div>}
                     <FoundList go={goToSelectedService} found={servicesFound}/>
-                </div>
-                <div style={{width: "2px", marginLeft: "2px", borderLeft:"2px solid black"}}></div>
-                <div className={styles.subContainer}>
-                   <div className={styles.row}> 
-                     <p className={styles.p}>Search for Products:</p>
-                    <input onChange={searchForProducts} style={{fontFamily: "Josefin Sans"}} className={styles.inputo} placeholder={"Enter Product Name"}/>
-                    <FoundList go={goToSelectedProduct} found={productsFound}/>
-                   </div>
                 </div>
             </div>
         </div>

@@ -35,33 +35,6 @@ const BusinessInsideUserHome = props => {
         <p className={styles.businessItem}>{props.business.phoneNumber}</p>
         <p className={styles.businessItem}>{props.business.website}</p>
       </div>
-      <div className={styles.centerContainer}>
-        {props.business.schedule.map((daySchedule, index) => {
-          let day = "";
-          if (index === 0) {
-            day = "Sun:"
-          }
-          else if (index === 1) {
-            day ="Mon:"
-          } 
-          else if (index === 2) {
-            day ="Tue:"
-          }       
-          else if (index === 3) {
-            day ="Wed:"
-          }       
-          else if (index === 4) {
-            day ="Thu:"
-          }       
-          else if (index === 5) {
-            day ="Fri:"
-          }
-          else if (index === 6) {
-            day ="Sat:"
-          }  
-         return <div key={index} style={{marginTop: '8px', marginBottom: '8px', display: 'flex', position: "relative", left: "40px"}}> <p style={{marginRight: '3px'}}>{day}</p><p>{daySchedule.open}-{daySchedule.close}</p></div>                  
-         })}
-      </div>
       <div
         className={styles.userSubContainer}
         id={styles.buttonsContainer}

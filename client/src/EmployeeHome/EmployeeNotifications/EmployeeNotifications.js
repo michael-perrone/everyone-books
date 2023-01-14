@@ -6,6 +6,7 @@ import EmployeeNotification from '../../Notifications/EmployeeNotification/Emplo
 import MessageView from './../../Notifications/MessageView/MessageView';
 import Axios from 'axios';
 import Spinner from '../../Spinner/Spinner';
+import Advertisement from '../../Shared/Advertisement/Advertisement';
 
 function EmployeeNotifications(props) {
 
@@ -19,6 +20,13 @@ function EmployeeNotifications(props) {
     const [eq, setEq] = useState();
     const [bcn, setBcn] = useState();
     const [bct, setBct] = useState();
+    const [ads, setAds] = useState([]);
+
+    React.useEffect(function() {
+        Axios.post("/api/ads/getRandomE", {limit: 3}).then(response => {
+            setAds(response.data.ads);
+        })
+    }, [])
 
     function denied(id) {
         const notiCopy = [...notifications];
@@ -165,9 +173,11 @@ function EmployeeNotifications(props) {
     return (
         loading ? <Spinner/> :
             <div id={styles.frame}>
+            <p style={{position: "absolute", fontWeight: "bold", top: 0, fontSize: "22px"}}>Notifications Center</p>
              <div id={styles.notificationsContainer}>
              <p style={{fontSize: "28px", marginTop: "10px", position: "absolute", top: "-50px", left: "100px"}}>Notifications</p>
-                {noNotis && <p style={{padding: "20px", lineHeight: "22px"}}>You do not have any notifications yet! When a business invites you to join their business or when a business accepts or declines your request to join their business as an employee you will see it here!</p>}
+                {noNotis && <p style={{padding: "20px", lineHeight: "22px"}}>You do not have any notifications yet! When a business invites you to join their business or when a business accepts or declines your request to join their business as an employee you will see it here! If you are looking for a job you should check out our careers portal and see if any of the businesses on our site are looking for great employees like you.</p>}
+             
                 {notifications && notifications.length > 0 && (
                     <div>
                         {notifications.map(notification => {
@@ -177,6 +187,13 @@ function EmployeeNotifications(props) {
                         })}
                     </div>
                 )}
+            </div>
+            <div style={{display: "flex", flexDirection: "column", paddingBottom: "30px"}}>
+            {noNotis && ads.map(ad => {
+                     return  <div style={{marginTop: "30px"}}>
+                     <Advertisement ad={ad}/>
+                  </div>
+                })}
             </div>
             {!noNotis && !loading && <MessageView eq={eq} bcn={bcn} bct={bct} notification={chosen} removeDeadNoti={removeDeadNoti} reduceNotiNum={reduceNotiNum} changeNotis={changeNotis} notiClicked={notiClicked} denied={denied} type={typeo}/>}
             </div>

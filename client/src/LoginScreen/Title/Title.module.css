@@ -8,6 +8,10 @@
   font-family: "Permanent Marker", cursive;
 }
 
+.ah {
+  margin-left: 185px;
+}
+
 
 @media (max-width: 950px) and (min-width: 0px) {
   #title {
@@ -28,12 +32,19 @@
     background: none;
     font-size: 50px;
   }
- 
- 
+  .ah {
+    height: 125px;
+    width: 125px;
+    margin-left: 140px;
+    margin-top: -10px;
+  }
 }
 
 @media (max-width: 700px) and (min-width: 0px) {
   #title {
     font-size: 42px;
+  }
+  .ah {
+    margin-left: 100px;
   }
 }

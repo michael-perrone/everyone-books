@@ -1,7 +1,7 @@
 #userViewContainer {
     display: flex;
     justify-content: space-around;
-    background-color: #e7e7e7; 
+    background-color: whitesmoke; 
     padding-top: 10px;
 }
 

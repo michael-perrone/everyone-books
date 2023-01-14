@@ -58,6 +58,18 @@ const BusinessSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'advertisement'
   },
+  ur: {
+    type: String,
+  },
+  hi: {
+    type: Number
+  },
+  in: {
+    type: Number
+  },
+  des: {
+    type: [String]
+  },
   eq: String,
   c: Number
 });

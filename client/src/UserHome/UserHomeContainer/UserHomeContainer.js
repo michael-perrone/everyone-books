@@ -6,12 +6,13 @@ import BusinessInsideUserHome from "./BusinessInsideUserHome/BusinessInsideUserH
 import UserBooking from "./UserBooking/UserBooking";
 import UserGroup from './UserGroup/UserGroup';
 import Spinner from "../../Spinner/Spinner";
+import Advertisement from '../../Shared/Advertisement/Advertisement';
 
 
 const UserHomeContainer = props => {
   const [businesses, setBusinesses] = useState([]);
   const [noBusinesses, setNoBusinesses] = useState(false);
-
+  const [ads, setAds] = useState([]);
   const [groupsAndBookings, setGroupsAndBookings] = useState([]);
   const [height, setHeight] = useState("");
   const [loading, setLoading] = useState(true);
@@ -38,18 +39,33 @@ const UserHomeContainer = props => {
   }
 
   useEffect(() => {
+    Axios.post("/api/ads/getRandom", {limit: 3}).then(
+      response => {
+        if (response.status === 200) {
+          setAds(response.data.ads);
+        }
+      }
+    )
+  },[])
+
+  useEffect(() => {
     Axios.get("/api/getBookings/ios", {
       headers: { "x-auth-token": props.userToken }
     }).then(response => {
+      if (response.status === 204) {
+        setLoading(false);
+      }
       if (response.status === 200) {
           const allezBookingsAndGroups = [...response.data.bookings, ...response.data.groups];
           allezBookingsAndGroups.sort(function(a,b) {
             return new Date(`${a.date}, ${a.time.split("-")[0]}`) - new Date(`${b.date}, ${b.time.split("-")[0]}`)
           })
           setGroupsAndBookings(allezBookingsAndGroups);
+          console.log("I RAN")
           setLoading(false);
       }
     }).catch(error => {
+      
       setLoading(false);
     })
   }, []);
@@ -62,7 +78,7 @@ const UserHomeContainer = props => {
       if (groupsAndBookings.length > 2 || businesses.length > 2) {
         setHeight("");
       }
-      else if (window.innerWidth < 725 && groupsAndBookings.length + businesses.length > 1) {
+      else if (window.innerWidth < 1150 && groupsAndBookings.length + businesses.length > 1) {
         setHeight("");
       }
       else {
@@ -149,9 +165,17 @@ const UserHomeContainer = props => {
           }
         })}
       </div>
+      <div id={styles.bigC} style={{display: "flex", flexDirection: "column", order: 3, paddingBottom: "20px"}}>
+        {ads && ads.map(ad => {
+          return (
+            <div className={styles.adContainer} style={{marginTop: "30px"}}>
+              <Advertisement ad={ad}/>
+            </div>
+          )
+        })}
+      </div>
     </div>
     <div>
-      
     </div>
     </div>
   );

@@ -6,6 +6,7 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import AdvancedSearch from "./AdvancedSearch/AdvancedSearch";
 import OtherAlert from "../OtherAlerts/OtherAlerts";
+import Advertisement from '../Shared/Advertisement/Advertisement';
 
 class BusinessList extends React.Component {
   constructor() {
@@ -14,7 +15,8 @@ class BusinessList extends React.Component {
       businesses: [],
       searchError: "",
       user: {},
-      idSentTo: ""
+      idSentTo: "",
+      ads: [],
     };
     this.advancedSearchFunction = this.advancedSearchFunction.bind(this);
     this.changeSentTo = this.changeSentTo.bind(this);
@@ -24,6 +26,8 @@ class BusinessList extends React.Component {
       this.setState({idSentTo: newThing});
   }
 
+
+
   componentDidMount() {
     if (this.props.token) {
       axios.get('/api/userprofile/myprofile',
@@ -31,6 +35,16 @@ class BusinessList extends React.Component {
       .then(response => {
          this.setState({user: response.data.user})
      })
+     axios.get("/api/ads/getRandomC").then(response => {
+        this.setState({ads: response.data.ads})
+     })
+      axios.post("/api/ads/getRandom", {limit: 3}).then(
+        response => {
+          if (response.status === 200) {
+            this.setState({ads: response.data.ads})
+          }
+        }
+      )
     }
     if (this.props.employeeToken) {
       axios.get('/api/getEmployee/idsSent', {headers: {'x-auth-token': this.props.employeeToken}}).then(
@@ -75,6 +89,8 @@ class BusinessList extends React.Component {
   }
 
 
+
+
   render() {
     console.log(this.state.businesses)
     return (
@@ -95,7 +111,6 @@ class BusinessList extends React.Component {
                 }
               return (
                    <BusinessInList
-             
                   following={following}
                   unfollow={this.unfollow}
                   follow={this.followBusiness}
@@ -106,10 +121,17 @@ class BusinessList extends React.Component {
               );
           })}
           {this.props.employeeToken && this.state.businesses.map(business => {
-
           return <BusinessInList changeSentTo={this.changeSentTo} alreadySent={business._id === this.state.idSentTo} notUser={true} business={business} key={business._id}/>
           })}
+            <div id={styles.bigC}>
+            {this.state.ads && this.state.ads.map(ad => {
+              return <div id={styles.adverContainer}>
+                  <Advertisement ad={ad}/>
+               </div>
+            })}
+            </div>
           </div>
+        
         </div>
 
     );

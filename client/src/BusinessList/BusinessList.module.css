@@ -12,32 +12,46 @@
   font-size: 44px;
 }
 
+#adverContainer {
+  display: flex;
+  max-height: 300px;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
 
 .actualClubsContainer {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  
   justify-content: space-around;
   padding-bottom: 15px;
 }
 
-
-@media(min-width: 1200px) {
-  #defaultHeight {
-   height: 120vh;
-  }
+#bigC {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-top: 350px;
+  flex-wrap: wrap;
 }
 
 
-@media(max-width: 1200px) {
+@media(min-width: 1150px) {
   #defaultHeight {
-    height: 140vh;
+   height: 105vh;
   }
 }
+
+@media(max-width: 1150px) {
+  #adverContainer {
+    margin-top: 45px;
+  }
+}
+
 
 @media(max-width: 600px) {
-  #defaultHeight {
-    height: 1300px;
+  #bigC {
+    margin-top: 50px;
+    height: 900px;
   }
 }

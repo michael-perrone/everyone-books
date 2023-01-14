@@ -20,6 +20,60 @@ router.post('/bct', async (req, res) => {
     }
 })
 
+router.get("/desired", authAdmin, async (req, res) => {
+    let business = await Business.findById({_id: req.admin.businessId}).select(["des", "re", "hi", "in"]);
+    if (business && business.des) {
+        return res.status(200).json({desired: business.des, in: business.in, ur: business.ur, hi: business.hi});
+    } 
+    if (business && !business.des) {
+        return res.status(200).json({in: business.in, ur: business.ur, hi: business.hi});
+    }
+   else {
+        return res.status(204).send();
+    }
+})
+
+router.post("/removeDesired", authAdmin, async (req,res) => {
+    try {
+        let business = await Business.findById({_id: req.admin.businessId}).select(["des"]);
+        if (business.des.includes(req.body.item)) {
+            const newDesired = business.des.filter(e => e !== req.body.item);
+            business.des = newDesired;
+    }
+         await business.save();
+         res.status(200).send();
+    }
+    catch(error) {
+        console.log(error);
+    }
+})
+
+router.post("/hiring", authAdmin, async (req, res) => {
+    console.log(req.admin);
+    let business = await Business.findOne({_id: req.admin.businessId});
+    console.log(business + "huh");
+    business.ur = req.body.ur;
+    if (req.body.hi === 0) {
+        business.hi = 0;
+    }
+    if (req.body.hi === 1) {
+        business.hi = 1;
+    }
+    if (req.body.in === 0) {
+        business.in = 0;
+    }
+    if (req.body.in === 1) {
+        business.in = 1;
+    }
+    if (req.body.desired) {
+        business.des = [...business.des, ...req.body.desired];
+    }
+    if (business) {
+        await business.save();
+        res.status(200).send();
+    }
+})
+
 router.get("/", authAdmin, async (req, res) => {
     const business = await Business.findOne({ _id: req.admin.businessId }).select(['businessName', 'address', "city", "zip", "state"]);
     if (business) {

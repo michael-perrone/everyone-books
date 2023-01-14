@@ -5,7 +5,8 @@ import Axios from "axios";
 import OtherAlert from "../../../OtherAlerts/OtherAlerts";
 import {connect} from 'react-redux';
 import Maplist from "../../../Shared/Maplist/Maplist";
-import { createMaplist } from '../../../feutils/feutils';
+import { createMaplist, createGridList2 } from '../../../feutils/feutils';
+import x from '../../../Business/BookingHelpers/AdminBooking/x.png';
 
 function AddEmployees(props) {
 
@@ -17,6 +18,12 @@ function AddEmployees(props) {
     const [selected, setSelected] = useState("Add");
     const [employeesHere, setEmployeesHere] = useState([]);
     const [employeesPending, setEmployeesPending] = useState([]);
+    const [ur, setUr] = useState("");
+    const [hi, setHi] = useState("");
+    const [inquire, setInquire] = useState("");
+    const [desired, setDesired] = useState(["dwdqwd"]);
+    const [newDesired, setNewDesired] = useState([]);
+    const [newItem, setNewItem] = useState("");
 
     function deleteEmployeeHere(id) {
         return () => {
@@ -57,6 +64,42 @@ function AddEmployees(props) {
         })
         }
     }
+
+    function addToNewDesired() {
+        const nDesired = [...newDesired, newItem];
+        setNewDesired(nDesired);
+        const desiredd = [...desired, newItem];
+        setDesired(desiredd);
+    }
+
+    useEffect(function() {
+        Axios.get('/api/business/desired', {headers: {'x-auth-token': props.adminToken}}).then(response => {
+            if (response.status === 200) {
+                if (response.data.desired) {
+                    setDesired(response.data.desired);
+                }
+                if (response.data.ur) {
+                    setUr(response.data.Ur)
+                }
+                if (response.data.hi === 1) {
+                    setHi("Yes");
+                }
+                else if (response.data.hi === 0) {
+                    setHi("No");
+                }
+                if (response.data.in === 1) {
+                    setInquire("Yes");
+                }
+                else if (response.data.in === 0) {
+                    setInquire("No");
+                }
+            }
+        }).catch(error => {
+            console.log("me?")
+            setError("");
+            setTimeout(() => setError("Something went wrong"));
+        })
+    }, [])
 
 
     useEffect(function() {
@@ -122,9 +165,39 @@ function AddEmployees(props) {
         })
     }
 
+    function cHiring() {
+        Axios.post("/api/business/hiring", {ur, hi: hi === "Yes" ? 1 : 0, in: inquire === "Yes" ? 1 : 0, desired: newDesired}, {headers: {'x-auth-token': props.adminToken}}).then(
+            response => {
+                if (response.status === 200) {
+                    setSuccessMessage("");
+                    setTimeout(function() {
+                        setSuccessMessage("You have saved the above information.");
+                    }, 300);
+                }
+            }
+        )
+    }
+
     function employeeIdChanged(e) {
         e.preventDefault();
         setEmployeeId(e.target.value);
+    }
+
+    function removeDesired(item) {
+        const filtered = desired.filter(e => e !== item);
+        setDesired(filtered);
+        if (!newDesired.length || !newDesired.includes(item)) {
+            Axios.post("api/business/removeDesired", {item}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
+                setSuccessMessage("");
+                setTimeout(function() {
+                    setSuccessMessage("You have saved the above information.");
+                }, 300);
+            })
+        }
+        else {
+            const newFiltered = newDesired.filter(e => e !== item);
+            setNewDesired(newFiltered);
+        }
     }
 
     return (
@@ -133,6 +206,7 @@ function AddEmployees(props) {
                 <p onClick={settingSelected("Add")} style={selected === "Add" ? {backgroundColor: "lavenderblush", boxShadow: "0px 0px 4px black"} : {backgroundColor: "", boxShadow: ""}} className={styles.miniTabs}>Add</p>
                 <p onClick={settingSelected("Pending")} style={selected === "Pending" ? {backgroundColor: "lavenderblush", boxShadow: "0px 0px 4px black"} : {backgroundColor: "", boxShadow: ""}} className={styles.miniTabs}>Pending</p>
                 <p onClick={settingSelected("Current")} style={selected === "Current" ? {backgroundColor: "lavenderblush", boxShadow: "0px 0px 4px black"} : {backgroundColor: "", boxShadow: ""}} className={styles.miniTabs}>Current</p>
+                <p onClick={settingSelected("Hiring")} style={selected === "Hiring" ? {backgroundColor: "lavenderblush", boxShadow: "0px 0px 4px black"} : {backgroundColor: "", boxShadow: ""}} className={styles.miniTabs}>Hiring</p>
             </div>
             {selected === "Add" &&
             <React.Fragment>
@@ -156,6 +230,52 @@ function AddEmployees(props) {
              <React.Fragment>
              <p style={{marginBottom: "20px"}}>The employees listed below are registered employees of your business. If you wish to remove an employee, you can delete the employee from the list below. Please keep in mind this action is permanent.</p>
              <Maplist delete={(id) => deleteEmployeeHere(id)} array={employeesHere} none={"No employees currently employed"}/>
+            </React.Fragment>
+            }
+            {selected === "Hiring" &&
+             <React.Fragment>
+                <p>This is the EveryoneBooks Hiring Portal. Here you can set your hiring settings depending on whether you are looking for additional employees. These can be changed at any time.</p>
+                <div style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
+                    <div className={styles.q} style={{display: "flex", width: "375px", justifyContent: "space-around"}}>
+                        <p style={{position: "relative", right: "4px"}}>Is your business currently hiring?</p>
+                        <select value={hi} onChange={(e) => setHi(e.target.value)} className={styles.defaultInput} style={{width: "80px", position: "relative", left: "5px", paddingLeft: "4px"}}>
+                            <option> </option>
+                            <option>Yes</option>
+                            <option>No</option>
+                        </select>
+                    </div>
+                    <div className={styles.q} style={{display: "flex", width: "375px", justifyContent: "space-around", marginTop: "40px"}}>
+                        <p>Urgency of business hiring process:</p>
+                        <select value={ur} onChange={(e) => setUr(e.target.value)} className={styles.defaultInput} style={{width: "80px", paddingLeft: "4px"}}>
+                            <option> </option>
+                            <option>Urgent</option>
+                            <option>Somewhat Urgent</option>
+                            <option>Not Urgent</option>
+                        </select>
+                    </div>
+                    <div className={styles.q} style={{display: "flex", width: "375px", justifyContent: "space-around"}}>
+                        <p style={{width: "250px"}}>Allow potential employees to inquire about employment?</p>
+                        <select value={inquire} onChange={(e) => setInquire(e.target.value)} style={{width: "80px", position: "relative", left: "1.5px", height: "20px", marginTop: "10px", paddingLeft: "4px"}} className={styles.defaultInput}>
+                            <option> </option>
+                            <option>Yes</option>
+                            <option>No</option>
+                        </select>
+                    </div>
+                    <div className={styles.q} style={{display: "flex", marginTop: "30px", flexDirection: "column", width: "375px", justifyContent: "space-around", alignItems: "center"}}>
+                        <p style={{width: "300px", position: "relative"}}>Employee roles or titles your looking for:</p>
+                        <div style={{display: "flex", position: "relative", marginTop: "8px"}}>
+                            <input onChange={(e) => setNewItem(e.target.value)} placeholder="Ex: Waxer, Hair Stylist, Instructor" style={{width: "220px", paddingLeft: "4px", border: "none", boxShadow: "0px 0px 2px black", height: "24px"}} />
+                            <button id={styles.addButton} style={{border: "none", marginLeft: "20px", boxShadow: "0px 0px 2px black", height: "24px", padding: "0px 8px", fontSize: "16px" }} onClick={addToNewDesired}>Add</button>
+                        </div>
+                        {desired && <div style={{maxWidth: "300px", width: "300px", marginTop: "20px", overflow: "auto", display: "grid", gridTemplateColumns: createGridList2(desired)}}>
+                            {desired.map(function(e) {
+                                return <div style={{display: "flex", justifyContent: "space-around", padding: "12px 6px", border: "1.8px solid lightgray"}}><p>{e}</p><img onClick={() => removeDesired(e)} style={{height: "22px", cursor: "pointer", width: "22px", position: "relative", top: "-3px"}} src={x}/></div>
+                            })}
+                        </div>}
+                    </div>
+                    <button onClick={cHiring} id={styles.b} style={{marginTop: "25px", boxShadow: "0px 0px 4px black", height: "30px", fontFamily: "Josefin Sans", padding: "4px 10px", fontSize: "22px", border: "none"}}>Save Information</button>
+                </div>
+                
             </React.Fragment>
             }
             <OtherAlert showAlert={successMessage !== ""} alertType={"success"} alertMessage={successMessage}/>

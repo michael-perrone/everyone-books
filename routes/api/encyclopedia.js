@@ -37,6 +37,8 @@ router.post('/services', async function(req, res) {
     }
 })
 
+
+
 // router.post('/services', async function(req, res) {
 //     const services = await Service.find({}).select(["cost", "serviceName"]);
 //     const servicesToSendBack = [];

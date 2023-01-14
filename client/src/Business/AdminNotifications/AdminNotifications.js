@@ -142,6 +142,7 @@ function AdminNotifications(props) {
         axios.get("/api/notifications/getAdminNotis", {headers: {'x-auth-token' : props.adminToken}}).then(
             response => {
                 if (response.status === 200) {
+                    setLoading(false);
                     setBcn(response.data.bcn)
                     setBct(response.data.bct);
                     setEq(response.data.eq);
