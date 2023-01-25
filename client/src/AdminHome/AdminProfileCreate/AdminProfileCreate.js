@@ -16,19 +16,12 @@ import layout from './layout.png';
 import AddMenu from './AddMenu/AddMenu';
 import AddLayout from "./AddLayout/AddLayout";
 
-
-
-
 const AdminProfileCreate = props => {
-  
   const [selected, setSelected] = useState('Employees');
-
-
 
   function getSelected(thing) {
     return () => setSelected(thing);
   }
-  
 
   return (
     <div id={styles.mainContainer}>

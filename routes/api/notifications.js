@@ -17,7 +17,7 @@ const utils = require("../../utils/utils");
 const BookedNotification = require("../../models/BookedNotification");
 const ServiceType = require("../../models/ServiceType");
 const { Server } = require("socket.io");
-const io = new Server();
+
 
 
 router.post("/userBookedEmployee", async (req, res) => { // cooked
@@ -46,6 +46,40 @@ router.post("/userBookedEmployee", async (req, res) => { // cooked
   }
 });
 
+router.post("/inquire", employeeAuth, async (req, res) => {
+  const date = new Date();
+  let business = await Admin.findOne({business: req.body.businessId});
+  const newNoti = new Notification({
+    type: "EIB",
+    fromString: req.employee.fullName,
+    fromId: req.employee.id,
+    date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
+  })
+  await newNoti.save();
+  const newBusinessNotis = [...business.notifications];
+  newBusinessNotis.push(newNoti);
+  await business.save();
+  return res.status(200).send();
+})
+
+router.post("/inquire/remove", employeeAuth, async (req, res) => {
+  const business = await Admin.findOne({business: req.body.businessId});
+  const notifications = await Notification.find({type: "EIB", fromId: req.employee.id});
+  let businessNotifications = business.notifications;
+  for (let i = 0; i < notifications.length; i++) {
+    for (let t = 0; t < businessNotifications.length; t++) {
+      if (notifications[i]._id === businessNotifications[t]) {
+        await Notification.deleteOne({_id: businessNotifications[t]})
+        businessNotifications = businessNotifications.splice(t, 1);
+        break;
+      }
+    }
+  }
+  business.notifications = businessNotifications;
+  await business.save();
+  return res.status(200).send();
+})
+
 router.post('/allReadUser', userAuth, async (req, res) => {
   let user = await User.findOne({ _id: req.user._id });
   let notifications = await Notification.find({ _id: user.notifications });
@@ -61,10 +95,9 @@ router.post("/employeeBookedCustomer", async (req, res) => {
     let booking = await Booking.findOne({ _id: req.body.bookingId });
     let customers = await User.find({ _id: req.body.users });
     let newNotification = new Notification({
-      type: "EmployeeBookedUser", // cooked
-      notificationMessage: `You have been booked for a ${booking.serviceName} from ${booking.timeStart}-${booking.timeEnd} at ${booking.businessName} by ${employee.fullName}.`,
+      type: "EBU", // cooked come back to this
+      
       date: new Date(),
-      notificationRead: false
     });
 
     for (let i = 0; i < customers.length; i++) {

@@ -171,7 +171,6 @@ const WeekSelector = (props) => {
             }
         }
 
-
         setSunday(newSunday)
         setMonday(newMonday)
         setTuesday(newTuesday)

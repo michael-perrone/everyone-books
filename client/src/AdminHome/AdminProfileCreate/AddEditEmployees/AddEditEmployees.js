@@ -70,6 +70,7 @@ function AddEmployees(props) {
         setNewDesired(nDesired);
         const desiredd = [...desired, newItem];
         setDesired(desiredd);
+        setNewItem("");
     }
 
     useEffect(function() {
@@ -79,7 +80,8 @@ function AddEmployees(props) {
                     setDesired(response.data.desired);
                 }
                 if (response.data.ur) {
-                    setUr(response.data.Ur)
+                    console.log("did i work");
+                    setUr(response.data.ur)
                 }
                 if (response.data.hi === 1) {
                     setHi("Yes");
@@ -263,7 +265,7 @@ function AddEmployees(props) {
                     </div>
                     <div className={styles.q} style={{display: "flex", marginTop: "30px", flexDirection: "column", width: "375px", justifyContent: "space-around", alignItems: "center"}}>
                         <p style={{width: "300px", position: "relative"}}>Employee roles or titles your looking for:</p>
-                        <div style={{display: "flex", position: "relative", marginTop: "8px"}}>
+                        <div value={newItem} style={{display: "flex", position: "relative", marginTop: "8px"}}>
                             <input onChange={(e) => setNewItem(e.target.value)} placeholder="Ex: Waxer, Hair Stylist, Instructor" style={{width: "220px", paddingLeft: "4px", border: "none", boxShadow: "0px 0px 2px black", height: "24px"}} />
                             <button id={styles.addButton} style={{border: "none", marginLeft: "20px", boxShadow: "0px 0px 2px black", height: "24px", padding: "0px 8px", fontSize: "16px" }} onClick={addToNewDesired}>Add</button>
                         </div>

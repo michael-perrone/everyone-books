@@ -4,6 +4,7 @@ const BusinessProfile = require('../../models/BusinessProfile');
 const Employee = require('../../models/Employee');
 const ServiceType = require('../../models/ServiceType');
 const authAdmin = require('../../middleware/authAdmin');
+const authEmployee = require('../../middleware/authEmployee');
 const utils = require('../../utils/utils');
 const Booking = require('../../models/Booking');
 const Admin = require("../../models/Admin");
@@ -20,8 +21,13 @@ router.post('/bct', async (req, res) => {
     }
 })
 
+router.get('/employeePortal', authEmployee, async (req, res) => {
+    const employee = await Employee.findOne({_id: req.employee.id});
+    
+})
+
 router.get("/desired", authAdmin, async (req, res) => {
-    let business = await Business.findById({_id: req.admin.businessId}).select(["des", "re", "hi", "in"]);
+    let business = await Business.findById({_id: req.admin.businessId}).select(["des", "ur", "hi", "in"]);
     if (business && business.des) {
         return res.status(200).json({desired: business.des, in: business.in, ur: business.ur, hi: business.hi});
     } 

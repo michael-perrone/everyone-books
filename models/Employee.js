@@ -36,7 +36,12 @@ const EmployeeSchema = new mongoose.Schema({
   secondBusiness: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "business"
-  }
+  },
+  jt: String,
+  pw: String,
+  ph: String,
+  cw: String,
+  ur: String
 });
 
 const Employee = mongoose.model("employee", EmployeeSchema);

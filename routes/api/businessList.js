@@ -472,6 +472,152 @@ if (businessesToPush.length === 0) {
 
 });
 
+
+
+router.post('/location', async (req, res) => {
+    const businesses = await Business.find({zip: req.body.zip});
+    if (businesses.length) {
+      res.status(200).json({businessesFromZip: businesses});
+    } 
+    else {
+      const businesses = await Business.find({city: req.body.city, state: req.body.state});
+      res.status(200).json({businessesFromCity: businesses});
+    }
+})
+
+router.post('/location/employeeHiring', async (req, res) => {
+  const businesses = await Business.find({zip: req.body.zip}).select(['hi', 'in', 'ur', 'des', 'schedule', '_id', 'businessName', 'address', 'state', 'city', 'zip', 'website', 'phoneNumber']);
+  if (businesses.length) {
+    res.status(200).json({businessesFromZip: businesses});
+  } 
+  else {
+    const businesses = await Business.find({city: req.body.city, state: req.body.state}).select(['hi', 'in', 'ur', 'des', 'schedule', '_id', 'businessName', 'address', 'state', 'city', 'zip', 'website', 'phoneNumber']);
+    res.status(200).json({businessesFromCity: businesses});
+  }
+})
+
+router.post("/location/portal", async (req, res) => {
+  let businesses = await Business.find({});
+  const state = req.body.state.toLowerCase();
+  const zip = req.body.zip;
+  const city = req.body.city.toLowerCase();
+  const businessesToPush = [];
+          if (req.body.state === "" &&
+          req.body.zip === "" &&
+          req.body.city !== "") {
+            for (let i = 0; i < businesses.length; i++) {
+              if (businesses[i].city.toLowerCase().includes(city)) {
+                businessesToPush.push(businesses[i]);
+            }
+          }
+          if (businessesToPush.length > 0) {
+              return res.status(200).json({businesses: businessesToPush});
+          }
+        }
+        else if (req.body.state === "" &&
+        req.body.zip !== "" &&
+        req.body.city === "") {
+          for (let i = 0; i < businesses.length; i++) {
+            if (businesses[i].zip.includes(zip)) {
+              businessesToPush.push(businesses[i]);
+          }
+        }
+        if (businessesToPush.length > 0) {
+            return res.status(200).json({businesses: businessesToPush});
+        }
+      }
+      else if (req.body.state !== "" &&
+      req.body.zip === "" &&
+      req.body.city === "") {
+        for (let i = 0; i < businesses.length; i++) {
+          if (businesses[i].state.toLowerCase().includes(state)) {
+            businessesToPush.push(businesses[i]);
+        }
+      }
+      if (businessesToPush.length > 0) {
+          return res.status(200).json({businesses: businessesToPush});
+      }
+    }
+    else if (req.body.state !== "" &&
+    req.body.zip !== "" &&
+    req.body.city === "") {
+      for (let i = 0; i < businesses.length; i++) {
+        if (businesses[i].state.toLowerCase().includes(state) && businesses[i].zip.toLowerCase().includes(zip)) {
+          businessesToPush.push(businesses[i]);
+      }
+    }
+    if (businessesToPush.length > 0) {
+        return res.status(200).json({businesses: businessesToPush});
+    }
+  }
+  else if (req.body.state === "" &&
+  req.body.zip !== "" &&
+  req.body.city !== "") {
+    for (let i = 0; i < businesses.length; i++) {
+      if (businesses[i].city.toLowerCase().includes(city) && businesses[i].zip.includes(zip)) {
+        businessesToPush.push(businesses[i]);
+    }
+  }
+  if (businessesToPush.length > 0) {
+      return res.status(200).json({businesses: businessesToPush});
+  }
+}
+else if (req.body.state !== "" &&
+req.body.zip === "" &&
+req.body.city !== "") {
+  for (let i = 0; i < businesses.length; i++) {
+    if (businesses[i].state.toLowerCase().includes(state) && businesses[i].city.toLowerCase().includes(city)) {
+      businessesToPush.push(businesses[i]);
+  }
+}
+if (businessesToPush.length > 0) {
+    return res.status(200).json({businesses: businessesToPush});
+  }
+}
+else if (req.body.state !== "" &&
+req.body.zip !== "" &&
+req.body.city !== "") {
+  for (let i = 0; i < businesses.length; i++) {
+    if (businesses[i].city.toLowerCase().includes(city) && businesses[i].state.toLowerCase().includes(state) && businesses[i].zip.includes(zip)) {
+      businessesToPush.push(businesses[i]);
+  }
+}
+if (businessesToPush.length > 0) {
+    return res.status(200).json({businesses: businessesToPush});
+}
+}
+// BREAK
+else {
+  return res.status(406).send();
+}
+if (businessesToPush.length === 0) {
+  return res.status(406).send();
+}
+});
+
+
+router.post('/location', async (req, res) => {
+    const businesses = await Business.find({zip: req.body.zip});
+    if (businesses.length) {
+      res.status(200).json({businessesFromZip: businesses});
+    } 
+    else {
+      const businesses = await Business.find({city: req.body.city, state: req.body.state});
+      res.status(200).json({businessesFromCity: businesses});
+    }
+})
+
+router.post('/location/employeeHiring', async (req, res) => {
+  const businesses = await Business.find({zip: req.body.zip}).select(['hi', 'in', 'ur', 'des', 'schedule', '_id', 'businessName', 'address', 'state', 'city', 'zip', 'website', 'phoneNumber']);
+  if (businesses.length) {
+    res.status(200).json({businessesFromZip: businesses});
+  } 
+  else {
+    const businesses = await Business.find({city: req.body.city, state: req.body.state}).select(['hi', 'in', 'ur', 'des', 'schedule', '_id', 'businessName', 'address', 'state', 'city', 'zip', 'website', 'phoneNumber']);
+    res.status(200).json({businessesFromCity: businesses});
+  }
+})
+
 //   if (
 //     req.body.state === "" &&
 //     req.body.zip === "" &&

@@ -23,6 +23,40 @@ router.get("/getBusinesses", authEmployee, async (req, res) => {
     }
 });
 
+router.get("/hi", authEmployee, async (req, res) => {
+    let employee = await Employee.findOne({_id: req.employee.id}).select(["jt", "pw", "ph", "cw", "ur"]);
+    console.log(employee);
+    res.status(200).json({employee});
+})
+
+router.post("/hi", authEmployee, async (req, res) => {
+    let employee = await Employee.findOne({_id: req.employee.id});
+    console.log(req.body);
+    if (req.body.jt) {
+        employee.jt = req.body.jt;
+    }
+    if (req.body.pw) {
+        employee.pw = req.body.pw;
+    }
+    if (req.body.ph) {
+        employee.ph = req.body.ph;
+    }
+    if (req.body.cw) {
+        employee.cw = req.body.cw;
+    }
+    if (req.body.ur) {
+        employee.ur = req.body.ur;
+    }
+    await employee.save();
+    return res.status(200).send();
+})
+
+// jt: String,
+// pf: String,
+// ph: String,
+// cw: Number,
+// ur: String
+
 router.post("/performance", authEmployee, async (req, res) => {
 
     const startDay = new Date(req.body.startDay);

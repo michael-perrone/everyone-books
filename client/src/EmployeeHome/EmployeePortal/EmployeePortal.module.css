@@ -1,0 +1,46 @@
+.cont {
+    width: 100%;
+    display: flex;
+    padding-bottom: 30px;
+}
+
+.half {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#rightHalf {
+    border-right: 2px solid black;
+}
+
+.is {
+    margin-top: 30px;
+    padding: 6px;
+    border: none;
+    box-shadow: 0px 0px 4px black;
+    width: 200px;
+}
+
+
+@media(max-width: 700px) {
+    #moveIt {
+        margin-top: 30px;
+        padding-bottom: 30px;
+    }
+    .cont {
+        flex-direction: column;
+        align-items: center;
+    }
+    #rightHalf {
+        border-right: none;
+        border-bottom: 2px solid black;
+    }
+    .half {
+        width: 75%;
+    }
+}
+
+
+

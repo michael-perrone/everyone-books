@@ -9,20 +9,15 @@ import BookingColumnsEnter from './BookingColumnsEnter/BookingColumnsEnter';
 import RestaurantBuilder from './RestaurantBuilder/RestaurantBuilder';
 import FakeNav from './FakeNav/FakeNav'
 import BackButton from './BackButton/BackButton';
-import logo500 from './logo-500.jpeg';
-import logo200 from './logo-250.jpeg';
+import logo325 from './logo-300.png'
 
 
 const BusinessSignup = (props) => {
-    const [showNet, setShowNet] = useState(false);
-    const [logo,setLogo] = useState("");
-    
-
     return (
     <React.Fragment>
         <FakeNav/> 
         <div id={styles.bSignupContainer}> 
-        <img className={window.innerWidth > 800 ? styles.large : styles.small} src={window.innerWidth > 800 ? logo500 : logo200}/>
+        <img src={logo325} style={{height: "300px", width: "300px"}} id={styles.picta}/>
             <div id={styles.welcomeContainer}>
                 <div style={{position: 'relative'}}>
                     {(props.showAdminDropDown || props.businessScheduleComplete || props.businessInfoComplete || props.adminInfoComplete || props.kindBusinessCompleted) && <BackButton marginTop={!!props.showAdminDropDown}/>}
