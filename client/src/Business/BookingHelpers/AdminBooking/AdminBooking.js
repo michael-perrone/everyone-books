@@ -456,7 +456,7 @@ import x from './x.png'
 
     return (
       <div id={styles.bookingHolder} onClick={props.hideDropDown}>
-          <div id={styles.coolContainer} style={{maxWidth: "400px"}}>
+          <div id={styles.coolContainer} className={styles.calWidth}>
           <Calendar/>
           </div>
           <div id={styles.newContainer}>
@@ -559,7 +559,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-   
     setBreakAlert: (obj) => dispatch({type: BREAK_ALERT, payload: obj}),
     setEmployeeShiftError: (trueOrFalse) => dispatch({type: EMPLOYEE_SHIFT_ERROR, payload: trueOrFalse}),
     getBookingType: bookingType =>

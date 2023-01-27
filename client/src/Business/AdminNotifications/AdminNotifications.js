@@ -34,7 +34,6 @@ function AdminNotifications(props) {
         const allNotis = [...notifications];
         for (let i = 0; i < notifications.length; i++) {
             if (notification._id === allNotis[i]._id) {
-                console.log("yes")
                 allNotis[i].type = type;
             }
         }
@@ -171,6 +170,9 @@ function AdminNotifications(props) {
                         setType("Choice");
                     }
                     if (flippedNotis[0].type === "ESIDDR") { 
+                        setType("Alert");
+                    }
+                    if (flippedNotis[0].type === "EIB" || flippedNotis[0].type === "EIBR") {
                         setType("Alert");
                     }
                     else if (flippedNotis[0].type === "ERN" || flippedNotis[0].type === "ERNR") {

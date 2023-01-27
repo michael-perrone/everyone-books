@@ -1,4 +1,4 @@
-import {GET_KIND_OF_BUSINESS, GET_NAME_OF_BUSINESS, KIND_BUSINESS_COMPLETED, SAVE_ADMIN_INFO, SAVE_BUSINESS_INFO, ENTER_BUSINESS_SCHEDULE, ADMIN_DROP_DOWN, SET_BOOKING_NUMBER_AND_TYPE, BACK_FUNCTION, REMOVE_CREATE_STATE, RESTAURANT_SEND_HIT} from '../actions/actions';
+import {GET_KIND_OF_BUSINESS, BOOKING_COLUMNS_ENTERED, GET_NAME_OF_BUSINESS, KIND_BUSINESS_COMPLETED, SAVE_ADMIN_INFO, SAVE_BUSINESS_INFO, ENTER_BUSINESS_SCHEDULE, ADMIN_DROP_DOWN, SET_BOOKING_NUMBER_AND_TYPE, BACK_FUNCTION, REMOVE_CREATE_STATE, RESTAURANT_SEND_HIT} from '../actions/actions';
 
 
 const initialState = {
@@ -15,6 +15,7 @@ const initialState = {
     bookingColumnNumber: "",
     bookingColumnType: "",
     showDropDown: false,
+    bookingColumnsComplete: false
 };
 
 export default function (state = initialState, action) {
@@ -35,6 +36,11 @@ export default function (state = initialState, action) {
                 bookingColumnType: "",
                 showDropDown: false,
                 restaurantSendNotHit: true
+            }
+        case BOOKING_COLUMNS_ENTERED:
+            return {
+                ...state,
+                bookingColumnsComplete: true
             }
         case BACK_FUNCTION:
             if (state.showDropDown) {

@@ -29,7 +29,7 @@ class EmployeeRegisterForm extends React.Component {
         email: "",
         createPassword: "",
         passwordConfirm: "",
-        profession: "",
+        phoneNumber: "",
       },
       dirty: {
         firstName: false,
@@ -37,7 +37,7 @@ class EmployeeRegisterForm extends React.Component {
         email: false,
         createPassword: false,
         passwordConfirm: false,
-        profession: false,
+        phoneNumber: false,
       },
       showOptionals: false
     };
@@ -64,6 +64,13 @@ class EmployeeRegisterForm extends React.Component {
     let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
   };
+  
+  validatePhone = phone => {
+    // eslint-disable-next-line no-useless-escape
+    let newRe = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+    return newRe.test(phone);
+  };
+
 
   registerEmployee(event) {
     event.preventDefault();
@@ -176,9 +183,27 @@ class EmployeeRegisterForm extends React.Component {
                   <Alert alertPhrase={"Please enter a valid email"} />
                 )}
             </div>
-
-            
-
+            <div className={otherStyles.divWidthControl}>
+              <label
+                className={otherStyles.labels}
+              >
+                Phone Number:
+              </label>
+              <input 
+                onKeyDown={this.setDirty}
+                onChange={this.getEmployeeInput}
+                value={this.state.employee.phoneNumber}
+                name="phoneNumber"
+                placeholder="Enter Phone (Optional)"
+                id={otherStyles.input2}
+                className={otherStyles.inputs}
+              />
+              {this.validatePhone(this.state.employee.phoneNumber) === false &&
+                this.state.dirty.phoneNumber === true && (
+                  <Alert alertPhrase={"Please enter a valid phone number"} />
+                )}
+                {this.state.phoneAlreadyInUse && <Alert alertPhrase={"This phone number is already registered"}/>}
+            </div>
             <div className={otherStyles.divWidthControl}>
               <label
                 style={{letterSpacing: "1.0px" }}
@@ -226,27 +251,6 @@ class EmployeeRegisterForm extends React.Component {
                   <Alert alertPhrase={"Passwords must be matching"} />
                 )}
             </div>
-            <div className={otherStyles.divWidthControl}>
-              <label
-                className={otherStyles.labels}
-              >
-                Current Profession:
-              </label>
-              <input 
-                onKeyDown={this.setDirty}
-                onChange={this.getEmployeeInput}
-                value={this.state.employee.profession}
-                name="profession"
-                placeholder="(Server, Waxer, Barber, etc)"
-                id={otherStyles.ml8}
-                className={otherStyles.inputs}
-              />
-              {this.state.dirty.profession === true &&
-                this.state.employee.profession === "" && (
-                  <Alert alertPhrase={"This field is required"} />
-                )}
-            </div>
-            
             <div style={{ display: "flex", justifyContent: "space-around" }}>
               <p
                 id={styles.headBack}

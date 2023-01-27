@@ -29,6 +29,16 @@ router.get("/hi", authEmployee, async (req, res) => {
     res.status(200).json({employee});
 })
 
+router.post("/li", async (req, res) => {
+    const employee = await Employee.findOne({_id: req.body.employeeId}).select(["phone", "ur", "cw", "ph", "pw", "jt", "fullName"]);
+    if (employee) {
+        return res.status(200).json({employee});
+    }
+    else {
+        res.status(406).send();
+    }
+})
+
 router.post("/hi", authEmployee, async (req, res) => {
     let employee = await Employee.findOne({_id: req.employee.id});
     console.log(req.body);

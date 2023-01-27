@@ -41,7 +41,8 @@ const EmployeeSchema = new mongoose.Schema({
   pw: String,
   ph: String,
   cw: String,
-  ur: String
+  ur: String,
+  phone: String
 });
 
 const Employee = mongoose.model("employee", EmployeeSchema);

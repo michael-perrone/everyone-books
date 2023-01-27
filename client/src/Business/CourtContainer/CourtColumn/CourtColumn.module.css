@@ -5,6 +5,15 @@
     background-color: rgb(236, 236, 236);
 }
 
+#columnus {
+    position: absolute;
+    font-size: 18px;
+    font-weight: bold;
+    width: 140px;
+    text-align: center;
+    top: -30px;
+}
+
 
 .bookingContainer {
     background-color: rgb(255, 187, 180);
@@ -34,4 +43,17 @@
 
 .bookingContainer:hover {
     background-color: rgb(246, 165, 156);
+}
+
+
+@media (max-width: 600px) {
+    #courtColumn {
+        margin-top: 90px;
+        width: 300px;
+    }
+    #columnus {
+        font-size: 24px;
+        position: relative;
+        width: 300px;
+    }
 }

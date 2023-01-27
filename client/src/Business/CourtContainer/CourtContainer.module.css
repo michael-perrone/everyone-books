@@ -6,3 +6,41 @@
     background-color: white;
     position: relative;
 }
+
+#subo {
+    transform: rotate(-180deg);
+    position: absolute; 
+    right: 60px;
+    top: 78px;
+    width: 80px; 
+}
+
+#courto {
+    display: flex;
+    transform: rotate(-180deg);
+    border: 2px solid black;
+}
+
+
+
+@media(max-width: 600px) {
+    #subo {
+        transform: none;
+    }
+    #mainContainer {
+        max-height: none;
+        transform: none;
+        overflow: visible;
+        padding: 0px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    #courto {
+        transform: none;
+        display: block;
+        border: none;
+        flex-direction: column;
+    }
+}
+

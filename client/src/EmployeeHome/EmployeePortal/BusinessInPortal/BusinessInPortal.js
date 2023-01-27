@@ -49,7 +49,7 @@ function BusinessInPortal(props) {
           </div>
           <div className={styless.buttonContainer}>
             {!inquired && <button onClick={() => inquire(props.business._id)} className={styles.sectionButton}>Inquire</button>}
-            {inquired && <button onClick={removeInquiry(props.business._id)} className={styles.sectionButton} id={styles.unfollow}>Remove Inquiry</button>}
+            {inquired && <button onClick={() => removeInquiry(props.business._id)} className={styles.sectionButton} id={styles.unfollow}>Remove Inquiry</button>}
           </div>
         </div>
     )

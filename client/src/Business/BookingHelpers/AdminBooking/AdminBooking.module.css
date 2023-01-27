@@ -6,6 +6,10 @@
   display: inline;
 }
 
+.calWidth {
+  max-width: 400px;
+}
+
 #addBookingContainer {
   width: 100%;
   display: flex;
@@ -25,7 +29,6 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  
   justify-content: center;
 }
 
@@ -74,4 +77,20 @@
     #newContainer {
       width: 100%;
     }
+}
+
+
+@media(max-width: 600px) {
+  #bookingHolder {
+    width: 100%;
+    max-height: none;
+    overflow: visible;
+  }
+  .calWidth {
+    max-width: none;
+    align-items: center;
+  }
+  #newContainer {
+    align-items: center;
+  }
 }

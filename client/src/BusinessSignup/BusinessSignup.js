@@ -9,15 +9,62 @@ import BookingColumnsEnter from './BookingColumnsEnter/BookingColumnsEnter';
 import RestaurantBuilder from './RestaurantBuilder/RestaurantBuilder';
 import FakeNav from './FakeNav/FakeNav'
 import BackButton from './BackButton/BackButton';
-import logo325 from './logo-300.png'
+import LogoSpinner from '../Shared/LogoSpinner/LogoSpinner';
+
 
 
 const BusinessSignup = (props) => {
+    const [progress, setProgress] = useState(0);
+
+    useEffect(function() {
+        if (props.kindBusinessCompleted) {
+            setProgress(1)
+        }
+        if (!props.kindBusinessCompleted) {
+            setProgress(0)
+        }
+    }, [props.kindBusinessCompleted])
+
+    useEffect(function() {
+        if (props.adminInfoComplete) {
+            setProgress(3);
+        }
+        if (!props.adminInfoComplete && props.kindBusinessCompleted) {
+            setProgress(1);
+        }
+    }, [props.adminInfoComplete])
+
+    useEffect(function() {
+        if (props.businessInfoComplete) {
+            setProgress(5)
+        }
+        else if (!props.businessInfoComplete && props.adminInfoComplete) {
+            setProgress(3)
+        }
+    }, [props.businessInfoComplete])
+
+     useEffect(function() {
+        if (props.businessScheduleComplete) {
+            setProgress(7)
+        }
+        if (!props.businessScheduleComplete && props.businessInfoComplete) {
+            setProgress(5)
+        }
+    }, [props.businessScheduleComplete])
+
+    useEffect(function() {
+        if (props.bookingColumnsComplete) {
+            setProgress(8);
+        }
+    },[props.bookingColumnsComplete])
+
     return (
     <React.Fragment>
         <FakeNav/> 
-        <div id={styles.bSignupContainer}> 
-        <img src={logo325} style={{height: "300px", width: "300px"}} id={styles.picta}/>
+        <div id={styles.bSignupContainer}>
+        <div>
+        <LogoSpinner progress={progress}/>
+        </div>
             <div id={styles.welcomeContainer}>
                 <div style={{position: 'relative'}}>
                     {(props.showAdminDropDown || props.businessScheduleComplete || props.businessInfoComplete || props.adminInfoComplete || props.kindBusinessCompleted) && <BackButton marginTop={!!props.showAdminDropDown}/>}
@@ -52,7 +99,8 @@ const mapStateToProps = state => {
         kindOfBusiness: state.newReducers.kindOfBusiness,
         nameOfBusiness: state.newReducers.nameOfBusiness,
         kindBusinessCompleted: state.newReducers.kindBusinessCompleted,
-        showAdminDropDown: state.newReducers.showDropDown
+        showAdminDropDown: state.newReducers.showDropDown,
+        bookingColumnsComplete: state.newReducers.bookingColumnsComplete
     }
 }
 

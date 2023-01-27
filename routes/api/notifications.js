@@ -48,17 +48,16 @@ router.post("/userBookedEmployee", async (req, res) => { // cooked
 
 router.post("/inquire", employeeAuth, async (req, res) => {
   const date = new Date();
-  let business = await Admin.findOne({business: req.body.businessId});
+  const admin = await Admin.findOne({business: req.body.businessId}).select(["notifications", "business"]);
   const newNoti = new Notification({
     type: "EIB",
     fromString: req.employee.fullName,
     fromId: req.employee.id,
     date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
   })
+  admin.notifications.push(newNoti);
+  await admin.save();
   await newNoti.save();
-  const newBusinessNotis = [...business.notifications];
-  newBusinessNotis.push(newNoti);
-  await business.save();
   return res.status(200).send();
 })
 
@@ -227,6 +226,7 @@ router.get('/employeeHas', employeeAuth, async (req, res) => {
 
 router.get('/getAdminNotis', authAdmin, async (req, res) => {
   const admin = await Admin.findOne({ _id: req.admin.id });
+  console.log(admin.notifications)
   const business = await Business.findOne({_id: admin.business}).select(["bookingColumnNumber", "bookingColumnType", "eq"]);
   const notifications = await Notification.find({ _id: admin.notifications });
   const bookedNotifications = await BookedNotification.find({_id: admin.bookedNotifications});
@@ -476,7 +476,7 @@ router.post('/employeeSendingId', async (req, res) => {
     }
     adminNotis.push(newNoti);
     admin.notifications = adminNotis;
-    admin.save();
+    await admin.save();
     res.status(200).send();
   }
 })
@@ -503,6 +503,11 @@ router.post("/changeToRead", async (req, res) => {
     if (notification) {
       if (notification.type === "ERY") {
         notification.type = "ERYR";
+        await notification.save();
+        return res.status(200).json({notification});
+      }
+      else if (notification.type === "EIB") {
+        notification.type = "EIBR";
         await notification.save();
         return res.status(200).json({notification});
       }

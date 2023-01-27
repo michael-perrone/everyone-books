@@ -36,6 +36,7 @@ router.post('/', async (req, res) => {
     let newEmployee = new Employee({
       fullName: fullName,
       email: req.body.email.toLowerCase(),
+      phone: req.body.phoneNumber
     });
     const salt = await bcrypt.genSalt(10);
     newEmployee.password = await bcrypt.hash(

@@ -19,9 +19,13 @@ function AdminNotification(props) {
                 setNotiMessage(props.notification.fromString + " has requested a table at your restaurant.");
                 setType("Choice");
             }
-            if (type === "ESIDDR") { 
+            else if (type === "ESIDDR") { 
                 setNotiMessage(props.notification.fromString + " was denied from becoming an employee at your business.");
                 setType("Alert");
+            }
+            else if (type === "EIB" || type === "EIBR") {
+                setNotiMessage("An individual has inquired about joining your business as an employee.")
+                setType("Alert")
             }
             else if (type === "ERN" || type === "ERNR") {
                 setNotiMessage(props.notification.fromString + " has declined your invitation to join your business.");

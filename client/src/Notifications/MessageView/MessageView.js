@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import OtherAlert from '../../OtherAlerts/OtherAlerts';
 import BCAList from '../../Shared/BCAList/BCAList';
 import Spinner from '../../Spinner/Spinner';
+import EmployeeInquireInfo from './EmployeeInquireInfo/EmployeeInquireInfo';
 
 function MessageView(props) {
     const [message, setMessage] = useState("");
@@ -15,6 +16,8 @@ function MessageView(props) {
     const [error, setError] = useState("");
     const [bcnArray, setBcnArray] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [showEIQ, setShowEIQ] = useState(false);
+    const [eiq, setEIQ] = useState("");
 
 
 
@@ -86,7 +89,7 @@ function MessageView(props) {
                 setLoading(false);
             })
         }
-    }, [props.type, props.notification._id])
+    }, [props.type, props.notification && props.notification._id])
 
     function denyEmployeeRequest() {
         Axios.post("api/notifications/employerDeniedEmployee", {notificationId: props.notification._id, employeeId: props.notification.fromId}, {headers: {"x-auth-token": props.adminToken}}).then(response => {
@@ -140,6 +143,33 @@ function MessageView(props) {
                 if (type === "ESIDDR") {
                     setMessage("You denied " + props.notification.fromString + "'s request to become an employee at your business. If this was a mistake, you can add them to your business in the edit business profile menu.");
                     setHeader("Employee Denied");
+                }
+                else if (type === "EIB" || type === "EIBR") {
+                    setHeader("Individual Inquired")
+                    setMessage(`An invidual has inquired about joining your business as an employee. Below is all the information that the individual has provided to our service.`)
+                    Axios.post('/api/employeeInfo/li', {employeeId: props.notification.fromId}).then(
+                        response => {
+                            if (response.status === 200) {
+                                setShowEIQ(true);
+                                setEIQ(<EmployeeInquireInfo
+                                     phoneNumber={response.data.employee.phone}
+                                     preferredWage={response.data.employee.pw}
+                                     jobTitle={response.data.employee.jt}
+                                     preferredHours={response.data.employee.ph}
+                                     currentlyWorking={response.data.employee.cw}
+                                     fullName={response.data.employee.fullName}
+                                     urgent={response.data.employee.ur}
+                                     />)
+                            }
+                        }
+                    ).catch(
+                        error => {
+                            if (error.response.status === 404) {
+                                setError("");
+                                setTimeout(() => setError("Could not retrieve employee info"), 200);
+                            }
+                        }
+                    )
                 }
                 else if (type === "UBT") {
                     setHeader("Table Booking Request");
@@ -225,7 +255,7 @@ function MessageView(props) {
                     setMessage("A shift you were sheduled for has been deleted. Please check your schedule and contact your employer if you believe this is a mistake.") // check this // i dont mention the date because it may be a pain to create a date for just this
                 }
             }
-    }, [props.notification._id, props.notification.type])
+    }, [props.notification && props.notification._id, props.notification && props.notification.type])
 
     function book() {
         if (props.adminToken) {
@@ -324,9 +354,11 @@ function MessageView(props) {
                 <div style={{ position: "relative", top: "75px"}}>
                     
                  <p className={styles.message}>{message}</p>
+                 {showEIQ && eiq}
                 </div>
             </div>
             }
+           
             
             {props.type === "Choice" &&
             <div id={styles.messageViewContainer}>

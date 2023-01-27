@@ -7,7 +7,7 @@ import ColorButton from '../../Shared/ColorButton/ColorButton';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import { ADMIN_REGISTER_SUCCESS } from '../../actions/actions';
-import c from 'config';
+import { BOOKING_COLUMNS_ENTERED } from '../../actions/actions';
 import Spinner from '../../Spinner/Spinner';
 
 const BookingColumnsEnter = (props) => {
@@ -32,10 +32,10 @@ const BookingColumnsEnter = (props) => {
            businessName: props.nameOfBusiness, typeOfBusiness: props.kindOfBusiness, bookingColumnNumber: bookingColumnNumber, bookingColumnType: bookingColumnType, eq: usesShifts ? "y" : "n"
         }
         console.log(props.nameOfBusiness, "BUSINESS NAMEO");
-
         axios.post('/api/adminSignup', allInfo).then(
             response => {
                 if (response.data.token) {
+                    props.entered();
                     setLoading(true);
                     setTimeout(() => {
                         setLoading(false);
@@ -225,6 +225,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        entered: () => dispatch({type:BOOKING_COLUMNS_ENTERED}),
         adminRegister: (adminToken) => dispatch({type: ADMIN_REGISTER_SUCCESS, payload: {adminToken}})
     }
 }
