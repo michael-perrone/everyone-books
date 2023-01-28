@@ -14,6 +14,18 @@
     top: -30px;
 }
 
+#subo {
+    left: 10px;
+    top: 80px;
+    width: 80px; 
+    position: relative;
+}
+
+#bigGuy {
+    display: flex;
+    justify-content: space-around;
+}
+
 
 .bookingContainer {
     background-color: rgb(255, 187, 180);
@@ -46,14 +58,20 @@
 }
 
 
+@media (min-width: 600px) {
+    #bigGuy {
+        width: 150px;
+    }
+}
+
 @media (max-width: 600px) {
     #courtColumn {
         margin-top: 90px;
-        width: 300px;
+        width: 225px;
     }
     #columnus {
         font-size: 24px;
         position: relative;
-        width: 300px;
+        width: 225px;
     }
 }

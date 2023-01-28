@@ -94,7 +94,7 @@ function CourtContainer(props) {
                 </div>}
                 <div id={styles.courto} style={{ height:`${heightNum * 16}px`, }}>
                     {bcnArray.map((bcn,index) => {
-                        return <CourtColumn minned={minned} clickGroup={props.clickGroup} clickBooking={props.clickBooking} sortedGroups={props.sortedGroups[index]} openTime={props.openTime} sortedBookings={props.sortedBookings[index]} key={bcn} bct={props.bct} height={heightNum * 16} bcn={bcn}/>
+                        return <CourtColumn times={times} minned={minned} clickGroup={props.clickGroup} clickBooking={props.clickBooking} sortedGroups={props.sortedGroups[index]} openTime={props.openTime} sortedBookings={props.sortedBookings[index]} key={bcn} bct={props.bct} height={heightNum * 16} bcn={bcn}/>
                     })}
                 </div>
             </div>
