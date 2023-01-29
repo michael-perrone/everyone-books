@@ -1,10 +1,10 @@
 import React from 'react';
+import styles from './Hours.module.css';
 
 const Hours = props => { 
     return (
-        <div style={{display: 'flex', flexDirection:'column', alignItems:'center', marginTop: '40px', fontSize: '18px'}}>
+        <div id={styles.mTop} style={{width: "300px", display: 'flex', flexDirection:'column', paddingLeft: "45px", fontSize: '18px'}}>
             <div>
-            <p style={{textDecoration: 'underline', fontWeight: 'bold', textAlign: 'center'}}>Business Hours:</p>
             {props.schedule && props.schedule.map((eachDay,index) => {
                 let day;
                 if (index === 0) {
@@ -28,7 +28,7 @@ const Hours = props => {
                 else if (index === 6) {
                     day = "Sat:"
                 }
-            return <div style={{display: 'flex',marginTop: '8px'}}><p style={{marginRight: '2px'}}>{day}</p><p>{eachDay.open}-{eachDay.close}</p></div>
+            return <div style={{marginTop: day === "Sun:" ? "6px" : "16px" , fontSize: "18px", fontFamily: "Josefin Sans", display: "flex"}}><p style={{marginRight: '2px', fontWeight: "bold", marginRight: "6px"}}>{day}</p><p>{eachDay.open}-{eachDay.close}</p></div>
             })}
             </div>
         </div>

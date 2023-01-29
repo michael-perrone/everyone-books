@@ -48,10 +48,12 @@ const UserView = (props) => {
         business.typeOfBusiness ?
         business.typeOfBusiness && business.typeOfBusiness !== "Restaurant" ?
         <div id={styles.userViewContainer}>
-            <div style={{position: 'relative'}}>
-            <p style={{marginBottom: "8px", width: '320px', textAlign: 'center', fontSize: business.businessName && business.businessName.length > 24 ? "18px" : '24px', fontFamily: "Josefin Sans"}}>{business.businessName}</p>
-          <LeftSide services={services} noProfile={noProfile} schedule={business.schedule} business={business} profile={profile}/>
+          <div style={{position: 'relative'}}>
+            <p id={styles.lol} style={{width: '100%', textAlign: 'center', fontWeight: "bold",
+            fontSize: "30px", fontFamily: "Josefin Sans"}}>{business.businessName}</p>
           </div>
+          <LeftSide services={services} noProfile={noProfile} schedule={business.schedule} business={business} profile={profile}/>
+        <div id={styles.bottomC}>
           <div style={{position: 'relative'}}>
             <p id={styles.marginTop} style={{marginBottom: "8px", fontSize: "24px", width: '320px', textAlign: 'center', fontFamily: "Josefin Sans"}}>Available Groups/Events</p>
           <OpenGroups business={business}/>
@@ -60,6 +62,7 @@ const UserView = (props) => {
           <p style={{width: '350px', textAlign: 'center', fontSize: '24px', paddingBottom: "8px", fontFamily: "Josefin Sans"}}>Book Online</p>
           <Core business={business} services={services} profile={profile} employees={employees}/>
           </div>
+        </div>
         </div> : 
         <UserRestaurant business={business} profile={profile}/> :
         <Spinner/>

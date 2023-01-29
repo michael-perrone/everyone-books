@@ -1,19 +1,18 @@
 import React from 'react';
+import styles from './ServicesTab.module.css';
 
 const ServicesTab = props => { 
     return (
         props.services.length ?
-        <div style={{display: 'flex', justifyContent: 'space-around'}}>
-         <div style={{marginTop: '15px'}}>
-            <p style={{textDecoration: 'underline', fontWeight: 'bold', marginLeft: "4px" }}>Service Name:</p>
+        <div id={styles.yooo} style={{display: 'flex', position: "relative", left: "-2px", width: "250px"}}>
+         <div>
             {props.services.map(service => {
-                return <p  style={{marginTop: '5px', marginLeft: "4px"}}>{service.serviceName}</p>
+                return <p style={{fontFamily: "Josefin Sans", fontSize: "20px", marginTop: "8px"}}>{service.serviceName}</p>
             })}
          </div>
-         <div style={{marginTop: '15px'}}>
-            <p style={{textDecoration: 'underline', fontWeight: 'bold' }}>Cost:</p>
+         <div>
             {props.services.map(service => {
-                return <p style={{marginTop: '5px', textAlign: 'center', position: 'relative', left: '-6px'}}>${service.cost}</p>
+                return <p style={{fontSize: "20px", marginTop: "8px", marginLeft: "20px", fontWeight: "bold"}}>${service.cost}</p>
             })}
          </div>
         </div>

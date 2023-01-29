@@ -1,0 +1,11 @@
+
+
+@media(max-width: 700px) {
+    #mTop {
+        margin-top: 5px;
+        padding-top: 25px;
+        border-top: 2px solid gray;
+        border-bottom: 2px solid gray;
+        padding-bottom: 20px;
+    }
+}

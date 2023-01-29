@@ -1,23 +1,21 @@
 import React from 'react';
+import styles from './Contact.module.css';
 
 const Contact = props => { 
     return (
-        <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-around', height: '450px', alignItems: 'center', fontSize: '18px'}}>
+        <div style={{width: "250px",display: 'flex', flexDirection: 'column', justifyContent: 'space-around', height: '300px', paddingLeft: "15px", fontSize: '18px'}}>
             <div style={{position: 'relative', top: '-20px'}}>
-                <p style={{textDecoration: 'underline', fontWeight: 'bold', textAlign: 'center', marginBottom: '6px'}}>Address:</p>
-                <p>{props.business.address}</p>
-                <p>{props.business.city}</p>
-                <p>{props.business.state}</p>
-                <p>{props.business.zip}</p>
+                <p style={{marginTop: "12px", fontSize: "20px", fontFamily: "Josefin Sans"}}>{props.business.address}</p>
+                <p style={{marginTop: "12px", fontSize: "20px", fontFamily: "Josefin Sans"}}>{props.business.city}</p>
+                <p style={{marginTop: "12px", fontSize: "20px", fontFamily: "Josefin Sans"}}>{props.business.state}</p>
+                <p style={{marginTop: "12px", fontSize: "20px", fontFamily: "Josefin Sans"}}>{props.business.zip}</p>
             </div>
-            <div style={{position: 'relative', top: '-20px'}}>
-                <p style={{textDecoration: 'underline', fontWeight: 'bold', textAlign: 'center', marginBottom: '6px'}}>Phone:</p>
-                <p>{props.business.phoneNumber}</p>
+            <div className={styles.shooter} style={{position: 'relative', top: '-20px'}}>        
+                <p style={{marginTop: "12px", fontSize: "20px", fontFamily: "Josefin Sans"}}>{props.business.phoneNumber}</p>
             </div>
 
-            <div style={{position: 'relative', top: '-20px'}}>
-                <p style={{textDecoration: 'underline', fontWeight: 'bold', textAlign: 'center', marginBottom: '6px'}}>Website:</p>
-                <a href={`${props.business.website}`}>{props.business.website}</a>
+            <div className={styles.shooter} style={{position: 'relative', top: '-20px'}}>
+                <p style={{marginTop: "12px", fontSize: "20px", fontFamily: "Josefin Sans"}}>{props.business.website}</p>
             </div>
         </div>
     )

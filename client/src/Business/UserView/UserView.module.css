@@ -1,28 +1,49 @@
 #userViewContainer {
     display: flex;
+    flex-direction: column;
     justify-content: space-around;
-    background-color: whitesmoke; 
+    background: linear-gradient(to bottom, rgb(255, 255, 255) 30%, #ffcdff);
     padding-top: 10px;
+    padding-left: 90px;
+    padding-right: 90px;
 }
 
-@media (min-width: 1150px) {
+#subView {
+    display: flex;
+    flex-direction: column;
+}
+
+
+#lol {
+    margin-bottom: 40px;
+}
+
+#bottomC {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 35px;
+    border-top: 2px solid gray;
+
+}
+
+
+
+@media(max-width: 950px) {
     #userViewContainer {
-       height: 100vh;
+        padding-left: 0px;
+        padding-right: 0px;
+        background: linear-gradient(to bottom, #ffddff, white, #ffcdff);
     }
 }
 
-@media (max-width: 1150px) {
-    #userViewContainer {
-        flex-direction: column;
+@media(max-width: 700px) {
+    #bottomC {
+        flex-direction: column-reverse;
         align-items: center;
-    }
-    
-    #marginTop {
-        margin-top: 20px;
+        padding-bottom: 80px;
     }
 
-    #coreContainer {
-        padding-top: 20px;
-        padding-bottom: 20px;
+    #lol {
+        margin-bottom: 10px;
     }
 }
