@@ -239,7 +239,7 @@ function ServiceFinder(props) {
 
 
     return (
-        <div>
+        <div id={styles.wholeThing}>
             <p style={{textAlign: "center", fontWeight: "bold", fontSize: "26px", paddingTop: "20px", fontFamily: "Josefin Sans"}}>Service Finder</p>
             <div id={styles.inputHolder}>
                 <div className={styles.subContainer}>

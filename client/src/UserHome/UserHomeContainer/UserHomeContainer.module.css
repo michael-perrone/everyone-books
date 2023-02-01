@@ -1,5 +1,5 @@
 #userHomeContainer {
-  background-color: rgb(236, 236, 236);
+  background: linear-gradient(to bottom, rgb(236, 236, 236) 40%, white);
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
@@ -7,7 +7,7 @@
 }
 
 #clubsSubscribedHalf {
-  background-color: rgb(236, 236, 236);
+
 }
 
 #bigC {

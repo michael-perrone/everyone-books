@@ -21,6 +21,10 @@
     user-select: none;
 }
 
+#wholeThing {
+    background: linear-gradient(to bottom, #f9e9f9, white);
+}
+
 .clickDiv {
     cursor: pointer;
 }

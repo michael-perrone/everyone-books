@@ -14,8 +14,8 @@ const Contact = props => {
                 <p style={{marginTop: "12px", fontSize: "20px", fontFamily: "Josefin Sans"}}>{props.business.phoneNumber}</p>
             </div>
 
-            <div className={styles.shooter} style={{position: 'relative', top: '-20px'}}>
-                <p style={{marginTop: "12px", fontSize: "20px", fontFamily: "Josefin Sans"}}>{props.business.website}</p>
+            <div className={styles.shooter} style={{position: 'relative', top: '-30px'}}>
+                <p style={{ fontSize: "20px", fontFamily: "Josefin Sans"}}>{props.business.website}</p>
             </div>
         </div>
     )

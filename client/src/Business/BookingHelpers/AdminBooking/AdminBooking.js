@@ -27,6 +27,8 @@ import StatementAppear from '../../../Shared/StatementAppear/StatementAppear';
 import SelectOneList from "../../../Shared/SelectOneList/SelectOneList";
 import BCAList from "../../../Shared/BCAList/BCAList";
 import x from './x.png'
+import {withRouter} from 'react-router-dom';
+
 
 
 
@@ -55,7 +57,10 @@ import x from './x.png'
     const [datesForClone, setDatesForClone] = useState("");
     const [services, setServices] = useState([]);
 
-    
+
+    function goToEditBusiness() {
+      props.history.push(`/admin/${props.admin.admin.id}/createeditprofile`)
+    }
 
     function createBooking() {
      // data = ["phone": phone ,"timeStart": timeStart, "date": date, "serviceIds": serviceIdsArray,
@@ -499,6 +504,7 @@ import x from './x.png'
               </div>
                 <div style={{marginTop: "22px", textAlign: "center"}}>
                   {props.services && props.services.length > 0 ? <SubmitButton onClick={getAvailableEmployees}>Check Availability</SubmitButton> : <p style={{width: "350px", marginLeft: "10px"}}>Your business has no services, please edit your business profile to create services and add employees!</p>}
+                  <SubmitButton onClick={goToEditBusiness} marginTop={25}>Edit Business Information</SubmitButton>
                 </div>
               </div>
               <div style={{display: "flex", flexDirection: 'column',}}>
@@ -580,4 +586,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminBooking);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AdminBooking));

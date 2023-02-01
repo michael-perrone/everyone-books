@@ -34,10 +34,6 @@ const AdminDropDown = (props) => {
 
   function goToEditBusiness() {
     props.history.push(`/admin/${props.admin.admin.id}/createeditprofile`)
-    console.log("HERLLDOWODOQIWFDIQWJFWF");
-    console.log("HERLLDOWODOQIWFDIQWJFWF");
-    console.log("HERLLDOWODOQIWFDIQWJFWF");
-    console.log("HERLLDOWODOQIWFDIQWJFWF");
   } 
 
 
