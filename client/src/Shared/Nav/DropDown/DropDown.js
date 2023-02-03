@@ -7,7 +7,7 @@ import AdminDropDown from "./AdminDropDown/AdminDropDown";
 
 const DropDown = props => {
   return (
-    <div
+    <div style={{zIndex: 2202020, backgroundColor: props.adminToken ? "#fceffc" : "white"}}
       className={styles.dropDownContainer}
       id={props.showDropDown ? styles.dropDownContainerAnimated : ""}
     >
@@ -22,6 +22,7 @@ const DropDown = props => {
 
 const mapStateToProps = state => {
   return {
+    adminToken: state.authReducer.adminToken,
     admin: state.authReducer.admin,
     employee: state.authReducer.employee,
     user: state.authReducer.user,

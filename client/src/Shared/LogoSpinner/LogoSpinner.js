@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import logo from './logo_250.png';
+import logo from './yoo.png';
 import styles from './LogoSpinner.module.css';
 
 function LogoSpinner(props) {
@@ -31,8 +31,8 @@ function LogoSpinner(props) {
         <div style={{transform: `rotate(${props.progress * 0}deg)`}} className={styles.rotato} id={styles.logo_container}>
             <div style={{top: "0px", display: props.progress > 0 ? "none" : ""}} className={styles.whiter}></div>
             <div style={{top: "70px", right: "200px", transform: "rotate(-45deg)", display: props.progress > 7 ? "none" : ""}} className={styles.whiter}></div>
-            <div style={{top: "150px", right: "210px", transform: "rotate(-90deg)", display: props.progress > 6 ? "none" : ""}} className={styles.whiter}></div>
-            <div style={{top: "295px", right: "130px", transform: "rotate(40deg)", display: props.progress > 5 ? "none" : ""}} className={styles.whiter}></div>
+            <div style={{top: "150px", right: "222px", transform: "rotate(-90deg)", display: props.progress > 6 ? "none" : ""}} className={styles.whiter}></div>
+            <div style={{top: "264px", right: "138px", width: "218px", transform: "rotate(40deg)",  display: props.progress > 5 ? "none" : ""}} className={styles.whiter}></div>
             <div style={{top: "298px", right: "80px", transform: "rotate(-8deg)", display: props.progress > 4 ? "none" : ""}} className={styles.whiter}></div>
             <div style={{top: "275px", right: "-20px", transform: "rotate(-50deg)", display: props.progress > 3 ? "none" : ""}} className={styles.whiter}></div>
             <div style={{top: "200px", right: "-90px", transform: "rotate(-89deg)", display: props.progress > 2 ? "none" : ""}} className={styles.whiter}></div>

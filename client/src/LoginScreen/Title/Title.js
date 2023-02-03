@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Title.module.css";
-import logo from './logo-home-200.png';
+import logo from './yoo.png';
 
 class Title extends React.Component {
   render() {

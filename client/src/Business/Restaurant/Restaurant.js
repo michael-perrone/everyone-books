@@ -296,7 +296,7 @@ function Restaurant(props) {
                 })}
             </select>
             </div>
-            <div style={{width: "365px", boxShadow: "0px 0px 3px black", height: "120px", backgroundColor: "#f9e9f9", position: "relative"}}>
+            <div style={{width: "365px", boxShadow: "0px 0px 3px black", height: "120px", backgroundColor: "#fceffc", position: "relative"}}>
                {hoverTable.timeStart && <div style={{marginLeft: "8px", paddingTop: "4px", height: "116px", display: "flex", flexDirection: "column", justifyContent: "space-around"}}>
                    <p>Time Start: {hoverTable.timeStart}</p>
                    <p>Est Duration: {hoverTable.estDuration}</p>

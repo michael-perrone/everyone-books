@@ -155,7 +155,7 @@ function AddMenu(props) {
             <div style={{width: "200px"}}>
                 <p style={{marginBottom: "20px", fontWeight: "bold", textAlign: "center"}}>Menu Categories</p>
                 {menuCategories.map((mc,index) => {
-                    return <div className={styles.selectors} style={{borderBottom: "1.5px solid black"}} onClick={() => chooseCategory(mc, index)}><p style={{textAlign: "center", paddingTop: "15px", paddingBottom: "15px", backgroundColor: mc === chosenCategory ? "#f9e9f9" : ""}}>{mc.menuCategoryValue}</p></div>
+                    return <div className={styles.selectors} style={{borderBottom: "1.5px solid black"}} onClick={() => chooseCategory(mc, index)}><p style={{textAlign: "center", paddingTop: "15px", paddingBottom: "15px", backgroundColor: mc === chosenCategory ? "#fceffc" : ""}}>{mc.menuCategoryValue}</p></div>
                 })}
             </div>
             <div style={{display: "flex", width: "100%", justifyContent: "center", height: `${heightNeeded}px`}}>

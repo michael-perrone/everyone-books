@@ -1,14 +1,15 @@
 #navBarContainer {
   display: flex;
   width: 100%;
-  height: 50px;
+  height: 57px;
   border-bottom: 2px solid black;
-  background-color: #f9e9f9;
+  background-color: white;
   justify-content: space-between;
 }
 
 #secondContainerActually {
   display: flex;
+  color: black;
 }
 
 .notiNum {
@@ -42,8 +43,9 @@
   font-size: 20px;
   position: relative;
   top: 22px;
-  background-color: #f9e9f9;
+  background-color: transparent;
   cursor: pointer;
+  color: #fceffc;
 }
 
 .links {

@@ -16,7 +16,6 @@ function RestaurantBuilder(props) {
     const box = React.useRef(null);
     const wholeScreen = React.useRef(null);
     const table = React.useRef(null);
-
     const [height, setHeight] = React.useState(600);
     const [width, setWidth] = React.useState(600);
     const [top, setTop] = React.useState();
@@ -298,8 +297,7 @@ function RestaurantBuilder(props) {
                     </div>
                     <div style={{position: "absolute", top: "-50px"}}>
                         <button onClick={rotateTable} style={{backgroundColor: "transparent", border: "none", zIndex: 100000000}}><img src={rotate}></img></button>
-                        <select onChange={toSetNumOfPeople} style={{position: "relative", top: '-12px', left: "30px", borderRadius: 0, border: "none", boxShadow: "0px 0px 2px black", backgroundColor: "white", height: "30px", width: "180px", fontSize: "18px"}}>
-                            <option>Num of persons</option>
+                        <select onChange={toSetNumOfPeople} style={{position: "relative", top: '-12px', left: "30px", borderRadius: 0, border: "none", paddingLeft: "4px", boxShadow: "0px 0px 2px black", backgroundColor: "white", height: "30px", width: "180px", fontSize: "18px"}}>
                             <option>2</option>
                             <option>4</option>
                             <option>6</option>

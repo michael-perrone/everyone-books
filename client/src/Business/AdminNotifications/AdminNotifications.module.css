@@ -6,7 +6,6 @@
     margin-top: 20px;
     position: relative;
     overflow: auto;
-    background-color: whitesmoke;
 }
 
 #mainContainer {
@@ -18,7 +17,11 @@
 
 
 #bigContainer {
-    height: 900px;
+    background: linear-gradient(to bottom, #fceffc, white);
+}
+
+#alsoYo {
+    width: 425px;
 }
 
 
@@ -26,8 +29,17 @@
     #bigContainer {
         height: 180vh;
     }
+    #yooooo {
+        margin-top: 40px;
+    }
     #mainContainer {
         flex-direction: column;
         align-items: center;
+    }
+}
+
+@media(max-width: 450px) {
+    #alsoYo {
+        width: 365px;
     }
 }

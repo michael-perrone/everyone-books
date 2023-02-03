@@ -1,6 +1,7 @@
 #employeeHome {
     display: flex;
     justify-content: space-around;
+    background: linear-gradient(to bottom, #fceffc, white)
 }
 
 
@@ -21,6 +22,8 @@
     display: flex;
     justify-content: center;
   }
+
+  
 
   #askButton {
       height: 38px;

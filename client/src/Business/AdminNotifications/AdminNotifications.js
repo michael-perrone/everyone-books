@@ -7,6 +7,7 @@ import YesNoNotification from '../../Notifications/YesNoNotification/YesNoNotifi
 import MessageView from './../../Notifications/MessageView/MessageView';
 import Axios from 'axios';
 import Spinner from '../../Spinner/Spinner';
+import SubmitButton from '../../Shared/SubmitButton/SubmitButton';
 
 function AdminNotifications(props) {
 
@@ -57,33 +58,33 @@ function AdminNotifications(props) {
         }
     }
 
-    React.useEffect(() => {
-        let num = setInterval(() => {
-          setCounter(counter + 1)
-        }, 20000);
-        return () => clearInterval(num);
-      })
+    // React.useEffect(() => {
+    //     let num = setInterval(() => {
+    //       setCounter(counter + 1)
+    //     }, 20000);
+    //     return () => clearInterval(num);
+    //   })
     
-      React.useEffect(function() {
-            if (!notifications) {
-                return
-            }
-            let numbo = 0;
-            for (let i = 0; i < notifications.length; i++) {
-                if (notifications[i].type.split("")[notifications[i].type.length - 1] !== "R") {
-                    numbo++;
-                }
-            }
-            Axios.post('/api/notifications/checkAdminNotis', {notiNum: numbo}, {headers: {'x-auth-token': props.adminToken}}).then(
-                response => {
-                    if (response.status === 201) {
-                        const newNotis = [...response.data.newNotis, ...notifications];
-                        setNotifications(newNotis);
+    //   React.useEffect(function() {
+    //         if (!notifications) {
+    //             return
+    //         }
+    //         let numbo = 0;
+    //         for (let i = 0; i < notifications.length; i++) {
+    //             if (notifications[i].type.split("")[notifications[i].type.length - 1] !== "R") {
+    //                 numbo++;
+    //             }
+    //         }
+    //         Axios.post('/api/notifications/checkAdminNotis', {notiNum: numbo}, {headers: {'x-auth-token': props.adminToken}}).then(
+    //             response => {
+    //                 if (response.status === 201) {
+    //                     const newNotis = [...response.data.newNotis, ...notifications];
+    //                     setNotifications(newNotis);
                      
-                    }
-                }
-              )
-      }, [counter])
+    //                 }
+    //             }
+    //           )
+    //   }, [counter])
 
     // function notiClicked(notification) { // check this... this is lazy to request so much back and bad practice
     //     if (notification.type === "ERY" || notification.type === "BAW" || notification.type === "ELB" || notification.type === "BBY" || notification.type === "YURA" || notification.type === "UATG" || notification.type === "ERN") {
@@ -210,12 +211,12 @@ function AdminNotifications(props) {
 
     return (
         loading ? <Spinner/> :
-        <div id={styles.bigContainer} style={{display: "flex", alignItems: "center", flexDirection: "column", backgroundColor: "rgb(225, 225, 225)"}}>
-             <p style={{marginTop: "20px", fontSize: "20px", fontWeight: "bold"}}>Notifications Center</p>
+        <div id={styles.bigContainer} style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
+             <p style={{marginTop: "30px", fontSize: "24px", fontFamily: "Josefin Sans", fontWeight: "bold", marginBottom: "20px"}}>Notifications Center</p>
             <div id={styles.mainContainer}> 
-             <div id={styles.notificationsContainer}>
-                {notifications && notifications.length === 0 && <p style={{textAlign: "center", fontSize: "18px", fontWeight: "bold", marginTop: "10px"}}>You do not have any notifications!</p>}
-                {notifications && notifications.length > 0 && (
+            {notifications && notifications.length === 0 && <p id={styles.alsoYo} style={{fontSize: "16px", marginTop: "10px",  lineHeight: "24px"}}>You do not have any notifications yet. There are many reasons why your business may get a notification so be sure to keep an eye on your notifications tab! Some of the reasons you may get a notification include users requesting a booking or asking to join a group. Make sure you add some services on the business edit page otherwise your business won't be able to schedule services. </p>}
+            {notifications && notifications.length > 0 && (  <div id={styles.notificationsContainer}>
+                
                     <div>
                         {notifications.map((notification,index) => {
                             return (
@@ -223,7 +224,13 @@ function AdminNotifications(props) {
                             )
                         })}
                     </div>
-                )}
+                
+            </div>)}
+            <div id={styles.yooooo} style={{display: 'flex', flexDirection: "column", justifyContent: "space-between", height: "160px"}}>
+                <SubmitButton>Go To Edit Business</SubmitButton>
+                <SubmitButton>Go To Advertisements</SubmitButton>
+                <SubmitButton>Go To Group Schedule</SubmitButton>
+                
             </div>
             {notifications && notifications.length > 0 && <MessageView notiClicked={notiClicked} alterType={alterType} reduceNotiNum={reduceNotiNum} removeDeadNoti={removeDeadNoti} bcn={bcn} eq={eq} bct={bct} changeNotis={changeNotis} notification={chosen} type={typeo}/>}
             </div>

@@ -1,30 +1,28 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import styles from "./Nav.module.css";
 import axios from "axios";
 import Title from "./Title/Title";
 import SecondContainer from "./SecondContainer/SecondContainer";
+import {connect} from 'react-redux';
 
-class Nav extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showDropDown: false,
-      notifications: "",
-      newNotifications: [],
-      profile: {}
-    };
-  }
-
-  render() {
+function Nav(props) {
+  
+  useEffect(function() {
+  }, [props.adminToken])
     return (
       <React.Fragment>
-        <div id={styles.navBarContainer}>
+        <div id={styles.navBarContainer} style={{backgroundColor: props.adminToken ? "#fceffc" : "white"}}>
           <Title />
           <SecondContainer />
         </div>
       </React.Fragment>
     );
+}
+
+const mapStateToProps = state => {
+  return {
+    adminToken: state.authReducer.adminToken
   }
 }
 
-export default Nav;
+export default connect(mapStateToProps)(Nav);

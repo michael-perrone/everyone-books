@@ -1,9 +1,9 @@
 #logo {
-    height: 250px;
+    height: 200px;
     width: 250px;
     position: relative;
     top: -4px;
-    left: -5px;
+    left: 10px;
 }
 
 #logo_container {
@@ -13,6 +13,7 @@
     height: 325px;
     width: 325px;
     border-radius: 50%;
+    position: relative;
     background-color: black;
     margin-top: 50px;
 }
@@ -41,7 +42,7 @@
     transform: rotate(45deg);
 }
 
-.p2 {
+.p2#logo {
     animation: load2 2s;
     transform: rotate(130deg);
 }

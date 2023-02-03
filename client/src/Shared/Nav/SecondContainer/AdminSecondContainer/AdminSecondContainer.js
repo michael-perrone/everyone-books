@@ -73,7 +73,7 @@ const AdminSecondContainer = props => {
 
   React.useEffect(() => {
     let num = setInterval(() => {
-      setCounter(counter + 1)
+      setCounter(counter + 1);
     }, 20000);
     return () => clearInterval(num);
   })

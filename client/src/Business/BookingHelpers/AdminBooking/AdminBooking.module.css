@@ -20,12 +20,13 @@
 .holder {
   width: 355px;
   padding-left: 20px;
+  border-right: 2px solid black;
 }
 
 #coolContainer {
   padding: 10px 10px 10px 10px;
   border-bottom: 1px solid gray;
-  background-color: #f9e9f9;
+  background-color: #fceffc;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -34,7 +35,7 @@
 
 #newContainer {
   border-bottom: 1px solid gray;
-  background-color: #f9e9f9;
+  background-color: #fceffc;
   position: relative;
   display: flex;
   flex-direction: column;

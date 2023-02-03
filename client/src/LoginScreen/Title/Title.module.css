@@ -6,10 +6,16 @@
   bottom: 40px;
   left: 30px;
   font-family: "Permanent Marker", cursive;
+  z-index: 2;
 }
 
 .ah {
   margin-left: 185px;
+  height: 198px;
+  width: 250px;
+  position: relative;
+  top: -20px;
+  z-index: 1;
 }
 
 
@@ -33,10 +39,9 @@
     font-size: 50px;
   }
   .ah {
-    height: 125px;
-    width: 125px;
-    margin-left: 140px;
-    margin-top: -10px;
+    margin-left: 120px;
+    height: 120px;
+    width: 160px;;
   }
 }
 
@@ -44,7 +49,9 @@
   #title {
     font-size: 42px;
   }
+
   .ah {
-    margin-left: 100px;
+    margin-left: 80px;
+    top: -3px;
   }
 }

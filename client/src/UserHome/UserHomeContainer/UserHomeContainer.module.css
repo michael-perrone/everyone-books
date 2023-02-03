@@ -1,5 +1,5 @@
 #userHomeContainer {
-  background: linear-gradient(to bottom, rgb(236, 236, 236) 40%, white);
+  background: linear-gradient(to bottom, #fceffc, white);
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;

@@ -4,10 +4,10 @@
     width: 230px;
     border: 2px solid gray;
     border-top: none;
-    background-color: #f9e9f9;
-    z-index:122020;
+    background-color: white;
+    z-index: 122020;
     top: 35px;
-    right: -32px;
+    right: -20px;
     transform: scaleY(0);
     transform-origin: top;
     flex-direction: column;

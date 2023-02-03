@@ -7,6 +7,8 @@ import YesNoNotification from '../../Notifications/YesNoNotification/YesNoNotifi
 import MessageView from './../../Notifications/MessageView/MessageView';
 import Axios from 'axios';
 import Spinner from '../../Spinner/Spinner';
+import SubmitButton from '../../Shared/SubmitButton/SubmitButton';
+import { withRouter } from 'react-router';
 
 function UserNotifications(props) {
 
@@ -137,10 +139,14 @@ function UserNotifications(props) {
 
     return (
         <div id={styles.main} style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
-            <p style={{marginTop: "20px", fontSize: "20px", fontWeight: "bold"}}>Notifications Center</p>
+            <p  style={{marginTop: "20px", fontSize: "24px", fontFamily:"Josefin Sans", fontWeight: "bold", marginBottom: "30px"}}>Notifications Center</p>
             {!loading ? <div id={styles.holder} style={{display: "flex", justifyContent: 'space-around', width: "100%", marginTop: "20px"}}> 
-             <div id={styles.notificationsContainer}>
-                {notifications && notifications.length === 0 && <p style={{textAlign: "center", fontSize: "18px", fontWeight: "bold", marginTop: "10px"}}>You do not have any notifications!</p>}
+            {notifications && notifications.length === 0 &&
+            <div id={styles.texto}> <p  style={{ fontSize: "18px",  marginTop: "10px"}}>
+                No notifications are here yet! After a business or employee adds you for a booking/group, your notification will show up here. If you request a booking at a business, you will get their response here in this section of the app .</p>
+            <p style={{marginTop: "20px", fontSize: "18px"}}>If you would like to request an appointment or join a group, please use the business or service finder to search for the business you would like to book at. Use the service finder to try to find a business nearby based on the name of the services they offer. Use the business finder to find a business based on the name, location or type of business.</p>
+            </div>}
+             {notifications.length !== 0 && <div id={styles.notificationsContainer}>
                 {notifications && notifications.length > 0 && (
                     <div>
                         {notifications.map((notification, index) => {
@@ -150,7 +156,13 @@ function UserNotifications(props) {
                         })}
                     </div>
                 )}
-            </div>
+            </div>}
+            {notifications.length === 0 && <div id={styles.c} style={{display: 'flex', flexDirection: 'column', justifyContent: "space-around", height: "300px"}}>
+                 <SubmitButton>Go to the Service Finder</SubmitButton>
+                 <SubmitButton >Go to the Business Finder</SubmitButton>
+                 <SubmitButton>Go Back to Your Bookings</SubmitButton>
+            </div>}
+
             {notifications && notifications.length > 0 && <MessageView reduceNotiNum={reduceNotiNum} changeNotis={changeNotis} notification={chosen} type={type}/>}
             </div> : <Spinner/> } 
         </div>
@@ -163,4 +175,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(UserNotifications);
+export default withRouter(connect(mapStateToProps)(UserNotifications));
