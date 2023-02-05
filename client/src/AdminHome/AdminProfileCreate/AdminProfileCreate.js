@@ -34,7 +34,7 @@ const AdminProfileCreate = props => {
       {selected === "Payroll" && <AddEditPayroll/>}
       <div className={styles.bottomAnchor}>
         <TabBarButton onClick={getSelected("Employees")} selected={selected === "Employees"} bringDown={true} label={"Employees"} width={'25%'} image={personImage}/>
-        {props.admin.admin.tob !== "Restaurant" && <TabBarButton onClick={getSelected("Services")} selected={selected === "Services"} padTop={"3px"} label={"Services"} width={'25%'} image={shake}/>}
+        {props.admin.admin.tob !== "Restaurant" && <TabBarButton onClick={getSelected("Services")} selected={selected === "Services"} smaller={true} padTop={"3px"} label={"Services"} width={'25%'} image={shake}/>}
         {props.admin.admin.tob !== "Restaurant" && <TabBarButton onClick={getSelected("Products")} selected={selected === "Products"} bringDown={true} label={"Products"} image={cart} width={'25%'}/>}
         {props.admin.admin.tob === "Restaurant" && <TabBarButton onClick={getSelected("Menu")} selected={selected === "Menu"} padTop={"4px"} label={"Menu"} width={"25%"} image={menu}/>}
         {props.admin.admin.tob === "Restaurant" && <TabBarButton onClick={getSelected("Layout")} selected={selected === "Layout"} label={"Layout"} width={"25%"} padTop={"4px"} image={layout}/>}

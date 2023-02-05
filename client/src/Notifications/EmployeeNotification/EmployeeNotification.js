@@ -82,7 +82,7 @@ function EmployeeNotification(props) {
     return (
         <div onClick={notiClicked} id={styles.notificationContainer} className={props.chosen && props.chosen._id === props.notification._id ? styles.selected : ""}>
             <p style={{fontSize: "14px", position: "absolute", top: "5px", right: "20px"}}>{props.notification.date}</p>
-            <img style={{height: "30px", width: "30px", marginLeft: "10px", marginTop: "5px"}} src={isRead ? open : closed}/>
+            <img id={styles.imo} style={{height: "30px", width: "30px", marginLeft: "10px", marginTop: "5px"}} src={isRead ? open : closed}/>
             <p style={{marginTop: "5px",padding: "15px"}}>{notiMessage}</p>
         </div>
     )

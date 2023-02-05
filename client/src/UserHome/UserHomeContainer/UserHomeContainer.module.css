@@ -1,5 +1,5 @@
 #userHomeContainer {
-  background: linear-gradient(to bottom, #fceffc, white);
+  background-color: #232323;
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
@@ -24,12 +24,13 @@
 }
 
 .noClubsBookingsContainer {
-  box-shadow: 0px 1px 4px black;
+  box-shadow: 0px 1px 4px #f9e9f9;
+  border-radius: 10px;
   z-index: 0;
   width: 350px;
   height: 130px;
   line-height: 20px;
-  background-color: white;
+  background-color: rgb(24,24,24);
   font-family: "Josefin Sans", sans-serif;
   padding: 10px;
   position: relative;

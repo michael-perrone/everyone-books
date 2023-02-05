@@ -122,13 +122,13 @@ function AddEditServices(props) {
         <div id={styles.mainContainerServices}>
             <p style={{marginTop: "16px"}}>Add the services that your business offers below followed by the price and the time duration of that service. Then select if the service requires an employee for the service to be conducted.</p>
             <div id={styles.subContainer}>
-            <div style={{width: "330px", backgroundColor: "lavenderblush", padding: "20px", boxShadow: "0px 0px 3px black", marginTop: "30px", height: "300px"}}>
+            <div style={{width: "330px", backgroundColor: "rgb(24,24,24)", padding: "20px", boxShadow: "0px 0px 3px #f9e9f9", marginTop: "30px", height: "300px",borderRadius: "10px"}}>
                 <p style={{fontSize: "18px", fontWeight: "bold", textAlign: "center", marginBottom: "20px"}}>Add Service:</p>
                 <input onChange={getServiceName} value={serviceName} placeholder={"Enter Service Name"} className={styles.inputs}/>
                 <div style={{display: "flex", marginTop: "24px", position: 'relative', right: "13px", width: "365px"}}>
                     <p style={{fontSize: "22px", marginTop: "4px"}}>$</p>
                     <input onChange={getCost} value={cost} className={styles.inputs} style={{width: "110px", marginLeft: "2px"}} placeholder={"Service Cost"}/>
-                    <select onChange={getTimeDuration} value={timeDuration} style={{width: "190px", paddingLeft: "8px", marginLeft: "20px", backgroundColor: "white", border: "1px solid rgb(145, 145, 145)", borderRadius: "2px"}}>
+                    <select onChange={getTimeDuration} value={timeDuration} style={{width: "190px", paddingLeft: "8px", marginLeft: "20px", backgroundColor: "rgb(24,24,24)", border: "1px solid rgb(145, 145, 145)", borderRadius: "2px"}}>
                         <option>Service Time Duration</option>
                         <option>5 Minutes</option>
                         <option>10 Minutes</option>
@@ -146,8 +146,8 @@ function AddEditServices(props) {
                 </div>
                 <div style={{display: "flex", marginTop: "24px", justifyContent: "space-between"}}>
                     <p style={{fontSize: "18px", marginTop: "4px"}}>Requires Employee:</p>
-                    <ColorButton backgroundColor={requiresEmployee ? "#919191" : ""} clicked={requiresEmployeeSet(true)}>Yes</ColorButton>
-                    <ColorButton backgroundColor={requiresEmployee === false ? "#919191" : ""} clicked={requiresEmployeeSet(false)}>No</ColorButton>
+                    <ColorButton backgroundColor={requiresEmployee ? "gray" : "rgb(24,24,24)"} clicked={requiresEmployeeSet(true)}>Yes</ColorButton>
+                    <ColorButton backgroundColor={requiresEmployee === false ? "gray" : "rgb(24,24,24)"} clicked={requiresEmployeeSet(false)}>No</ColorButton>
                 </div>   
                 <div style={{display: 'flex', justifyContent: "center", marginTop: "30px"}}>
                     <SubmitButton onClick={addService}>Add Service</SubmitButton>

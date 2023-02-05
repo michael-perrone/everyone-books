@@ -23,14 +23,14 @@
     border-top: none;
     border-left: none;
     border-right: none;
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid #f9e9f9;
 }
 
 #optionDrop {
     padding: 10px;
     border: none;
     background-color: whitesmoke;
-    box-shadow: 0px 0px 2px black;
+    box-shadow: 0px 0px 2px #f9e9f9;
     font-size: 15px;
 }
 

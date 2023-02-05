@@ -290,20 +290,20 @@ function Restaurant(props) {
                 </div>
                 <div style={{display: "flex"}}>
             <p style={{fontSize: "20px", marginTop: "4px", marginLeft: "-10px"}}>Table Schedule Time: </p>
-             <select onChange={toSetSelectedTime} value={selectedTime} style={{fontSize: "16px", height: "30px", border: "none", marginLeft: "10px", boxShadow: "0px 0px 2px black", width: "100px"}}>
+             <select onChange={toSetSelectedTime} value={selectedTime} style={{fontSize: "16px", height: "30px", border: "none", marginLeft: "10px", boxShadow: "0px 0px 2px #f9e9f9", width: "100px"}}>
                 {times.map(time => {
                     return <option>{time}</option>
                 })}
             </select>
             </div>
-            <div style={{width: "365px", boxShadow: "0px 0px 3px black", height: "120px", backgroundColor: "#fceffc", position: "relative"}}>
+            <div style={{width: "365px", boxShadow: "0px 0px 3px #f9e9f9", height: "120px", backgroundColor: "rgb(24,24,24)", position: "relative"}}>
                {hoverTable.timeStart && <div style={{marginLeft: "8px", paddingTop: "4px", height: "116px", display: "flex", flexDirection: "column", justifyContent: "space-around"}}>
                    <p>Time Start: {hoverTable.timeStart}</p>
                    <p>Est Duration: {hoverTable.estDuration}</p>
                    <p>Customer Name: {hoverTable.customerName}</p>
                    <p>Employee: {hoverTable.employeeName}</p>
                    <p>Num of People: {hoverTable.numOfPeople}</p>
-                   <button style={{position: "absolute", border: "none", boxShadow: "0px 0px 2px black", height: "30px", width: "65px", right: 10, top: 10, backgroundColor: "rgb(255, 125, 125)"}} onClick={deleteTableBooking}>Cancel</button>
+                   <button style={{position: "absolute", border: "none", boxShadow: "0px 0px 2px #f9e9f9", height: "30px", width: "65px", right: 10, top: 10, backgroundColor: "rgb(255, 125, 125)"}} onClick={deleteTableBooking}>Cancel</button>
                </div>} 
                {!hoverTable.timeStart && <p style={{textAlign: "center", marginTop: "45px", fontSize: "18px"}}>Select a booked table for booking information</p>}
             </div>
@@ -312,7 +312,7 @@ function Restaurant(props) {
         <div id={styles.trickyBox} style={{overflow: "auto"}}>
         <div style={{height: boxHeight, minWidth: boxWidth, overflow: "auto"}} id={styles.wholeBox}>
            {tables.map(table => {
-               return <div onClick={() => hoverOver(table.id, booked(table.id))} onDoubleClick={() => clickTable(table)} style={{border: "2px solid black", cursor: "pointer", backgroundColor: booked(table.id), height: table.height, width: table.width, position: "absolute", left: table.left, top: table.top, display: "flex", justifyContent: "center", alignItems: "center"}}><p style={{fontSize: "20px", fontWeight: "bold"}}>{getNum(table.width, table.height)}</p>
+               return <div onClick={() => hoverOver(table.id, booked(table.id))} onDoubleClick={() => clickTable(table)} style={{border: "2px solid #f9e9f9", cursor: "pointer", backgroundColor: booked(table.id), height: table.height, width: table.width, position: "absolute", left: table.left, top: table.top, display: "flex", justifyContent: "center", alignItems: "center"}}><p style={{fontSize: "20px", fontWeight: "bold"}}>{getNum(table.width, table.height)}</p>
                </div>     
            })}
            {showBackDrop && <div style={{display: "flex", position: "absolute", top: 0, lef: 0, width: "100%", justifyContent: "center"}}><div id={styles.backDrop}><ViewTable exitTableView={exitTableView} fakeId={selectedId} dateString={dateString} times={times} num={getNum(selectedWidth, selectedHeight)} check={checkIfTakenOrReserved2(selectedId)} selectedTime={selectedTime} hide={() => setShowBackDrop(false)}/></div> </div>}

@@ -18,7 +18,7 @@ const SecondContainer = props => {
         id={props.instructor ? styles.instructorBars : styles.bars}
         onClick={props.showDropDown}
         style={{
-          color: props.showDropDownState ? "lightgray" : "black"
+          color: props.showDropDownState ? "lightgray" : "#f9e9f9"
         }}
         className="fas fa-bars"
       />

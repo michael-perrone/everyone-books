@@ -12,7 +12,7 @@ const OtherAlert = props => {
           width: props.alertMessage.length > 40 ? "300px" : ""
       }}
     >
-      <p id={styles.alertMessage}>{props.alertMessage}</p>
+      <p style={{color: "black"}} id={styles.alertMessage}>{props.alertMessage}</p>
     </div>
   );
 };

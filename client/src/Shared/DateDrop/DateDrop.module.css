@@ -1,7 +1,7 @@
 .cool {
     border: none;
-    background-color: transparent;
+    background-color: rgb(24,24,24);
     font-size: 15px;
-    box-shadow: 0px 0px 3px black;
+    box-shadow: 0px 0px 3px #f9e9f9;
     padding: 8px;
 }

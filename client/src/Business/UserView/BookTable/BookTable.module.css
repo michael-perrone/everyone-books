@@ -1,8 +1,8 @@
 #container {
     height: 500px;
     width: 350px;
-    background-color: #fceffc;
-    box-shadow: 0px 0px 2px black;
+    background-color: rgb(24,24,24);
+    box-shadow: 0px 0px 3px rgb(24,24,24);
     display: flex;
     align-items: center;
     flex-direction: column;

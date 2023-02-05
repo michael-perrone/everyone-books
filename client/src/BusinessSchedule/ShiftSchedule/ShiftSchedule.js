@@ -39,14 +39,14 @@ const ShiftSchedule = props => {
                             </div>
                         </div>
                         <div style={{marginTop: "10px", width: "260px", display: "flex", justifyContent: "space-between", marginLeft: "30px"}}>
-                            <button onClick={props.deleteShift(shift._id)} style={{backgroundColor: "salmon", border: "none", boxShadow: "0px 0px 2px black", height: "30px", width: "90px", fontWeight: "bold"}}>Delete</button>
-                            {props.shiftBeingEdited !== shift._id && <button onClick={toEditShift(shift)} style={{backgroundColor: "white", border: "none", boxShadow: "0px 0px 2px black", height: "30px", width: "90px"}}>Edit</button>}
-                            {props.shiftBeingEdited === shift._id && <button onClick={toBeDoneEditing} style={{backgroundColor: "lightgray", border: "none", boxShadow: "0px 0px 2px black", height: "30px", width: "90px"}}>Done Editing</button>}
+                            <button onClick={props.deleteShift(shift._id)} style={{backgroundColor: "salmon", border: "none", boxShadow: "0px 0px 2px black", height: "30px", width: "90px", color: "black", fontWeight: "bold"}}>Delete</button>
+                            {props.shiftBeingEdited !== shift._id && <button onClick={toEditShift(shift)} style={{backgroundColor: "rgb(24,24,24)", border: "none", boxShadow: "0px 0px 2px #f9e9f9", height: "30px", width: "90px"}}>Edit</button>}
+                            {props.shiftBeingEdited === shift._id && <button onClick={toBeDoneEditing} style={{backgroundColor: "rgb(67,67,67)", border: "1.2px solid #f9e9f9", boxShadow: "0px 0px 2px black", height: "30px", width: "90px"}}>Done Editing</button>}
                         </div>
                     </div>
                 )
             })}
-            {props.shifts && props.shifts.length === 0 && <p style={{padding: "20px", fontSize: '16px', textAlign: "center"}}>No shifts scheduled for this day</p>}
+            {props.shifts && props.shifts.length === 0 && <p style={{fontSize: '16px', textAlign: "center"}}>No shifts scheduled for this day</p>}
             </div>
         </div> 
     )

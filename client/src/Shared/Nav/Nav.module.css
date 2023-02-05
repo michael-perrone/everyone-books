@@ -2,9 +2,10 @@
   display: flex;
   width: 100%;
   height: 57px;
-  border-bottom: 2px solid black;
-  background-color: white;
+  border-bottom: 2px solid #f9e9f9;
+  background-color: rgb(24, 24, 24);
   justify-content: space-between;
+  color: #f9e9f9;
 }
 
 #secondContainerActually {
@@ -31,7 +32,7 @@
   font-family: "Permanent Marker", cursive;
   position: relative;
   left: 60px;
-  color: black;
+  color: #f9e9f9;
 }
 
 #title:hover {
@@ -42,7 +43,7 @@
 #bars {
   font-size: 20px;
   position: relative;
-  top: 22px;
+  top: 24px;
   background-color: transparent;
   cursor: pointer;
   color: #fceffc;
@@ -50,8 +51,10 @@
 
 .links {
   text-decoration: none;
-  color: black;
+  color: #f9e9f9;
   margin-right: 20px;
+  position: relative;
+  top: 2px;
   cursor: pointer;
 }
 
@@ -95,6 +98,6 @@
     top: 12px;
   }
   .links {
-    top: 6px;
+    top: 14px;
   }
 }

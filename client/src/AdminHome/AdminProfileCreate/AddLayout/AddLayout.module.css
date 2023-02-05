@@ -53,7 +53,7 @@
 }
 
 .divo {
-    background-color: black;
+    background-color: #f9e9f9;
     cursor: grab;
     border: none;
 }
@@ -65,7 +65,7 @@
 #setTableButton {
     background-color: rgb(249, 233, 249);
     border: none;
-    box-shadow: 0px 0px 2px black;
+    box-shadow: 0px 0px 2px #f9e9f9;
     height: 30px;
     width: 70px;
 }

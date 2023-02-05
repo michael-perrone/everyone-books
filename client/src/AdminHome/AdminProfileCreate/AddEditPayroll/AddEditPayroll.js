@@ -168,11 +168,11 @@ function AddEditPayroll(props) {
             <div style={{display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column"}}>
                 <div className={styles.miniContainer} style={{marginTop: "32px", marginLeft: "2px"}}>
                     <p className={styles.label}>Select Employee:</p>
-                    <select onChange={e => {
+                    <select style={{backgroundColor: "rgb(24,24,24)"}} onChange={e => {
                         console.log(e.target);
                         setSelectedEmployee(e.target.value);
                     }} id={styles.optionDrop}>
-                         {employees.map(element => {
+                         {employees && employees.map(element => {
                      return (
                     <option value={element.id} key={element.id}>{element.displayName}</option>
                 )
@@ -185,8 +185,8 @@ function AddEditPayroll(props) {
                 <div className={styles.miniContainer} style={{marginTop: "44px", position: "relative"}}>
                     <p className={styles.label}>Get paid by salary?</p>
                     <div style={{display: "flex", width: "180px", justifyContent: "space-between"}}>
-                        <ColorButton clicked={toSetSalary(true)} backgroundColor={salary === true ? "lavenderblush" : ""}>Yes</ColorButton>
-                        <ColorButton clicked={toSetSalary(false)} backgroundColor={salary === false ? "lavenderblush" : ""}>No</ColorButton>
+                        <ColorButton clicked={toSetSalary(true)} backgroundColor={salary === true ? "rgb(100,100,100)" : ""}>Yes</ColorButton>
+                        <ColorButton clicked={toSetSalary(false)} backgroundColor={salary === false ? "rgb(100,100,100)" : ""}>No</ColorButton>
                     </div>
                     {salary && <div style={{width: "370px", display: "flex", top: "40px", right: "10px", position: "absolute"}}>
                          <p style={{fontSize: "22px", marginRight: "3px"}}>$</p>
@@ -197,8 +197,8 @@ function AddEditPayroll(props) {
                 <div className={styles.miniContainer} style={{marginTop: "54px", position: "relative"}}>
                     <p className={styles.label}>Get paid hourly?</p>
                     <div style={{display: "flex", width: "180px", justifyContent: "space-between"}}>
-                        <ColorButton clicked={toSetHourly(true)} backgroundColor={hourly === true ? "lavenderblush" : ""}>Yes</ColorButton>
-                        <ColorButton clicked={toSetHourly(false)} backgroundColor={hourly === false ? "lavenderblush" : ""}>No</ColorButton>
+                        <ColorButton clicked={toSetHourly(true)} backgroundColor={hourly === true ? "rgb(100,100,100)": "transparent"}>Yes</ColorButton>
+                        <ColorButton clicked={toSetHourly(false)} backgroundColor={hourly === false ? "rgb(100,100,100)": "transparent"}>No</ColorButton>
                     </div>
                     {hourly && <div style={{width: "370px", display: "flex", top: "40px", right: "10px", position: "absolute"}}>
                          <p style={{fontSize: "22px", marginRight: "3px"}}>$</p>
@@ -209,12 +209,12 @@ function AddEditPayroll(props) {
                 <div className={styles.miniContainer} style={{marginTop: "54px"}}>
                     <p className={styles.label}>Earn commission?</p>
                     <div style={{display: "flex", width: "180px", justifyContent: "space-between"}}>
-                        <ColorButton clicked={toSetCommission(true)} backgroundColor={commission === true ? "lavenderblush" : ""}>Yes</ColorButton>
-                        <ColorButton clicked={toSetCommission(false)} backgroundColor={commission === false ? "lavenderblush" : ""}>No</ColorButton>
+                        <ColorButton clicked={toSetCommission(true)} backgroundColor={commission === true ? "rgb(100,100,100)": "transparent"}>Yes</ColorButton>
+                        <ColorButton clicked={toSetCommission(false)} backgroundColor={commission === false ? "rgb(100,100,100)": "transparent"}>No</ColorButton>
                     </div>
                 </div>
                {commission && <div style={{width: "370px", display: "flex", fontWeight: "bold", fontSize: "16px", justifyContent: "space-between", marginTop: "30px"}}>
-                   <select value={serviceCommission} onChange={(e) => setServiceCommission(e.target.value)} style={{backgroundColor: "white", border: "1px solid black", height: "26px"}}>
+                   <select value={serviceCommission} onChange={(e) => setServiceCommission(e.target.value)} style={{backgroundColor: "white", border: "1px solid #f9e9f9", height: "26px"}}>
                        <option>Service Commission %</option>
                        <option>None</option>
                        <option>1</option>
@@ -318,7 +318,7 @@ function AddEditPayroll(props) {
                        <option>99</option>
                        <option>100</option>
                    </select>
-                   <select value={productCommission} onChange={(e) => setProductCommission(e.target.value)} style={{backgroundColor: "white", border: "1px solid black", height: "26px"}}>
+                   <select value={productCommission} onChange={(e) => setProductCommission(e.target.value)} style={{backgroundColor: "rgb(24,24,24)", border: "1px solid #f9e9f9", height: "26px"}}>
                        <option>Product Commission %</option>
                        <option>None</option>
                        <option>1</option>

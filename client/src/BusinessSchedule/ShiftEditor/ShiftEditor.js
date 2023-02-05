@@ -207,11 +207,11 @@ function ShiftEditor(props) {
         <div id={styles.scheduleContainer}>
             <p style={{ position: 'absolute', left: '40px', bottom: "10px", color: 'darkred' }}>{breakError}</p>
             <p style={{ width: '100%', textAlign: 'center', fontSize: '20px', position: "relative", top: "8px" }}>Edit Shift</p>
-            <div style={{marginTop: "20px"}}>
+            <div style={{marginTop: "30px"}}>
                 <span style={{position: "relative", top: "-3px"}}>Shift Date:</span>
                 <input style={{ position: 'relative', top: '-2px', marginLeft: "8px" }} className={styles.inputs + " " +  otherstyles.seePink} onChange={setDateHandler} value={date} placeholder="select date" type="date" />
             </div>
-            <div style={{ display: "flex", marginTop: "15px"}}>
+            <div style={{ display: "flex", marginTop: "25px"}}>
                 <p>Employee:</p>
                 <select style={{marginLeft: "8px"}} id='changer' onChange={(e) => {
                     setEmployeeName(e.target.options[e.target.options.selectedIndex].text)
@@ -223,14 +223,14 @@ function ShiftEditor(props) {
                     })}
                 </select>
             </div>
-            <div style={{ display: 'flex', marginTop: "15px" }}>
+            <div style={{ display: 'flex', marginTop: "25px" }}>
                 <p>{props.bookingColumnsType} number:</p>
                 <select className={otherstyles.seePink} style={{ position: 'relative', top: '-2px', left: '10px' }} value={optionsNumber} onChange={getOptionsNumber}>
                     {createOptions()}
                 </select>
 
             </div>
-            <div style={{marginTop: "15px"}}>
+            <div style={{marginTop: "25px"}}>
                 <span>Shift Time Start: </span>
                 <select className={styles.inputs + " " + otherstyles.seePink} value={shiftStart} onChange={shiftStartHandler}>
                     {times.map(element => {
@@ -238,7 +238,7 @@ function ShiftEditor(props) {
                     })}
                 </select>
             </div>
-            <div style={{marginTop: "15px"}}>
+            <div style={{marginTop: "25px"}}>
                 <span>Shift Time End:</span>
                 <select style={{marginLeft: "10px"}} className={styles.inputs + " " + otherstyles.seePink} value={endOfShift} onChange={shiftEndHandler}>
                     {endTimes.map(element => {
@@ -246,7 +246,7 @@ function ShiftEditor(props) {
                     })}
                 </select>
             </div>  
-            <div style={{ display: 'flex', marginTop: "15px" }}>
+            <div style={{ display: 'flex', marginTop: "25px" }}>
                 <span>Break?</span>
                 <input onClick={breakHandler} checked={isBreak} value="Yes" style={{ marginLeft: '27px', position: 'relative' }} name="YesNo" id="Yes" type="radio" />
                 <label style={{ marginLeft: '4px', position: 'relative' }} htmlFor="Yes">Yes</label>
@@ -254,7 +254,7 @@ function ShiftEditor(props) {
                 <label style={{ marginLeft: '5px', position: 'relative' }} htmlFor="No">No</label>
             </div>
             {isBreak &&
-                <div style={{position: "absolute", top: "250px"}}>
+                <div style={{position: "absolute", top: "300px"}}>
                     <span>Break-Start:</span>
                     <select style={{width: '76px', marginLeft: "4px" }} value={breakStart} onChange={breakStartHandler}>
                     {endTimes.map(element => {
@@ -272,7 +272,7 @@ function ShiftEditor(props) {
             <OtherAlert alertMessage={shiftError} showAlert={shiftError !== ""} alertType="error" />
             <OtherAlert alertMessage={'Shifts Added Successfully'} showAlert={success} alertType="success" />
                 <div style={{ position: 'relative', top: '50px' }}>
-                   {!clone && <button onClick={updateShift} style={{marginLeft: '80px', backgroundColor: 'white', width: "120px", border: 'none', boxShadow: '0px 0px 3px black', padding: '6px' }}>Update Shift</button>}
+                   {!clone && <button onClick={updateShift} style={{marginLeft: '80px', backgroundColor: 'rgb(24,24,24)', width: "120px", border: 'none', boxShadow: '0px 0px 4px #f9e9f9', padding: '6px' }}>Update Shift</button>}
                     
                 </div>
         </div>

@@ -1,19 +1,27 @@
 #scheduleContainer {
     width: 330px;
-    margin-top: 15px;
+    margin-top: 30px;
     padding-left: 9px;
-    height: 450px;
-    max-height: 450px;
+    height: 525px;
+    max-height: 525px;
     display: flex;
     position: relative;
     flex-direction: column;
-    background-color: lavenderblush;
-    box-shadow: 0px 0px 3px black;
+    box-shadow: 0px 0px 3px #f9e9f9;
+    background-color: #232323;
 }
 
 .inputs {
     margin-left: 5px;
     width: 150px;
+}
+
+#buu {
+    background-color: rgb(24,24,24);
+}
+
+#buu:hover {
+    background-color: rgb(64,64,64);
 }
 
 option {
@@ -22,7 +30,7 @@ option {
 
 .seePink {
     background-color: transparent;
-    box-shadow: 0px 0px 3px black;
+    box-shadow: 0px 0px 3px #f9e9f9;
     border: none;
     padding: 2px 2px 2px 8px;
 }

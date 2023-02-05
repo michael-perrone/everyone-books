@@ -1,5 +1,5 @@
 #wholeBox {
-    border: 2px solid black;
+    border: 2px solid #f9e9f9;
     margin-top: 20px;
     position: relative;
     background-color: white;
@@ -46,7 +46,7 @@
   @media (max-width: 500px) {
       #trickyBox {
           width: 365px;
-          border: 2px solid black;
+          border: 2px solid #f9e9f9;
           margin-top: 10px;
       }
 

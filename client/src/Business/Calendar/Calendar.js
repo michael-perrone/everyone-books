@@ -47,7 +47,7 @@ class Calendar extends React.Component {
     }
 
     return (
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex", backgroundColor: "rgb(24,24,24)", color: "#f9e9f9", justifyContent: "space-around" }}>
         <p className="dayInHeader">Sun</p>
         <p className="dayInHeader">Mon</p>
         <p

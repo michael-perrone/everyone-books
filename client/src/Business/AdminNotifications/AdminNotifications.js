@@ -214,7 +214,7 @@ function AdminNotifications(props) {
         <div id={styles.bigContainer} style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
              <p style={{marginTop: "30px", fontSize: "24px", fontFamily: "Josefin Sans", fontWeight: "bold", marginBottom: "20px"}}>Notifications Center</p>
             <div id={styles.mainContainer}> 
-            {notifications && notifications.length === 0 && <p id={styles.alsoYo} style={{fontSize: "16px", marginTop: "10px",  lineHeight: "24px"}}>You do not have any notifications yet. There are many reasons why your business may get a notification so be sure to keep an eye on your notifications tab! Some of the reasons you may get a notification include users requesting a booking or asking to join a group. Make sure you add some services on the business edit page otherwise your business won't be able to schedule services. </p>}
+            {notifications && notifications.length === 0 && <p id={styles.alsoYo} style={{fontSize: "16px", lineHeight: "24px"}}>You do not have any notifications yet. There are many reasons why your business may get a notification so be sure to keep an eye on your notifications tab! Some of the reasons you may get a notification include users requesting a booking or asking to join a group. Make sure you add some services on the business edit page otherwise your business won't be able to schedule services. </p>}
             {notifications && notifications.length > 0 && (  <div id={styles.notificationsContainer}>
                 
                     <div>
@@ -226,12 +226,14 @@ function AdminNotifications(props) {
                     </div>
                 
             </div>)}
+            { notifications && notifications.length === 0 && 
             <div id={styles.yooooo} style={{display: 'flex', flexDirection: "column", justifyContent: "space-between", height: "160px"}}>
                 <SubmitButton>Go To Edit Business</SubmitButton>
                 <SubmitButton>Go To Advertisements</SubmitButton>
                 <SubmitButton>Go To Group Schedule</SubmitButton>
                 
             </div>
+            }
             {notifications && notifications.length > 0 && <MessageView notiClicked={notiClicked} alterType={alterType} reduceNotiNum={reduceNotiNum} removeDeadNoti={removeDeadNoti} bcn={bcn} eq={eq} bct={bct} changeNotis={changeNotis} notification={chosen} type={typeo}/>}
             </div>
         </div>

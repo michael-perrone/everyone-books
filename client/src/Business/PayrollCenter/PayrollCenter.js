@@ -63,7 +63,7 @@ function PayrollCenter(props) {
 
     return (
         <div id={styles.main}>
-          {!didntWork && <div id={styles.top} style={{paddingBottom: "20px", borderBottom: "0.5px solid black"}}>
+          {!didntWork && <div id={styles.top} style={{paddingBottom: "20px", borderBottom: "0.5px solid #f9e9f9"}}>
             <div className={styles.subContainer}>
                 <p style={{marginTop: "10px", fontSize: "18px"}}>Start Date:</p>
                 <DateDrop setDateString={(dateString) => toSetStartDateString(dateString)}/>

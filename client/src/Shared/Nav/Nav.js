@@ -11,7 +11,7 @@ function Nav(props) {
   }, [props.adminToken])
     return (
       <React.Fragment>
-        <div id={styles.navBarContainer} style={{backgroundColor: props.adminToken ? "#fceffc" : "white"}}>
+        <div id={styles.navBarContainer}>
           <Title />
           <SecondContainer />
         </div>

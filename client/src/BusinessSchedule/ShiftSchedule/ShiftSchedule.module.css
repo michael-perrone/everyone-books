@@ -2,13 +2,11 @@
     flex-direction: column;
     display: flex;
     height: 110px;
-    padding-top: 20px;
-    border-bottom: 1px solid black;
+    padding-top: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f9e9f9;
 }
 
-.shiftContainer:last-child {
-    border-bottom: none;
-}
 
 .insideShiftContainer {
     display: flex;
@@ -31,8 +29,6 @@
     max-height: 600px;
     overflow: auto;
     margin-top: 20px;
-    box-shadow: 0px 0px 2px black;
-    background-color: lavenderblush;
     padding-left: 10px;
     padding-right: 10px;
 }

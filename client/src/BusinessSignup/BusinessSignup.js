@@ -68,16 +68,16 @@ const BusinessSignup = (props) => {
             <div id={styles.welcomeContainer}>
                 <div style={{position: 'relative'}}>
                     {(props.showAdminDropDown || props.businessScheduleComplete || props.businessInfoComplete || props.adminInfoComplete || props.kindBusinessCompleted) && <BackButton marginTop={!!props.showAdminDropDown}/>}
-                    {!props.kindBusinessCompleted && <p style={{fontSize: '18px', textAlign: 'center', borderBottom: '2px solid black', paddingBottom: '5px', color: 'black'}}>
+                    {!props.kindBusinessCompleted && <p style={{fontSize: '18px', textAlign: 'center', borderBottom: '2px solid #f9e9f9', paddingBottom: '5px', color: '#f9e9f9'}}>
                     We appreciate your interest in Everyone Books. Let's get you started right away! 
                     </p>}
-                    {props.kindBusinessCompleted && !props.adminInfoComplete && <p style={{fontSize: '18px', textAlign: 'center', borderBottom: '2px solid black', paddingBottom: '5px', color: 'black'}}>
+                    {props.kindBusinessCompleted && !props.adminInfoComplete && <p style={{fontSize: '18px', textAlign: 'center', borderBottom: '2px solid #f9e9f9', paddingBottom: '5px', color: '#f9e9f9'}}>
                     Now we need some information about you so we can create your administrator account.
                     </p>}
-                    {props.adminInfoComplete && !props.businessInfoComplete && <p style={{fontSize: '18px', textAlign: 'center', borderBottom: '2px solid black', paddingBottom: '5px', color: 'black'}}>Please provide about your business like the Street Address, City, Zip, and State.</p>}
-                    {props.businessInfoComplete && !props.businessScheduleComplete && <p style={{fontSize: '18px', textAlign: 'center', borderBottom: '2px solid black', paddingBottom: '5px', color: 'black'}}>Enter the open/close times for your business. Your Schedule will use these times. </p>}
-                    {props.businessScheduleComplete && !props.showAdminDropDown && <p style={{fontSize: '18px', textAlign: 'center', borderBottom: '2px solid black', paddingBottom: '5px', color: 'black'}}>We are about done, read the diretions below to finish up. Click help if any help is needed.</p>}
-                    {props.showAdminDropDown && <p style={{fontSize: '18px', textAlign: 'center', borderBottom: '2px solid black', paddingBottom: '5px', color: 'black'}}>We're just going to make sure we have all your information correctly, click the back button to go back and edit your information if needed.</p>}
+                    {props.adminInfoComplete && !props.businessInfoComplete && <p style={{fontSize: '18px', textAlign: 'center', borderBottom: '2px solid #f9e9f9', paddingBottom: '5px', color: '#f9e9f9'}}>Please provide about your business like the Street Address, City, Zip, and State.</p>}
+                    {props.businessInfoComplete && !props.businessScheduleComplete && <p style={{fontSize: '18px', textAlign: 'center', borderBottom: '2px solid #f9e9f9', paddingBottom: '5px', color: '#f9e9f9'}}>Enter the open/close times for your business. Your Schedule will use these times. </p>}
+                    {props.businessScheduleComplete && !props.showAdminDropDown && <p style={{fontSize: '18px', textAlign: 'center', borderBottom: '2px solid #f9e9f9', paddingBottom: '5px', color: '#f9e9f9'}}>We are about done, read the diretions below to finish up. Click help if any help is needed.</p>}
+                    {props.showAdminDropDown && <p style={{fontSize: '18px', textAlign: 'center', borderBottom: '2px solid #f9e9f9', paddingBottom: '5px', color: '#f9e9f9'}}>We're just going to make sure we have all your information correctly, click the back button to go back and edit your information if needed.</p>}
                 </div>
                 {(props.kindOfBusiness === "" || props.nameOfBusiness === "" || props.kindBusinessCompleted === false)  && <KindOfBusiness/>}
                 {props.kindBusinessCompleted && !props.adminInfoComplete && <AdminSignup/>}

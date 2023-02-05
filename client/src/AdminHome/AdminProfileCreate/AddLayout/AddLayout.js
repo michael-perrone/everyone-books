@@ -285,11 +285,11 @@ function AddLayout(props) {
                 {showBlock && <div ref={box} id={styles.layoutBlock} style={{height: `${height}px`, width: `${width}px`}}>
                 {showButton && <button id={styles.setTableButton} onClick={setTable} style={{position: "absolute", right: 0, top: "-40px", zIndex: 1002020}}>Set Table</button>}
                     <div draggable={false} onMouseLeave={pointerIsUp} onPointerUp={pointerIsUp} onMouseMove={pointerIsMoving} onPointerDown={pointerIsDown} id={'yoo'} style={{transform: `translateX(${translate.x}px) translateY(${translate.y}px)`, zIndex: 1000, position: "absolute", cursor: "grab", top: "-60px", right: `${-10 - (numOfPeople * 4)}px`, height: tableHeight * 2, width: tableWidth * 2, display: 'flex', justifyContent: "center", alignItems: "center"}}>
-                       <div draggable={false} ref={table} style={{ backgroundColor: "rgb(249, 233, 249)", height: tableHeight, width: tableWidth, border: "2px solid black"}}></div>
+                       <div draggable={false} ref={table} style={{ backgroundColor: "rgb(249, 233, 249)", height: tableHeight, width: tableWidth, border: "2px solid #f9e9f9"}}></div>
                     </div>
                     <div style={{position: "absolute", top: "-50px"}}>
                         <button onClick={rotateTable} style={{backgroundColor: "transparent", border: "none", zIndex: 100000000}}><img src={rotate}></img></button>
-                        <select onChange={toSetNumOfPeople} style={{position: "relative", top: '-12px', left: "30px", borderRadius: 0, border: "none", boxShadow: "0px 0px 2px black", backgroundColor: "white", height: "30px", width: "180px", fontSize: "18px"}}>
+                        <select onChange={toSetNumOfPeople} style={{position: "relative", top: '-12px', left: "30px", borderRadius: 0, border: "none", boxShadow: "0px 0px 2px #f9e9f9", backgroundColor: "white", height: "30px", width: "180px", fontSize: "18px"}}>
                             <option>Num of persons</option>
                             <option>2</option>
                             <option>4</option>
@@ -303,9 +303,9 @@ function AddLayout(props) {
                             <option>20</option>
                         </select>      
                     </div>
-                    {(tables.length > 0 || deletedTables.length) > 0 && <button id={styles.finishButton} onClick={sendTableInfo} style={{border: "none", boxShadow: "0px 0px 2px black", height: "30px", width: "140px", fontWeight: "bold", fontSize: "18px", position: "absolute", bottom: "-45px", left: width / 2 - 50}}>Update Tables</button>}
+                    {(tables.length > 0 || deletedTables.length) > 0 && <button id={styles.finishButton} onClick={sendTableInfo} style={{border: "none", boxShadow: "0px 0px 2px #f9e9f9", height: "30px", width: "140px", fontWeight: "bold", fontSize: "18px", position: "absolute", bottom: "-45px", left: width / 2 - 50}}>Update Tables</button>}
                     {tables.map(table => {
-                          return <div onDoubleClick={(id) => deleteTable(table.id)} ref={table} style={{ backgroundColor: "rgb(229, 229, 229)", height: table.height, width: table.width, position: "absolute", top: table.top, left: table.left, border: "2px solid black", display: "flex", justifyContent: "center", alignItems: "center"}}><p style={{fontSize: "20px", fontWeight: "bold"}}>{getNum(table.width, table.height)}</p></div>
+                          return <div onDoubleClick={(id) => deleteTable(table.id)} ref={table} style={{ backgroundColor: "rgb(229, 229, 229)", height: table.height, width: table.width, position: "absolute", top: table.top, left: table.left, border: "2px solid #f9e9f9", display: "flex", justifyContent: "center", alignItems: "center"}}><p style={{fontSize: "20px", fontWeight: "bold"}}>{getNum(table.width, table.height)}</p></div>
                         })}
                     <div className={styles.divo} style={{width: "2px", height: height, position: "absolute", left: 0, top: 0}}></div>
                     <div className={styles.divo} style={{width: "2px", height: height, position: "absolute", right: 0, top: 0}}></div>

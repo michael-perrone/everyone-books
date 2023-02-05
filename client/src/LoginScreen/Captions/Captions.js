@@ -9,15 +9,15 @@ class Captions extends React.Component {
         <div id={styles.captionsContainerSub}>
           
           <p className={styles.captions}>
-            <i className="far fa-building" id={styles.icons1} /> Find great businesses near you.
+            <i className="far fa-building" style={{color: "black"}} id={styles.icons1} /> Find great businesses near you.
           </p>
           <p className={styles.captions}>
-            <i className="fas fa-user-friends" id={styles.icons2} />
+            <i className="fas fa-user-friends" style={{color: "black"}} id={styles.icons2} />
             Easily schedule a booking.
           </p>
 
           <p className={styles.captions}>
-            <i id={styles.icons2} className="fas fa-thumbs-up" />
+            <i id={styles.icons2} style={{color: "black"}} className="fas fa-thumbs-up" />
             Never call front desks again!{" "}
           </p>
        

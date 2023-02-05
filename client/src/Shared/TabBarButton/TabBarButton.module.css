@@ -5,6 +5,8 @@
     align-items: center;
     border-left: 1.5px solid black;
     border-right: 1.5px solid black;
+    background-color: #fbdefb;
+    color: black;
     cursor: pointer;
 }
 

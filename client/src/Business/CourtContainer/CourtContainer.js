@@ -63,8 +63,6 @@ function CourtContainer(props) {
         else {
             if (window.innerWidth !== widthNum) {
                 setWidthNum(numbo * 150.2);
-                console.log(numbo)
-                console.log(bcnArray)
                 setMinned(false);
             }
         }

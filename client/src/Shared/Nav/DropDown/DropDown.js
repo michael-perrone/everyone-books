@@ -7,7 +7,7 @@ import AdminDropDown from "./AdminDropDown/AdminDropDown";
 
 const DropDown = props => {
   return (
-    <div style={{zIndex: 2202020, backgroundColor: props.adminToken ? "#fceffc" : "white"}}
+    <div style={{zIndex: 2202020}}
       className={styles.dropDownContainer}
       id={props.showDropDown ? styles.dropDownContainerAnimated : ""}
     >

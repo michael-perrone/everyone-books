@@ -10,7 +10,7 @@ function FakeNav(props){
     }
 
     return (
-        <div style={{display: 'flex', alignItems:'center', justifyContent: 'space-between', width: '100%', height: '52px', backgroundColor: '#fceffc', borderBottom: '2px solid black', color: 'black'}}>
+        <div style={{display: 'flex', alignItems:'center', justifyContent: 'space-between', width: '100%', height: '52px', backgroundColor: 'rgb(24,24,24)', borderBottom: '2px solid black', color: 'black'}}>
             <p onClick={goHome} className={styles.title}>Everyone Books</p>
             <p onClick={goHome} className={styles.home}><i style={{marginLeft: '5px'}} className="fas fa-home"></i></p>
         </div>

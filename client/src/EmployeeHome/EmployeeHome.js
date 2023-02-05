@@ -127,7 +127,7 @@ const EmployeeHome = (props) => {
             {(business === "None" && loading === false) &&
             <div id={styles.secret}>
              <div style={{width: '370px', padding:'8px', paddingTop: '17px', minHeight: "270px", height: "600px", marginTop: '20px', display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
-                <p style={{lineHeight: '30px'}}>Thanks for joining Everyone-Books! We are glad to have you with us. If you have an employer, you need to give them your unique ID that we have assigned you. Your unqiue Id is <span style={{fontWeight: 'bold'}}>{employeeId}</span>, your employer can use this Id to invite you to their business. {businessAddedYou && <label style={{fontWeight: "bold"}}>You have a pending invite from a business.</label>}</p>
+                <p style={{lineHeight: '30px', padding: "5px"}}>Thanks for joining Everyone-Books! We are glad to have you with us. If you have an employer, you need to give them your unique ID that we have assigned you. Your unqiue Id is <span style={{fontWeight: 'bold'}}>{employeeId}</span>, your employer can use this Id to invite you to their business. {businessAddedYou && <label style={{fontWeight: "bold"}}>You have a pending invite from a business.</label>}</p>
                 <button onClick={goToBusinessSearch} id={styles.askButton}>Ask Employer for Invite To Business</button>
                 <div style={{width: "100%", height: "2px", backgroundColor: "black"}}></div>
                 <p style={{lineHeight: '30px'}}>If you do not have an employer, you can click the button below to enter the careers portal. In the careers portal, you can enter your skills and past experiences and find employers looking to find a great employee like you! Good luck in your search. </p>
@@ -157,3 +157,4 @@ const mapStateToProps = state => {
 }
 
 export default withRouter(connect(mapStateToProps)(EmployeeHome));
+

@@ -173,13 +173,12 @@ function EmployeeNotifications(props) {
     return (
         loading ? <Spinner/> :
             <div id={styles.frame}>
-            <p style={{position: "absolute", fontWeight: "bold", top: 0, fontSize: "22px"}}>Notifications Center</p>
-             <div id={styles.notificationsContainer}>
-             <p style={{fontSize: "28px", marginTop: "10px", position: "absolute", top: "-50px", left: "100px"}}>Notifications</p>
-                {noNotis && <p style={{padding: "20px", lineHeight: "22px"}}>You do not have any notifications yet! When a business invites you to join their business or when a business accepts or declines your request to join their business as an employee you will see it here! If you are looking for a job you should check out our careers portal and see if any of the businesses on our site are looking for great employees like you.</p>}
-             
-                {notifications && notifications.length > 0 && (
+            <p style={{position: "absolute", fontWeight: "bold", top: 0, fontSize: "24px", fontFamily: "Josefin Sans", marginBottom: "50px"}}>Notifications Center</p>
+            {noNotis && <p id={styles.help} style={{paddingLeft: "15px", marginTop: "60px", paddingTop: "8px", lineHeight: "22px", backgroundColor: "rgb(24,24,24)", boxShadow: "0px 0px 3px #f9e9f9", borderRadius: "10px"}}>No notifications are here yet! When a business invites you to join their business or when a business accepts or declines your request to join their business as an employee you will see it here! If you are looking for a job you should check out our careers portal and see if any of the businesses on our site are looking for great employees like you.</p>}
+            {!noNotis && <div id={styles.notificationsContainer}>
+                {!noNotis && !loading && (
                     <div>
+                     <p style={{fontSize: "28px", marginTop: "10px", position: "absolute", top: "-50px", left: "100px"}}>Notifications</p>
                         {notifications.map(notification => {
                             return (
                                 <EmployeeNotification notification={notification} notificationClicked={notiClicked} chosen={chosen} /> 
@@ -187,15 +186,15 @@ function EmployeeNotifications(props) {
                         })}
                     </div>
                 )}
-            </div>
+            </div>}
             <div style={{display: "flex", flexDirection: "column", paddingBottom: "30px"}}>
             {noNotis && ads.map(ad => {
-                     return  <div style={{marginTop: "30px"}}>
+                     return  <div style={{marginTop: "50px"}}>
                      <Advertisement ad={ad}/>
                   </div>
                 })}
             </div>
-            {!noNotis && !loading && <MessageView eq={eq} bcn={bcn} bct={bct} notification={chosen} removeDeadNoti={removeDeadNoti} reduceNotiNum={reduceNotiNum} changeNotis={changeNotis} notiClicked={notiClicked} denied={denied} type={typeo}/>}
+            {!noNotis && !loading && <div id={styles.gotcha}><MessageView eq={eq} bcn={bcn} bct={bct} notification={chosen} removeDeadNoti={removeDeadNoti} reduceNotiNum={reduceNotiNum} changeNotis={changeNotis} notiClicked={notiClicked} denied={denied} type={typeo}/></div>}
             </div>
     )
 }

@@ -48,7 +48,7 @@ const UserView = (props) => {
         business.typeOfBusiness ?
         business.typeOfBusiness && business.typeOfBusiness !== "Restaurant" ?
         <div id={styles.userViewContainer}>
-          <div style={{position: 'relative', top: "10000"}}>
+          <div>
             <p id={styles.lol} style={{width: '100%', textAlign: 'center', fontWeight: "bold",
             fontSize: "30px", fontFamily: "Josefin Sans"}}>{business.businessName}</p>
           </div>

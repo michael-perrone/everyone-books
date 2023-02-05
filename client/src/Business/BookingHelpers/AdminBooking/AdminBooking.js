@@ -477,20 +477,20 @@ import {withRouter} from 'react-router-dom';
               </div>
               <div style={{marginTop: "24px"}}>
                   <p className={styles.ptags}>Clone Booking?</p>
-                  <ColorButton backgroundColor={cloneBooking === true ? "darkgray": "transparent"} clicked={toSetCloneBooking(true)}>Yes</ColorButton>
-                  <ColorButton backgroundColor={cloneBooking === false ? "darkgray": "transparent"} clicked={toSetCloneBooking(false)}>No</ColorButton>
+                  <ColorButton backgroundColor={cloneBooking === true ? "rgb(100,100,100)": "transparent"} clicked={toSetCloneBooking(true)}>Yes</ColorButton>
+                  <ColorButton backgroundColor={cloneBooking === false ? "rgb(100,100,100)": "transparent"} clicked={toSetCloneBooking(false)}>No</ColorButton>
               </div> 
                 <React.Fragment>
                   <div style={{marginTop: "24px"}}>
                     <p className={styles.ptags}>Number of Times to Clone:</p>
-                    <select onChange={toSetCloneNumber} value={numberOfTimesToClone} style={{width: "60px", padding: "4px", border: "none", boxShadow: "0px 0px 2px black", backgroundColor: "transparent"}}>
+                    <select onChange={toSetCloneNumber} value={numberOfTimesToClone} style={{width: "60px", padding: "4px", border: "none", boxShadow: "0px 0px 2px #f9e9f9", backgroundColor: "transparent"}}>
                       {!cloneBooking && <option>0</option>}
                       {cloneBooking && days.map(element => <option key={element}>{element}</option>)}
                     </select>
                   </div>
                     <div style={{marginTop: "24px"}}>
                     <p className={styles.ptags}>Days Between Clones:</p>
-                    <select onChange={toSetDaysBetweenBookings} value={daysBetweenBookings}  style={{width: "60px", padding: "4px", border: "none", boxShadow: "0px 0px 2px black", backgroundColor: "transparent"}}>
+                    <select onChange={toSetDaysBetweenBookings} value={daysBetweenBookings}  style={{width: "60px", padding: "4px", border: "none", boxShadow: "0px 0px 2px #f9e9f9", backgroundColor: "transparent"}}>
                       {cloneBooking && days.map(element => <option key={element}>{element}</option>)}
                       {!cloneBooking && <option>0</option>}
                     </select>
@@ -504,7 +504,7 @@ import {withRouter} from 'react-router-dom';
               </div>
                 <div style={{marginTop: "22px", textAlign: "center"}}>
                   {props.services && props.services.length > 0 ? <SubmitButton onClick={getAvailableEmployees}>Check Availability</SubmitButton> : <p style={{width: "350px", marginLeft: "10px"}}>Your business has no services, please edit your business profile to create services and add employees!</p>}
-                  <SubmitButton onClick={goToEditBusiness} marginTop={25}>Edit Business Information</SubmitButton>
+                  {props.services && props.services.length === 0 && <SubmitButton onClick={goToEditBusiness} marginTop={25}>Edit Business Information</SubmitButton>}
                 </div>
               </div>
               <div style={{display: "flex", flexDirection: 'column',}}>
@@ -515,7 +515,7 @@ import {withRouter} from 'react-router-dom';
               {(bcnArray !== undefined || employeesBack.length > 0) && <div style={{height: "40px", width: "375px"}}><p style={{fontWeight: "bold", fontSize: "18px", textAlign: 'center', marginTop: employeesBack.length > 0 ? "25px": "0px"}}>Find Customer:</p></div>}
               <StatementAppear appear={selectedServices.length > 0 && ((bcnArray && bcnArray.length > 0) || props.eq === "y" && employeesBack.length > 0)} center={true}>
                 <div style={{display: 'flex', marginTop: "20px"}}>
-                <input value={phoneNumber} onChange={toSetPhoneNumber} style={{width: "220px", height: "28px", fontSize: "18px", borderBottom: "2px solid black", backgroundColor: "transparent", borderTop: "none", borderLeft: "none", borderRight: "none "}} placeholder="Customer Phone #"/>
+                <input value={phoneNumber} onChange={toSetPhoneNumber} style={{width: "220px", height: "28px", fontSize: "18px", borderBottom: "2px solid #f9e9f9", backgroundColor: "transparent", borderTop: "none", borderLeft: "none", borderRight: "none "}} placeholder="Customer Phone #"/>
                 {!registeringNewGuest && <SubmitButton onClick={findGuest}>Find Guest</SubmitButton>}
                 {registeringNewGuest && <img src={x} alt="cancel" onClick={cancelRegisteringNewGuest} style={{fontWeight: "bold", marginLeft: "20px", marginTop: '-3px'}}/>}
                 </div>
@@ -525,11 +525,11 @@ import {withRouter} from 'react-router-dom';
                 <SubmitButton onClick={registerNewGuest} marginTop={"10px"}>Register New Guest</SubmitButton>
                 </React.Fragment>
                   }
-                  {registeringNewGuest && <div style={{textAlign: "left"}}><input value={newGuestName} onChange={toSetNewGuestName} style={{width: "220px", marginLeft: "30px", height: "28px", fontSize: "18px", borderBottom: "2px solid black", backgroundColor: "transparent", borderTop: "none", borderLeft: "none", borderRight: "none "}} placeholder="New Guest Name"/></div>}
+                  {registeringNewGuest && <div style={{textAlign: "left"}}><input value={newGuestName} onChange={toSetNewGuestName} style={{width: "220px", marginLeft: "30px", height: "28px", fontSize: "18px", borderBottom: "2px solid #f9e9f9", backgroundColor: "transparent", borderTop: "none", borderLeft: "none", borderRight: "none "}} placeholder="New Guest Name"/></div>}
                 {customerFound !== undefined &&
                 <React.Fragment>
                   <p style={{fontWeight: "bold", fontSize: "18px", marginTop: "12px", width: "200px", textAlign: "left"}}>Customer:</p>
-                  <div style={{display: "flex"}}><p style={{ padding: "10px", marginTop: "14px", boxShadow: "0px 0px 3px black", width: "200px"}}>{customerFound.fullName}</p><img src={x} alt={"cancel"} onClick={removeFound} style={{position: 'relative', top: "12px", marginLeft: "18px", cursor: "pointer", height: "36px", width: "36px"}}/></div>
+                  <div style={{display: "flex"}}><p style={{ padding: "10px", marginTop: "14px", boxShadow: "0px 0px 3px #f9e9f9", width: "200px"}}>{customerFound.fullName}</p><img src={x} alt={"cancel"} onClick={removeFound} style={{position: 'relative', top: "12px", marginLeft: "18px", cursor: "pointer", height: "36px", width: "36px"}}/></div>
                  </React.Fragment>}
                  {bcnArray && bcnArray.length > 0 && <p style={{fontWeight: "bold", fontSize: "18px", marginTop: "35px"}}>{props.bct}:</p>}
                  {bcnArray && bcnArray.length > 0 && <div style={{ marginTop: "14px"}}><BCAList selectBcn={(bcn) => toSetBcn(bcn)} selectedBcn={selectedBcn} bcnList={bcnArray}/></div>}

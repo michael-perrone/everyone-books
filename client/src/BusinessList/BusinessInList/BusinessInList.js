@@ -153,7 +153,7 @@ class BusinessInList extends React.Component {
             {!this.props.notUser && <button onClick={this.viewBusiness} className={styles.sectionButton} id={styles.marginLeft}>View Business</button>}
             
             {!this.props.alreadySent && this.props.notUser && <button className={styles.sectionButton} onClick={this.requestEmployeeInvite(this.props.business._id)}>Ask For Invite</button>}
-            {this.props.alreadySent && this.props.notUser && <button className={styles.sectionButton} style={{backgroundColor: "salmon"}} onClick={this.cancelRequest}>Cancel Request</button>}
+            {this.props.alreadySent && this.props.notUser && <button className={styles.sectionButton} style={{backgroundColor: "salmon", color: "black"}} onClick={this.cancelRequest}>Cancel Request</button>}
           </div>
         </div>       
         <OtherAlert showAlert={this.state.successMessage !== ""} alertType={"success"} alertMessage={this.state.successMessage}/>

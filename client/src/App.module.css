@@ -1,15 +1,8 @@
-#hi {
-  background-color: black;
-  color: white;
-  height: 200px;
-  width: 200px;
-}
-
 button {
   cursor: pointer;
 }
 
 option {
-  background-color: white;
-  color: black;
+  background-color: #232323;
+  color: #f9e9f9;
 }

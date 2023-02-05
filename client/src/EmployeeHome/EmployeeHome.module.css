@@ -1,7 +1,7 @@
 #employeeHome {
     display: flex;
     justify-content: space-around;
-    background: linear-gradient(to bottom, #fceffc, white)
+    background: #232323
 }
 
 
@@ -30,15 +30,14 @@
       font-size: 20px;
       width: 355px;
       border: none;
-      background-color: whitesmoke;
-      box-shadow: 0px 0px 2px black;
+      background-color: rgb(24,24,24);
+      border-radius: 4px;
+      box-shadow: 0px 0px 3px #f9e9f9;
       align-self: center;
   }
 
   #askButton:hover {
-      border: 1px solid rgb(73, 73, 73);
-      background-color: rgb(231, 231, 231);
-      box-shadow: none;
+      background-color: rgb(67,67,67);
   }
 
 

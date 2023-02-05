@@ -19,12 +19,12 @@
 }
 
 :root {
-  --lavender: lavenderblush;
-  --main-color: #1a8fff;
+  --lavender: black;
+  --main-color: white;
   --text-color: rgb(83, 83, 83);
   --text-color-light: rgb(141, 141, 141);
-  --border-color: #eee;
-  --bg-color: #f9f9f9;
+  --border-color: black;
+  --bg-color: rgb(24,24,24);
   --neutral-color: #fff;
 }
 
@@ -35,6 +35,9 @@
   box-sizing: border-box;
   color: black;
   position: relative;
+  padding-top: 20px;
+  padding-bottom: 20px;
+
 }
 
 header {
@@ -105,6 +108,7 @@ header #logo .icon {
   border: 1px solid var(--border-color);
   box-sizing: border-box;
   margin-right: 20px;
+  box-shadow: 0px 0px 4px #f9e9f9;
 }
 
 .calendar .header {
@@ -113,11 +117,15 @@ header #logo .icon {
   font-size: 115%;
   padding: 0.5em 0;
   border-bottom: 1px solid var(--border-color);
+  background-color: rgb(24,24,24);
+  color: #f9e9f9;
 }
 
 .calendar .header .icon {
   cursor: pointer;
   transition: 0.15s ease-out;
+  background-color: rgb(24,24,24);
+  color: #f9e9f9;
 }
 
 .calendar .header .icon:hover {
@@ -142,22 +150,24 @@ header #logo .icon {
   cursor: pointer;
   background: var(--neutral-color);
   transition: 0.25s ease-out;
+  background-color: rgb(24,24,24);
+    border: 0.5px solid #f9e9f9;
 }
 
 .calendar .body .cell:hover {
-  background: var(black);
-  transition: 0.5s ease-out;
+  background-color: rgb(24,24,24);
+    transition: 0.5s ease-out;
 }
 
 .calendar .body .selected {
   border-left: 10px solid transparent;
-  border-image: linear-gradient(45deg, var(--main-color) 0%, #53cbf1 40%);
+  border-image: linear-gradient(45deg, var(--main-color) 0%, #fdc9ff 40%);
   border-image-slice: 1;
 }
 
 .calendar .body .row {
   border-bottom: 1px solid var(--border-color);
-}
+  background-color: rgb(24,24,24);}
 
 .calendar .body .row:last-child {
   border-bottom: none;
@@ -174,10 +184,11 @@ header #logo .icon {
   top: 0.75em;
   right: 0.75em;
   font-weight: 700;
-}
+  color: #f9e9f9;
+  background-color: rgb(24,24,24);}
 
 .calendar .body .disabled {
-  color: rgb(179, 179, 179);
+  color: #f9e9f9;
   pointer-events: none;
 }
 

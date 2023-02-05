@@ -135,7 +135,7 @@ function ViewTable(props) {
                  <p style={{marginTop: "14px", textAlign: "center", fontSize: "24px"}}>Book Table</p>
                  <div style={{display: "flex", marginTop: "30px" }}>
                      <p>Num of persons: </p>
-                 <select value={numPeople} onChange={toSetNumPeople} style={{width: "70px", marginLeft: "10px", border: "none", boxShadow: "0px 0px 2px black", height: "24px", paddingLeft: "10px"}}>
+                 <select value={numPeople} onChange={toSetNumPeople} style={{width: "70px", marginLeft: "10px", border: "none", boxShadow: "0px 0px 2px #f9e9f9", height: "24px", paddingLeft: "10px"}}>
                     {nums.map(num => {
                         return <option>{num}</option>
                     })}
@@ -143,7 +143,7 @@ function ViewTable(props) {
                  </div>
                  <div style={{display: "flex", marginTop: "40px"}}>
                      <p>Start Time: </p>
-                 <select onChange={toSetSelectedTime} value={selectedTime} style={{width: "100px", marginLeft: "12px", border: "none", boxShadow: "0px 0px 2px black", height: "24px", paddingLeft: "10px"}}>
+                 <select onChange={toSetSelectedTime} value={selectedTime} style={{width: "100px", marginLeft: "12px", border: "none", boxShadow: "0px 0px 2px #f9e9f9", height: "24px", paddingLeft: "10px"}}>
                     {props.times.map(time => {
                         return <option>{time}</option>
                     })}
@@ -152,7 +152,7 @@ function ViewTable(props) {
                  <div style={{display: "flex", flexDirection: "column"}}>
                 <div style={{display: "flex", marginTop: "40px"}}>
                 <p>Employee: </p>
-                 <select onChange={toSetEmployee} value={selectedEmployee} style={{width: "170px", marginLeft: "12px", border: "none", boxShadow: "0px 0px 2px black", height: "24px", paddingLeft: "10px"}}>
+                 <select onChange={toSetEmployee} value={selectedEmployee} style={{width: "170px", marginLeft: "12px", border: "none", boxShadow: "0px 0px 2px #f9e9f9", height: "24px", paddingLeft: "10px"}}>
                     <option> </option>
                     {employees.map(employee => {
                         return <option value={employee._id}>{employee.fullName}</option>
@@ -161,15 +161,15 @@ function ViewTable(props) {
                  </div>
                  <div style={{display: "flex", marginTop: "40px"}}>
                  <p>Est Duration:</p>
-                 <select onChange={toSetEstDuration} value={estDuration} style={{width: "150px", marginLeft: "12px", border: "none", boxShadow: "0px 0px 2px black", height: "24px", paddingLeft: "10px"}}>
+                 <select onChange={toSetEstDuration} value={estDuration} style={{width: "150px", marginLeft: "12px", border: "none", boxShadow: "0px 0px 2px #f9e9f9", height: "24px", paddingLeft: "10px"}}>
                     {timesArray.map(element => {
                         return <option>{element}</option>
                     })}
                  </select>
                  </div>
-                 <input onChange={toSetCustomerName} placeholder={"Customer Name/Email"} style={{borderBottom: "2px solid black", width: "240px", fontSize: "20px", marginTop: "40px", borderLeft: "none", borderRight: "none", borderTop: "none", backgroundColor: "transparent"}}/>
+                 <input onChange={toSetCustomerName} placeholder={"Customer Name/Email"} style={{borderBottom: "2px solid #f9e9f9", width: "240px", fontSize: "20px", marginTop: "40px", borderLeft: "none", borderRight: "none", borderTop: "none", backgroundColor: "transparent"}}/>
                  <p style={{marginTop: "45px"}}>Date: {props.dateString}</p>
-                 <button onClick={bookTable} style={{marginTop: "50px", width: "120px", fontSize: "18px", border: "none", boxShadow: "0px 0px 2px black", height: "30px", alignSelf: "center"}}>Book Table</button>
+                 <button onClick={bookTable} style={{marginTop: "50px", width: "120px", fontSize: "18px", border: "none", boxShadow: "0px 0px 2px #f9e9f9", height: "30px", alignSelf: "center"}}>Book Table</button>
                 <p style={{color: "red", position: "absolute", bottom: "30px", width: "360px", left: 0, textAlign: "center"}}>{error}</p>
                 </div>
             </div>

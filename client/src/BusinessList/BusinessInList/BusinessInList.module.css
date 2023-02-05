@@ -1,14 +1,14 @@
 #businessContainer {
   width: 600px;
   height: 220px;
-  box-shadow: 0px 0px 3px black;
+  box-shadow: 0px 0px 3px #f9e9f9;
   margin-top: 40px;
   display: flex;
   justify-content: space-around;
   align-items: center;
   position: relative;
   padding-top: 20px;
-  background-color: #fdf5fd;
+  background-color: rgb(24,24,24);
 }
 
 #unfollow {
@@ -31,7 +31,8 @@
   padding: 8px 6px;
   box-shadow: 0px 0px 4px black;
   border: none;
-  background-color: white;
+  background-color: rgb(64, 64, 64);
+  box-shadow: 0px 0px 4px #f9e9f9;
   font-size: 14px;
 }
 
@@ -83,7 +84,7 @@
   align-items: center;
   position: relative;
   top: -5px;
-  background-color: white;
+  background-color: rgb(64, 64, 64);
 }
 
 @media(max-width: 600px) {

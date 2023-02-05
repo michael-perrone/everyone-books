@@ -5,12 +5,12 @@
     width: 11em;
     height: 11em;
     border-radius: 50%;
-    background: black;
-    background: -moz-linear-gradient(left, black 10%, rgba(255, 255, 255, 0) 42%);
-    background: -webkit-linear-gradient(left, black 10%, rgba(255, 255, 255, 0) 42%);
-    background: -o-linear-gradient(left, black 10%, rgba(255, 255, 255, 0) 42%);
-    background: -ms-linear-gradient(left, black 10%, rgba(255, 255, 255, 0) 42%);
-    background: linear-gradient(to right, black 10%, rgba(255, 255, 255, 0) 42%);
+    background: #f9e9f9;
+    background: -moz-linear-gradient(left, #f9e9f9 10%, #f9e9f9 42%);
+    background: -webkit-linear-gradient(left, #f9e9f9 10%, #f9e9f9 42%);
+    background: -o-linear-gradient(left, #f9e9f9 10%, #f9e9f9 42%);
+    background: -ms-linear-gradient(left,  #f9e9f9 10%, #f9e9f9 42%);
+    background: linear-gradient(to right, #f9fef9 10%, #f9e9f9 42%);
     position: relative;
     -webkit-animation: load3 1.4s infinite linear;
     animation: load3 1.4s infinite linear;
@@ -30,7 +30,7 @@
     content: '';
   }
   .loader:after {
-    background: white;
+    background: black;
     width: 75%;
     height: 75%;
     border-radius: 50%;

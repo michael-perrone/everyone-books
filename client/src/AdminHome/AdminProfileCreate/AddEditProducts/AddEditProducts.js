@@ -114,7 +114,7 @@ function AddEditProducts(props) {
         <div id={styles.mainContainerServices}>
             <p style={{marginTop: "16px"}}>Add the products that your business offers below followed by the price and the time duration of that service. Then select if the service requires an employee for the service to be conducted.</p>
             <div id={styles.subContainer}>
-            <div style={{width: "330px", backgroundColor: "lavenderblush", padding: "20px", boxShadow: "0px 0px 3px black", marginTop: "20px", height: "200px"}}>
+            <div style={{width: "330px", backgroundColor: "rgb(24,24,24)", padding: "20px", boxShadow: "0px 0px 3px #f9e9f9", marginTop: "20px", height: "200px"}}>
                 <p style={{fontSize: "18px", fontWeight: "bold", textAlign: "center", marginBottom: "20px"}}>Add Product:</p>
                 <input onChange={getProductName} value={productName} placeholder={"Enter Product Name"} className={styles.inputs}/>
                 <div style={{display: "flex", marginTop: "24px", position: 'relative', right: "13px", width: "365px"}}>

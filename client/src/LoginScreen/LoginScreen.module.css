@@ -5,7 +5,7 @@
 }
 
 .coverDiv {
-  background-color: #fceffc;
+  background-color: #f9e9f9;
 }
 
 #loginScreenLeftSide {
@@ -18,7 +18,7 @@
 @media (max-width: 950px) and (min-width: 0px) {
 
   .coverDiv {
-    background-color: #fceffc;
+    background-color: #f9e9f9;
   }
   .loginScreenContainer {
     flex-direction: column;

@@ -17,6 +17,7 @@
 .unselected {
     padding: 10px 5px;
     cursor: pointer;
+    color: #f9e9f9;
 }
 
 .unselected:hover {

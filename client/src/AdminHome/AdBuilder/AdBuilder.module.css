@@ -5,6 +5,9 @@
     flex-direction: column;
 }
 
+input {
+    background-color: rgb(105, 105, 105);
+}
 
 #mainInside {
     width: 100%;
@@ -20,14 +23,15 @@
 }
 
 #borderr {
-    border-left: 2px solid black;
+    border-left: 2px solid #f9e9f9;
 }
 
 #modelAd {
     height: 300px;
     width: 350px;
-    box-shadow: 0px 0px 5px black;
+    box-shadow: 0px 0px 5px #f9e9f9;
     display: flex;
+    background-color: rgb(100,100,100);
     flex-direction: column;
     align-items: center;
 }
@@ -48,7 +52,7 @@
     }
     #borderr {
         border-left: none;
-        border-top: 2px solid black;
+        border-top: 2px solid #f9e9f9;
         padding-top: 40px;
         padding-bottom: 30px;
     }

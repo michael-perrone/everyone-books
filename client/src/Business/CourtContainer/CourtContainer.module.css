@@ -3,8 +3,9 @@
     overflow: auto;
     max-height: 95vh;
     transform: rotate(180deg);
-    background-color: white;
+    background-color: #232323;
     position: relative;
+    border-right: 2px solid #f9e9f9;
 }
 
 #subo {

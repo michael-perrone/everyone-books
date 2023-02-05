@@ -8,14 +8,14 @@
 #otherMainContainer {
     max-height: 260px;
     overflow: auto;
-    box-shadow: 0px 0px 2px black;
+    box-shadow: 0px 0px 4px #f9e9f9;
      width: 300px;
 }
 
 #otha {
     max-height: 160px;
     overflow: auto;
-    box-shadow: 0px 0px 2px black;
+    box-shadow: 0px 0px 4px #f9e9f9;
      width: 300px;
 }
 
@@ -23,7 +23,7 @@
     width: 280px;
     display: flex;
     justify-content: space-between;
-    box-shadow: 0px 0px 2px black;
+    box-shadow: 0px 0px 2px #f9e9f9;
     padding: 4px 10px 4px 10px;
     align-items: center;
     height: 40px;

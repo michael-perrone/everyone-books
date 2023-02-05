@@ -195,12 +195,12 @@ function CreateGroup(props) {
             </div>
             <div style={{display: "flex", marginTop: "20px"}}>
                 <p style={{marginTop: "5px"}}>Group open to public?</p>
-                <YesNoButton selected={groupOpenToPublic} backgroundColor={groupOpenToPublic ? "gray" : ""} clicked={setGroupOpenToPublicTrue}>Yes</YesNoButton>
-                <YesNoButton selected={groupOpenToPublic === false} backgroundColor={groupOpenToPublic === false ? "gray" : ""} clicked={setGroupOpenToPublicFalse}>No</YesNoButton>
+                <YesNoButton selected={groupOpenToPublic} backgroundColor={groupOpenToPublic ? "rgb(100,100,100)" : ""} clicked={setGroupOpenToPublicTrue}>Yes</YesNoButton>
+                <YesNoButton selected={groupOpenToPublic === false} backgroundColor={groupOpenToPublic === false ? "rgb(100,100,100)" : ""} clicked={setGroupOpenToPublicFalse}>No</YesNoButton>
             </div>
             <div style={{display: "flex", marginTop: "24px"}}>
                 <p style={{marginTop: "2px"}}>Group Limit Number:</p>
-                <select onChange={(e) => setGroupLimit(e.target.value)} value={groupLimit} style={{height: "24px", paddingLeft: "6px", width: "90px", marginLeft: "10px", border: "none", boxShadow: "0px 0px 2px black", backgroundColor: "transparent"}}>
+                <select onChange={(e) => setGroupLimit(e.target.value)} value={groupLimit} style={{height: "24px", paddingLeft: "6px", width: "90px", marginLeft: "10px", border: "none", boxShadow: "0px 0px 2px #f9e9f9", backgroundColor: "rgb(24,24,24)"}}>
                     <option>No Limit</option>
                     <option>1</option>
                     <option>2</option>

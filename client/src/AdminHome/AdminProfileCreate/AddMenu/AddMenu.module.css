@@ -1,13 +1,13 @@
 #singlePage {
     width: 400px;
-    border: 2px solid black;
+    border: 2px solid #f9e9f9;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-bottom: 15px;
     max-height: 600px;
     overflow: auto;
-    background-color: whitesmoke;
+    background-color: rgb(24,24,24);
     cursor: pointer;
 }
 
@@ -16,7 +16,7 @@
 }
 
 .selectors:hover {
-    background-color: whitesmoke;
+    background-color: rgb(24,24,24);
 }
 
 #mcb {
@@ -34,6 +34,6 @@
     font-size: 14px;
     border: none;
     border-radius: 0;
-    border: 1px solid black;
+    border: 1px solid #f9e9f9;
     padding-left: 4px;
 }

@@ -21,13 +21,13 @@ function CourtColumn(props) {
                     timeEndNum - timeStartNum > 3 ?
                     <div onClick={props.clickBooking(sortedBooking)} className={styles.bookingContainer} style={{position: "absolute", top: `${(timeStartNum - openTimeNum) * 16}px`,
                      height: timeStartNum >= timeEndNum ? "0px" : `${(timeEndNum - timeStartNum) * 16 - 2}px`, width: !props.minned ? "147px" : "225px"}}>
-                        <p style={{fontWeight: "bold", padding: "5px"}}>{timeSplit[0]}</p>
-                        <p style={{fontWeight: "bold", padding: "5px"}}>{timeSplit[1]}</p>
+                        <p style={{fontWeight: "bold", color: "black", padding: "5px"}}>{timeSplit[0]}</p>
+                        <p style={{fontWeight: "bold", color: "black", padding: "5px"}}>{timeSplit[1]}</p>
                     </div>
                     : 
                     <div onClick={props.clickBooking(sortedBooking)} className={styles.bookingContainer} style={{position: "absolute", justifyContent: "center", top: `${(timeStartNum - openTimeNum) * 16}px`,
                      height: timeStartNum >= timeEndNum ? "0px" : `${(timeEndNum - timeStartNum) * 16 - 2}px`, width: !props.minned ? "147px" : "225px"}}>
-                        <p style={{fontWeight: "bold", position: 'relative', top: "1.5px"}}>{sortedBooking.time}</p>
+                        <p  style={{fontWeight: "bold", color: 'black', position: 'relative', top: "1.5px"}}>{sortedBooking.time}</p>
                     </div>
                 )
             })}

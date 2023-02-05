@@ -130,7 +130,7 @@ function ViewGroup(props) {
                     <p className={styles.bolder}>Group Limit Number:</p>
                     <p className={styles.fontFourteen}>{props.group.groupLimitNumber}</p>
                 </div>
-                <button onClick={deleteGroup} style={{backgroundColor: "salmon", height: "35px", width: "120px", position: "absolute", bottom: "40px", marginTop: "80px", fontWeight: "bold", boxShadow: "0px 0px 2px black", border: "none"}}>{!deleting ? "Delete Group" : "Confirm"}</button>
+                <button onClick={deleteGroup} style={{backgroundColor: "salmon", height: "35px", width: "120px", position: "absolute", bottom: "40px", marginTop: "80px", fontWeight: "bold", boxShadow: "0px 0px 2px #f9e9f9", border: "none"}}>{!deleting ? "Delete Group" : "Confirm"}</button>
             </div>
             <div style={{width: "200px", display: "flex", flexDirection: "column", alignItems: "center", paddingTop: "80px"}}>
                 <p style={{textAlign: "center"}} className={styles.bolder}>Customers:</p>

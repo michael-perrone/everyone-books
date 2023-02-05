@@ -268,7 +268,7 @@ function ViewBooking(props) {
                     <p className={styles.bolder}>Cost of Booking:</p>
                     <p className={styles.fontFourteen}>{cost}</p>
                 </div>
-                <button onClick={deleteBooking} style={{backgroundColor: "salmon", height: "35px", width: "120px", position: "absolute", bottom: "40px", fontWeight: "bold", boxShadow: "0px 0px 2px black", border: "none"}}>Delete Booking</button>
+                <button onClick={deleteBooking} style={{backgroundColor: "salmon", height: "35px", width: "120px", position: "absolute", bottom: "40px", fontWeight: "bold", boxShadow: "0px 0px 2px #f9e9f9", border: "none"}}>Delete Booking</button>
             </div>
             <div id={styles.rightContainer}>
                 {showProducts ?
@@ -288,8 +288,8 @@ function ViewBooking(props) {
                         <p onClick={toSetProducts} style={{paddingBottom: "8px", cursor: "pointer"}} className={showProducts ? styles.selected : styles.unselected}>Add Products</p>
                     </div>
                     
-                   <div style={{width: "218px", height: "200px", borderLeft: "1.5px solid black",
-                    borderRight: "1.5px solid black", borderBottom: "1.5px solid black" }}>
+                   <div style={{width: "218px", height: "200px", borderLeft: "1.5px solid #f9e9f9",
+                    borderRight: "1.5px solid #f9e9f9", borderBottom: "1.5px solid #f9e9f9" }}>
                    {showProducts ?
                         <ServiceList array={props.products} small={true} addService={(id) => selectProduct(id)} minusService={minusProduct} prod={true}  selectedServices={selectedProductIds}/>
                            :
@@ -300,14 +300,14 @@ function ViewBooking(props) {
                 {showProducts && 
                 <StatementAppear appear={selectedProducts.length > 0 && showProducts}>
                     <div className={styles.bottomButton}>
-                   <button style={{height: "35px", width: "120px", boxShadow: "0px 0px 2px black", border: "none"}} onClick={addProducts}>Add Product(s)</button>
+                   <button style={{height: "35px", width: "120px", boxShadow: "0px 0px 2px #f9e9f9", border: "none"}} onClick={addProducts}>Add Product(s)</button>
                    </div>
                 </StatementAppear>
                 }
                 { !showProducts &&
                 <StatementAppear appear={selectedServices.length > 0 && !showProducts}>
                     <div className={styles.bottomButton}>
-                   <button style={{height: "35px", width: "120px", boxShadow: "0px 0px 2px black", border: "none"}} onClick={addServices}>Add Service(s)</button>
+                   <button style={{height: "35px", width: "120px", boxShadow: "0px 0px 2px #f9e9f9", border: "none"}} onClick={addServices}>Add Service(s)</button>
                    </div>
                 </StatementAppear>
                 }

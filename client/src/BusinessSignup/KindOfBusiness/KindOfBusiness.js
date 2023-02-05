@@ -35,7 +35,7 @@ const KindOfBusiness = (props) => {
     return (
     <div id={styles.kindOfBusinessDiv}>
         <p>First, select below what business you would like to set up. If you don't see your type of business, please choose other or contact us.</p>
-        <select onChange={getKindOfBusinessFunction} id={styles.inputOrSelectKindBusiness}>
+        <select style={{border: "none", }} onChange={getKindOfBusinessFunction} id={styles.inputOrSelectKindBusiness}>
             <option> </option>
             <option>Wax Center</option>
             <option>Beauty Center</option>

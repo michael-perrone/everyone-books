@@ -149,13 +149,13 @@ function AddMenu(props) {
             <div style={{width: "100%", display: "flex", justifyContent: "center", marginTop: "20px", alignItems: "center", flexDirection: "column"}}>
             <div>
             {showMenuCategoryInput && <input style={{height: "24px", marginLeft: "20px", paddingLeft: "4px", marginRight: "20px"}} onChange={manageMenuCategoryValue} value={menuCategoryValue} placeholder={"Enter Category Name"}/>}
-            <button onClick={handleButton} id={styles.mcb} style={{border: "none", boxShadow: "0px 0px 2px black", height: "28px", fontSize: "16px", width: "120px"}}>{menuCategoryButtonValue}</button>
+            <button onClick={handleButton} id={styles.mcb} style={{border: "none", boxShadow: "0px 0px 2px #f9e9f9", height: "28px", fontSize: "16px", width: "120px"}}>{menuCategoryButtonValue}</button>
             </div>
             <div style={{display: "flex"}}>
             <div style={{width: "200px"}}>
                 <p style={{marginBottom: "20px", fontWeight: "bold", textAlign: "center"}}>Menu Categories</p>
                 {menuCategories.map((mc,index) => {
-                    return <div className={styles.selectors} style={{borderBottom: "1.5px solid black"}} onClick={() => chooseCategory(mc, index)}><p style={{textAlign: "center", paddingTop: "15px", paddingBottom: "15px", backgroundColor: mc === chosenCategory ? "#fceffc" : ""}}>{mc.menuCategoryValue}</p></div>
+                    return <div className={styles.selectors} style={{borderBottom: "1.5px solid #f9e9f9"}} onClick={() => chooseCategory(mc, index)}><p style={{textAlign: "center", paddingTop: "15px", paddingBottom: "15px", backgroundColor: mc === chosenCategory ? "rgb(24,24,24)" : ""}}>{mc.menuCategoryValue}</p></div>
                 })}
             </div>
             <div style={{display: "flex", width: "100%", justifyContent: "center", height: `${heightNeeded}px`}}>
@@ -177,7 +177,7 @@ function AddMenu(props) {
                        </div>
                         <textarea onChange={handleItemDescription} value={itemDescription} placeholder="Item Description" style={{marginTop: "15px", paddingLeft: "3px", fontFamily: "initial", width: "292px"}} rows={4}/>
                         </div>}
-                    <button onClick={addMenuItem} style={{border: "none", alignSelf: "flex-start", boxShadow: "0px 0px 2px black", height: "24px", fontSize: "12px", width: "100px", backgroundColor: "lightgreen", marginLeft: "20px", marginTop: "20px"}}>{amiv}</button> 
+                    <button onClick={addMenuItem} style={{border: "none", alignSelf: "flex-start", boxShadow: "0px 0px 2px #f9e9f9", height: "24px", fontSize: "12px", width: "100px", backgroundColor: "lightgreen", marginLeft: "20px", marginTop: "20px"}}>{amiv}</button> 
                 </div>
                 </div>
             }

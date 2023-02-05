@@ -143,7 +143,7 @@ function UserNotifications(props) {
             {!loading ? <div id={styles.holder} style={{display: "flex", justifyContent: 'space-around', width: "100%", marginTop: "20px"}}> 
             {notifications && notifications.length === 0 &&
             <div id={styles.texto}> <p  style={{ fontSize: "18px",  marginTop: "10px"}}>
-                No notifications are here yet! After a business or employee adds you for a booking/group, your notification will show up here. If you request a booking at a business, you will get their response here in this section of the app .</p>
+                No notifications are here yet! After a business or employee adds you for a booking/group, your notification will show up here. If you request a booking at a business, you will get their response here in this section of the app.</p>
             <p style={{marginTop: "20px", fontSize: "18px"}}>If you would like to request an appointment or join a group, please use the business or service finder to search for the business you would like to book at. Use the service finder to try to find a business nearby based on the name of the services they offer. Use the business finder to find a business based on the name, location or type of business.</p>
             </div>}
              {notifications.length !== 0 && <div id={styles.notificationsContainer}>

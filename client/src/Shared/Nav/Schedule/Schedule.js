@@ -102,7 +102,7 @@ const Schedule = props => {
         <p style={{textAlign: 'center'}}>Schedule</p>
         <div
           style={{
-            marginTop: "10px",
+            marginTop: "12px",
             display: "flex",
             justifyContent: "center"
           }}
@@ -119,7 +119,11 @@ const Schedule = props => {
           <input
             onChange={datePickerHandler}
             value={dateFromPicker}
-            style={{ height: "22px" }}
+            style={{ height: "22px",
+             border: "none",
+             boxShadow: "0px 0px 4px #f9e9f9",
+             paddingLeft: "4px"
+             }}
             type="date"
           />
         </div>
@@ -129,13 +133,13 @@ const Schedule = props => {
             maxHeight: "600px",
             overflow: "auto",
             width: "100%",
-            backgroundColor: "rgb(248, 248, 248)",
-            border: '1px solid black',
+            backgroundColor: "rgb(80, 80, 80)",
+            border: '2px solid #f9e9f9',
             marginTop: "10px"
           }}
         >
-          {shift && <p style={{fontSize: '14px', paddingTop: '10px',  lineHeight: "18px", paddingBottom: '10px', width: '100%', textAlign: 'center', borderBottom: '1px solid black'}}>{message}</p>}
-          {!shift && <p style={{fontSize: '14px', paddingTop: '10px', lineHeight: "18px",  paddingBottom: '10px', width: '100%', textAlign: 'center', borderBottom: '1px solid black'}}>{message}</p>}
+          {shift && <p style={{fontSize: '14px', paddingTop: '10px',  lineHeight: "18px", paddingBottom: '10px', width: '100%', textAlign: 'center', borderBottom: '1px solid #f9e9f9'}}>{message}</p>}
+          {!shift && <p style={{fontSize: '14px', paddingTop: '10px', lineHeight: "18px",  paddingBottom: '10px', width: '100%', textAlign: 'center', borderBottom: '1px solid #f9e9f9'}}>{message}</p>}
           {bookings && bookings.length > 0 && bookings.map(booking => {
               return (
                 <div className={styles.employeeBookingContainer}>

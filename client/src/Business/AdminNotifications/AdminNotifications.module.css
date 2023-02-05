@@ -1,11 +1,8 @@
 #notificationsContainer {
-    height: 600px;
-    width: 370px;
-    box-shadow: 0px 0px 2px black;
-    max-height: 600px;
-    margin-top: 20px;
+    margin-top: 50px;
     position: relative;
     overflow: auto;
+    max-height: 550px;
 }
 
 #mainContainer {
@@ -17,11 +14,19 @@
 
 
 #bigContainer {
-    background: linear-gradient(to bottom, #fceffc, white);
+    background-color: #232323;
+}
+
+#yooooo {
+    margin-top: 12px;
 }
 
 #alsoYo {
     width: 425px;
+    box-shadow: 0px 0px 2px #f9e9f9;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: rgb(24,24,24);
 }
 
 

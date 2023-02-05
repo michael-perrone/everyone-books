@@ -2,10 +2,10 @@
     width: 330px;
     padding: 0px 4px;
     height: 260px;
-    box-shadow: 0px 0px 3px black;
+    box-shadow: 0px 0px 3px #f9e9f9;
+    background-color: #232323;
     top: 5px;
     left: 5px;
-    background-color: lavenderblush;
 }
 
 .day {
@@ -13,6 +13,8 @@
     margin-top: 2px;
     padding: 4px;
     border: 1px solid black;
+    
+    background-color: rgb(24,24,24);
     cursor: pointer;
 }
 
