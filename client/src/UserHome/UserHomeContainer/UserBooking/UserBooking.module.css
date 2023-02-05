@@ -1,14 +1,15 @@
 #bookingContainer {
-  box-shadow: 0px 1px 4px black;
+  box-shadow: 0px 1px 4px #f9e9f9;
   width: 350px;
   height: 220px;
-  background-color: rgb(24,24,24);
+  background-color: rgb(0, 0, 0);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-around;
   font-family: "Josefin Sans", sans-serif;
   margin-bottom: 20px;
+  margin-top: 6px;
 }
 
 .moveLeft {

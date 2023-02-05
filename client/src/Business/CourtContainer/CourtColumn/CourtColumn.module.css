@@ -41,8 +41,8 @@
 
 .groupContainer {
     background-color: rgb(240, 255, 180);
-    border-top: 1px solid #9fe9f9;
-    border-bottom: 1px solid #9fe9f9;
+    border-top: 1.4px solid black;
+    border-bottom: 1.4px solid black;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

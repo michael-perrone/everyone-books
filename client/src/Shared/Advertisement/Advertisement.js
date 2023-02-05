@@ -20,7 +20,7 @@ function Advertisement(props) {
             <p style={{fontSize: "22px", marginTop: "15px", fontWeight: "bold", textAlign: "center", color: 'black'}}>{props.ad.adHeader}</p>
             <p style={{fontSize: "15px", paddingLeft: "6px", paddingLeft: "12px", paddingRight: "12px", color: 'black', paddingTop: "16px", paddingBottom: "20px"}}>{props.ad.adDetails}</p>
             <p style={{position: "absolute", bottom: "3px"}}>{props.businessName}</p>
-            <p style={{textAlign: "center", fontFamily: "Josefin Sans", position: 'absolute', bottom: "5px", color: "black"}}>Advertisement Center</p>
+            <p style={{textAlign: "center", fontFamily: "Josefin Sans", position: 'absolute', bottom: "5px", color: "black"}}>Advertisement</p>
         </div>
         </div>
     )

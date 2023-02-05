@@ -303,7 +303,7 @@ router.post("/employerAcceptedEmployee", authAdmin, async (req, res) => {
       })
       await businessProfile.save();
       let notification = await Notification.findOne({ _id: req.body.notificationId });
-      notification.type = "ERYR";
+      notification.type = "BRYR";
       await notification.save();
       let business = await Business.findOne({ _id: req.body.businessId })
       let employee = await Employee.findOne({ _id: req.body.employeeId });
@@ -342,7 +342,7 @@ router.post("/employerAcceptedEmployee", authAdmin, async (req, res) => {
         employee.business = business.businessName;
         await employee.save()
         let notification = await Notification.findOne({ _id: req.body.notificationId });
-        notification.type = "ERYR";
+        notification.type = "BRYR";
         await notification.save();
         return res.status(200).json({notification});
       }

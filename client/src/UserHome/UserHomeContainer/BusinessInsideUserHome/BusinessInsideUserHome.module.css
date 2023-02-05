@@ -4,9 +4,10 @@
   align-items: center;
   height: 190px;
   width: 375px;
-  background-color: rgb(24,24,24);
-  box-shadow: 0px 2px 5px black;
+  background-color: rgb(0, 0, 0);
+  box-shadow: 0px 1px 4px #f9e9f9;
   margin-bottom: 20px;
+  margin-top: 6px;
 }
 
 .clubItem {

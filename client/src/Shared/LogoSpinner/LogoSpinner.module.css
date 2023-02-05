@@ -4,6 +4,7 @@
     position: relative;
     top: -4px;
     left: 10px;
+    filter: invert(0%);
 }
 
 #logo_container {
@@ -15,7 +16,6 @@
     border-radius: 50%;
     position: relative;
     background-color: #f9e9f9;
-    margin-top: 50px;
 }
 
 #inside_logo_container {
@@ -61,6 +61,8 @@
     animation: load5 2s;
     transform: rotate(360deg);
 }
+
+
 
 
 @-webkit-keyframes load1 {

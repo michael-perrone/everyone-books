@@ -5,7 +5,6 @@ import StatementAppear from '../../../Shared/StatementAppear/StatementAppear';
 import DateDrop from "../../../Shared/DateDrop/DateDrop";
 import TimeList from "../../../Shared/TimeList/TimeList";
 import {intToStringTime, createMaplist, getTimeRightAway, getTs, stringToIntTime} from '../../../feutils/feutils';
-import ColorButton from '../../../Shared/ColorButton/ColorButton';
 import SubmitButton from '../../../Shared/SubmitButton/SubmitButton';
 import ServiceList from "../../../Shared/ServiceList/ServiceList";
 import OtherAlert from '../../../OtherAlerts/OtherAlerts';

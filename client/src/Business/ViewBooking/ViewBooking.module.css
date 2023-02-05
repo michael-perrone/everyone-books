@@ -3,7 +3,7 @@
     width: 370px;
     border: 2px solid white;
     z-index: 10;;
-    background-color: rgb(248, 222, 247);
+    background-color: #232323;
     display: flex;
     justify-content: space-around;
     position: relative;
@@ -12,6 +12,10 @@
 
 .fontFourteen {
     font-size: 14px;
+}
+
+img {
+    filter: invert(100%);
 }
 
 #leftContainer {

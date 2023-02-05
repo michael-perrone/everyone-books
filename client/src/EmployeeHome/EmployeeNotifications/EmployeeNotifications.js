@@ -173,7 +173,7 @@ function EmployeeNotifications(props) {
     return (
         loading ? <Spinner/> :
             <div id={styles.frame}>
-            <p style={{position: "absolute", fontWeight: "bold", top: 0, fontSize: "24px", fontFamily: "Josefin Sans", marginBottom: "50px"}}>Notifications Center</p>
+            <p id={styles.gah} style={{position: "absolute", fontWeight: "bold", top: 0, fontSize: "24px", fontFamily: "Josefin Sans"}}>Notifications Center</p>
             {noNotis && <p id={styles.help} style={{paddingLeft: "15px", marginTop: "60px", paddingTop: "8px", lineHeight: "22px", backgroundColor: "rgb(24,24,24)", boxShadow: "0px 0px 3px #f9e9f9", borderRadius: "10px"}}>No notifications are here yet! When a business invites you to join their business or when a business accepts or declines your request to join their business as an employee you will see it here! If you are looking for a job you should check out our careers portal and see if any of the businesses on our site are looking for great employees like you.</p>}
             {!noNotis && <div id={styles.notificationsContainer}>
                 {!noNotis && !loading && (

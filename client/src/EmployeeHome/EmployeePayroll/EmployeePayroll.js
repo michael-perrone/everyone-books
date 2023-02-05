@@ -55,7 +55,7 @@ function PayrollCenter(props) {
 
     return (
         <div id={styles.main}>
-          {!didntWork && <div id={styles.top} style={{paddingBottom: "20px", borderBottom: "0.5px solid black"}}>
+          {!didntWork && <div id={styles.top} style={{paddingBottom: "20px", borderBottom: "0.5px solid #f9e9f9"}}>
             <div className={styles.subContainer}>
                 <p style={{marginTop: "10px", fontSize: "18px"}}>Start Date:</p>
                 <DateDrop setDateString={(dateString) => toSetStartDateString(dateString)}/>
@@ -71,7 +71,7 @@ function PayrollCenter(props) {
             <div style={{marginTop: "20px", opacity: loading ? 0.3 : 1}}>
             <div style={{fontFamily: "Times New Roman"}} className={styles.payrollSubContainer}>
             <p className={styles.info} style={{fontSize: "22px", marginBottom: "20px"}}>{payrollInfo.employeeName}</p>
-             <Container width={"85%"} backgroundColor={"lavenderblush"}>
+             <Container width={"85%"} backgroundColor={"rgb(24,24,24)"}>
             <div style={{display: "flex", justifyContent: "space-around"}}>
             <div>
             <p className={styles.info}>Hourly Wage: ${payrollInfo.hourly !== "" ? Number(payrollInfo.hourly).toFixed(2) : 0}</p>

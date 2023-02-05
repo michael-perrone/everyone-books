@@ -1,5 +1,4 @@
 #mainContainer {
-    width: 200px;
     max-width: 200px;
     overflow: auto;
     display: grid;

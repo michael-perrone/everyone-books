@@ -84,7 +84,7 @@ const BookingColumnsEnter = (props) => {
         <div style={{marginTop: '70px'}}>
              <p style={{marginLeft: "5px"}}>Please enter the area which your business will be booked. For example: a massage parlor takes appointments in an individual room, a tattoo studio may conduct appointments in individual rooms or chairs, and a tennis club would book out individual tennis courts. (For tattoo studio you can type "Room", and tennis club type "Court") </p>
             <div style={{display: "flex", justifyContent: "center", marginTop: "20px"}}>   
-                <input  placeholder={"Type of Booking Area"} value={bookingColumnType} onChange={bookingColumnTypeHandler}/>
+                <input style={{backgroundColor: "rgb(24,24,24)", border: "none", boxShadow: "0px 0px 4px #f9e9f9", paddingLeft: "4px"}}  placeholder={"Type of Booking Area"} value={bookingColumnType} onChange={bookingColumnTypeHandler}/>
                 <SubmitButton onClick={bctChosenHit}>Enter</SubmitButton>
             </div>
            

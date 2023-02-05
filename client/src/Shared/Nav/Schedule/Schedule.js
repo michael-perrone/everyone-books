@@ -121,6 +121,7 @@ const Schedule = props => {
             value={dateFromPicker}
             style={{ height: "22px",
              border: "none",
+             backgroundColor: "rgb(65,65,65)",
              boxShadow: "0px 0px 4px #f9e9f9",
              paddingLeft: "4px"
              }}
@@ -133,7 +134,7 @@ const Schedule = props => {
             maxHeight: "600px",
             overflow: "auto",
             width: "100%",
-            backgroundColor: "rgb(80, 80, 80)",
+            backgroundColor: "rgb(65, 65, 65)",
             border: '2px solid #f9e9f9',
             marginTop: "10px"
           }}
@@ -144,7 +145,7 @@ const Schedule = props => {
               return (
                 <div className={styles.employeeBookingContainer}>
                   <div>
-                  <p className={styles.bold}>Services Included</p>
+                  <p className={styles.bold}>Services</p>
                   {booking.serviceNames.map(serviceName => {
                     return <div className={styles.littleDiv}>
                        <p className={styles.sn}>{serviceName}</p>
@@ -156,7 +157,7 @@ const Schedule = props => {
                     <p className={styles.padABit}>{bct} {booking.bcn}</p>
                     <p className={styles.padABit}>{booking.cName}</p>
                     <p className={styles.padABit}>{booking.cost}</p>
-                    <button onClick={props.viewBooking(booking)} style={{border: "none", boxShadow: "0px 0px 2px black", width: "100px", height: "30px", fontWeight: "bold", padding: "4px", marginTop: "8px", fontSize: "16px"}}>View</button>
+                    <button onClick={props.viewBooking(booking)} style={{border: "none", backgroundColor: "rgb(24,24,24)", boxShadow: "0px 0px 2px #f9e9f9", width: "100px", height: "30px", fontWeight: "bold", padding: "4px", marginTop: "8px", fontSize: "16px"}}>View</button>
                   </div>
                 </div>
               )

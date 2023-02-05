@@ -146,8 +146,8 @@ function AddEditServices(props) {
                 </div>
                 <div style={{display: "flex", marginTop: "24px", justifyContent: "space-between"}}>
                     <p style={{fontSize: "18px", marginTop: "4px"}}>Requires Employee:</p>
-                    <ColorButton backgroundColor={requiresEmployee ? "gray" : "rgb(24,24,24)"} clicked={requiresEmployeeSet(true)}>Yes</ColorButton>
-                    <ColorButton backgroundColor={requiresEmployee === false ? "gray" : "rgb(24,24,24)"} clicked={requiresEmployeeSet(false)}>No</ColorButton>
+                    <ColorButton backgroundColor={requiresEmployee ? "rgb(100,100,100)" : "rgb(24,24,24)"} clicked={requiresEmployeeSet(true)}>Yes</ColorButton>
+                    <ColorButton backgroundColor={requiresEmployee === false ? "rgb(100,100,100)" : "rgb(24,24,24)"} clicked={requiresEmployeeSet(false)}>No</ColorButton>
                 </div>   
                 <div style={{display: 'flex', justifyContent: "center", marginTop: "30px"}}>
                     <SubmitButton onClick={addService}>Add Service</SubmitButton>

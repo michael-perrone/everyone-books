@@ -182,7 +182,7 @@ function AdminNotifications(props) {
                     else if (flippedNotis[0].type === "ESID") { 
                         setType("Choice")
                     }
-                    else if (flippedNotis[0].type === "ERY" || flippedNotis[0].type === "ERYR") { 
+                    else if (flippedNotis[0].type === "ERY" || flippedNotis[0].type === "ERYR" || flippedNotis[0].type === "BRYR") { 
                         setType("Alert");
                     }
                     else if (flippedNotis[0].type === "ELBR" || flippedNotis[0].type === "ELB") { 

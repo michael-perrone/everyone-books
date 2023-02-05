@@ -17,6 +17,7 @@
   position: relative;
   top: -20px;
   z-index: 1;
+  filter: invert(0%);
 }
 
 

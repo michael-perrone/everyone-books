@@ -268,7 +268,7 @@ function ViewBooking(props) {
                     <p className={styles.bolder}>Cost of Booking:</p>
                     <p className={styles.fontFourteen}>{cost}</p>
                 </div>
-                <button onClick={deleteBooking} style={{backgroundColor: "salmon", height: "35px", width: "120px", position: "absolute", bottom: "40px", fontWeight: "bold", boxShadow: "0px 0px 2px #f9e9f9", border: "none"}}>Delete Booking</button>
+                <button onClick={deleteBooking} style={{backgroundColor: "salmon", color: "black", height: "35px", width: "120px", position: "absolute", bottom: "40px", fontWeight: "bold", boxShadow: "0px 0px 2px #f9e9f9", border: "none"}}>Delete Booking</button>
             </div>
             <div id={styles.rightContainer}>
                 {showProducts ?
@@ -300,14 +300,14 @@ function ViewBooking(props) {
                 {showProducts && 
                 <StatementAppear appear={selectedProducts.length > 0 && showProducts}>
                     <div className={styles.bottomButton}>
-                   <button style={{height: "35px", width: "120px", boxShadow: "0px 0px 2px #f9e9f9", border: "none"}} onClick={addProducts}>Add Product(s)</button>
+                   <button style={{height: "35px", width: "120px", backgroundColor: "rgb(24,24,24)", boxShadow: "0px 0px 2px #f9e9f9", border: "none"}} onClick={addProducts}>Add Product(s)</button>
                    </div>
                 </StatementAppear>
                 }
                 { !showProducts &&
                 <StatementAppear appear={selectedServices.length > 0 && !showProducts}>
                     <div className={styles.bottomButton}>
-                   <button style={{height: "35px", width: "120px", boxShadow: "0px 0px 2px #f9e9f9", border: "none"}} onClick={addServices}>Add Service(s)</button>
+                   <button style={{height: "35px", width: "120px", backgroundColor: "rgb(24,24,24)", boxShadow: "0px 0px 2px #f9e9f9", border: "none"}} onClick={addServices}>Add Service(s)</button>
                    </div>
                 </StatementAppear>
                 }

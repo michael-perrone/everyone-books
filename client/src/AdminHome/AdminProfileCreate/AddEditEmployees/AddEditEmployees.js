@@ -204,17 +204,17 @@ function AddEmployees(props) {
 
     return (
         <div id={styles.mainContainer}>
-            <div style={{display: "flex", width: "330px", justifyContent: "space-between", marginTop: "20px", marginBottom: "20px", alignSelf: "center"}}>
-                <p onClick={settingSelected("Add")} style={selected === "Add" ? {backgroundColor: "black", boxShadow: "0px 0px 4px black"} : {backgroundColor: "", boxShadow: ""}} className={styles.miniTabs}>Add</p>
-                <p onClick={settingSelected("Pending")} style={selected === "Pending" ? {backgroundColor: "black", boxShadow: "0px 0px 4px black"} : {backgroundColor: "", boxShadow: ""}} className={styles.miniTabs}>Pending</p>
-                <p onClick={settingSelected("Current")} style={selected === "Current" ? {backgroundColor: "black", boxShadow: "0px 0px 4px black"} : {backgroundColor: "", boxShadow: ""}} className={styles.miniTabs}>Current</p>
-                <p onClick={settingSelected("Hiring")} style={selected === "Hiring" ? {backgroundColor: "black", boxShadow: "0px 0px 4px black"} : {backgroundColor: "", boxShadow: ""}} className={styles.miniTabs}>Hiring</p>
+            <div style={{display: "flex", width: "360px", justifyContent: "space-around", marginTop: "20px", marginBottom: "20px", alignSelf: "center"}}>
+                <p onClick={settingSelected("Add")} style={selected === "Add" ? {backgroundColor: "black", boxShadow: "0px 0px 4px #f9e9f9"} : {backgroundColor: "", boxShadow: ""}} className={styles.miniTabs}>Add</p>
+                <p onClick={settingSelected("Pending")} style={selected === "Pending" ? {backgroundColor: "black", boxShadow: "0px 0px 4px #f9e9f9"} : {backgroundColor: "", boxShadow: ""}} className={styles.miniTabs}>Pending</p>
+                <p onClick={settingSelected("Current")} style={selected === "Current" ? {backgroundColor: "black", boxShadow: "0px 0px 4px #f9e9f9"} : {backgroundColor: "", boxShadow: ""}} className={styles.miniTabs}>Current</p>
+                <p onClick={settingSelected("Hiring")} style={selected === "Hiring" ? {backgroundColor: "black", boxShadow: "0px 0px 4px #f9e9f9"} : {backgroundColor: "", boxShadow: ""}} className={styles.miniTabs}>Hiring</p>
             </div>
             {selected === "Add" &&
             <React.Fragment>
             <p>Enter the employee username or unique ID to find an employee. Once employee is found, click the add button to add the employee to your business. Once the employee accepts your employment request they will be able to be scheduled at your business.</p>
             <div style={{display: 'flex', marginTop: "15px", justifyContent: "center"}}>
-                <input value={employeeId} onChange={employeeIdChanged} style={{width: "200px", height: "27px", border: "none", boxShadow: "0px 0px 5px #f9e9f9", fontSize: "14px", paddingLeft: "5px"}} placeholder={"Enter Employee ID"}/>
+                <input value={employeeId} onChange={employeeIdChanged} style={{width: "200px", height: "27px", border: "none", boxShadow: "0px 0px 5px #f9e9f9", fontSize: "14px", backgroundColor: "rgb(24,24,24)", paddingLeft: "5px"}} placeholder={"Enter Employee ID"}/>
                 <SubmitButton onClick={findEmployee}>Find Employee</SubmitButton>
             </div>
             {employeeName !== "" && successMessage === "" && <div style={{display: 'flex', width: "300px", marginTop: "20px", justifyContent: "space-between", alignSelf: "center", boxShadow: "0px 0px 5px black", padding: "10px"}}>
@@ -266,7 +266,7 @@ function AddEmployees(props) {
                     <div className={styles.q} style={{display: "flex", marginTop: "30px", flexDirection: "column", width: "375px", justifyContent: "space-around", alignItems: "center"}}>
                         <p style={{width: "300px", position: "relative"}}>Employee roles or titles your looking for:</p>
                         <div value={newItem} style={{display: "flex", position: "relative", marginTop: "8px"}}>
-                            <input onChange={(e) => setNewItem(e.target.value)} placeholder="Ex: Waxer, Hair Stylist, Instructor" style={{width: "220px", paddingLeft: "4px", border: "none", boxShadow: "0px 0px 3px #f9e9f9", height: "24px"}} />
+                            <input onChange={(e) => setNewItem(e.target.value)} placeholder="Ex: Waxer, Hair Stylist, Instructor" style={{width: "220px", paddingLeft: "4px", backgroundColor: "rgb(24,24,24)", border: "none", boxShadow: "0px 0px 3px #f9e9f9", height: "24px"}} />
                             <button id={styles.addButton} style={{border: "none", marginLeft: "20px", padding: "4px", height: "24px", padding: "0px 8px", fontSize: "16px" }} onClick={addToNewDesired}>Add</button>
                         </div>
                         {desired && <div style={{maxWidth: "300px", width: "300px", marginTop: "20px", overflow: "auto", display: "grid", gridTemplateColumns: createGridList2(desired)}}>

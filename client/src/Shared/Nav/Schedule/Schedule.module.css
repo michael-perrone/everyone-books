@@ -23,15 +23,14 @@
   .employeeBookingContainer {
     font-size: 16px;
     padding: 20px;
-    border-bottom: 1px solid black;
+    border-bottom: 1.5px solid #f9e9f9;
     height: 160px;
     display: flex;
     justify-content: space-around;
   }
 
   .bold {
-    font-weight: bold;
-    text-decoration: underline;
+    font-weight: 500;
     margin-bottom: 10px;
   }
 

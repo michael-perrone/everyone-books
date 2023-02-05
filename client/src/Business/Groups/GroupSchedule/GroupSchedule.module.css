@@ -1,22 +1,22 @@
 #main {
     height: 700px;
-    width: 380px;
+    width: 370px;
     top: 30px;
     position: relative;
     background-color: #232323;
 }
 
 .groupHolder {
-    border: 1px solid gray;
+    box-shadow: 0px 0px 4px #f9e9f9;
     background-color: rgb(24,24,24);
     height: 214px;
-    padding: 10px 0 10px 0;
-    width: 365px;
+    padding: 10px 0 10px 10px;
+    width: 350px;
+    margin-top: 10px;
 }
 
 .halfDiv {
-    width: 50%;
-    padding-left: 10px;
+    width: 170px;
     display: flex;
     flex-direction: column;
 }

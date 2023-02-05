@@ -8,8 +8,8 @@ import SmallList from '../../../Shared/SmallList/SmallList';
 function GroupSchedule(props) {
     return (
         <div id={styles.main}>
-            <p style={{ width: "380px", textAlign: "center", fontSize: "24px"}}>Group Schedule</p>
-            <div style={{width: "380px", textAlign: "center", marginTop: "20px"}}>
+            <p style={{ width: "360px", textAlign: "center", fontSize: "24px"}}>Group Schedule</p>
+            <div style={{width: "360px", textAlign: "center", marginTop: "20px"}}>
                 <DateDrop setDateString={(dateString) => props.setDateo(dateString)}/>
             </div>
             {props.groups.length === 0 &&
@@ -24,13 +24,13 @@ function GroupSchedule(props) {
                     <div id={styles.fullDiv}>
                     <div className={styles.halfDiv}>
                         <p>Group Name:</p>
-                        <p style={{fontWeight: "bold"}}>{group.name}</p>
+                        <p style={{fontSize: "14px", marginTop: "4px"}}>{group.name}</p>
                         <p style={{marginTop: "20px"}}>Time:</p>
-                        <p style={{fontWeight: "bold"}}>{group.time}</p>
+                        <p style={{fontSize: "14px", marginTop: "4px"}}>{group.time}</p>
                         <p style={{marginTop: "20px"}}>Employee:</p>
-                        <p style={{fontWeight: "bold"}}>{group.employeeName}</p>
+                        <p style={{fontSize: "14px", marginTop: "4px"}}>{group.employeeName}</p>
                         <p style={{marginTop: "20px"}}>{props.bct}:</p>
-                        <p style={{fontWeight: "bold"}}>{group.bcn}</p>
+                        <p style={{fontSize: "14px", marginTop: "0px"}}>{group.bcn}</p>
                     </div>
                     <div className={styles.halfDiv}>
                         <p style={{textAlign: "center"}}>Customers:</p>
@@ -39,9 +39,9 @@ function GroupSchedule(props) {
                         </div>
                         
                         <p style={{marginLeft: "15px"}}>Group Limit:</p>
-                        <p style={{fontWeight: "bold", marginLeft: "15px"}}>{group.groupLimitNumber}</p>
+                        <p style={{fontSize: "14px",marginLeft: "15px", marginTop: "3px"}}>{group.groupLimitNumber}</p>
                         <p style={{marginTop: "20px", marginLeft: "15px"}}>Open to Public: </p>
-                        <p style={{fontWeight: "bold", marginLeft: "15px"}}>{group.openToPublic ? "Yes" : "No"}</p>
+                        <p style={{marginTop: "3px",fontSize: "14px",marginLeft: "15px"}}>{group.openToPublic ? "Yes" : "No"}</p>
                     </div>
                     <p></p>
                 </div>

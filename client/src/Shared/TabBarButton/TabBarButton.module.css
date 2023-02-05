@@ -17,6 +17,10 @@
     font-family: 'Josefin Sans';
 }
 
+#help {
+    filter: invert(0%);
+}
+
 
 .tabButton:hover {
     background-color: #fbdefb;

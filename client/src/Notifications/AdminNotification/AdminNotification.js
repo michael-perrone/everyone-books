@@ -40,6 +40,10 @@ function AdminNotification(props) {
                 setNotiMessage(props.notification.fromString + " has accepted your request to join your business as an employee.");;
                 setType("Alert");
             }
+            else if (type === "BRYR") {
+                setNotiMessage("You accepted an employment request from " + props.notification.fromString + " to join your business. ");;
+                setType("Alert");
+            }
             else if (type === "ELBR" || type === "ELB") { 
                 setNotiMessage(props.notification.fromString + " has left your business as an employee");
                 setType("Alert");

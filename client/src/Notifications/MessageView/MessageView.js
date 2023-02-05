@@ -207,7 +207,8 @@ function MessageView(props) {
                     setMessage("You accepted this request from " + props.notification.fromString + " to join there business as an employee! You will now be able to be added to their shift schedule.");
                     setHeader("Request Accepted");
                 }
-                else if (type === "ERY" || type === "ERYR") {
+                
+                else if (type === "ERY" || type === "ERYR" || "BRYR") {
                     setMessage("Your business accepted a request from " + props.notification.fromString + " to join your business as an employee. They can now be added to your shift schedule.");
                     setHeader("Employee Accepted");
                 }

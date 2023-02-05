@@ -40,13 +40,13 @@ function CourtColumn(props) {
                     timeEndNum - timeStartNum > 3 ?
                     <div onClick={props.clickGroup(sortedGroup)} className={styles.groupContainer} style={{position: "absolute", top: `${(timeStartNum - openTimeNum) * 16}px`,
                      height: timeStartNum >= timeEndNum ? "0px" : `${(timeEndNum - timeStartNum) * 16 - 2}px`, width: !props.minned ? "147px" : "225px"}}>
-                        <p style={{fontWeight: "bold", padding: "5px"}}>{timeSplit[0]}</p>
-                        <p style={{fontWeight: "bold", padding: "5px"}}>{timeSplit[1]}</p>
+                        <p style={{fontWeight: "bold", padding: "5px", color: "black"}}>{timeSplit[0]}</p>
+                        <p style={{fontWeight: "bold", padding: "5px", color: "black"}}>{timeSplit[1]}</p>
                     </div>
                     : 
                     <div onClick={props.clickGroup(sortedGroup)} className={styles.groupContainer} style={{position: "absolute", justifyContent: "center", top: `${(timeStartNum - openTimeNum) * 16}px`,
                      height: timeStartNum >= timeEndNum ? "0px" : `${(timeEndNum - timeStartNum) * 16 - 2}px`, width: !props.minned ? "147px" : "225px"}}>
-                        <p style={{fontWeight: "bold", position: 'relative', top: "1.5px"}}>{sortedGroup.time}</p>
+                        <p style={{fontWeight: "bold", position: 'relative', top: "1.5px", color: "black"}}>{sortedGroup.time}</p>
                     </div>
                 )
             })}
