@@ -245,7 +245,7 @@ function ServiceFinder(props) {
                 <div className={styles.subContainer}>
                     <div className={styles.row}>
                          <p className={styles.p}>Search for Services:</p>
-                        <input style={{fontFamily: "Josefin Sans"}} onChange={searchForServices} className={styles.inputo}  placeholder={"Enter Service Name"}/>
+                        <input style={{backgroundColor: "rgb(24,24,24)", boxShadow: "0px 0px 3px #f9e9f9", fontFamily: "Josefin Sans"}} onChange={searchForServices} className={styles.inputo}  placeholder={"Enter Service Name"}/>
                     </div>
                     {servicesFound.length > 0 && <div style={{display: "flex", marginTop: "50px", justifyContent: "space-between"}}>
                         <div className={styles.clickDiv} onClick={sortServiceNames} style={{display: "flex"}}>

@@ -44,7 +44,7 @@
     height: 24px;
     border: none;
     padding-left: 8px;
-    box-shadow: 0px 0px 3px black;
+    box-shadow: 0px 0px 3px #f9e9f9;
 }
 
 #formContainer {
@@ -59,7 +59,6 @@
 #welcomeContainer {
     width: 340px;
     height: 700px;
-    margin-top: 40px;
     position: relative;
     padding: 5px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -84,6 +83,7 @@ option {
 #inputOrSelectKindBusiness {
     width: 240px; 
     height: 26px;
+    background-color: rgb(24,24,24);
     font-size: 16px;
     margin-top: 10px;
 }

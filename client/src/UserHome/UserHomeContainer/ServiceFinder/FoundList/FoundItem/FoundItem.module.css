@@ -1,8 +1,11 @@
 .container {
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid #f9e9f9;
+    padding-bottom: 6px;
     font-family: 'Josefin Sans';
     font-size: 15px;
-    width: 375px;
+    width: 365px;
+    padding-left: 5px;
+    padding-right: 5px;
     height: 40px;
     display: flex;
     justify-content: space-between;
@@ -10,8 +13,8 @@
 }
 
 .container:hover {
-    background-color: rgb(230, 230, 230);
-    box-shadow: 0px 0px 3px black;
+    background-color: rgb(24, 24, 24);
+    box-shadow: 0px 0px 4px #f9e9f9;
     cursor: pointer;
 }
 

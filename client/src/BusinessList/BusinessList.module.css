@@ -31,27 +31,17 @@
   display: flex;
   justify-content: space-around;
   width: 100%;
-  margin-top: 350px;
+  margin-top: 50px;
   flex-wrap: wrap;
 }
 
 
-@media(min-width: 1150px) {
-  #defaultHeight {
-   height: 105vh;
-  }
-}
 
-@media(max-width: 1150px) {
-  #adverContainer {
-    margin-top: 45px;
-  }
-}
+
 
 
 @media(max-width: 600px) {
   #bigC {
     margin-top: 50px;
-    height: 900px;
   }
 }

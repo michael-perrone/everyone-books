@@ -1,12 +1,11 @@
 #notificationsContainer {
     height: 600px;
     width: 370px;
-    box-shadow: 0px 0px 2px black;
+    box-shadow: 0px 0px 4px #f9e9f9;
     max-height: 600px;
     margin-top: 20px;
     position: relative;
     overflow: auto;
-    background-color: white;
 }
 
 #main {

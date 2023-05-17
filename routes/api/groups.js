@@ -162,7 +162,7 @@ router.post("/toJoin", userAuth, async (req, res) => {
     const groups = await Group.find({openToPublic: true, businessId: req.body.businessId}).select(["price", "time", "date", "groupLimitNumber", "customers", "type"]);
     const filteredByDate = [];
     for (let i = 0; i < groups.length; i++) {
-        if (new Date(groups[i].date) > new Date()) {
+        if ((new Date(groups[i].date).getDate() >= new Date().getDate() && new Date(groups[i].date).getMonth >= new Date().getMonth) || new Date(groups[i].date) >= new Date() ) {
             filteredByDate.push(groups[i]);
         }
     }

@@ -4,7 +4,7 @@ import styles from './SelectOneList.module.css';
 function SelectOneList(props) {
     return (
         props.array ?
-        <div style={{maxHeight: "270px", overflow: "auto", boxShadow: '0px 0px 2px black', width: "250px"}}>
+        <div style={{maxHeight: "270px", overflow: "auto", boxShadow: '0px 0px 3px #f9e9f9', width: "250px"}}>
         {props.array.map((element, index) => {
             return (
                     props.selected !== element["id"] ?

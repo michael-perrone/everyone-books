@@ -277,7 +277,7 @@ function RestaurantBuilder(props) {
         <div ref={wholeScreen}>
             <FakeNav/>
             <div style={{alignItems: showBlock ? "flex-start" : "center"}} onDragOver={grabAny} id={styles.whole}>
-               {showBlock && <button style={{border: "none", boxShadow: "0px 0px 2px black", backgroundColor: "white", height: "30px", width: "80px", fontWeight: "bold", fontSize: "18px", position: "absolute", right: 200, top: "15px"}} onClick={resetAll}>Reset</button>}
+               {showBlock && <button style={{border: "none", boxShadow: "0px 0px 2px black", backgroundColor: "#232323", height: "30px", width: "80px", fontWeight: "bold", fontSize: "18px", position: "absolute", right: 200, top: "15px"}} onClick={resetAll}>Reset</button>}
                 {!showBlock && 
                 <div id={styles.directions}>
                     <p id={styles.rBuilderHeader}>Welcome to EveryoneBooks Restaurant Builder!</p>
@@ -289,15 +289,15 @@ function RestaurantBuilder(props) {
                     <SubmitButton onClick={getStartedHit} marginTop={"20px"}>{buttonTitle}</SubmitButton>
                 </div>
                 }
-                {showBlock && <button onClick={helpHit} style={{border: "none", boxShadow: "0px 0px 2px black", backgroundColor: "salmon", height: "30px", width: "80px", fontWeight: "bold", fontSize: "18px", position: "absolute", right: 100, top: "15px"}}>Help</button>}
-                {showBlock && <div ref={box} id={styles.layoutBlock} style={{height: `${height}px`, width: `${width}px`}}>
+                {showBlock && <button onClick={helpHit} style={{border: "none", boxShadow: "0px 0px 2px black", color: "black", backgroundColor: "salmon", height: "30px", width: "80px", fontWeight: "bold", fontSize: "18px", position: "absolute", right: 100, top: "15px"}}>Help</button>}
+                {showBlock && <div ref={box} id={styles.layoutBlock} style={{height: `${height}px`, width: `${width}px`, boxShadow: "0px 0px 3px #f9e9f9"}}>
                 {showButton && <button id={styles.setTableButton} onClick={setTable} style={{position: "absolute", right: 0, top: "-40px", zIndex: 1002020}}>Set Table</button>}
                     <div draggable={false} onMouseLeave={pointerIsUp} onPointerUp={pointerIsUp} onMouseMove={pointerIsMoving} onPointerDown={pointerIsDown} id={'yoo'} style={{transform: `translateX(${translate.x}px) translateY(${translate.y}px)`, zIndex: 1000, position: "absolute", cursor: "grab", top: "-60px", right: `${-10 - (numOfPeople * 4)}px`, height: tableHeight * 2, width: tableWidth * 2, display: 'flex', justifyContent: "center", alignItems: "center"}}>
-                       <div draggable={false} ref={table} style={{ backgroundColor: "rgb(249, 233, 249)", height: tableHeight, width: tableWidth, border: "2px solid black"}}></div>
+                       <div draggable={false} ref={table} style={{ backgroundColor: "rgb(105, 105, 105)", height: tableHeight, width: tableWidth, border: "1px solid white"}}></div>
                     </div>
                     <div style={{position: "absolute", top: "-50px"}}>
                         <button onClick={rotateTable} style={{backgroundColor: "transparent", border: "none", zIndex: 100000000}}><img src={rotate}></img></button>
-                        <select onChange={toSetNumOfPeople} style={{position: "relative", top: '-12px', left: "30px", borderRadius: 0, border: "none", paddingLeft: "4px", boxShadow: "0px 0px 2px black", backgroundColor: "white", height: "30px", width: "180px", fontSize: "18px"}}>
+                        <select onChange={toSetNumOfPeople} style={{position: "relative", top: '-12px', left: "30px", borderRadius: 0, border: "none", paddingLeft: "4px", boxShadow: "0px 0px 3px #f9e9f9", backgroundColor: "rgb(15,15,15)", height: "30px", width: "180px", fontSize: "18px"}}>
                             <option>2</option>
                             <option>4</option>
                             <option>6</option>
@@ -310,9 +310,9 @@ function RestaurantBuilder(props) {
                             <option>20</option>
                         </select>      
                     </div>
-                    {tables.length > 0 && <button onClick={sendTableInfo} style={{border: "none", boxShadow: "0px 0px 2px black", backgroundColor: "white", height: "30px", width: "100px", fontWeight: "bold", fontSize: "18px", position: "absolute", bottom: "-45px", left: width / 2 - 50}}>Finish up!</button>}
+                    {tables.length > 0 && <button onClick={sendTableInfo} style={{border: "none", boxShadow: "0px 0px 4px #f9e9f9", backgroundColor: "rgb(15,15,15)", height: "30px", width: "100px", fontWeight: "bold", fontSize: "18px", position: "absolute", bottom: "-45px", left: width / 2 - 50}}>Finish up!</button>}
                     {tables.map(table => {
-                          return <div onDoubleClick={(id) => deleteTable(table.id)} ref={table} style={{ backgroundColor: "rgb(229, 229, 229)", height: table.height, width: table.width, position: "absolute", top: table.top, left: table.left, border: "2px solid black", display: "flex", justifyContent: "center", alignItems: "center"}}><p style={{fontSize: "20px", fontWeight: "bold"}}>{getNum(table.width, table.height)}</p></div>
+                          return <div onDoubleClick={(id) => deleteTable(table.id)} ref={table} style={{ backgroundColor: "rgb(120,120,120)", height: table.height, width: table.width, position: "absolute", top: table.top, left: table.left, border: "1px solid white", display: "flex", justifyContent: "center", alignItems: "center"}}><p style={{fontSize: "20px", fontWeight: "bold"}}>{getNum(table.width, table.height)}</p></div>
                         })}
                     <div className={styles.divo} style={{width: "2px", height: height, position: "absolute", left: 0, top: 0}}></div>
                     <div className={styles.divo} style={{width: "2px", height: height, position: "absolute", right: 0, top: 0}}>{tables.length === 0 && <button style={{position: "absolute", right: -12, top: height / 2 - 12}} onDragStart={dragRight} onDragEnd={test} draggable={true} className={styles.cornerButton}><img src={crop}></img></button>}</div>

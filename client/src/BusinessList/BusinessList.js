@@ -17,6 +17,7 @@ class BusinessList extends React.Component {
       user: {},
       idSentTo: "",
       ads: [],
+      currentCity: ""
     };
     this.advancedSearchFunction = this.advancedSearchFunction.bind(this);
     this.changeSentTo = this.changeSentTo.bind(this);
@@ -29,15 +30,16 @@ class BusinessList extends React.Component {
 
 
   componentDidMount() {
+    const newThis = this;
     if (this.props.token) {
       axios.get('/api/userprofile/myprofile',
       {headers: {'x-auth-token': this.props.token}})
       .then(response => {
          this.setState({user: response.data.user})
      })
-     axios.get("/api/ads/getRandomC").then(response => {
-        this.setState({ads: response.data.ads})
-     })
+    //  axios.get("/api/ads/getRandomC").then(response => {
+    //     this.setState({ads: response.data.ads})
+    //  })
       axios.post("/api/ads/getRandom", {limit: 3}).then(
         response => {
           if (response.status === 200) {
@@ -57,7 +59,38 @@ class BusinessList extends React.Component {
         // just catching 406 to do nothing
       })
     }
+    console.log("YOOOO")
+    navigator.geolocation.getCurrentPosition(function(position) {
+      const lat = position.coords.latitude; 
+      const long = position.coords.longitude;
+      console.log(this)
+      axios.get(`http://www.mapquestapi.com/geocoding/v1/reverse?key=5z4IX12uixwGDlNJ9qaPHYA4tI3dKgNU&location=${lat},${long}&includeRoadMetadata=false&includeNearestIntersection=false`
+      ).then(function(response){
+              const locationInfo = response.data.results[0].locations[0];
+              const zip = locationInfo.postalCode.split("-")[0];
+              const city = locationInfo.adminArea5;
+              //this.setState({currentCity: city})
+              const state = locationInfo.adminArea3;
+              axios.post('/api/businessList/location', {zip, city, state}).then(response => {
+
+                  if (response.data.businessesFromZip && response.data.businessesFromZip.length > 0) {
+                      newThis.setState({businesses: response.data.businessesFromZip});
+                  }
+                  else if (response.data.businessesFromCity && response.data.businessesFromCity.length > 0) {
+                    newThis.setState({businesses: response.data.businessesFromCity});
+                  }
+              }).catch(error => {
+                
+                console.log(error);
+              })
+          }
+      )
+  });
   } 
+
+
+  
+
 
   advancedSearchFunction(city, state, zip, businessName, typeOfBusiness) {
     return event => {
@@ -104,11 +137,14 @@ class BusinessList extends React.Component {
           <div id={this.state.businesses.length > 3 ? "" : styles.defaultHeight} className={styles.actualClubsContainer}>
           {this.props.token && this.state.businesses.map(element => {
                 let following = false;
-                for (let i = 0; i < this.state.user.businessesFollowing.length; i++) {                  
-                  if (element._id === this.state.user.businessesFollowing[i]) {
-                    following = true;
+                if (this.state.user.businessesFollowing) {
+                  for (let i = 0; i < this.state.user.businessesFollowing.length; i++) {                  
+                    if (element._id === this.state.user.businessesFollowing[i]) {
+                      following = true;
+                    }
                   }
                 }
+             
               return (
                    <BusinessInList
                   following={following}

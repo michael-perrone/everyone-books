@@ -207,10 +207,6 @@ function ShiftEditor(props) {
         <div id={styles.scheduleContainer}>
             <p style={{ position: 'absolute', left: '40px', bottom: "10px", color: 'darkred' }}>{breakError}</p>
             <p style={{ width: '100%', textAlign: 'center', fontSize: '20px', position: "relative", top: "8px" }}>Edit Shift</p>
-            <div style={{marginTop: "30px"}}>
-                <span style={{position: "relative", top: "-3px"}}>Shift Date:</span>
-                <input style={{ position: 'relative', top: '-2px', marginLeft: "8px" }} className={styles.inputs + " " +  otherstyles.seePink} onChange={setDateHandler} value={date} placeholder="select date" type="date" />
-            </div>
             <div style={{ display: "flex", marginTop: "25px"}}>
                 <p>Employee:</p>
                 <select style={{marginLeft: "8px"}} id='changer' onChange={(e) => {

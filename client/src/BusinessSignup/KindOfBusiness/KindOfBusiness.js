@@ -35,7 +35,7 @@ const KindOfBusiness = (props) => {
     return (
     <div id={styles.kindOfBusinessDiv}>
         <p>First, select below what business you would like to set up. If you don't see your type of business, please choose other or contact us.</p>
-        <select style={{border: "none", }} onChange={getKindOfBusinessFunction} id={styles.inputOrSelectKindBusiness}>
+        <select style={{border: "none", boxShadow: "0px 0px 4px #f9e9f9" }} onChange={getKindOfBusinessFunction} id={styles.inputOrSelectKindBusiness}>
             <option> </option>
             <option>Wax Center</option>
             <option>Beauty Center</option>
@@ -52,7 +52,7 @@ const KindOfBusiness = (props) => {
         <TemporaryStatement marginTop={'15px'} show={businessKindEntered && props.kindOfBusiness !== ""}>Cool!  A {props.kindOfBusiness}.  You got it.</TemporaryStatement>
         <StatementAppear appear={props.kindOfBusiness !== ""}>
         <p>Now let's get the name of your business.</p>
-        <input onChange={getNameOfBusinessFunction} style={{paddingLeft: "8px", width: '200px'}} id={styles.inputOrSelectKindBusiness} placeholder="Business Name"/>
+        <input onChange={getNameOfBusinessFunction} style={{paddingLeft: "8px", boxShadow: "0px 0px 4px #f9e9f9", width: '200px', border: "none"}} id={styles.inputOrSelectKindBusiness} placeholder="Business Name"/>
         <SubmitButton onClick={submitName}>Submit</SubmitButton>
         </StatementAppear>
         <StatementAppear marginTop={'40px'} appear={props.nameOfBusiness !== "" && props.kindOfBusiness !== ""}>

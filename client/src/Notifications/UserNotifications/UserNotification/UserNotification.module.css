@@ -3,16 +3,15 @@
     height: 90px;
     width: 370px;
     align-items: center;
-    border-bottom: 0.5px solid black;
+    border-bottom: 0.5px solid #f9e9f9;
     cursor: pointer;
     position: relative;
 }
 
 #notificationContainer:hover {
-    background-color: lightgray;
-    box-shadow: 0px 0px 2px black;
+    cursor: pointer;
 }
 
 #notificationContainer.selected {
-    background-color: lavenderblush;
+    background-color: rgb(60,60,60);
 }

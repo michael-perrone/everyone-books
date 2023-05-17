@@ -31,7 +31,7 @@ input {
     width: 350px;
     box-shadow: 0px 0px 5px #f9e9f9;
     display: flex;
-    background-color: rgb(100,100,100);
+    background-color: rgb(55,55,55);
     flex-direction: column;
     align-items: center;
 }

@@ -42,7 +42,7 @@ const BusinessInsideUserHome = props => {
            <button className={styles.clubButton} onClick={bookACourt}>
           View Business
         </button>
-        <button style={{backgroundColor: "lavenderblush"}} className={styles.clubButton} onClick={unfollowBusiness}>
+        <button style={{backgroundColor: "salmon", color: "black"}} className={styles.clubButton} onClick={unfollowBusiness}>
           Unfollow Business
         </button>
       </div>

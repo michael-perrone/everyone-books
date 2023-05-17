@@ -6,6 +6,7 @@ import styles from './AdBuilder.module.css';
 import axios from 'axios';
 import {connect} from 'react-redux';
 import OtherAlert from '../../OtherAlerts/OtherAlerts'
+import ServiceList from "../../Shared/ServiceList/ServiceList";
 
 
 function AdBuilder(props) {
@@ -16,6 +17,14 @@ function AdBuilder(props) {
     const [error, setError] = React.useState("");
     const [showSavedAds, setShowSavedAds] = React.useState(false);
     const [ads, setAds] = React.useState([]);
+    const [yesPromo, setYesPromo] = React.useState(false);
+    const [noPromo, setNoPromo] = React.useState(false);
+    const [promoType, setPromoType] = React.useState("");
+
+    function toSetPromoType(e) {
+        setPromoType(e.target.value);
+    }
+    
 
 
     React.useEffect(() => {
@@ -87,6 +96,19 @@ function AdBuilder(props) {
         }
     }
 
+    function yesPromoHit() {
+        setYesPromo(true);
+        if (noPromo) {
+            setNoPromo(false);
+        }
+    }
+    function noPromoHit() {
+        setNoPromo(true);
+        if(yesPromo) {
+            setYesPromo(false);
+        }
+    }
+
 
     return (
         <div id={styles.main}>
@@ -96,17 +118,35 @@ function AdBuilder(props) {
                     <p style={{fontSize: "20px", position: "relative", left: "-23px", fontWeight: "bold"}}>Build your advertisement</p>
                     <div>
                     <p style={{marginTop: "30px"}}>Step One: Choose Target Audience</p>
-                    <select onChange={toSetTargetAudience} style={{height: "24px", width: "250px", backgroundColor: "rgb(105,105,105)", marginTop: "10px", paddingLeft: "4px", border: "1.5px solid #f9e9f9"}}>
+                    <select onChange={toSetTargetAudience} style={{height: "24px", width: "250px", backgroundColor: "rgb(24,24,24)", marginTop: "10px", paddingLeft: "4px", boxShadow: "0px 0px 4px white", border: "none"}}>
                         <option> </option>
                         <option>Potential Employees</option>
                         <option>Potential Customers</option>
                     </select>
                     <p style={{marginTop: "30px"}}>Step Two: Enter Advertisement Header</p>
-                    <input style={{height: "20px", backgroundColor: "rgb(105,105,105)", width: "250px", paddingLeft: "4px", marginTop: "10px", paddingLeft: "4px"}} placeholder={"Advertisement Header"} onChange={toSetAdHeader}/>
+                    <input style={{height: "20px", backgroundColor: "rgb(24,24,24)", width: "250px", paddingLeft: "4px", marginTop: "10px", paddingLeft: "4px", boxShadow: "0px 0px 4px white", border: "none"}} placeholder={"Advertisement Header"} onChange={toSetAdHeader}/>
+                    
                     <p style={{marginTop: "30px"}}>Step Three: Enter Advertisement Details</p>
-                    <textarea onChange={toSetAdDetails} placeholder="Advertisement Details" style={{height: "300px", marginTop: "10px", width: "260px", backgroundColor: "rgb(105,105,105)", padding: "4px"}}/>
+                    <textarea onChange={toSetAdDetails} placeholder="Advertisement Details" style={{height:"300px", marginTop: "10px", width: "260px", backgroundColor: "rgb(24,24,24)", padding: "4px", boxShadow: "0px 0px 4px white", border: "none"}}/>
                     </div>
-                    <button onClick={saveAd} style={{backgroundColor: "rgb(24,24,24)", marginTop: "10px", border: "none", boxShadow: "0px 0px 3px #f9e9f9", height: "30px", fontSize:"18px", width: "80px"}}>Save</button>
+                    <p style={{marginTop: "30px"}}>Step Four: Create Promotion for Advertisement?</p>
+                    <div style={{display: "flex", width: "140px", justifyContent: "space-between"}}>
+                    <button onClick={yesPromoHit} style={{backgroundColor: yesPromo ? "rgb(140,140,140)" : "rgb(70,70,70)", marginTop: "10px", border: "none", boxShadow: "0px 0px 3px #f9e9f9", height: "30px", fontSize:"18px", width: "60px"}}>Yes</button>
+                    <button onClick={noPromoHit} style={{backgroundColor: noPromo ? "rgb(140,140,140)" : "rgb(70,70,70)", marginTop: "10px", border: "none", boxShadow: "0px 0px 3px #f9e9f9", height: "30px", fontSize:"18px", width: "60px"}}>No</button>
+                    </div>
+                   
+                    {noPromo && <p style={{width: "350px", marginBottom: "20px", marginTop: "30px"}}>You have chosen for there to be no promotion for this advertisement. Click "Yes" above if you'd like to create a promotion for this advertisement. Please hit save to finish creating your advertisement. </p>}
+                    {yesPromo && <div style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
+                            <p style={{marginTop: "20px"}}>What type of promotion would you like to create?</p>
+                            <select onChange={(e) => toSetPromoType(e.target.value)} style={{border: "none", paddingLeft: "10px", width: "180px", boxShadow: "0px 0px 4px white", height: "25px", marginTop: "10px"}}>
+                                 <option>Singular Service</option>
+                                 <option>Multiple Services</option>
+                                 <option>Singular Product</option>
+                                 <option>Multiple Products</option>
+                                 <option>Special Business Offers</option>
+                            </select>
+                        </div>}
+                    <button onClick={saveAd} style={{backgroundColor: "rgb(24,24,24)", marginBottom: "10px", marginTop: "30px", border: "none", boxShadow: "0px 0px 3px #f9e9f9", height: "30px", fontSize:"18px", width: "80px"}}>Save</button>
                 </div>
                 <div id={styles.borderr} className={styles.halfo}>
                         <p style={{fontWeight: "bold", fontSize: "18px", marginBottom: "6px"}}>{showSavedAds ? "Saved Advertisements" : "Example Advertisement"}</p>
