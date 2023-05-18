@@ -7,6 +7,7 @@ import CourtContainer from "./CourtContainer/CourtContainer";
 import ViewBooking from './ViewBooking/ViewBooking';
 import Spinner from '../Spinner/Spinner';
 import ViewGroup from "./ViewGroup/ViewGroup";
+import Chatty from "../Chatty/Chatty";
 
 function Business(props) {
   const [sortedBookings, setSortedBookings] = useState([]);
@@ -130,6 +131,8 @@ function Business(props) {
                   eq={eq}
                   bct={bct}    
                 />
+                {!loading && <Chatty/>}
+                
                 {!loading ? <CourtContainer clickGroup={clickGroup} sortedGroups={groups} clickBooking={clickBooking} sortedBookings={sortedBookings} openTime={openTime} closeTime={closeTime} bct={bct} bcn={bcn}/> : 
                   <Spinner/>
                 }
