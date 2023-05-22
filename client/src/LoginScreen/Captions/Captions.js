@@ -1,4 +1,5 @@
 import React from "react";
+import Chat from "../../Chat/Chat";
 import styles from "./Captions.module.css";
 class Captions extends React.Component {
   render() {

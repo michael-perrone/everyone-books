@@ -1,0 +1,44 @@
+#ani {
+    animation: stillGotIt 4s; 
+    filter: inherit; 
+    height: 70px;
+    width: 90px;
+    
+}
+
+#closedMouth{
+    filter: inherit;
+    position: absolute;
+    z-index: 100000;
+    height: 60px;
+    width: 60px;
+    left: 0;
+    top: 0;
+}
+
+#plane {
+  height: 30px;
+  width: 30px;
+  position: absolute;
+  z-index: 100000000000;
+  bottom: 5px;
+  cursor: pointer;
+  right: 6px;
+  filter: invert(40%);
+}
+
+#plane:hover {
+  filter: inherit;
+}
+
+
+@keyframes stillGotIt{
+    0% {
+        -webkit-transform: rotate(-70deg);
+        transform: rotate(-70deg);
+      }
+      100% {
+        -webkit-transform: rotate(70deg);
+        transform: rotate(70deg);
+      }
+}

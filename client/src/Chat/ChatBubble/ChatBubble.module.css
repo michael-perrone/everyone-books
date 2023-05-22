@@ -1,0 +1,56 @@
+ .box {
+         width: 250px;
+         margin-left: 30px;
+         margin-top: 10px;  
+         background: #f6c2eb;
+         padding: 10px;
+         text-align: center;
+         font-weight: 900;
+         color: #fff;
+         font-family: arial;
+         position: relative;
+         font-size: 14px;
+       }
+      
+    .arrow{
+         content: "";
+         width: 0px;
+         height: 0px;
+         position: absolute;
+         border-right: 10px solid #f6c2eb;
+         border-left: 10px solid transparent;
+         border-top: 10px solid #f6c2eb;
+         border-bottom: 10px solid transparent;
+         left: -19px;
+        top: 0px;
+       }
+    
+
+
+       .userInputBox{
+        width: 250px;
+        background: lightgreen;
+        padding: 10px;
+        text-align: center;
+        color: black;
+        font-family: arial;
+        position: relative;
+        right: -145px;
+        font-weight: 900;
+        font-size: 14px;
+       }
+
+
+       .userArrow{
+        content: "";
+        width: 0px;
+        height: 0px;
+        position: absolute;
+        border-right: 10px solid lightgreen;
+         border-left: 10px solid transparent;
+        border-bottom: 10px solid lightgreen;
+        border-top: 10px solid transparent;
+        right: -19px;
+        transform: rotate(180deg);
+        top: 0px;
+       }
