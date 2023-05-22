@@ -6,7 +6,7 @@ import send from './send.png';
 
 const Chatty = (props) => {
     const intro = "Hello my name is chatty the chat bot I am quite silly and willy but I will do my best to help you today.";
-    const defaultResponse = "We're sorry! We aren't sure what you are requesting help with. Please try again."; 
+    const defaultResponse = "Pickle sorry! We aren't sure what you are requesting help with. Please try again."; 
     const bookingResponse = "Would you like to schedule a booking?"
     let counter = 0; 
 
@@ -73,6 +73,12 @@ const Chatty = (props) => {
             return;
         }
     }, [chats.length]);
+
+    useEffect(function() {
+        if (chats.length === 3) {
+            console.log(chats[2].msg);
+        }
+    }, [chats.length])
     
     function changeTextFieldText(event) {
         setTextFieldText(event.target.value);
@@ -95,19 +101,21 @@ const Chatty = (props) => {
         let newStringToArray = splitStr(botMessage);
         console.log(botMessage);
         const potatio = setInterval(() => {
-           if (chatsReplica[chatsReplica.length - 1].msg === undefined) {
-               chatsReplica[chatsReplica.length - 1].msg = "";
-           }
+        //    if (chatsReplica[chatsReplica.length - 1].msg === undefined) {
+        //        chatsReplica[chatsReplica.length - 1].msg = "";
+        //    }
            console.log(newStringToArray[counter]);
-            chatsReplica[chatsReplica.length - 1].msg = chatsReplica[chatsReplica.length - 1].msg + newStringToArray[counter];
-            console.log(chatsReplica);
-            setChats(chatsReplica);
+            let str = chatsReplica[chatsReplica.length - 1].msg;
+            str = str + newStringToArray[counter];
+            let newObj = {...chatsReplica[chatsReplica.length - 1], msg: str};
+            chatsReplica[chatsReplica.length - 1] = newObj;
+            setChats([...chatsReplica]);
             counter++;
             if(counter === botMessage.length){
                 clearInterval(potatio); 
            }
         }
-        , 100);
+        , 50);
     }
 
     return (
