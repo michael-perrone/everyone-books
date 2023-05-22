@@ -18,6 +18,7 @@ const Chatty = (props) => {
 
 
     function splitStr(str) {
+        console.log(str);
         return str.split('');
     }
 
@@ -33,8 +34,9 @@ const Chatty = (props) => {
         let newStringToArray = splitStr(newStr);
         const potatio = setInterval(() => {
             const chatsReplica = [...chats];
-           if (chats[id].msg === undefined) {
-               chats[id].msg = "";
+            console.log(chatsReplica);
+           if (chatsReplica[id].msg === undefined) {
+               chatsReplica[id].msg = "";
            }
             chatsReplica[id].msg = chatsReplica[id].msg + newStringToArray[counter];
             setChats(chatsReplica);
@@ -43,7 +45,7 @@ const Chatty = (props) => {
                 clearInterval(potatio); 
            }
         }
-        , 30);
+        , 60);
     }
 
     // function typeOutResponse(msg){
@@ -64,7 +66,8 @@ const Chatty = (props) => {
 
     useEffect(function() {
         if (!chats[chats.length - 1].fromBot) {
-            generateBotResponse();
+            setTimeout(() => generateBotResponse(), 2000);
+            console.log("am i running");
         }
         else {
             return;
@@ -76,6 +79,7 @@ const Chatty = (props) => {
     }
 
     function generateBotResponse(){
+        counter = 0;
         const chatsReplica = [...chats];
         let booking = false;  
         if(chatsReplica[chatsReplica.length - 1].msg.includes("book" || "booking")){
@@ -83,31 +87,27 @@ const Chatty = (props) => {
         }
         let newChat = {fromBot: true, msg: "", id: chatsReplica.length};
         chatsReplica.push(newChat);
-        setChats(chatsReplica); 
+       // setChats(chatsReplica); 
         let botMessage = defaultResponse; 
         if(booking === true){
             botMessage = bookingResponse; 
         }
-        printOutBotResponse(botMessage, chats.length-1); 
-    }
-
-     function printOutBotResponse(botMessage, id,){
         let newStringToArray = splitStr(botMessage);
+        console.log(botMessage);
         const potatio = setInterval(() => {
-            const chatsTempArr = [...chats];
-           if (chats[id].msg === undefined) {
-               chats[id].msg = "";
+           if (chatsReplica[chatsReplica.length - 1].msg === undefined) {
+               chatsReplica[chatsReplica.length - 1].msg = "";
            }
-            chatsTempArr[id].msg = chatsTempArr[id].msg + newStringToArray[counter];
-            setChats(chatsTempArr);
-            console.log(chats[chats.length-1].msg); 
-            console.log(counter); 
+           console.log(newStringToArray[counter]);
+            chatsReplica[chatsReplica.length - 1].msg = chatsReplica[chatsReplica.length - 1].msg + newStringToArray[counter];
+            console.log(chatsReplica);
+            setChats(chatsReplica);
+            counter++;
             if(counter === botMessage.length){
                 clearInterval(potatio); 
            }
-           counter++;
         }
-        , 30);
+        , 100);
     }
 
     return (
