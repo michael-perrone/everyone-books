@@ -139,6 +139,7 @@ function AdBuilder(props) {
                     {yesPromo && <div style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
                             <p style={{marginTop: "20px"}}>What type of promotion would you like to create?</p>
                             <select onChange={(e) => toSetPromoType(e.target.value)} style={{border: "none", paddingLeft: "10px", width: "180px", boxShadow: "0px 0px 4px white", height: "25px", marginTop: "10px"}}>
+                                <option> </option>
                                  <option>Singular Service</option>
                                  <option>Multiple Services</option>
                                  <option>Singular Product</option>
