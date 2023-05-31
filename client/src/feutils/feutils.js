@@ -38,54 +38,13 @@ export const stringToIntTime = {
     "11:30 PM": 282, "11:35 PM": 283, "11:40 PM": 284, "11:45 PM": 285, "11:50 PM": 286, "11:55 PM": 287
 }
 
-export function chattyKathy1(msg) {
-    msg = msg.toLowerCase();
-    if (msg.includes("book") && msg.includes("create")) {
-        return "Would you like to create a booking?"
-    }
-    if (msg.includes("payroll")) {
-        return "Would you like to edit your business payroll info?"
-    }
-    if (msg.includes("add") && msg.includes('employee')) {
-        return "Would you like to add an employee to your business' list of employees?"
-    }
-    if (msg.includes("remove") && msg.includes('employee')) {
-        return "Would you like to remove an employee from your business' list of employees?"
-    }
-    if ((msg.includes('advertisement') || msg.includes('adver')) && (msg.includes("create") || msg.includes) ) {
-        return "Would you like to create an advertisement?"
-    }
-    if (msg.includes('edit') && (msg.includes('advertisement') || msg.includes('adver'))) {
-        return "Would you like to edit an advertise"
-    }
-    else {
-        return "I couldn't find what you were looking for, would you please try a different command?";
-    }
-}
 
-const yesArray = ["yes", "sure", "definitely", "absolutely", "ya", "yea", "yah", "yar", "yes mate", "yar mate", "fo sho", "for sure", "yas", "yes please", "duh", "all right", "very well", "alright",
-"indeed mate", "indeed", "most certainly", "certainly", "aye", "yep", "yup", "affirmative", "uhuh", "mhm", "uhu", "ok", "okay", "okeyfrickindokey", "okey", "surely", "kk", "kkz",
-]
-
-export function gettingConfirmation(msg) {
-    console.log(msg);
-    for (let i = 0; i < yesArray.length; i++) {
-        if (msg.includes(yesArray[i])) {
-            return true;
-        }
-    }
-    return false;
-}
-
-
-
-// possible ideas for chat
-// 
 
 
 
 
 
+// possible ideas for chat
 
 
 export function getTimes(open, close) {
@@ -404,6 +363,8 @@ export function getTs(open, close) {
     }
     return times;
 }
+
+
 
 
 export function convertShiftTimes(numberTime) {

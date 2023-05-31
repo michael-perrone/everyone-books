@@ -2,81 +2,100 @@ import React, { useState, useEffect } from 'react';
 import ChatBubble from '../Chat/ChatBubble/ChatBubble';
 import styles from './Chatty.module.css';
 import send from './send.png';
-import { chattyKathy1, gettingConfirmation } from '../feutils/feutils';
+import { chattyKathy1, findDateBot, gettingConfirmation } from '../feutils/botutils';
 //import ChatBubble from './ChatBubble/ChatBubble';
 
 const Chatty = (props) => {
     const intro = "Hello my name is chatty the chat bot I am quite silly and willy but I will do my best to help you today.";
-    const defaultResponse = "I am sorry! I am not sure what you are requesting help with. Please try again."; 
-    const bookingResponse = "Would you like to schedule a booking?"
-    let counter = 0; 
-    const [needDate, setNeedDate] = useState(false);
-    const [chatText, setChatText] = useState('');
-    const [str, setStr] = useState('');
+    let counter = 0;
+    
+    // const [needDate, setNeedDate] = useState(false);
+    // const [needNumber, setNeedNumber] = useState(false);
+    // const [number, setNumber] = useState();
+    // const [needDateConfirmation, setNeedDateConfirmation] = useState(false);
+    // const [chatText, setChatText] = useState('');
+    // const [str, setStr] = useState('');
     const [chats, setChats] = useState([{fromBot: true, id: 0, msg: ''}]);
     const [textFieldText, setTextFieldText] = useState('');
-    const [needConfirmation, setNeedConfirmation] = useState(false);
-    const [confirmation, setConfirmation] = useState(false);
-    const [typeOfRequest, setTypeOfRequest] = useState(0);
-    const [notFound, setNotFound] = useState(false);
+    // const [needConfirmation, setNeedConfirmation] = useState(false);
+    // const [confirmation, setConfirmation] = useState(false);
+    // const [typeOfRequest, setTypeOfRequest] = useState(0);
+    // const [notFound, setNotFound] = useState(false);
 
     // Create Booking - 1
     // Delete Booking - 2
 
     function generateBotResponse(){
         const chatsReplica = [...chats];
-        counter = 0;
-        if (needConfirmation) {
-            let confirmationResponse = gettingConfirmation(chatsReplica[chatsReplica.length - 1].msg);
-            console.log(confirmationResponse);
-            if (confirmationResponse) {
-                if (typeOfRequest === 1) {
-                    createBotChat("What date would you like to schedule your booking for?", chatsReplica);
-                }
-            }
-            else {
-                console.log("do i run")
-                createBotChat("I am sorry! I was not quite able to determine what you are trying to get help with. Please try again.", chatsReplica);
-            }
-        }
-        else {
-            let response = chattyKathy1(chatsReplica[chatsReplica.length - 1].msg);
-            if (response !== "I couldn't find what you were looking for, would you please try a different command?") {
-                if (response === "Would you like to create a booking?") {
-                    setNeedConfirmation(true);
-                    setTypeOfRequest(1);
-                    createBotChat(response, chatsReplica);
-                }
-            }
-            else {
-                createBotChat(response, chatsReplica);
-            }
-        }
+        
+    //     if (needNumber) {
+    //         createBotChat("What services would you like to create")
+    //     }
+    //     else if (needDateConfirmation) {
+    //         let confirmationResponse = gettingConfirmation(chatsReplica[chatsReplica.length - 1].msg);
+    //         if (confirmationResponse) {
+    //             createBotChat("How many services would you like your booking to have?", chatsReplica);
+    //             setNeedNumber(true);
+    //         }
+    //     }
+    //     else if (needDate) {
+    //         const response = findDateBot(chatsReplica[chatsReplica.length - 1]);
+    //         console.log(response);
+    //         createBotChat(`Did you want to schedule it for ${response}?`, chatsReplica);
+    //         setNeedDateConfirmation(true);      
+    //     }
+
+    //    else if (needConfirmation) {
+    //         let confirmationResponse = gettingConfirmation(chatsReplica[chatsReplica.length - 1].msg);
+    //         console.log(confirmationResponse);
+    //         if (confirmationResponse) {
+    //             if (typeOfRequest === 1) {
+    //                 createBotChat("What date would you like to schedule your booking for?", chatsReplica);
+    //                 setNeedDate(true);
+    //                 setNeedConfirmation(false);
+    //             }
+    //         }
+    //         else {
+    //             createBotChat("I am sorry! I was not quite able to determine what you are trying to get help with. Please try again.", chatsReplica);
+    //         }
+    //     }
+    //     else {
+    //         let response = chattyKathy1(chatsReplica[chatsReplica.length - 1].msg);
+    //         if (response !== "I couldn't find what you were looking for, would you please try a different command?") {
+    //             if (response === "Would you like to create a booking?") {
+    //                 setNeedConfirmation(true);
+    //                 setTypeOfRequest(1);
+    //                 createBotChat(response, chatsReplica);
+    //             }
+    //         }
+    //         else {
+    //             createBotChat(response, chatsReplica);
+    //         }
+    //     }
     }
 
     function createBotChat(response, chatsReplica) {
-        document.getElementById("yo").scrollTo({
-            top: 1000 * 16
-         });
         let newChat = {fromBot: true, msg: "", id: chatsReplica.length};
         chatsReplica.push(newChat);
         let newStringToArray = splitStr(response);
         const potatio = setInterval(() => {
-        //    if (chatsReplica[chatsReplica.length - 1].msg === undefined) {
-        //        chatsReplica[chatsReplica.length - 1].msg = "";
-        //    }
             let str = chatsReplica[chatsReplica.length - 1].msg;
             str = str + newStringToArray[counter];
             let newObj = {...chatsReplica[chatsReplica.length - 1], msg: str};
             chatsReplica[chatsReplica.length - 1] = newObj;
             setChats([...chatsReplica]);
             counter++;
+            if (counter % 5 === 0 || counter === 0) {
+                document.getElementById("yo").scrollTo({
+                    top: 100000
+                });
+            }
             if(counter === response.length){
                 clearInterval(potatio); 
            }
         }
         , 50);
-
+      
     }
    
 
@@ -107,7 +126,7 @@ const Chatty = (props) => {
                 clearInterval(potatio); 
            }
         }
-        , );
+        , 50);
     }
 
     // function typeOutResponse(msg){
@@ -117,6 +136,7 @@ const Chatty = (props) => {
     function enterPressed(e) {
         if (e.type === "keydown") {
             if (e.keyCode === 13) {
+                e.preventDefault();
                 addChatFromUser();
             }
         }
@@ -127,11 +147,22 @@ const Chatty = (props) => {
         if (textFieldText === "") {
             return;
         }
+        const tfta = textFieldText.split(" ");
+        for (let i = 0; i < tfta.length; i++) {
+            if (tfta[i].length > 21) {
+                return;
+            }
+        }
         const chatsReplica = [...chats];
         const newChat = {fromBot: false, msg: textFieldText, id: chats.length};
         chatsReplica.push(newChat);
         setChats(chatsReplica);
         setTextFieldText("");
+        setTimeout(function() {
+            document.getElementById("yo").scrollTo({
+                top: 100000
+            });
+        }, 200);
     }   
 
     useEffect(function() {
@@ -175,7 +206,7 @@ const Chatty = (props) => {
     // </div>
     
         <div style={{display: "flex", justifyContent: "space-between", flexDirection: "column", position: 'fixed', right: 10, bottom: 0, height: "400px", width: "450px", border: "1.7px solid black", backgroundColor: "lavenderblush", zIndex: 300}}>
-            <div id="yo" style={{height: "300px", overflow: "auto"}}>
+            <div id="yo" style={{height: "300px", paddingBottom: "10px", overflow: "auto"}}>
                 {chats.map(chat => <ChatBubble id={chat.id} fromBot={chat.fromBot} chat={chat.msg}/>)}
             </div>
             <img onClick={addChatFromUser} id={styles.plane} src={send}/>
