@@ -16,6 +16,37 @@
     top: 0;
 }
 
+#potato {
+  color: rgb(88, 88, 88);
+  
+}
+#potato:hover {
+  color: black;
+}
+
+.shrink {
+  height: 0px;
+}
+
+.notShrunkWhole {
+  height: 400px;
+}
+
+.shrinkWhole {
+  height: 30px;
+}
+
+
+.notShrunkChat {
+  height: 300px;
+}
+
+.notShrunkBox {
+  height: 100px;
+}
+
+
+
 #plane {
   height: 30px;
   width: 30px;

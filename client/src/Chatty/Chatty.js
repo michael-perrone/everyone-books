@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import ChatBubble from '../Chat/ChatBubble/ChatBubble';
+import ChatBubble from './ChatBubble/ChatBubble';
 import styles from './Chatty.module.css';
 import send from './send.png';
-import { chattyKathy1, findDateBot, gettingConfirmation } from '../feutils/botutils';
+import { chattyKathy1, findDateBot, gettingConfirmation, bigMagic } from '../feutils/botutils';
 //import ChatBubble from './ChatBubble/ChatBubble';
 
 const Chatty = (props) => {
     const intro = "Hello my name is chatty the chat bot I am quite silly and willy but I will do my best to help you today.";
     let counter = 0;
+    const [hideChat, setHideChat] = useState(false);
     
     // const [needDate, setNeedDate] = useState(false);
     // const [needNumber, setNeedNumber] = useState(false);
@@ -25,9 +26,23 @@ const Chatty = (props) => {
     // Create Booking - 1
     // Delete Booking - 2
 
+    const [rotate, setRotate] = useState(true);
+
+    function hide() {
+        if (rotate) {
+            setHideChat(true);
+            setRotate(false);
+        }
+        else {
+            setHideChat(false);
+            setRotate(true);
+        }
+    }
+
     function generateBotResponse(){
         const chatsReplica = [...chats];
-        
+        const response = bigMagic(chatsReplica[chatsReplica.length - 1].msg);
+        createBotChat(response, chatsReplica);
     //     if (needNumber) {
     //         createBotChat("What services would you like to create")
     //     }
@@ -205,12 +220,15 @@ const Chatty = (props) => {
 
     // </div>
     
-        <div style={{display: "flex", justifyContent: "space-between", flexDirection: "column", position: 'fixed', right: 10, bottom: 0, height: "400px", width: "450px", border: "1.7px solid black", backgroundColor: "lavenderblush", zIndex: 300}}>
-            <div id="yo" style={{height: "300px", paddingBottom: "10px", overflow: "auto"}}>
+        <div className={hideChat ? styles.shrinkWhole : styles.notShrunkWhole} style={{display: "flex", justifyContent: "space-between", flexDirection: "column", position: 'fixed', right: 10, bottom: 0, width: "450px", border: "1.7px solid black", backgroundColor: "lavenderblush", zIndex: 300}}>
+            <div style={{color: "black", display: "flex", justifyContent: "flex-end", position: "absolute", top: hideChat ? "0px" : "-30px", height: hideChat ? "45px" : "30px", backgroundColor: "rgb(190, 190, 190)", width: "100%", left: '-1.7px', borderLeft: "1.7px solid black", borderBottom: "0.7px solid gray", borderTop: "1.7px solid black", borderRight: "1.7px solid black"}}>
+                <p onClick={hide} id={styles.potato} style={{fontSize: "34px", cursor: 'pointer', marginRight: "8px", marginTop: hideChat ? "2px" : "-4px", transform: !hideChat ? "rotate(180deg)" : "none", fontFamily: "monospace"}}>^</p>
+            </div>
+            <div id="yo" className={hideChat ? styles.shrink : styles.notShrunkChat} style={{paddingBottom: "10px", overflow: "auto"}}>
                 {chats.map(chat => <ChatBubble id={chat.id} fromBot={chat.fromBot} chat={chat.msg}/>)}
             </div>
-            <img onClick={addChatFromUser} id={styles.plane} src={send}/>
-            <textarea onKeyDown={enterPressed} value={textFieldText} onChange={changeTextFieldText} style={{color: "black", paddingLeft: "5px", paddingTop: "5px", height: "100px", resize: 'none', paddingRight: "40px", position: 'relative', width: "403px", left: "-1px"}}/>
+            <img style={{opacity: hideChat ? 0 : 100}} onClick={addChatFromUser} id={styles.plane} src={send}/>
+            <textarea className={hideChat ? styles.shrink : styles.notShrunkBox} onKeyDown={enterPressed} value={textFieldText} onChange={changeTextFieldText} style={{color: "black", paddingLeft: "5px", paddingTop: hideChat ? "0px" : "5px", resize: 'none', paddingRight: "40px", position: 'relative', width: "403px", left: "-1px"}}/>
         </div>
     )
 }
