@@ -339,7 +339,6 @@ router.post('/', adminAuth, async (req, res) => {
     let date1 = utils.getStringDateTime(req.body.timeChosen, req.body.date);
     let dateToUse = new Date(date1.date);
     if (new Date() > dateToUse) {
-      console.log("OH NO")
       return res.status(409).send();
     }
     if (req.body.fromUser) {

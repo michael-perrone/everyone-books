@@ -36,7 +36,7 @@ router.get('/', adminAuth, async (req, res) => {
 
 router.post("/getServices", async (req, res) => {
   try {
-    console.log("YOOOOO");
+    console.log(req.body, "IM THE BODY");
     let businessProfile = await BusinessProfile.findOne({ business: req.body.businessId}).select(["serviceTypes"]);
     if (businessProfile) {
       console.log(businessProfile);
@@ -44,7 +44,6 @@ router.post("/getServices", async (req, res) => {
       res.status(200).json({ services: serviceTypes });
     }
     else {
-      console.log("AHHH");
       res.status(204).send()
     }
   }
@@ -81,10 +80,8 @@ router.post('/create', adminAuth, async (req, res) => {1
     })
     await newServiceType.save();
     servicesArray.push(newServiceType._id);
-    console.log(newServiceType)
     businessProfile.serviceTypes = servicesArray;
     await businessProfile.save();
-    console.log("hi")
     res.status(200).json({ newServiceType })
   }
   else {

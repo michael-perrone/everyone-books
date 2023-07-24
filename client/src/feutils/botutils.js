@@ -1,15 +1,240 @@
-import axios from 'axios';
-
-
 const yesArray = ["yes", "sure", "definitely", "absolutely", "ya", "yea", "yah", "yar", "yes mate", "yar mate", "fo sho", "for sure", "yas", "yes please", "duh", "all right", "very well", "alright",
-"indeed mate", "indeed", "most certainly", "certainly", "aye", "yep", "yup", "affirmative", "uhuh", "mhm", "uhu", "ok", "okay", "okeyfrickindokey", "okey", "surely", "kk", "kkz",
+    "indeed mate", "indeed", "most certainly", "certainly", "aye", "yep", "yup", "affirmative", "uhuh", "mhm", "uhu", "ok", "okay", "okeyfrickindokey", "okey", "surely", "kk", "kkz",
 ]
 
+const couldBeBct = {
+    "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "10": 10, "11": 11, "12": 12, "13": 13, "14": 14, "15": 15, "16": 16, "17": 17, "18": 18, "19": 19, "20":20, "21":21, "22": 22, "23": 23, "24": 24, "25": 25, "26": 26, "27": 27, "28": 28, "29": 29, "30": 30, "one": "1", "two": "2", "three": "3", "four": "4", "five": "5", "six": "6", "seven": "7",
+    "eight": "8", "nine": "9", "ten": "10", "eleven": "11", "twelve": "12", "thirteen": 13, "fourteen": 14, "fifteen": "15", "sixteen": "16", "seventeen": "17", "eighteen": "18", "nineteen": "19", "twenty": "20", "twentyone": "21", "twentytwo": "22", "twentythree": "23", "twentyfour": "24", "twentyfive": "25", "twentysix": "26", "twentyseven": "27", "twentyeight": "28", "twentynine": "29", "thirty": "30"}; 
+
+
+const keywords = ["create", "booking", "book", 'add', "make"];
+
+///// EXTRACT THE AREA
+
+export function getLoc(msg, bct) {
+    let loc;
+    let arr = msg.split(" ");
+    if (arr.length === 1 && parseInt(arr[0]).toString() !== "NaN") {
+        loc = arr[0];
+    }
+    else {
+        loc = extractArea(arr, bct).loc;
+    }
+    if (!loc) {
+        return "error"
+    }
+    else {
+        return loc;
+    }
+}
+
+
+
+function extractArea(arr, bct) {
+    bct = bct.toLowerCase();
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === bct) {
+            console.log(arr[i]);
+            if (couldBeBct[arr[i + 1]]) {
+                console.log(arr[i + 1])
+                let loc = `${arr[i]} ${arr[i + 1]}`
+                arr.splice(i, 2);
+                return { 
+                    loc,
+                    arr
+                }
+            }
+        }
+    }
+    return {
+        arr
+    }
+}
+
+//// EXTRACT AREA ABOVE
+
+
+
+
+export function extractServices(arr, services) {
+    if (typeof(arr) === "string") {
+        arr = arr.split(" ");
+    }
+    let holder = -1;
+    const defServices = [];
+    const probableServices = [];
+    const servicesArray = [];
+    for (let i = 0; i < services.length; i++) {
+        const indArray = [];
+        const arry = services[i].serviceName.split(" ");
+        for (let a = 0; a < arry.length; a++) {
+            indArray.push(arry[a].toLowerCase());
+        }
+        indArray.push(services[i]._id);
+        servicesArray.push(indArray);
+    }
+    for (let i = 0; i < arr.length; i++) {
+        probableServices.push([]);
+        for (let t = 0; t < servicesArray.length; t++) {
+            for (let a = 0; a < servicesArray[t].length - 1; a++) {
+                const pushedServices = [];
+                holder = -1;
+                if (arr[i] !== undefined) {
+                    for (let y = 0; y < arr[i].length; y++) {
+                        for (let z = holder === -1 ? 0 : holder; z < servicesArray[t][a].length; z++) {
+                            if (servicesArray[t][a][z] === arr[i][y]) {
+                                pushedServices.push(servicesArray[t][a]);
+                                holder = z + 1;
+                                break;
+                            }
+                            else {
+                                pushedServices.push([]);
+                            }
+                        }
+                    }
+                    let counter = 0;
+                    let otherCounter = 0;
+                    let double = false;
+                    for (let h = 0; h < pushedServices.length; h++) {
+                        if (pushedServices[h] === pushedServices[h + 1]) {
+                            if (!double) {
+                                otherCounter = 2;
+                            }
+                            else { otherCounter++ }
+                        }
+                    }
+                    for (let h = 0; h < pushedServices.length; h++) {
+                        if (pushedServices[h].length !== 0) {
+                            counter++;
+                        }
+                    }
+                    if ((arr[i].length > 3 && counter / pushedServices.length * 100 > 50 && arr[i].length + 1 >= servicesArray[t][a].length && arr[i].length - 2 <= servicesArray[t][a].length)
+                        || (arr[i].length > 3 && otherCounter / pushedServices.length * 100 >= 40 && arr[i].length + 1 >= servicesArray[t][a].length && arr[i].length - 2 <= servicesArray[t][a].length)) {
+                        probableServices[i].push(servicesArray[t][a]);
+                        arr.splice(i, 1);
+                    }
+                    else if (counter / pushedServices.length === 1) {
+                        probableServices[i].push(servicesArray[t][a]);
+                        arr.splice(i, 1);
+                    }
+                }
+            }
+        }
+    }
+    for (let i = 0; i < probableServices.length; i++) {
+        for (let z = 0; z < servicesArray.length; z++) {
+            let matches = true;
+            for (let t = 0; t < servicesArray[z].length - 1; t++) {
+                if (servicesArray[z][t] !== probableServices[i][t]) {
+                    matches = false;
+                }
+            }
+            if (matches) {
+                defServices.push(servicesArray[z][servicesArray[z].length - 1]);
+            }
+        }
+    }
+
+    return {
+        defServices,
+        arr
+    }
+}
+
+// function extractCustomer(arr) {
+//     const splitty = arr.split(' ');
+//     if (splitty.length > 6) {
+//         if ()
+//     }
+// }
+
+function extractEmployees(arr, employees) {
+    console.log(employees);
+    let holder = -1;
+    const defEmployees = [];
+    const probableEmployees = [];
+    const token = localStorage.getItem('adminToken');
+    const employeesArray = [];
+    for (let i = 0; i < employees.length; i++) {
+        const indArray = [];
+        const arry = employees[i].fullName.split(" ");
+
+        for (let a = 0; a < arry.length; a++) {
+            indArray.push(arry[a].toLowerCase());
+        }
+        indArray.push(employees[i]._id);
+
+        employeesArray.push(indArray);
+    }
+    for (let i = 0; i < arr.length; i++) {
+        probableEmployees.push([]);
+        for (let t = 0; t < employeesArray.length; t++) {
+            for (let a = 0; a < employeesArray[t].length - 1; a++) {
+                const pushedEmployees = [];
+                holder = -1;
+                for (let y = 0; y < arr[i].length; y++) {
+                    for (let z = holder === -1 ? 0 : holder; z < employeesArray[t][a].length; z++) {
+                        if (employeesArray[t][a][z] === arr[i][y]) {
+                            pushedEmployees.push(employeesArray[t][a]);
+                            holder = z + 1;
+                            break;
+                        }
+                        else {
+                            pushedEmployees.push([]);
+                        }
+                    }
+                }
+                let counter = 0;
+                let otherCounter = 0;
+                let double = false;
+                for (let h = 0; h < pushedEmployees.length; h++) {
+                    if (pushedEmployees[h] === pushedEmployees[h + 1]) {
+                        if (!double) {
+                            otherCounter = 2;
+                        }
+                        else { otherCounter++ }
+                    }
+                }
+                for (let h = 0; h < pushedEmployees.length; h++) {
+                    if (pushedEmployees[h].length !== 0) {
+                        counter++;
+                    }
+                }
+                if ((arr[i].length > 3 && counter / pushedEmployees.length * 100 > 50 && arr[i].length + 1 >= employeesArray[t][a].length && arr[i].length - 2 <= employeesArray[t][a].length)
+                    || (arr[i].length > 3 && otherCounter / pushedEmployees.length * 100 >= 40 && arr[i].length + 1 >= employeesArray[t][a].length && arr[i].length - 2 <= employeesArray[t][a].length)) {
+                    probableEmployees[i].push(employeesArray[t][a]);
+                    arr.splice(i, 1);
+                }
+                else if (counter / pushedEmployees.length === 1) {
+                    probableEmployees[i].push(employeesArray[t][a]);
+                    arr.splice(i, 1);
+                }
+            }
+        }
+    }
+    for (let i = 0; i < probableEmployees.length; i++) {
+        for (let z = 0; z < employeesArray.length; z++) {
+            let matches = true;
+            for (let t = 0; t < employeesArray[z].length - 1; t++) {
+                if (employeesArray[z][t] !== probableEmployees[i][t]) {
+                    matches = false;
+                }
+                else {
+                }
+            }
+            if (matches) {
+                defEmployees.push(employeesArray[z][employeesArray[z].length - 1]);
+            }
+        }
+    }
+    {
+        return {defEmployees, arr};
+    }
+}
 
 
 
 export function gettingConfirmation(msg) {
-    console.log(msg);
     for (let i = 0; i < yesArray.length; i++) {
         if (msg.includes(yesArray[i])) {
             return true;
@@ -32,7 +257,7 @@ export function chattyKathy1(msg) {
     if (msg.includes("remove") && msg.includes('employee')) {
         return "Would you like to remove an employee from your business' list of employees?"
     }
-    if ((msg.includes('advertisement') || msg.includes('adver')) && (msg.includes("create") || msg.includes) ) {
+    if ((msg.includes('advertisement') || msg.includes('adver')) && (msg.includes("create") || msg.includes)) {
         return "Would you like to create an advertisement?"
     }
     if (msg.includes('edit') && (msg.includes('advertisement') || msg.includes('adver'))) {
@@ -44,7 +269,6 @@ export function chattyKathy1(msg) {
 }
 
 export function findDateBot(date) {
-    console.log(date.msg)
     const todaysDate = new Date();
     if (date.msg.includes("today")) {
         return "today, " + todaysDate.toDateString()
@@ -57,65 +281,78 @@ export function findDateBot(date) {
 // if theres a date and time find them
 
 
-const keywords = ["create", "booking", "book", 'add', "make"];
+
 
 const timeNumbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "am", "pm"];
 
-const timeHours = ["one", "two", "three", "four", "five", "six", "seven", "eight", 
-"nine", "ten", "eleven", "twelve", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+const timeHours = ["one", "two", "three", "four", "five", "six", "seven", "eight",
+    "nine", "ten", "eleven", "twelve", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
 
-const timeMinutes = [ "00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55",  "fifteen", "ten", "ofive", "five", "ohfive", "o-five", "o' five", "o'five", "thirty", "fortyfive", "forty-five",
-"twenty", "twenty-five", "thirty-five", "twentyfive", "forty", "fourty",
-  "thirtyfive", "fifty", "fiftyfive", "fifty-five"];
+const timeMinutes = ["00", "o clock", "oclock", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55", "fifteen", "ten", "ofive", "five", "ohfive", "o-five", "o' five", "o'five", "thirty", "fortyfive", "forty-five",
+    "twenty", "twenty-five", "thirty-five", "twentyfive", "forty", "fourty",
+    "thirtyfive", "fifty", "fiftyfive", "fifty-five"];
 
-const dayWords = ["today", "tomorrow"];
+const dayWords = ["today", "tomorrow", 'tonight'];
+
+const extendedDayWords = ['morning', 'night'];
 
 const dateWords = ["january", "february", "march", "april", "june", "july", "august", "september", "october", "november", "december"];
 
-const dateAbrevs = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+const dateAbrevs = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+
+const months = {
+    "jan": 1, "january": 1, "feb": 2, "february": 2, "march": 3, "mar": 3, "apr": 4, "april": 4, "may": 5,
+    "jun": 6, "june": 6, "july": 7, "jul": 7, "aug": 8, "august": 8, "sep": 9, "september": 9, "oct": 10, "october": 10, "nov": 11, "november": 11, "dec": 12, "december": 12
+};
+
+
 
 const minutesToNumDic = {
-    "o'clock": "00", 
-    "oclock": "00", 
-    "ohclock": "00", 
+    "o'clock": "00",
+    "oclock": "00",
+    "ohclock": "00",
     "ofive": "05",
-    "o'5": "05", 
+    "o'5": "05",
     "ofive": "05",
     "five": "05",
-    "ten": 10, 
-    "fifteen": 15, 
-    "twenty": "20", 
-    "twenty-five": 25, 
-    "twentyfive": 25, 
-    "thirty": "30", 
-    "thirtyfive": 35, 
-    "thirty five": 35, 
-    "thirty-five": 35, 
-    "forty": "40", 
-    "fourty": "40", 
-    "fourty-five": 45,
-    "fourty five": 45,
-    "fortyfive": 45,
-    "forty-five": 45,
-    "fifty": "50", 
-    "fiftyfive": 55, 
-    "fifty-five": 55
+    "ten": "10",
+    "fifteen": "15",
+    "twenty": "20",
+    "twenty-five": "25",
+    "twentyfive": "25",
+    "thirty": "30",
+    "thirtyfive": "35",
+    "thirty-five": "35",
+    "forty": "40",
+    "fourty": "40",
+    "fourty-five": "45",
+    "fortyfive": "45",
+    "forty-five": "45",
+    "fifty": "50",
+    "fiftyfive": "55",
+    "fifty-five": "55"
 }
 
 const timeToNumDic = {
-    "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, 
-    "eight": 8, "nine": 9, "ten": 10, "eleven": 11, "twelve": 12, "fifteen": 15,
-    "thirty": 30, "fortyfive": 45, "forty-five": 45, "thirty-five": 35, "thirtyfive": 35,
-    "forty": 40, "fourty": 40, "fiftyfive": 55, "fifty-five": 55, "twentyfive": 25,
-    "twenty-five": 25
+    "oclock" : "00", "ohclock": "00", "clock": "00", "o'clock": "00",
+    "one": "1", "two": "2", "three": "3", "four": "4", "five": "5", "six": "6", "seven": "7",
+    "eight": "8", "nine": "9", "ten": "10", "eleven": "11", "twelve": "12", "fifteen": "15",
+    "thirty": "30", "fortyfive": "45", "forty-five": "45", "thirty-five": "35", "thirtyfive": "35",
+    "forty": "40", "fourty": "40", "fifty": "50", "fiftyfive": "55", "fifty-five": "55", "twentyfive": "25",
+    "twenty-five": "25"
 };
 
-function findDay(arr) {
+export function findDay(arr) {
+    if (typeof(arr) === "string") {
+        arr = arr.split(" ");
+    }
+    console.log(arr);
+    let apComing = "";
     let holder = -1;
     const probableDayWords = [];
     for (let i = 0; i < arr.length; i++) {
         for (let t = 0; t < dayWords.length; t++) {
-            const pushedKeywords = []; 
+            const pushedKeywords = [];
             holder = -1;
             for (let y = 0; y < arr[i].length; y++) {
                 for (let z = holder === -1 ? 0 : holder; z < dayWords[t].length; z++) {
@@ -127,9 +364,8 @@ function findDay(arr) {
                     else {
                         pushedKeywords.push([]);
                     }
-                }  
+                }
             }
-            console.log(pushedKeywords);
             let counter = 0;
             let otherCounter = 0;
             let double = false;
@@ -138,7 +374,7 @@ function findDay(arr) {
                     if (!double) {
                         otherCounter = 2;
                     }
-                    else { otherCounter ++}
+                    else { otherCounter++ }
                 }
             }
             for (let h = 0; h < pushedKeywords.length; h++) {
@@ -146,33 +382,95 @@ function findDay(arr) {
                     counter++;
                 }
             }
-            if ((arr[i].length > 3 && counter / pushedKeywords.length * 100 > 50 && arr[i].length + 1 >= dayWords[t].length && arr[i].length - 2 <= dayWords[t].length) 
-            || (arr[i].length > 3 && otherCounter / pushedKeywords.length * 100 >= 40 && arr[i].length + 1 >= dayWords[t].length && arr[i].length - 2 <= dayWords[t].length)) {
+            if ((arr[i].length > 3 && counter / pushedKeywords.length * 100 > 50 && arr[i].length + 1 >= dayWords[t].length && arr[i].length - 2 <= dayWords[t].length)
+                || (arr[i].length > 3 && otherCounter / pushedKeywords.length * 100 >= 40 && arr[i].length + 1 >= dayWords[t].length && arr[i].length - 2 <= dayWords[t].length)) {
                 probableDayWords.push(dayWords[t]);
+                arr.splice(i, 1);
+                break;
             }
             else if (arr[i].length === 3 && counter / pushedKeywords.length === 1) {
                 probableDayWords.push(dayWords[t]);
+                arr.splice(i, 1);
+                break;
             }
         }
     }
-    return probableDayWords;
+    let dayError = false;
+    let df = "";
+    let date = "";
+    if (probableDayWords.length > 1) {
+        for (let i = 0; i < probableDayWords.length; i++) {
+            if (df !== "" && df !== probableDayWords[i]) {
+                dayError = "Today and Tomorrow?"
+                break;
+            }
+            df = probableDayWords[i];
+            if (probableDayWords[0] === "today" || probableDayWords[0] === "tonight") {
+                date = new Date().toDateString();
+                if (probableDayWords[0] === "tonight") {
+                    apComing = " PM";
+                }
+            }
+            else {
+                date = new Date(`${new Date().getMonth() + 1}, ${new Date().getDate() + 1}, ${new Date().getFullYear()}`).toDateString();
+            }
+        }
+    }
+    else if (probableDayWords.length === 1) {
+        if (probableDayWords[0] === "today" || probableDayWords === "tonight") {
+            date = new Date().toDateString();
+            if (probableDayWords[0] === "tonight") {
+                apComing = " PM";
+            }
+        }
+        else {
+            date = new Date(`${new Date().getMonth() + 1}, ${new Date().getDate() + 1}, ${new Date().getFullYear()}`).toDateString();
+        }
+    }
+    const arry = [];
+    
+    for (let i = 0 ; i < extendedDayWords.length; i++) {
+        if (arr.includes(extendedDayWords[i])) {
+            arry.push(extendedDayWords[i]);
+        }
+    }
+    if (arry.length > 2) {
+        dayError = "Many Morning or Night?";
+    }
+    else if (arry.length === 2) {
+        if (arry[0] === arry[1]) {
+            if (arry[0] === "morning") {
+                apComing = " AM";
+            }
+            else {
+                apComing = " PM";
+            }
+        }
+        else {
+            dayError = "Morning and Night?";
+        }
+    }
+    else if (arry.length === 1) {
+        if (arry[0] === "morning") {
+            apComing = " AM";
+        }
+        else {
+            apComing = " PM";
+        }
+    }
+    return {
+        date, arr, dayError, apComing
+    }
 }
 
-export function bigMagic(msg) {
-    let mainGoal = "";
-    let subjectSupport = "";
-    let doesNeedDateTime = 5;
-    let dateIfNeeded = "";
-    let timeIfNeeded = "";
+export function bigMagic(msg, services, employees, bct) {
     const probableWords = [];
-    
     // cm stands for correct message
     let cm = msg.split(" ");
     let holder = -1;
-    
     for (let i = 0; i < cm.length; i++) {
         for (let t = 0; t < keywords.length; t++) {
-            const pushedKeywords = []; 
+            const pushedKeywords = [];
             holder = -1;
             for (let y = 0; y < cm[i].length; y++) {
                 for (let z = holder === -1 ? 0 : holder; z < keywords[t].length; z++) {
@@ -184,7 +482,7 @@ export function bigMagic(msg) {
                     else {
                         pushedKeywords.push([]);
                     }
-                }  
+                }
             }
             let counter = 0;
             let otherCounter = 0;
@@ -194,7 +492,7 @@ export function bigMagic(msg) {
                     if (!double) {
                         otherCounter = 2;
                     }
-                    else { otherCounter ++}
+                    else { otherCounter++ }
                 }
             }
             for (let h = 0; h < pushedKeywords.length; h++) {
@@ -202,8 +500,8 @@ export function bigMagic(msg) {
                     counter++;
                 }
             }
-            if ((cm[i].length > 3 && counter / pushedKeywords.length * 100 > 50 && cm[i].length + 1 >= keywords[t].length && cm[i].length - 2 <= keywords[t].length) 
-            || (cm[i].length > 3 && otherCounter / pushedKeywords.length * 100 >= 40 && cm[i].length + 1 >= keywords[t].length && cm[i].length - 2 <= keywords[t].length)) {
+            if ((cm[i].length > 3 && counter / pushedKeywords.length * 100 > 50 && cm[i].length + 1 >= keywords[t].length && cm[i].length - 2 <= keywords[t].length)
+                || (cm[i].length > 3 && otherCounter / pushedKeywords.length * 100 >= 40 && cm[i].length + 1 >= keywords[t].length && cm[i].length - 2 <= keywords[t].length)) {
                 probableWords.push(keywords[t]);
             }
             else if (cm[i].length === 3 && counter / pushedKeywords.length === 1) {
@@ -211,137 +509,439 @@ export function bigMagic(msg) {
             }
         }
     }
-    if (createBookingMagic(probableWords)) {
-        const dayFound = findDay(cleanMsg(probableWords, msg));
-        let df = "";
-        if (dayFound.length > 1) {
-            for (let i = 0; i < dayFound.length; i++) {
-                if (df !== "" || df !== dayFound[i]) {
-                    return "Please specify if you want this booking to be today or tomorrow";
-                }
-                df = dayFound[i];
-            }
-        }
-        else if (dayFound.length === 1) {
-            if (dayFound[0] === "today") {
-                dateIfNeeded = new Date().toDateString();
-            }
-            else {
-                dateIfNeeded = new Date(`${new Date().getMonth() + 1}, ${new Date().getDate() + 1}, ${new Date().getFullYear()}`).toDateString();
-            }
-        }
-
-        if (dayFound.length === 0) {
-            // okay we still need to find the date
-            // findDate();
-        }
-        let time = findTime(cleanMsg(probableWords, msg));
-        if (time === '') {
-            time = findTimesMagic(cleanMsg(probableWords, msg));
-            if (time === "") {
-                return "I understand you'd like to create a booking but wasn't able to identify a time, can you please specify a time for this booking?"
-            }
+    if (createBookingMagic(probableWords, services, cm)) {
+        // let customer = "";
+        let date = "";
+        const area = extractArea(cleanMsg(probableWords, msg), bct);
+        const serviceResults = extractServices(area.arr, services);
+        const employeeResults = extractEmployees(serviceResults.arr, employees);
+        const dayFound = findDay(employeeResults.arr);
+        if (dayFound.date) {
+            date = dayFound;
         }
         else {
-            if (time) {
-                if (dateIfNeeded) {
-                    console.log(time, dateIfNeeded);
-                }
-                return time;
-            }
+            date = findDate(cleanMsg(probableWords, msg));  
         }
+        let time = "";
+        time = findTime(date.arr);
+        console.log(time);
+        if (time.error) {
+            console.log("should be me?")
+            time = findTimesMagic(date.arr, date.apComing);
+        }
+        else {
+            time = time.time
+        }
+
+        return {
+            type: "booking",
+            loc: area.loc,
+            date: date.date,
+            employee: employeeResults.defEmployees,
+            services: serviceResults.defServices,
+            time
+        }
+       
+
     }
-    return "I was unable to determine what you are asking, please try again!";
+    // else if (!bookingMagic) {}
+
+    return {
+        type: "didntUnderstandError",
+        msg: "I was unable to determine what you are saying, please try again!"
+    };
 }
 
 
-function findTime(arr) {
+// function determinePM() {
+
+// }
+
+
+function findDate(arr) {
+    let month = "";
+    let day = "";
+    let date = "";
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i].includes("/")) {
+            const splitter = arr[i].split("/");
+            if (splitter.length > 3) {
+                continue;
+            }
+            else if (splitter.length === 3) {
+                if (isNumber(splitter[0]) && isNumber(splitter[1]) && isNumber(splitter[2])) {
+                    if (parseInt(splitter[0]) > 12 && parseInt(splitter[1] < 13)) {
+                        date = new Date(`${splitter[1]}, ${splitter[0]}, ${splitter[2]}`).toDateString()
+
+                    }
+                    else {
+                        date = new Date(`${splitter[0]}, ${splitter[1]}, ${splitter[2]}`).toDateString();
+                    }
+                }
+            }
+            else if (splitter.length === 2) {
+                if (isNumber(splitter[0]) && isNumber(splitter[1])) {
+                    if (parseInt(splitter[0]) < 13 && parseInt(splitter[1]) < 32) {
+                        date = new Date(`${splitter[0]}, ${splitter[1]}, ${new Date().getFullYear()}`).toDateString()
+                    }
+                }
+            }
+        }
+        if (arr[i].includes("-")) {
+            const splitter = arr[i].split("-");
+            if (splitter.length > 3) {
+                continue;
+            }
+            else if (splitter.length === 3) {
+                if (isNumber(splitter[0]) && isNumber(splitter[1]) && isNumber(splitter[2])) {
+                    if (parseInt(splitter[0]) > 12 && parseInt(splitter[1] < 13)) {
+                        date = new Date(`${splitter[1]}, ${splitter[0]}, ${splitter[2]}`);
+                    }
+                    else {
+                        date = new Date(`${splitter[0]}, ${splitter[1]}, ${splitter[2]}`).toDateString();
+                    }
+                }
+            }
+            else if (splitter.length === 2) {
+                if (isNumber(splitter[0]) && isNumber(splitter[1])) {
+                    if (parseInt(splitter[0]) < 13 && parseInt(splitter[1]) < 32) {
+                        date = new Date(`${splitter[0]}, ${splitter[1]}, ${new Date().getFullYear()}`).toDateString()
+                    }
+                }
+            }
+        }
+    }
+    const probableWords = [];
+    if (date === "" || date.toString() === "Invalid Date") {
+        for (let i = 0; i < arr.length; i++) {
+            if (dateAbrevs.includes(arr[i])) {
+                probableWords.push(arr[i]);
+            }
+        }
+        if (probableWords.length === 0) {
+            let holder = -1;
+            for (let i = 0; i < arr.length; i++) {
+                for (let t = 0; t < dateWords.length; t++) {
+                    const pushedKeywords = [];
+                    holder = -1;
+                    for (let y = 0; y < arr[i].length; y++) {
+                        for (let z = holder === -1 ? 0 : holder; z < dateWords[t].length; z++) {
+                            if (dateWords[t][z] === arr[i][y]) {
+                                pushedKeywords.push(dateWords[t]);
+                                holder = z + 1;
+                                break;
+                            }
+                            else {
+                                pushedKeywords.push([]);
+                            }
+                        }
+                    }
+                    let counter = 0;
+                    let otherCounter = 0;
+                    let double = false;
+                    for (let h = 0; h < pushedKeywords.length; h++) {
+                        if (pushedKeywords[h] === pushedKeywords[h + 1]) {
+                            if (!double) {
+                                otherCounter = 2;
+                            }
+                            else { otherCounter++ }
+                        }
+                    }
+                    for (let h = 0; h < pushedKeywords.length; h++) {
+                        if (pushedKeywords[h].length !== 0) {
+                            counter++;
+                        }
+                    }
+                    if ((arr[i].length > 3 && counter / pushedKeywords.length * 100 >= 50 && arr[i].length + 1 >= dateWords[t].length && arr[i].length - 2 <= dateWords[t].length)
+                        || (arr[i].length > 3 && otherCounter / pushedKeywords.length * 100 >= 40 && arr[i].length + 1 >= dateWords[t].length && arr[i].length - 2 <= dateWords[t].length)) {
+                        probableWords.push(dateWords[t]);
+                        arr.splice(i, 1)
+                    }
+                    else if (arr[i].length === 3 && counter / pushedKeywords.length === 1) {
+                        probableWords.push(dateWords[t]);
+                        arr.splice(i, 1);
+                    }
+                }
+            }
+            if (probableWords.length > 1) {
+                // FOUND MORE THAN ONE MONTH
+            }
+            else if (probableWords.length === 1) {
+                // success
+                month = probableWords[0];
+                let found = false;
+                for (let i = 0; i < arr.length; i++) {
+                    const splitto = arr[i].split("");
+                    if (splitto.length === 3) {
+                        if (arr[i] === "2nd" || arr[i] === "3rd" || arr[i] === "1st") {
+                            day = `${arr[i]}`;
+                            found = true;
+                        }
+                        else if (splitto[1] === "t" && splitto[2] === "h") {
+                            if (isNumber(splitto[0])) {
+                                day = `${arr[i]}`;
+                                found = true;
+                            }
+                        }
+                    }
+                    else if (splitto.length === 4) {
+                        if (arr[i] === "22nd" || arr[i] === "23rd" || arr[i] === "21st") {
+                            day = `${arr[i]}`;
+                            found = true;
+                        }
+                        else if (splitto[2] === "t" && splitto[3] === "h") {
+                            if (isNumber(splitto[0] + splitto[1]) && parseInt(splitto[0] + splitto[1]) < 32) {
+                                day += `${arr[i]}`;
+                                found = true;
+                                arr.splice(i, 1);
+                            }
+                        }
+                    }
+                }
+                if (!found) {
+                    for (let i = 0; i < arr.length; i++) {
+                        if (arr[i].length === 2) {
+                            if (isNumber(arr[i]) && parseInt(arr[i]) < 32) {
+                                day = `${arr[i]}`;
+                                arr.splice(i, 1)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else if (probableWords.length === 1) {
+            // success
+            month = probableWords[0];
+            let found = false;
+            for (let i = 0; i < arr.length; i++) {
+                const splitto = arr[i].split("");
+                if (splitto.length === 3) {
+                    if (arr[i] === "2nd" || arr[i] === "3rd" || arr[i] === "1st") {
+                        day = `${arr[i]}`;
+                        found = true;
+                    }
+                    else if (splitto[1] === "t" && splitto[2] === "h") {
+                        if (isNumber(splitto[0])) {
+                            day = `${arr[i]}`;
+                            found = true;
+                        }
+                    }
+                }
+                else if (splitto.length === 4) {
+                    if (arr[i] === "22nd" || arr[i] === "23rd" || arr[i] === "21st") {
+                        day = `${arr[i]}`;
+                        found = true;
+                    }
+                    else if (splitto[2] === "t" && splitto[3] === "h") {
+                        if (isNumber(splitto[0] + splitto[1]) && parseInt(splitto[0] + splitto[1]) < 32) {
+                            day = `${arr[i]}`;
+                            found = true;
+                        }
+                    }
+                }
+            }
+            if (!found) {
+                for (let i = 0; i < arr.length; i++) {
+                    if (arr[i].length === 2) {
+                        if (isNumber(arr[i]) && parseInt(arr[i]) < 32) {
+                            day = `${arr[i]}`;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (date === "") {
+        if (month !== "" && day !== "") {
+            if (isNumber(day)) {
+                month = months[month]
+                date = new Date(2023, month - 1, parseInt(day)).toDateString();
+            }
+            else {
+                let ds = day.split("");
+                if (ds.length === 3) {
+                    day = ds[0];
+                }
+                else {
+                    day = ds[0] + ds[1];
+                }
+            }
+        }
+    }
+    return {
+        date,
+        arr
+    }
+}
+
+export function findTime(arr) {
+    if (typeof(arr) === "string") {
+        arr = arr.split(" ")
+    }
+    console.log(arr);
     let time = "";
     for (let i = 0; i < arr.length; i++) {
         const splitArr = arr[i].split(":");
         if (splitArr.length === 2) {
-            if (splitArr[0].length > 2 || !isNumber(splitArr[0] || parseInt(splitArr[0] > 12))) {
-                return "This time was not found to be an eligible time.";
+            console.log("HERE PETERRR")
+            if (splitArr[0].length > 2 || !isNumber(splitArr[0]) || parseInt(splitArr[0] > 12)) {
+                return {
+                    error: "timeEligibilityError",
+                    msg: "This time was not found to be an eligible time."
+                }
             }
             else {
                 if (splitArr[1].length !== 2 || !isNumber(splitArr[1])) {
-                    if (splitArr[1].length !== 4) {
-                        return "This time was not found to be an eligible time.";
+                    console.log("YOOOOOO SMACKA")
+                    console.log(splitArr[1].length)
+                    if (splitArr[1].length !== 4 && splitArr[1].length !== 5) {
+                        return {
+                            error: "timeEligibilityError",
+                            msg: "This time was not found to be an eligible time."
+                        }
                     }
                     else {
-                        if(splitArr[1][2].toLowerCase() === "a" || splitArr[1][2].toLowerCase() === "p") {
-                            if(splitArr[1][3].toLowerCase() === "m") {
+                        if (splitArr[1][2].toLowerCase() === "a" || splitArr[1][2].toLowerCase() === "p") {
+                            console.log("YOOOOO JABAAA JOE")
+                            if (splitArr[1][3].toLowerCase() === "m") {
                                 if (isNumber(parseInt(splitArr[1][0] + splitArr[1][1])) && parseInt(splitArr[1][0] + splitArr[1][1]) < 60) {
-                                    return "You have scheduled this booking to be at " + arr[i];
+                                    return {
+                                        type: "timeSuccess",
+                                        time: splitArr[0].toString() + ":" + splitArr[1][0] + splitArr[1][1] + " " + splitArr[1][2].toUpperCase() + splitArr[1][3].toUpperCase()
+                                    }
                                 }
                                 else {
-                                    return "This time was not found to be an eligible time.";
+                                    return {
+                                        type: "timeEligibilityError",
+                                    }
                                 }
-                            }   
+                            }
                         }
                     }
                 }
-                    else {
-                        if (!isNumber(parseInt(splitArr[1])) || parseInt(splitArr[1]) > 59) {
-                            return "This time was not found to be an eligible time."
+                else {
+                    if (!isNumber(parseInt(splitArr[1])) || parseInt(splitArr[1]) > 59) {
+                        return {
+                            error: "timeEligibilityError",
                         }
-                        else {
-                            if (i !== arr.length - 1) {
-                                if (arr[i + 1].toLowerCase() === "am" || arr[i + 1].toLowerCase() === "pm") {
-                                    return "You have scheduled this booking to be at " + arr[i] + arr[i + 1];
-                                }
-                                else {
-                                    return "Please specify if you want this booking at " + arr[i] + "am" + " or " + arr[i] + "pm";
+                    }
+                    else {
+                        if (i !== arr.length - 1) {
+                            if (arr[i + 1].toLowerCase() === "am" || arr[i + 1].toLowerCase() === "pm") {
+                                return {
+                                    success: "timeSuccess",
+                                    time: arr[i] + " " + arr[i + 1].toUpperCase()
                                 }
                             }
                             else {
-                                return "Please specify if you want this booking at " + arr[i] + "am" + " or " + arr[i] + "pm";
-                            } 
+                                if (new Date().getHours() > parseInt(splitArr[0])) {
+                                    return {
+                                        success: "timeSuccess",
+                                        time: arr[i] + " PM"
+                                    }
+                                }
+                                else {
+                                    return {
+                                        error: "ampmError",
+                                        time: + arr[i]
+                                    }
+                                }
+                            }
                         }
-                } 
+                        else {
+                            if (new Date().getHours() > parseInt(splitArr[0])) {
+                                return {
+                                    time: arr[i] + " PM",
+                                    type: "timeSuccess"
+                                }
+
+                            }
+                            else {
+                                return {
+                                    error: "ampmError",
+                                }
+                            }
+                        }
+                    }
+                }
             }
-            return "Time not found due to improper use of colon."
+            return {
+                error: "colonError",
+            }
         }
     }
     for (let i = 0; i < arr.length; i++) {
         if (arr[i].length === 3) {
-            console.log("HERE PETER")
-           if (isNumber(arr[i])) {
+            if (isNumber(arr[i])) {
                 const newArray = arr[i].split("");
                 if (parseInt(newArray[0]) < 13 && parseInt(newArray[1] + newArray[2]) < 60) {
-                    if(i === arr.length - 1){
+                    if (i === arr.length - 1) {
                         time = newArray[0] + ":" + newArray[1] + newArray[2];
-                        return "Please specify if you want this booking at " + time + "am" + " or " + time + "pm.";
+                        if (parseInt(newArray[0]) < new Date().getHours()) {
+                            return {
+                                time: time + " PM",
+                                type: "bookingTimeSuccess",
+                            }
+                        }
+                        return {
+                            time: time,
+                            type: "ampmError",
+                        }
                     }
                     else {
-                        if(arr[i+1].toLowerCase() !== "am" && arr[i+1].toLowerCase() !== "pm"){
+                        if (arr[i + 1].toLowerCase() !== "am" && arr[i + 1].toLowerCase() !== "pm") {
                             time = newArray[0] + ":" + newArray[1] + newArray[2];
-                            return "Please specify if you want this booking at " + time + "am" + " or " + time + "pm.";
+                            if (parseInt(newArray[0]) < new Date().getHours()) {
+                                return {
+                                  time: time + " PM"
+                                }
+                            }
+                            return {
+                                msg: time,
+                                error: "ampmError",
+                            }
                         }
                         else {
                             time = newArray[0] + ":" + newArray[1] + newArray[2] + arr[i + 1];
                         }
-                    } 
+                    }
                 }
             }
-        } 
+        }
         else if (arr[i].length === 4) {
-                if (isNumber(arr[i])) {
-                    const newArray = arr[i].split("");
-                    if (parseInt(newArray[0] +  newArray[1]) < 13 && parseInt(newArray[2] + newArray[3]) < 60) {
-                        if(i === arr.length - 1){
+            if (isNumber(arr[i])) {
+                const newArray = arr[i].split("");
+                if (parseInt(newArray[0] + newArray[1]) < 13 && parseInt(newArray[2] + newArray[3]) < 60) {
+                    if (i === arr.length - 1) {
+                        time = newArray[0] + newArray[1] + ":" + newArray[2] + newArray[3];
+                        if (parseInt(newArray[0] + newArray[0]) < new Date().getHours()) {
+                            return {
+                             time: time + " PM"
+                            }
+                        }
+                        return {
+                            time: time,
+                            error: "ampmError"
+                        }
+                    }
+                    else {
+                        if (arr[i + 1].toLowerCase() !== "am" && arr[i + 1].toLowerCase() !== "pm") {
                             time = newArray[0] + newArray[1] + ":" + newArray[2] + newArray[3];
-                            return "Please specify if you want this booking at " + time + "am" + " or " + time + "pm.";
+                            if (parseInt(newArray[0] + newArray[0]) < new Date().getHours()) {
+                                return {
+                                    time: time + " PM"
+                                } 
+                            }
+                            return {
+                                time: time,
+                                error: "ampmError"
+                            }
                         }
                         else {
-                            if(arr[i+1].toLowerCase() !== "am" && arr[i+1].toLowerCase() !== "pm"){
-                                time = newArray[0] + newArray[1] + ":" + newArray[2] + newArray[3];
-                                return "Please specify if you want this booking at " + time + "am" + " or " + time + "pm.";
-                            }
-                            else {
-                                time = newArray[0] + newArray[1] + ":" + newArray[2] + newArray[3] + arr[i + 1];
-                            }
-                        } 
+                            time = newArray[0] + newArray[1] + ":" + newArray[2] + newArray[3] + arr[i + 1];
+                        }
+                    }
                 }
             }
         }
@@ -350,25 +950,35 @@ function findTime(arr) {
                 if (arr[i][4].toLowerCase() === "m") {
                     if (isNumber(arr[i][0] + arr[i][1] + arr[i][2])) {
                         if (parseInt(arr[i][1] + arr[i][2]) < 60) {
-                            time = arr[i][0] + ":" + arr[i][1] + arr[i][2] + arr[i][3] + arr[i][4];
+                            time = arr[i][0] + ":" + arr[i][1] + arr[i][2] + " " + arr[i][3].toUpperCase() + arr[i][4].toUpperCase()
                         }
                     }
                 }
             }
         }
-        else if (arr[i].length === 6){
-            if(arr[i][4].toLowerCase() === "a" || arr[i][4].toLowerCase() === "p"){
-                if (arr[i][5].toLowerCase() === "m"){
-                    if(isNumber(arr[i][0] + arr[i][1] + arr[i][2])+ arr[i][3]){
-                        if(parseInt(arr[i][0] + arr[i][1]) < 13 && parseInt(arr[i][2] + arr[i][3]) < 60){
-                            time = arr[i][0] + arr[i][1] + ":" + arr[i][2] + arr[i][3] + arr[i][4] + arr[i][5];
+        else if (arr[i].length === 6) {
+            if (arr[i][4].toLowerCase() === "a" || arr[i][4].toLowerCase() === "p") {
+                if (arr[i][5].toLowerCase() === "m") {
+                    if (isNumber(arr[i][0] + arr[i][1] + arr[i][2]) + arr[i][3]) {
+                        if (parseInt(arr[i][0] + arr[i][1]) < 13 && parseInt(arr[i][2] + arr[i][3]) < 60) {
+                            time = arr[i][0] + arr[i][1] + ":" + arr[i][2] + arr[i][3] +  " " + arr[i][4].toUpperCase() + arr[i][5].toUpperCase()
                         }
                     }
                 }
             }
         }
     }
-    return "You have scheduled this booking to be at " + time;
+    if (time === "") {
+        return {
+            error: "gotToEndNoTime"
+        }
+    }
+    else {
+        return {
+            success: "gotToEndWithTime",
+            time
+        }
+    }
 }
 
 function isNumber(num) {
@@ -377,100 +987,146 @@ function isNumber(num) {
 
 
 function littleMagic(probableWords, msg) {
-    
+
 }
 
-function createBookingMagic(probableWords) {
+function createBookingMagic(probableWords, services, arr) {
     const length = probableWords.length;
     if (probableWords.includes("book") || probableWords.includes("booking")) {
-        if (probableWords.includes("create") || probableWords.includes("add")) {
+        if (probableWords.length === 1) {
+            return true;
+        }
+        if (probableWords.includes("create") || probableWords.includes("add") || probableWords.includes("make")) {
+
             return true;
         }
     }
-}
-
-
-
-function findTimesMagic(arr) {
-    const time = findHours(arr) + ":" + findMinutes(arr);
-    console.log(time);
-}
-
-
-function findMinutes(arr){
-    const timeMinutesFound = []; 
-    let minutes = ""; 
-    for(let i = 0; i < arr.length; i++){
-        if(timeMinutes.includes(arr[i])){
-            timeMinutesFound.push(arr[i]); 
-        }
-    }
-    console.log(timeMinutesFound);
-    if(timeMinutesFound.length > 1){
-        if(timeMinutesFound[1] !== "five" && timeMinutesFound[1] !== "5"){
-            return "There are too many possible minutes specified in this request."
-        }
-        else {
-            if(parseInt(timeMinutesFound[0]).toString() === "NaN"){
-                minutes += minutesToNumDic[timeMinutesFound[0]][0];
-            }
-            if(parseInt(timeMinutesFound[1]).toString() === "NaN"){
-                minutes += minutesToNumDic[timeMinutesFound[1]][1];
+    else if (probableWords.includes("create") || probableWords.includes("add") || probableWords.includes("make")) {
+        let num = 0;
+        for (let i = 0; i < services.length; i++) {
+            let splitter = services[i].serviceName.split(" ");
+            for (let t = 0; t < splitter.length; t++) {
+                console.log(splitter[t]);
+                if (arr.includes(splitter[t].toLowerCase())) {
+                    num++;
+                    if (num > 1) {
+                        return true;
+                    }
+                }
             }
         }
     }
-
-    if(timeMinutesFound.length === 1){
-        if(parseInt(timeMinutesFound[0]).toString() === "NaN"){
-            minutes += minutesToNumDic[timeMinutesFound[0]];
-        }
-        else{
-            minutes += timeMinutesFound[0]; 
-        }
-    }
-    return minutes;
-
 }
 
 
 
-function findHours(arr) {
-    const timeHoursFound = []; // empty array
-    let timeMentioned = ""; // starts as empty string but will be mutated to whatever hour we find
-    for (let i = 0; i < arr.length; i++) { // running through the arr we are given
-        if (timeHours.includes(arr[i])) {   
-            timeHoursFound.push(arr[i]); // ["three"]
+export function findTimesMagic(arr, apComing) {
+    if (typeof(arr) === "string") {
+        arr = arr.split(" ");
+    }
+    let ap = "";
+    let hour = "";
+    let minutes = "";
+    const possibleHours = [];
+    const possibleMinutes = [];
+    for (let i = 0; i < arr.length; i++) {
+        if (timeHours.includes(arr[i])) {
+            possibleHours.push(arr[i]);
         }
     }
-    if (timeHoursFound.length > 3) {
-        return "There is too many possible hour times this booking could be requested for."
-    }
-    if (timeHoursFound.length > 1) {
-        console.log(timeHoursFound);
-        if (timeHoursFound[1] !== "five" && timeHoursFound[1] !== "ten" && timeHoursFound[2] !== "five" && timeHoursFound[2] !== "ten" ) {
-            return "There is too many possible hour times this booking could be requested for."
+ 
+    if (possibleHours.length === 1) {
+        hour = possibleHours[0];
+        if (parseInt(hour).toString() === "NaN") {
+            hour = timeToNumDic[hour];
         }
         else {
-            if (parseInt(timeHoursFound[0]).toString() === "NaN") {
-                timeMentioned += timeToNumDic[timeHoursFound[0]]; // timeToNumDic["seven"] === 7
+            // dont need to do anything ig
+        }
+        const index = arr.findIndex(function(e) {
+            return e === possibleHours[0];
+        })
+            if (index !== -1) {
+                arr.splice(index, 1);
+            }
+    }
+    else if (possibleHours.length === 2) {
+            hour = possibleHours[0];
+            if (parseInt(hour).toString() === "NaN") {
+                hour = timeToNumDic[hour];
             }
             else {
-                  timeMentioned += timeHoursFound[0];
+                // dont need to do anything ig
+            }
+            const index = arr.findIndex(function(e) {
+                return e === possibleHours[0];
+            })
+            if (index !== -1) {
+                arr.splice(index, 1);
+            }
+    }
+    else if (possibleHours.length === 3) {
+        if (possibleHours[2] === "five" || possibleHours[2] === "5") {
+            hour = possibleHours[0];
+            if (parseInt(hour).toString() === "NaN") {
+                hour = timeToNumDic[hour];
+            }
+            else {
+                // dont need to do anything ig
+            }
+            const index = arr.findIndex(function(e) {
+                return e === possibleHours[0];
+            })
+            if (index !== -1) {
+                arr.splice(index, 1);
             }
         }
     }
-    if (timeHoursFound.length === 1) {
-        if (parseInt(timeHoursFound[0]).toString() === "NaN") {
-            timeMentioned += timeToNumDic[timeHoursFound[0]];
+
+    for (let i = 0; i < arr.length; i++) {
+        if (timeMinutes.includes(arr[i])) {
+            possibleMinutes.push(arr[i]);
+        }
+    }
+    if (possibleMinutes.length === 1) {
+        if (parseInt(minutes).toString() === "NaN") {
+            minutes = timeToNumDic[possibleMinutes[0]];
         }
         else {
-            timeMentioned += timeHoursFound[0];
+            minutes = possibleMinutes[0];
         }
     }
-    if (timeHoursFound.length === 0) {
-        console.log("DID NOT FIND AN HOUR"); 
+    else if (possibleMinutes.length === 2) {
+        if (possibleMinutes[1] === "5" || possibleMinutes[1] === "five") {
+            if (parseInt(minutes).toString() === "NaN") {
+                minutes = timeToNumDic[possibleMinutes[0] + possibleMinutes[1]];
+            }
+            else {
+                minutes = possibleMinutes[0] + possibleMinutes[1];
+            }
+        }
     }
-    return timeMentioned;
+    if (apComing === "") {
+        if (arr.includes("AM") || arr.includes("am") || arr.includes("Am") || arr.includes("morning")) {
+            ap = " AM";
+        }
+        if (arr.includes("PM") || arr.includes("pm") || arr.includes("Pm") || arr.includes("night")) {
+            ap = " PM";
+        }
+        if (ap === "") {
+            ap = " PM";
+        }
+    }
+    else {
+        ap = apComing;
+    }
+    if (hour && minutes) {
+        return hour + ":" + minutes + ap;
+    } 
+    else {
+        return "error";
+    }
+   
 }
 
 
@@ -480,13 +1136,21 @@ function cleanMsg(probableWords, msg) {
     const msgCleaner = msg.split(" ");
     for (let i = 0; i < probableWords.length; i++) {
         const index = msgCleaner.findIndex(value => {
-           return value === probableWords[i];
+            return value === probableWords[i];
         })
         if (index !== -1) {
             msgCleaner.splice(index, 1);
         }
     }
-    return msgCleaner;
+    for (let i = 0; i < msgCleaner.length; i++) {
+        if (msgCleaner[i] === "it" || msgCleaner[i] === "to" || msgCleaner[i] === "a" || msgCleaner[i] === "i" || msgCleaner[i] === "for") {
+            msgCleaner.splice(i, 1);
+        }
+    }
+    const newThing = msgCleaner.filter(word => {
+        return word !== "it" && word !== "to" && word !== "a" && word !== "i" && word !== "for"
+    })
+    return newThing;
 }
 
 

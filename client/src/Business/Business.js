@@ -25,6 +25,7 @@ function Business(props) {
   const [groupToView, setGroupToView] = useState({});
   const [loading, setLoading] = useState(true);
   const [groups, setGroups] = useState([]);
+  const [employees, setEmployees] = useState([]);
 
 
   function loadSchedule() {
@@ -73,6 +74,15 @@ function Business(props) {
       }
     })
   }
+
+
+  useEffect(function() {
+    axios.get('api/getEmployees/', {headers: {'x-auth-token': props.adminToken}}).then(response => {
+      if (response.status === 200) {
+        setEmployees(response.data.employees);
+      }
+    })
+  }, [])
 
   useEffect(function() {
     axios.post("api/services/getServices", {businessId: props.admin.admin.businessId}).then(response => {
@@ -131,7 +141,7 @@ function Business(props) {
                   eq={eq}
                   bct={bct}    
                 />
-                {!loading && <Chatty/>}
+                {!loading && <Chatty eq={eq} name={bct} employees={employees} services={services}/>}
                 
                 {!loading ? <CourtContainer clickGroup={clickGroup} sortedGroups={groups} clickBooking={clickBooking} sortedBookings={sortedBookings} openTime={openTime} closeTime={closeTime} bct={bct} bcn={bcn}/> : 
                   <Spinner/>
