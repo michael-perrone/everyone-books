@@ -14,6 +14,7 @@ const authAdmin = require("../../middleware/authAdmin");
 const BookedNotification = require("../../models/BookedNotification");
 const Business = require("../../models/Business");
 
+
 router.post("/admin", async (req, res) => {
         const date = utils.getStringDateTime(req.body.timeStart, req.body.date);
         const dateo = new Date();
@@ -511,6 +512,111 @@ router.post("/admin/newGuest/clone", async (req, res) => {
 })
 
  // let data = ["timeStart": timeStart, "date": date, "serviceIds": serviceIdsArray, "employeeId": employeeId, "businessId": businessId] as [String : Any];
+
+router.post("/createChatBooking", authAdmin, async (req, res) => {
+    try {
+        const services = await ServiceType.find({_id: req.body.bookingState.services});
+        let cost = 0;
+        let timeNum = utils.stringToIntTime[req.body.bookingState.time]
+        for (let i = 0; i < services.length; i++) {
+            timeNum = timeNum + utils.timeDurationStringToInt[services[i].timeDuration];
+            cost += services[i].cost;
+        }
+        if (cost.toString().split(".").length === 2) {
+            // do nothing?
+        }
+        else {
+            cost = cost.toString() + ".00";
+        }
+
+        const endTime = utils.intToStringTime[timeNum];
+        const business = await Business.findOne({_id: req.admin.businessId});
+        if (business.eq) {
+           let shifts = await Shift.find({employeeId: req.body.bookingState.employee[0], shiftDate: req.body.bookingState.date});
+           if (shifts.length === 0) {
+               return res.status(406).send();
+           }
+            let newBooking = new Booking({
+                serviceType: req.body.bookingState.services,
+                time: `${req.body.bookingState.time}-${endTime}`,
+                businessId: req.admin.businessId,
+                date: req.body.bookingState.date,
+                employeeBooked: req.body.bookingState.employee[0],
+                cost: `$${cost}`,
+                bcn: shifts[0].bookingColumnNumber
+            });
+            if (shifts.length === 1) {
+                if (utils.bookingFallsInsideShift(`${req.body.bookingState.time}-${endTime}`, shifts[0])) {
+                    await newBooking.save();
+                    return res.status(200).send({newBooking});
+                }
+            }
+            else if (shifts.length === 2) {
+                console.log("gross");
+            }
+            else {
+                return res.status(406).json({error: "No Shift."})
+            }
+        }  
+    }
+    catch(error) {
+        console.log(error);
+        res.status(500).send();
+    }
+})
+
+router.post('/updatePhone', authAdmin, async (req, res) => {
+    try {
+        const booking = await Booking.findOne({_id: req.body.bookingId});
+        const custo = await User.findOne({phoneNumber: req.body.phone});
+        console.log(req.body.phone)
+        if (!custo) {
+            const user = new User({
+                phoneNumber: req.body.custoPhone
+            })
+            booking.customer = user;
+            await user.save();
+            await booking.save();
+            res.status(200).json({custo:user});
+        }
+        else {
+            booking.customer = custo;
+            await booking.save();
+            res.status(200).json({custo});
+        }
+    }
+    catch(error) {
+
+    }
+});
+
+router.post('/updateCusto', authAdmin, async (req, res) => {
+    try {
+        const booking = await Booking.findOne({_id: req.body.bookingId});
+        const custo = await User.findOne({phoneNumber: req.body.phone});
+        console.log(req.body.phone)
+        if (!custo) {
+            const user = new User({
+                phoneNumber: req.body.phone,
+                name: req.body.name
+            })
+            booking.customer = user;
+            await user.save();
+            await booking.save();
+            res.status(200).json({custo:user});
+        }
+        else {
+            booking.customer = custo;
+            await booking.save();
+            res.status(200).json({custo});
+        }
+    }
+    catch(error) {
+
+    }
+});
+
+
 
 router.post("/sendNotiFromUser", userAuth, async (req, res) => {
     try {

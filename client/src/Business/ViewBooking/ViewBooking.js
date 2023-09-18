@@ -23,6 +23,9 @@ function ViewBooking(props) {
     const [selectedServiceIds, setSelectedServiceIds] = useState([]);
     const [error, setError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
+    const [custoName, setCustoName] = useState("");
+    const [custoPhone, setCustoPhone] = useState("");
+    const [custo, setCusto] = useState({});
 
     // check this -- make it so that
 
@@ -239,22 +242,35 @@ function ViewBooking(props) {
         }
     }
 
+    function enterPhone() {
+        Axios.post('api/iosBooking/updateCusto', {bookingId: props.booking._id, phone: custoPhone, name: custoName}, {headers: {'x-auth-token': props.adminToken}}).then(
+            response => {
+                if (response.status === 200) {
+                    setCusto(response.data.custo);
+                }
+            }
+        )
+    }
+
+
+
     return (
         <div id={styles.viewBookingContainer}>
             <p style={{fontWeight: "bold", fontSize: "18px", position: "absolute", top: 5}}>Booking Info</p>
-            <img onClick={hide} style={{position: "absolute", right: 20, top: 20, cursor: "pointer"}} src={x}/>
+            <img onClick={hide} style={{position: "absolute", right: 20, top: 10, cursor: "pointer"}} src={x}/>
             <div id={styles.leftContainer}>
                 <div>
                     <p className={styles.bolder}>Employee Name:</p>
                     <p className={styles.fontFourteen}>{props.booking.employeeName}</p>
                 </div>
-                <div>
+                <div style={{display: "flex", flexDirection: "column"}}>
                     <p className={styles.bolder}>Customer Name:</p>
-                    <p className={styles.fontFourteen}>{props.booking.customer.fullName}</p>
+                   {(props.booking.customer || custo.fullName) ? <p className={styles.fontFourteen}>{props.booking.customer ? props.booking.customer.fullName : custo.fullName}</p> : <input onChange={(e) => setCustoName(e.target.value)} style={{width: "120px", height: "26px", border: "none", border: "1px solid white", fontSize: "12px", paddingLeft: "3px", paddingRight: "3px"}} placeholder='Customer Name'/>}
                 </div>
-                 <div>
+                <div style={{display: "flex", flexDirection: "column"}}>
                     <p className={styles.bolder}>Customer Phone:</p>
-                    <p className={styles.fontFourteen}>{props.booking.customer.phoneNumber}</p>
+                   {props.booking.customer || custo.phoneNumber ? <p className={styles.fontFourteen}>{props.booking.customer ? props.booking.customer.phoneNumber : custo.phoneNumber}</p> : <input onChange={(e) => setCustoPhone(e.target.value)} style={{width: "120px", height: "26px", border: "none", border: "1px solid white", fontSize: "12px", paddingLeft: "3px", paddingRight: "3px"}} placeholder='Customer Phone'/>}
+                  {(!props.booking.customer && !custo.phoneNumber) && <button onClick={enterPhone} style={{backgroundColor: "lightgreen", border: "0.2px solid white", color: "black", paddingTop: "4px", paddingBottom: "4px", width: "80px", marginTop: "16px", fontWeight: "bold", marginLeft: "20px"}}>Enter</button>}
                 </div>
                 <div>
                     <p className={styles.bolder}>Time of Booking:</p>
@@ -268,7 +284,7 @@ function ViewBooking(props) {
                     <p className={styles.bolder}>Cost of Booking:</p>
                     <p className={styles.fontFourteen}>{cost}</p>
                 </div>
-                <button onClick={deleteBooking} style={{backgroundColor: "salmon", color: "black", height: "35px", width: "120px", position: "absolute", bottom: "40px", fontWeight: "bold", boxShadow: "0px 0px 2px #f9e9f9", border: "none"}}>Delete Booking</button>
+                <button onClick={deleteBooking} style={{backgroundColor: "salmon", color: "black", height: "35px", width: "120px", position: "absolute", bottom: "10px", fontWeight: "bold", boxShadow: "0px 0px 2px #f9e9f9", border: "none"}}>Delete Booking</button>
             </div>
             <div id={styles.rightContainer}>
                 {showProducts ?
@@ -282,14 +298,13 @@ function ViewBooking(props) {
                     <Maplist small={true} delete={deleteService} array={servicesInBooking}/>
                 </div>
                 }
-                <div style={{position: "absolute", top: "270px", width: "221px", right: "5px"}}>
+                <div style={{position: "absolute", top: "270px", width: "198px", right: "1px"}}>
                     <div style={{display: "flex", justifyContent: "space-between", position: "relative", top: "1px"}}>
-                        <p onClick={toSetServices} style={{paddingBottom: "8px", cursor: "pointer"}} className={showProducts ? styles.unselected : styles.selected}>Add Services</p>
-                        <p onClick={toSetProducts} style={{paddingBottom: "8px", cursor: "pointer"}} className={showProducts ? styles.selected : styles.unselected}>Add Products</p>
+                        <p onClick={toSetServices} style={{paddingBottom: "3px", cursor: "pointer"}} className={showProducts ? styles.unselected : styles.selected}>Add Services</p>
+                        <p onClick={toSetProducts} style={{paddingBottom: "3px", cursor: "pointer"}} className={showProducts ? styles.selected : styles.unselected}>Add Products</p>
                     </div>
                     
-                   <div style={{width: "218px", height: "200px", borderLeft: "1.5px solid #f9e9f9",
-                    borderRight: "1.5px solid #f9e9f9", borderBottom: "1.5px solid #f9e9f9" }}>
+                   <div style={{width: "224px", height: "200px"}}>
                    {showProducts ?
                         <ServiceList array={props.products} small={true} addService={(id) => selectProduct(id)} minusService={minusProduct} prod={true}  selectedServices={selectedProductIds}/>
                            :

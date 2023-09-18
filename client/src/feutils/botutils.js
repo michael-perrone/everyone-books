@@ -29,7 +29,6 @@ export function getLoc(msg, bct) {
 }
 
 
-
 function extractArea(arr, bct) {
     bct = bct.toLowerCase();
     for (let i = 0; i < arr.length; i++) {
@@ -148,8 +147,8 @@ export function extractServices(arr, services) {
 //     }
 // }
 
-function extractEmployees(arr, employees) {
-    console.log(employees);
+export function extractEmployees(arr, employees) {
+    console.log(arr)
     let holder = -1;
     const defEmployees = [];
     const probableEmployees = [];
@@ -158,12 +157,10 @@ function extractEmployees(arr, employees) {
     for (let i = 0; i < employees.length; i++) {
         const indArray = [];
         const arry = employees[i].fullName.split(" ");
-
         for (let a = 0; a < arry.length; a++) {
             indArray.push(arry[a].toLowerCase());
         }
         indArray.push(employees[i]._id);
-
         employeesArray.push(indArray);
     }
     for (let i = 0; i < arr.length; i++) {
@@ -206,6 +203,7 @@ function extractEmployees(arr, employees) {
                     arr.splice(i, 1);
                 }
                 else if (counter / pushedEmployees.length === 1) {
+                    console.log(arr);
                     probableEmployees[i].push(employeesArray[t][a]);
                     arr.splice(i, 1);
                 }
@@ -268,12 +266,7 @@ export function chattyKathy1(msg) {
     }
 }
 
-export function findDateBot(date) {
-    const todaysDate = new Date();
-    if (date.msg.includes("today")) {
-        return "today, " + todaysDate.toDateString()
-    }
-}
+
 
 // find the main goal of the msg (ie create a booking or delete a booking)
 // find the subject that goes along with the main goal (ie employee thats being hired or services that are being booked)
@@ -341,6 +334,8 @@ const timeToNumDic = {
     "forty": "40", "fourty": "40", "fifty": "50", "fiftyfive": "55", "fifty-five": "55", "twentyfive": "25",
     "twenty-five": "25"
 };
+
+const rawTimes = {"12am": "12:00 AM", "1am": "1:00 AM", "2am": "2:00 AM", "3am": "3:00 AM", "4am": "4:00 AM", "5am": "5:00 AM", "6am": "6:00 AM", "7am": "7:00 AM", "8am": "8:00 AM", "9am": "9:00 AM", "10am": "10:00 AM", "11am": "11:00 AM", "12pm": "12:00 PM", "1pm": "1:00 PM", "2pm": "2:00 PM", "3pm": "3:00 PM", "4pm": "4:00 PM", "5pm": "5:00 PM", "6pm": "6:00 PM", "7pm": "7:00 pM", "8pm": "8:00 PM", "9pm": "9:00 PM", "10pm": "10:00 PM", "11pm": "11:00 PM", "12pm": "12:00 PM", }
 
 export function findDay(arr) {
     if (typeof(arr) === "string") {
@@ -558,7 +553,7 @@ export function bigMagic(msg, services, employees, bct) {
 // }
 
 
-function findDate(arr) {
+export function findDate(arr) {
     let month = "";
     let day = "";
     let date = "";
@@ -779,7 +774,14 @@ export function findTime(arr) {
     if (typeof(arr) === "string") {
         arr = arr.split(" ")
     }
-    console.log(arr);
+    for (let i = 0; i < arr.length; i++) {
+        if (rawTimes[arr[i]]) {
+            return {
+                type: "timeSuccess",
+                time: rawTimes[arr[i]]
+            }
+        }
+    }
     let time = "";
     for (let i = 0; i < arr.length; i++) {
         const splitArr = arr[i].split(":");

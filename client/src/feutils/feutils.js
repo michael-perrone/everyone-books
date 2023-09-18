@@ -60,6 +60,8 @@ export function getTimes(open, close) {
 }
 
 
+
+
 export function getDateInFormat(date = null) {
     if (date) {
         const dete = new Date(date);

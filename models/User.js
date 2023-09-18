@@ -8,7 +8,6 @@ const UserSchema = new mongoose.Schema({
   newGuest: Boolean,
   fullName: {
     type: String,
-    required: true
   },
   email: {
     type: String,
@@ -18,7 +17,6 @@ const UserSchema = new mongoose.Schema({
   },
   phoneNumber: {
     type: String,
-    required: true
   },
   businessesFollowing: {
     type: [mongoose.Schema.Types.ObjectId],
@@ -32,10 +30,6 @@ const UserSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectId],
     ref: "bookedNotification"
   },
-  friends: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: "user"
-  }
 });
 
 module.exports = User = mongoose.model("user", UserSchema);

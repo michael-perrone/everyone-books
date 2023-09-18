@@ -4,12 +4,12 @@ import styles from './Chatty.module.css';
 import send from './send.png';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { chattyKathy1, findDateBot, gettingConfirmation, bigMagic, getLoc, findTime, findDay, findTimesMagic, extractServices } from '../feutils/botutils';
+import { chattyKathy1, gettingConfirmation, bigMagic, getLoc, findDate, findTime, findDay, findTimesMagic, extractServices, extractEmployees } from '../feutils/botutils';
 
 //import ChatBubble from './ChatBubble/ChatBubble';
 
 const Chatty = (props) => {
-    const intro = "Hello my name is Chatters the chatty bot. I can perform and help with many tasks. How can I help?"
+    const intro = "Hello my name is Bookie the booking bot. I can create and delete bookings for you. How can I help?"
     let counter = 0;
 
     /////// CHAT BOOKINGS CHAT BOOKINGS CHAT BOOKINGS BELOW ////////
@@ -20,7 +20,9 @@ const Chatty = (props) => {
     const [needEmployee, setNeedEmployee] = useState(false);
     const [needServices, setNeedServices] = useState(false);
     const [needTime, setNeedTime] = useState(false);
-    const [needAnswer, setNeedAnswer] = useState(false);
+    const [erroro, setErroro] = useState("");
+
+
 
     ///////// CHAT BOOKINGS ABOVE CHAT BOOKINGS ABOVE ///////////
 
@@ -49,48 +51,45 @@ const Chatty = (props) => {
         const chatsReplica = [...chats];
         const response = bigMagic(chatsReplica[chatsReplica.length - 1].msg, props.services, props.employees, props.name, props.eq);
         if (response.type === "booking") {
-        setBookingState({loc: response.loc , date: response.date, employee: response.employee, services: response.services, time: response.time});
-            console.log("WIDJQWJD")
+            setBookingState({loc: response.loc , date: response.date, employee: response.employee, services: response.services, time: response.time});
             if (!response.loc && props.eq === "n") {
-                createBotChat(`Could you clarify what ${props.name} you would like this booking to be located?`, chatsReplica);
                 setNeedLocation(true);
-                setNeedAnswer(true);
-                return;
             }
-           if (!response.date) {
-                createBotChat(`Could you clarify the date you would like this booking to be on?`, chatsReplica);
+            else {
+                setBookingState({loc: response.loc, ...bookingState})
+            }
+            if (!response.date) {
                 setNeedDate(true);
-                setNeedAnswer(true);
-                return;
+            }
+            else {
+                setBookingState({date: response.date, ...bookingState});
             }
             if (response.time === "error" || !response.time) {
-                createBotChat(`Could you clarify what time would you like this booking to be at?`, chatsReplica);
                 setNeedTime(true);
-                setNeedAnswer(true);
-                return;
             }
-            if (response.employee.length === 0) {
-                createBotChat("What employee would you like to book for this?", chatsReplica);
-                setNeedEmployee(true);
-                setNeedAnswer(true);;
-                return;
+            else {
+                setBookingState({time: response.time, ...bookingState});
             }
             if (response.services.length === 0) {
-                createBotChat(`What services would you like to be booked on this booking?`, chatsReplica);
+                console.log("DID I RUN?")
                 setNeedServices(true);
-                setNeedAnswer(true);
-                return;
             }
-         
             else {
-                createBotChat(`Okay I will go ahead and make this booking!`, chatsReplica);
-                return;
+                setBookingState({services: response.services, ...bookingState})
+            }
+            if (response.employee.length === 0) {
+                setNeedEmployee(true);
+            }
+            else {
+                setBookingState({employee: response.employee, ...bookingState});
+            }
+            if ((response.loc || props.eq === "y") && response.date && response.time && response.time !== "error" && response.employee.length !== 0 && response.services.length > 0) {
+                console.log("DJWIDJQIDJWIJDIWJQDJIQWDJQWDJ")
+                const chatsReplica = [...chats];
+                createBotChat(`Okay I will go ahead and try to make this booking!`, chatsReplica);
+                createBooking()
             }
         }
-
-
-
-
 
 
         //     if (needNumber) {
@@ -139,28 +138,92 @@ const Chatty = (props) => {
         //     }
     }
 
-    function createBotChat(response, chatsReplica) {
-        let newChat = { fromBot: true, msg: "", id: chatsReplica.length };
-        chatsReplica.push(newChat);
-        let newStringToArray = splitStr(response);
-        const potatio = setInterval(() => {
-            let str = chatsReplica[chatsReplica.length - 1].msg;
-            str = str + newStringToArray[counter];
-            let newObj = { ...chatsReplica[chatsReplica.length - 1], msg: str };
-            chatsReplica[chatsReplica.length - 1] = newObj;
-            setChats([...chatsReplica]);
-            counter++;
-            if (counter % 5 === 0 || counter === 0) {
-                document.getElementById("yo").scrollTo({
-                    top: 100000
-                });
+    function createBooking() {
+        axios.post('/api/iosBooking/createChatBooking', {bookingState: bookingState}, {headers: {"x-auth-token": localStorage.getItem("adminToken")}}).then(response => {
+            if (response.status === 200) {
+                console.log(response.status)
             }
-            if (counter === response.length) {
-                clearInterval(potatio);
+        }).catch(error => {
+            if (error.response.status === 406) {
+                console.log("wdoqkwdijewfKWJDKQWJDKQWJDwkjdqwkjdkwqdkqWJDQKJDKQWJD")
+                setErroro("It seems the employee you tried to book is not scheduled to be working at this time.")
+                setTimeout(function() {
+                    setErroro("");
+                }, 1000)
             }
-        }
-            , 20);
+        })
+    }
 
+    useEffect(function() {
+        console.log("hello?")
+        console.log(bookingState)
+        if ((bookingState.loc || props.eq === "y") && bookingState.date && bookingState.time !== "error" && bookingState.time && bookingState.services.length > 0 && bookingState.employee.length !== 0) {
+            console.log("YOOOOO?")
+            const chatsReplica = [...chats];
+            createBotChat(`Okay I will go ahead and try to make this booking!`, chatsReplica);
+            createBooking()
+        }
+    }, [bookingState])
+
+    useEffect(function() {
+        if (erroro !== "") {
+            setTimeout(function() {
+                const chatsReplica = [...chats];
+                createBotChat(erroro, chatsReplica);
+            }, 1000)
+        }
+    }, [erroro])
+
+    function neeedLocation() {
+        const chatsReplica = [...chats];
+        setTimeout(() => createBotChat(`Could you clarify what ${props.name} you would like this booking to be located?`, chatsReplica), 300);
+    }
+
+    function neeedDate() {
+        const chatsReplica = [...chats];
+        setTimeout(() => createBotChat(`Could you clarify the date you would like this booking to be on?`, chatsReplica),300);
+    }
+
+    function neeedTime() {
+        const chatsReplica = [...chats];
+        setTimeout(() => createBotChat(`Could you clarify what time would you like this booking to be at?`, chatsReplica),300);
+    }
+    
+    function neeedEmployee() {
+        const chatsReplica = [...chats];
+        setTimeout(() => createBotChat("What employee would you like to book for this?", chatsReplica),300);
+    }
+
+    function neeedServices() {
+        const chatsReplica = [...chats];
+        setTimeout(() => createBotChat(`What services would you like to be booked on this booking?`, chatsReplica),300);
+    }
+
+
+    function createBotChat(response, chatsReplica) {
+        let newChat = { fromBot: true, msg: response, id: chatsReplica.length };
+        chatsReplica.push(newChat);
+        setChats(chatsReplica);
+        document.getElementById("yo").scrollTo({
+            top: 100000
+        });
+       // const potatio = setInterval(() => {
+        // let str = chatsReplica[chatsReplica.length - 1].msg;
+        // str = str + newStringToArray[counter];
+        // let newObj = { ...chatsReplica[chatsReplica.length - 1], msg: str };
+        // chatsReplica[chatsReplica.length - 1] = newObj;
+        // counter++;
+        // if (counter % 5 === 0 || counter === 0) {
+        
+        //     }
+        // if (counter === response.length) {
+        //     console.log("I SHOULD BE CLEARED")
+        //         clearInterval(potatio);
+        //     }
+        //     setChats([...chatsReplica]);
+        // }
+        
+        // , 20);
     }
 
 
@@ -191,20 +254,8 @@ const Chatty = (props) => {
                 clearInterval(potatio);
             }
         }
-            , 20);
+        , 20);
     }
-
-
-    useEffect(function() {
-        if (needLocation || needDate || needServices || needTime) {
-            getAnswer()
-        }
-        
-    }, [needLocation, needDate, needServices, needTime])
-
-    // function typeOutResponse(msg){
-
-    // }
 
     function enterPressed(e) {
         if (e.type === "keydown") {
@@ -239,44 +290,78 @@ const Chatty = (props) => {
     }
 
     useEffect(function () {
-        if (!chats[chats.length - 1].fromBot) {
-            if (!needAnswer) {
-                console.log("YOOOO")
-                setTimeout(() => generateBotResponse(), 300);
-            }
-            else {
-                console.log("HEYYYYY")
-                setTimeout(() => getAnswer(chats[chats.length - 1]), 300);
-            }
-        }
+    if (!chats[chats.length - 1].fromBot) {
+        console.log("IS THIS NOT ME?")
+        if (!needLocation && !needDate && !needEmployee && !needServices && !needTime) {
+            generateBotResponse();
+    }
         else {
-            return;
+            if (needTime) {
+                getAnswer(chats[chats.length - 1], "time");
+                return;
+            }
+            else if (needDate) {
+                getAnswer(chats[chats.length - 1], "date");
+                return;
+            }
+            else if (needLocation) {
+                getAnswer(chats[chats.length - 1], "location");
+                return;
+            }
+            else if (needServices) {
+                getAnswer(chats[chats.length - 1], "services");
+                return;
+            }
+            else if (needEmployee) {
+                getAnswer(chats[chats.length - 1], "employee");
+                return;
+            }
         }
+    }
     }, [chats.length]);
 
-    useEffect(function () {
-        if (chats.length === 3) {
-            console.log(chats[2].msg);
+    // do each effect individually based off whats needed //
+
+
+    useEffect(function() {
+        console.log(needDate);
+        console.log("I AM IMPORTANT");
+        console.log(needTime, needLocation, needEmployee, needServices)
+        if (needTime) {
+            console.log("DO I NEED THE TIME")
+            neeedTime();
+            return;
         }
-    }, [chats.length])
+        else if (needDate) {
+            console.log("DO I NEED THE DATE!!!")
+            neeedDate();
+            return;
+        }
+        else if (needLocation) {
+            neeedLocation();
+            return;
+        }
+        else if (needServices) {
+            neeedServices();
+            return;
+        }
+        else if (needEmployee) {
+            neeedEmployee();
+            return;
+        }
+    }, [needLocation, needDate, needTime, needEmployee, needServices])
+
 
     function changeTextFieldText(event) {
         setTextFieldText(event.target.value);
     }
 
-    function gm() {
-        let msg;
-        if (chats[chats.length - 1].fromBot === false) {
-            msg = chats[chats.length - 1].msg;
-
-        }
-    }
-
-    function getAnswer(msg) {
-        if (needLocation) {
+    function getAnswer(msg, gettingAnswer) {
+        if (gettingAnswer === "location") {
            let loc = getLoc(msg.msg, props.name);
            if (!loc || loc === "error") {
                answerNotFound(`I still couldn't find what ${props.name} you said, try again with just a number.`);
+               return;
            }
            else {
               setNeedLocation(false);
@@ -285,7 +370,7 @@ const Chatty = (props) => {
               return;
            }
         }
-        if (needTime) {
+        if (gettingAnswer === "time") {
             let time = findTime(msg.msg);
             if (time.error) {
                 time = findTimesMagic(msg.msg, "");
@@ -293,61 +378,81 @@ const Chatty = (props) => {
                     answerNotFound("I couldn't find the time that you specified, could you try again with a time?")
                 }
                 else {
+                    setNeedTime(false);
                     answerFound("time")
                     setBookingState({...bookingState, time})
+
                 }
             }
             else {
+                setNeedTime(false);
                 answerFound("time");
                 setBookingState({...bookingState, time})
+
             }
         }
-        if (needDate) {
-            let date = findDay(msg.msg);
+        if (gettingAnswer === "date") {
+            console.log(msg.msg)
+            let date = findDay(msg.msg.split(" "));
             if (date.date) {
-                answerFound("date");
+                answerFound("date", date.date);
                 setBookingState({...bookingState, date: date.date})
+                setNeedDate(false);
+            }
+            else {
+                // remember this doesnt work rn
+                console.log(findDate(msg.msg))
             }
         }
-        if (needServices) {
-            let services = extractServices(msg.msg)
+        if (gettingAnswer === "services") {
+            let services = extractServices(msg.msg, props.services)
+
             if (services.defServices.length === 1) {
                 answerFound("service");
                 setBookingState({...bookingState, services: services.defServices});
+                setNeedServices(false);
+
             }
             else if (services.defServices.length > 1) {
                 answerFound("services");
                 setBookingState({...bookingState, services: services.defServices});
+                setNeedServices(false);
+            }
+        }
+        if (gettingAnswer === "employee") {
+            const employees = extractEmployees(msg.msg.split(" "), props.employees);
+            if (employees.defEmployees.length === 1) {
+                answerFound("employees");
+                setBookingState({...bookingState, employee: employees.defEmployees})
+            }
+            else if (employees.defEmployees.length > 1) {
+                answerNotFound("It seems your answer could be more than one employee. Maybe try again!")
+            }
+            else {
+                answerNotFound("I couldn't find the employee that you specified. Maybe try again!")
             }
         }
     }
 
 
-    function answerFound(problem) {
+    function answerFound(problem, result) {
         const chatsReplica = [...chats];
         if (problem === "loc") {
             createBotChat(`Great, I was able to find the ${props.name} that you specified.`, chatsReplica);
-            setNeedLocation(false);
         }
         if (problem === "time") {
             createBotChat("Great, I was able to find the time that you specified.", chatsReplica);
-            setNeedTime(false);
         }
         if (problem === "date") {
-            createBotChat(`Great, I was able to find the date that you specified.`, chatsReplica);
-            setNeedDate(false);
+            createBotChat(`Great, I was able to find that the date you specified is ${result}.`, chatsReplica);
         }
         if (problem === "service") {
             createBotChat(`Great, I was able to find the service that you specified.`, chatsReplica);
-            setNeedServices(false);
         }
-        if (problem === "services") {
-            createBotChat(`Great, I was able to find the service that you specified.`, chatsReplica);
-            setNeedServices(false);
+        if (problem === "employees") {
+            createBotChat(`Great, I was able to find the employee that you specified.`, chatsReplica);
         }
     }
-
-    
 
 
     function answerNotFound(msg) {
@@ -370,7 +475,7 @@ const Chatty = (props) => {
 
         <div className={hideChat ? styles.shrinkWhole : styles.notShrunkWhole} style={{ display: "flex", justifyContent: "space-between", flexDirection: "column", position: 'fixed', right: 10, bottom: 0, width: "450px", border: "1.7px solid black", backgroundColor: "lavenderblush", zIndex: 300 }}>
             <div style={{ color: "black", display: "flex", justifyContent: "space-between", position: "absolute", top: hideChat ? "0px" : "-30px", height: hideChat ? "45px" : "30px", backgroundColor: "rgb(190, 190, 190)", width: "451px", left: '-1.8px', borderLeft: "1.7px solid black", borderBottom: "0.7px solid gray", borderTop: "1.7px solid black", borderRight: "1.7px solid black" }}>
-                <p style={{ color: 'black', fontWeight: 'bold', fontFamily: 'Permanent Marker', position: 'relative', top: '-10px', right: "-10px", fontSize: "30px" }}>Chatters</p>
+                <p style={{ color: 'black', fontWeight: 'bold', fontFamily: 'Permanent Marker', position: 'relative', top: '-10px', right: "-10px", fontSize: "30px" }}>Bookie</p>
                 <p onClick={hide} id={styles.potato} style={{ fontSize: "34px", cursor: 'pointer', marginRight: "8px", marginTop: hideChat ? "2px" : "-4px", transform: !hideChat ? "rotate(180deg)" : "none", fontFamily: "monospace" }}>^</p>
             </div>
             <div id="yo" className={hideChat ? styles.shrink : styles.notShrunkChat} style={{ paddingBottom: "10px", overflow: "auto" }}>

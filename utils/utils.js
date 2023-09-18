@@ -114,6 +114,16 @@ function compareDates(year, otherYear, month, otherMonth, day, otherDay) {
 
 const biggestNumConverter = {50: 2, 65: 4, 80: 6, 95: 8, 110: 10, 125: 12, 140: 14, 155: 16, 170: 17, 185: 18}       
 
+function bookingFallsInsideShift(time, shift) {
+    const times = time.split("-");
+    if (stringToIntTime[times[0]] > stringToIntTime[shift.timeStart] && stringToIntTime[times[1]] < stringToIntTime[shift.timeEnd]) {
+        return true;
+    }
+    else {
+        return false;
+    }
+
+}
 
 function getTime() {
     const date = new Date();
@@ -783,5 +793,6 @@ module.exports = {
     removeComma,
     getTime, 
     compareDates,
-    biggestNumConverter
+    biggestNumConverter,
+    bookingFallsInsideShift
 }
