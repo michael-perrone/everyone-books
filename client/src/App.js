@@ -21,12 +21,12 @@ import RestaurantBuilder from "./BusinessSignup/RestaurantBuilder/RestaurantBuil
 import Restaurant from './Business/Restaurant/Restaurant';
 import UserView from './Business/UserView/UserView';
 import UserNotifications from './Notifications/UserNotifications/UserNotifications';
-import PayrollCenter from './Business/PayrollCenter/PayrollCenter';
 import EmployeePayroll from './EmployeeHome/EmployeePayroll/EmployeePayroll';
 import ServiceFinder from "./UserHome/UserHomeContainer/ServiceFinder/ServiceFinder";
 import BusinessesByService from "./UserHome/BusinessesByService/BusinessesByService";
 import AdBuilder from './AdminHome/AdBuilder/AdBuilder';
 import EmployeePortal from './EmployeeHome/EmployeePortal/EmployeePortal';
+import Ana from './Business/Ana/Ana';
 
 
 class App extends React.Component {
@@ -69,7 +69,7 @@ class App extends React.Component {
       <Route path="/user/:userId/notifications" exact component={UserNotifications}></Route>
       <Route path="/admin/:adminId/AdBuilder" exact component={AdBuilder}></Route>
         <Route path="/admin/:adminId/notifications" exact component={AdminNotifications}></Route>
-        <Route path="/admin/:businessId/payroll" exact component={PayrollCenter}></Route>
+        <Route path="/admin/:businessId/analytics" exact component={Ana}></Route>
         <Route path="/employee/:employeeId/payroll" exact component={EmployeePayroll}></Route>
         <Route path="/admin/:businessId/groups" exact component={Groups}></Route>
         <Route path="/user/serviceFinder" ecact component={ServiceFinder}></Route>

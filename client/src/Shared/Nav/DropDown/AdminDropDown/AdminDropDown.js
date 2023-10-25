@@ -29,7 +29,7 @@ const AdminDropDown = (props) => {
   }
 
   function goToPayroll() {
-    props.history.push(`/admin/${props.admin.admin.businessId}/payroll`);
+    props.history.push(`/admin/${props.admin.admin.businessId}/analytics`);
   }
 
   function goToEditBusiness() {
@@ -40,7 +40,7 @@ const AdminDropDown = (props) => {
     return (
         <React.Fragment>
          <DropDownLink clickProp={goToEditBusiness}>
-            Edit Business
+            Business
           </DropDownLink>
           <DropDownLink clickProp={goToGroups}>
             Groups
@@ -52,7 +52,7 @@ const AdminDropDown = (props) => {
             Shifts
           </DropDownLink>
           <DropDownLink clickProp={goToPayroll}>
-            Payroll
+            Analytics
           </DropDownLink>
           <DropDownLink clickProp={adminLogout}>
             Logout

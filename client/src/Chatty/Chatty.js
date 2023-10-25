@@ -4,7 +4,7 @@ import styles from './Chatty.module.css';
 import send from './send.png';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { chattyKathy1, gettingConfirmation, bigMagic, getLoc, findDate, findTime, findDay, findTimesMagic, extractServices, extractEmployees } from '../feutils/botutils';
+import { chattyKathy1, gettingConfirmation, bigMagic, getLoc, findDate, findTime, findDay, findTimesMagic, extractServices, extractEmployees, checkYes, checkNo, extractSpecificArea } from '../feutils/botutils';
 
 //import ChatBubble from './ChatBubble/ChatBubble';
 
@@ -20,22 +20,25 @@ const Chatty = (props) => {
     const [needEmployee, setNeedEmployee] = useState(false);
     const [needServices, setNeedServices] = useState(false);
     const [needTime, setNeedTime] = useState(false);
-    const [erroro, setErroro] = useState("");
-
-
+    const [stillTryingToCreateBooking, setStillTryingToCreateBooking] = useState(false);
+    const [createdShift, setCreatedShift] = useState(false);
+    
 
     ///////// CHAT BOOKINGS ABOVE CHAT BOOKINGS ABOVE ///////////
 
-
+    const [erroro, setErroro] = useState("");
     const [chats, setChats] = useState([{ fromBot: true, id: 0, msg: '' }]);
     const [textFieldText, setTextFieldText] = useState('');
     const [hideChat, setHideChat] = useState(false);
-
-    // Create Booking - 1
-    // Delete Booking - 2
-
+    const [ask, setAsk] = useState("");
     const [rotate, setRotate] = useState(true);
 
+    /// STATE TO DO WITH SHIFTS BELOW
+
+    const [shiftState, setShiftState] = useState({loc: "", employee: "", timeStart: "", timeEnd: "", date: ""});
+
+
+    /// HIDE THE CHAT
     function hide() {
         if (rotate) {
             setHideChat(true);
@@ -47,106 +50,143 @@ const Chatty = (props) => {
         }
     }
 
+    /// CREATING THE SHIFT
+
+    function createShift(loc) { // CHECK WHY U CREATED PARAMETER U BOZO
+        axios.post('/api/shifts/create', {timeStart: shiftState.timeStart, bookingColumnNumber: loc, timeEnd: shiftState.timeEnd, shiftDate: bookingState.date ? bookingState.date : shiftState.date, employeeId: bookingState.employee[0] ? bookingState.employee[0] : shiftState.employee}, {headers: {
+            'x-auth-token': localStorage.getItem("adminToken")
+        }}).then(
+            response => {
+                if (response.status === 201) {
+                    let chatsRep = [...chats];
+                    createBotChat("Okay sweet I was able to create this shift. Let me know if theres anything else I can do!", chatsRep);
+                }
+            }
+        ).catch(error => {
+            console.log(error);
+        })
+    }
+
+    /// EDITING THE SHIFT
+
+    function editShift() {
+        axios.post('/api/shifts/edit');
+    }
+
+
+    /// GENERATE THE BOT RESPONSE
     function generateBotResponse() {
         const chatsReplica = [...chats];
         const response = bigMagic(chatsReplica[chatsReplica.length - 1].msg, props.services, props.employees, props.name, props.eq);
+        console.log(response);
         if (response.type === "booking") {
-            setBookingState({loc: response.loc , date: response.date, employee: response.employee, services: response.services, time: response.time});
+            let loc, date, employee, time, services;
+        //    setBookingState({loc: response.loc , date: response.date, employee: response.employee, services: response.services, time: response.time});
             if (!response.loc && props.eq === "n") {
                 setNeedLocation(true);
             }
             else {
-                setBookingState({loc: response.loc, ...bookingState})
+                loc = response.loc;
             }
             if (!response.date) {
                 setNeedDate(true);
             }
             else {
-                setBookingState({date: response.date, ...bookingState});
+                date = response.date;
             }
             if (response.time === "error" || !response.time) {
                 setNeedTime(true);
             }
             else {
-                setBookingState({time: response.time, ...bookingState});
+                time = response.time;
             }
             if (response.services.length === 0) {
                 console.log("DID I RUN?")
                 setNeedServices(true);
             }
             else {
-                setBookingState({services: response.services, ...bookingState})
+                services = response.services;
             }
             if (response.employee.length === 0) {
                 setNeedEmployee(true);
             }
             else {
-                setBookingState({employee: response.employee, ...bookingState});
+                employee = response.employee;
             }
-            if ((response.loc || props.eq === "y") && response.date && response.time && response.time !== "error" && response.employee.length !== 0 && response.services.length > 0) {
-                console.log("DJWIDJQIDJWIJDIWJQDJIQWDJQWDJ")
-                const chatsReplica = [...chats];
-                createBotChat(`Okay I will go ahead and try to make this booking!`, chatsReplica);
-                createBooking()
-            }
+            setBookingState({loc, date, employee, time, services});
         }
-
-
-        //     if (needNumber) {
-        //         createBotChat("What services would you like to create")
-        //     }
-        //     else if (needDateConfirmation) {
-        //         let confirmationResponse = gettingConfirmation(chatsReplica[chatsReplica.length - 1].msg);
-        //         if (confirmationResponse) {
-        //             createBotChat("How many services would you like your booking to have?", chatsReplica);
-        //             setNeedNumber(true);
-        //         }
-        //     }
-        //     else if (needDate) {
-        //         const response = findDateBot(chatsReplica[chatsReplica.length - 1]);
-        //         console.log(response);
-        //         createBotChat(`Did you want to schedule it for ${response}?`, chatsReplica);
-        //         setNeedDateConfirmation(true);      
-        //     }
-
-        //    else if (needConfirmation) {
-        //         let confirmationResponse = gettingConfirmation(chatsReplica[chatsReplica.length - 1].msg);
-        //         console.log(confirmationResponse);
-        //         if (confirmationResponse) {
-        //             if (typeOfRequest === 1) {
-        //                 createBotChat("What date would you like to schedule your booking for?", chatsReplica);
-        //                 setNeedDate(true);
-        //                 setNeedConfirmation(false);
-        //             }
-        //         }
-        //         else {
-        //             createBotChat("I am sorry! I was not quite able to determine what you are trying to get help with. Please try again.", chatsReplica);
-        //         }
-        //     }
-        //     else {
-        //         let response = chattyKathy1(chatsReplica[chatsReplica.length - 1].msg);
-        //         if (response !== "I couldn't find what you were looking for, would you please try a different command?") {
-        //             if (response === "Would you like to create a booking?") {
-        //                 setNeedConfirmation(true);
-        //                 setTypeOfRequest(1);
-        //                 createBotChat(response, chatsReplica);
-        //             }
-        //         }
-        //         else {
-        //             createBotChat(response, chatsReplica);
-        //         }
-        //     }
+        else if (response.type === "Hello") {
+            console.log("is this not me?")
+            const chatsReplica = [...chats];
+            createBotChat("Hey there! How can I help you?", chatsReplica)
+        }
+        else if (response.type === "Shift") {
+            if (response.error) {
+                const chatsReplica = [...chats];
+                createBotChat(response.error, chatsReplica);
+                setShiftState({loc: response.loc, employee: response.employee, timeStart: response.timeStart, timeEnd: response.timeEnd, date: response.date})
+                if (response.lookFor === "bothTimes") {
+                    setAsk("Individual Shift Both Times");
+                }
+                if (response.lookFor === "secondTime") {
+                    setAsk("Individual Shift Second Time");
+                }
+                return;
+            }
+            setShiftState({loc: response.loc, employee: response.employee, timeStart: response.timeStart, timeEnd: response.timeEnd, date: response.date})
+        }
     }
+    
 
+    
+
+    /// useEffect for tracking state for shift
+
+    useEffect(function() {
+        if (shiftState.timeStart && shiftState.timeEnd && !shiftState.employee) {
+            let chatsRep = [...chats];
+            createBotChat(`Could you specify what employee will be working this shift?`, chatsRep);
+            setAsk("Shift Employee");
+        }
+        else if (shiftState.timeStart && shiftState.timeEnd && !shiftState.date) {
+            let chatsRep = [...chats];
+            createBotChat(`Could you specify what date this shift will be?`, chatsRep);
+            setAsk("Shift Date");
+        }
+        if (shiftState.timeStart && shiftState.timeEnd && !shiftState.loc) {
+            let chatsRep = [...chats];
+            createBotChat(`Could you specify what ${props.name} you would like to use for this shift?`, chatsRep);
+            setAsk("Shift Location");
+        }
+        
+        if (shiftState.loc && shiftState.employee && shiftState.timeStart && shiftState.timeEnd && shiftState.date) {
+            createShift(shiftState.loc)
+        }
+    }, [shiftState])
+
+    
+
+
+    //// CREATE A BOOKING WITH CHAT
     function createBooking() {
         axios.post('/api/iosBooking/createChatBooking', {bookingState: bookingState}, {headers: {"x-auth-token": localStorage.getItem("adminToken")}}).then(response => {
             if (response.status === 200) {
-                console.log(response.status)
+                const chatsReplica = [...chats];
+                createBotChat("I have created this booking and you will now see it in your schedule.",chatsReplica);
+                // props.addBookingToSchedule(response.data.newBooking);
+                props.loadSchedule();
             }
         }).catch(error => {
             if (error.response.status === 406) {
-                console.log("wdoqkwdijewfKWJDKQWJDKQWJDwkjdqwkjdkwqdkqWJDQKJDKQWJD")
-                setErroro("It seems the employee you tried to book is not scheduled to be working at this time.")
+                if (error.response.error === "SOOB") { // SHIFT OUT OF BOUNDS
+                    setErroro("It seems the employee you tried to book has a shift on this day but is not supposed to be working at this time. Would you like me to edit the shift times to fit the booking?")
+                    setAsk("Edit Shift");
+                }
+                else if (error.response.data.error === "NS") { // NO SHIFT
+                    setErroro("It seems the employee you tried to book is not scheduled to work on this day. Would you like me to create a shift so that the booking can be created?")
+                    setAsk("Shift");
+                    setStillTryingToCreateBooking(true);
+                }
                 setTimeout(function() {
                     setErroro("");
                 }, 1000)
@@ -155,9 +195,22 @@ const Chatty = (props) => {
     }
 
     useEffect(function() {
-        console.log("hello?")
-        console.log(bookingState)
-        if ((bookingState.loc || props.eq === "y") && bookingState.date && bookingState.time !== "error" && bookingState.time && bookingState.services.length > 0 && bookingState.employee.length !== 0) {
+        if (createdShift) {
+            if (stillTryingToCreateBooking) {
+                setTimeout(function() {
+                    createBooking();
+                }, 2000);
+            }
+            setTimeout(function() {
+                setCreatedShift(false)
+                setStillTryingToCreateBooking(false);
+            }, 2000)
+        }
+    }, [createdShift])
+
+    
+    useEffect(function() {
+        if ((bookingState.loc || props.eq === "y") && bookingState.date && bookingState.time !== "error" && bookingState.time && bookingState.services  && bookingState.employee) {
             console.log("YOOOOO?")
             const chatsReplica = [...chats];
             createBotChat(`Okay I will go ahead and try to make this booking!`, chatsReplica);
@@ -227,7 +280,6 @@ const Chatty = (props) => {
     }
 
 
-
     function splitStr(str) {
         return str.split('');
     }
@@ -235,10 +287,6 @@ const Chatty = (props) => {
     useEffect(function () {
         makeMagic(0, intro);
     }, [])
-
-    // useEffect(function() { console.log(chats.length)}, [chats.length]);
-
-    // useEffect takes in 2 parameters, first is a function that is basically the effect that you want to happen, the second is an array of possible properties or state variables that you need to keep track of to induce this effect
 
     function makeMagic(id, newStr) {
         let newStringToArray = splitStr(newStr);
@@ -288,10 +336,142 @@ const Chatty = (props) => {
             });
         }, 200);
     }
+    
 
     useEffect(function () {
+    if (ask === "Individual Shift Both Times" && !chats[chats.length - 1].fromBot) {
+        let firstTime = findTime(chats[chats.length - 1].msg.split(" ")).time;
+        if (firstTime) {
+            const chatsRep = [...chats];
+            setAsk("Individual Shift Second Time");
+            createBotChat("Okay I got the start time. Can you tell me what time the shift will end?", chatsRep);
+            setShiftState({...shiftState, timeStart: firstTime})
+        }
+        else {
+            let firstTimeMagic = findTimesMagic(chats[chats.length - 1].msg.split(" ")).time;
+            if (firstTimeMagic) {
+                const chatsRep = [...chats];
+                setAsk("Individual Shift Second Time");
+                createBotChat("Okay I got the start time. Can you tell me what time the shift will end?", chatsRep)
+                setShiftState({...shiftState, timeStart: firstTimeMagic})
+            }
+        }
+        return;
+    }
+    if (ask === "Individual Shift Second Time" && !chats[chats.length - 1].fromBot) {
+        let secondTime = findTime(chats[chats.length - 1].msg.split(" ")).time;
+        let chatsRep = [...chats];
+        if (secondTime) {
+            createBotChat("Okay I was able to identify both times that you would like to create this shift for.", chatsRep)
+            setShiftState({...shiftState, timeEnd: secondTime})
+        }
+        else {
+            let secondTimeMagic = findTimesMagic(chats[chats.length - 1].msg.split(" ")).time;
+            if (secondTimeMagic) {
+                createBotChat("Okay I was able to identify both times that you would like to create this shift for.", chatsRep);
+                setShiftState({...shiftState, timeEnd: secondTimeMagic})
+            }
+        }
+        return;
+    }
+
+    if (ask === "Shift Date" && !chats[chats.length - 1].fromBot) {
+        const chatsRep = [...chats];
+        let date = findDate(chats[chats.length - 1].msg.split(" ")).date;
+        if (date) {
+            createBotChat("Okay I was able to find the date you want this shift to be created on.", chatsRep)
+            setShiftState({...shiftState, date});
+        }
+        else {
+            let date = findDay(chats[chats.length - 1].msg.split(" ")).date;
+            if (date) {
+                createBotChat("Okay I was able to find the date you want this shift to be created on.", chatsRep)
+                setShiftState({...shiftState, date});
+            }
+        }
+        return;
+    }
+    if (ask === "Shift Employee" && !chats[chats.length - 1].fromBot) {
+        const chatsRep = [...chats];
+        const employee = extractEmployees(chats[chats.length - 1].split(" "), props.employees).defEmployees[0];
+        if (employee) {
+            setShiftState({...shiftState, employee});
+            createBotChat("Okay I was able to find the employee that you mentioned.", chatsRep)
+        }
+        return;
+    }
+    if (ask === "Shift Location" && !chats[chats.length - 1].fromBot) {
+        let chatsRep = [...chats];
+        createBotChat("Okay I got the shift location!", chatsRep);
+        let area = extractSpecificArea(chats[chats.length - 1].msg.split(" "));
+        if (area) {
+            setShiftState({...shiftState, loc: area});
+        }
+        else {
+            let otherArea = extractSpecificArea(chats[chats.length - 1].msg.split(" "));
+            if (otherArea) {
+                setShiftState({...shiftState, loc: otherArea});
+            }
+        }
+        return;
+    }
+    if (ask === "Edit Shift" && !chats[chats.length - 1].fromBot) {
+        if (checkYes(chats[chats.length - 1].msg)) {
+            const chatsRep = [...chats];
+            createBotChat("Okay let me try to alter this shift to make this booking work!", chatsRep);
+            editShift();
+        }
+        return;
+    }
+    else if (ask === "Shift") {
+        if (checkYes(chats[chats.length - 1].msg)) {
+          const chatsRep = [...chats];
+            createBotChat("Okay lets create the shift! What time would you like this shift to start?", chatsRep);
+            setAsk("Shift Start Time");
+        }
+        else if (checkNo(chats[chats.length - 1].msg)) {
+            const chatsRep = [...chats];
+            createBotChat("Okay! Unfortunately I can't create this booking unless this employee is scheduled to be working.", chatsRep);
+        }
+        return;
+    }
+    else if (ask === "Shift Start Time" && chats[chats.length - 1].fromBot === false) {
+        let time = findTime(chats[chats.length - 1].msg.split(" ")).time;
+        if (time) {
+            setShiftState({...shiftState, timeStart: time})
+            const chatsRep = [...chats];
+            createBotChat("Okay thanks I got the start time, when would you like it to end?", chatsRep);
+            setAsk("Shift End Time");
+        }
+        return;
+    }
+    else if (ask === "Shift End Time" && chats[chats.length - 1].fromBot === false) {
+        let time = findTime(chats[chats.length - 1].msg.split(" ")).time;
+        if(time) {
+            setShiftState({ ...shiftState, timeEnd: time,})
+            const chatsRep = [...chats];
+            createBotChat(`Okay thanks I got the end time, can you tell me what ${props.name} to schedule this shift on?`, chatsRep);
+            setAsk("Need BCN For Shift");
+        }
+        return;
+    }
+    else if (ask === "Need BCN For Shift" && chats[chats.length - 1].fromBot === false) {
+        let area = extractSpecificArea(chats[chats.length - 1].msg.split(" "));
+        if(area) {
+            const chatsRep = [...chats];
+            setShiftState({...shiftState, loc: area, });
+            createBotChat(`Okay I will try to schedule this employee for a shift from ${shiftState.timeStart}-${shiftState.timeEnd}. I will also try again to create the booking you asked to be created earlier.`, chatsRep);
+            createShift(area);
+            if (stillTryingToCreateBooking) {
+                setCreatedShift(true);
+            }
+        }
+        return;
+    }
+    /// THE ABOVE ARE BASICALLY CATCHERS TO DETERMINE IF COMPLETING THE SHIFT FOR THE BOOKING TO BE ALLOWED IS DONE
+    /// THE WAY IT WORKS IS SINCE IT CREATES A NEW CHAT EVERYTIME ITS GOING TO CHECK IF ALL THE STEPS ARE COMPLETE
+    
     if (!chats[chats.length - 1].fromBot) {
-        console.log("IS THIS NOT ME?")
         if (!needLocation && !needDate && !needEmployee && !needServices && !needTime) {
             generateBotResponse();
     }
@@ -324,16 +504,11 @@ const Chatty = (props) => {
 
 
     useEffect(function() {
-        console.log(needDate);
-        console.log("I AM IMPORTANT");
-        console.log(needTime, needLocation, needEmployee, needServices)
         if (needTime) {
-            console.log("DO I NEED THE TIME")
             neeedTime();
             return;
         }
         else if (needDate) {
-            console.log("DO I NEED THE DATE!!!")
             neeedDate();
             return;
         }
@@ -400,8 +575,12 @@ const Chatty = (props) => {
                 setNeedDate(false);
             }
             else {
-                // remember this doesnt work rn
-                console.log(findDate(msg.msg))
+                let date = findDate(msg.msg);
+                if (date.date) {
+                    answerFound("date", date.date);
+                    setBookingState({...bookingState, date: date.date});
+                    setNeedDate(false);
+                }
             }
         }
         if (gettingAnswer === "services") {

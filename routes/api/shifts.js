@@ -255,10 +255,11 @@ router.post("/breaksForDay", adminAuth, async (req, res) => {
  return res.status(200).json({breaks: breaksForDay})
 })
 
-router.post('/create', async (req, res) => {
+router.post('/create', adminAuth, async (req, res) => {
   try {
     let date = new Date(req.body.shiftDate).toDateString();
-    const areaConflict = await Shift.find({ businessId: req.body.businessId, bookingColumnNumber: req.body.bookingColumnNumber, shiftDate: date });
+    const employee = await Employee.findOne({_id: req.body.employeeId});
+    const areaConflict = await Shift.find({ businessId: req.admin.businessId, bookingColumnNumber: req.body.bookingColumnNumber, shiftDate: date });
     const shiftConflict = await Shift.find({ employeeId: req.body.employeeId, shiftDate: date });
     const employeeForBusiness = await Employee.findOne({_id: req.body.employeeId}).select(["businessWorkingAt"]);
     const businessForEq = await Business.findOne({_id: employeeForBusiness.businessWorkingAt}).select(["eq"]);
@@ -308,17 +309,16 @@ router.post('/create', async (req, res) => {
       }
     }
 
-    let newshift;
-
+    let newShift;
+    // FIX THIS should not save employeeName
     if (req.body.bookingColumnNumber) {
       newShift = new Shift({
         shiftDate: date,
         timeStart: req.body.timeStart,
         timeEnd: req.body.timeEnd,
         employeeId: req.body.employeeId,
-        employeeName: req.body.employeeName,
-        shiftDuration: req.body.shiftDuration,
-        businessId: req.body.businessId,
+        employeeName: employee.fullName,
+        businessId: req.admin.businessId,
         isBreak: req.body.isBreak,
         breakEnd: req.body.breakEnd,
         breakStart: req.body.breakStart,
@@ -331,8 +331,7 @@ router.post('/create', async (req, res) => {
         timeStart: req.body.timeStart,
         timeEnd: req.body.timeEnd,
         employeeId: req.body.employeeId,
-        employeeName: req.body.employeeName,
-        shiftDuration: req.body.shiftDuration,
+        employeeName: employee.fullName,
         businessId: req.body.businessId,
         isBreak: req.body.isBreak,
         breakEnd: req.body.breakEnd,
@@ -512,6 +511,8 @@ router.post('/getEmployeeBookingsForDay', async (req, res) => {
     }
   }
 })
+
+
 
 router.post('/deleteOne', adminAuth, async (req, res) => {
   if (req.admin) {

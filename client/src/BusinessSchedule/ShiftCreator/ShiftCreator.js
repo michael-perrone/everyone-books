@@ -226,7 +226,7 @@ function ShiftCreator(props) {
 
         setBreakError("");
 
-        Axios.post('/api/shifts/create', obSending).then(response => {
+        Axios.post('/api/shifts/create', obSending, {headers: {'x-auth-token': localStorage.getItem("adminToken")}}).then(response => {
             if (response.status === 201) {
                 setTimeout(() => setSuccess(true), 200);
                 props.getNewShifts()

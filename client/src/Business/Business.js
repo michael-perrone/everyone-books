@@ -75,6 +75,10 @@ function Business(props) {
     })
   }
 
+  function addBookingFromChat() {
+
+  }
+
 
   useEffect(function() {
     axios.get('api/getEmployees/', {headers: {'x-auth-token': props.adminToken}}).then(response => {
@@ -141,7 +145,7 @@ function Business(props) {
                   eq={eq}
                   bct={bct}    
                 />
-                {!loading && <Chatty eq={eq} name={bct} employees={employees} services={services}/>}
+                {!loading && <Chatty loadSchedule={loadSchedule} eq={eq} name={bct} employees={employees} services={services}/>}
                 
                 {!loading ? <CourtContainer clickGroup={clickGroup} sortedGroups={groups} clickBooking={clickBooking} sortedBookings={sortedBookings} openTime={openTime} closeTime={closeTime} bct={bct} bcn={bcn}/> : 
                   <Spinner/>

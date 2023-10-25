@@ -534,7 +534,8 @@ router.post("/createChatBooking", authAdmin, async (req, res) => {
         if (business.eq) {
            let shifts = await Shift.find({employeeId: req.body.bookingState.employee[0], shiftDate: req.body.bookingState.date});
            if (shifts.length === 0) {
-               return res.status(406).send();
+            console.log("THIS SHOULD BE ME")
+            return res.status(406).json({error: "NS"})
            }
             let newBooking = new Booking({
                 serviceType: req.body.bookingState.services,
@@ -546,16 +547,22 @@ router.post("/createChatBooking", authAdmin, async (req, res) => {
                 bcn: shifts[0].bookingColumnNumber
             });
             if (shifts.length === 1) {
+                console.log("HIIII")
+                console.log(shifts[0]);
                 if (utils.bookingFallsInsideShift(`${req.body.bookingState.time}-${endTime}`, shifts[0])) {
                     await newBooking.save();
-                    return res.status(200).send({newBooking});
+                    return res.status(200).json({newBooking});
+                }
+                else {
+                    console.log("THIS SHOULD BE ME")
+                    return res.status(406).json({error: "SOOB", shiftId: shifts[0]._id}); // SOOB === SHIFT OUT OF BOUNDS
                 }
             }
             else if (shifts.length === 2) {
                 console.log("gross");
             }
             else {
-                return res.status(406).json({error: "No Shift."})
+                return res.status(406).json({error: "NC"}) // NC === NO CLUE
             }
         }  
     }
@@ -671,16 +678,17 @@ router.post("/delete", authAdmin, async (req, res) => {
         const booking = await Booking.findOne({ _id: req.body.bookingId, businessId: req.admin.businessId });
         const business = await Business.findOne({_id: booking.businessId});
         const customer = await User.findOne({_id: booking.customer});
-        console.log(customer, "I AM THE CUSTOMER");
-        const newNoti = new Notification({
-            type: "BDB",
-            date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
-            fromId: booking.businessId,
-            fromString: business.businessName,
-        })
-        customer.notifications.push(newNoti);
-        await newNoti.save();
-        await customer.save();
+        if (customer) {
+            const newNoti = new Notification({
+                type: "BDB",
+                date: utils.cutDay(`${date.toDateString()}, ${utils.convertTime(date.getHours(), date.getMinutes())}`),
+                fromId: booking.businessId,
+                fromString: business.businessName,
+            })
+            customer.notifications.push(newNoti);
+            await customer.save();
+            await newNoti.save();
+        }
         if (booking) {
             await booking.deleteOne();
         }
