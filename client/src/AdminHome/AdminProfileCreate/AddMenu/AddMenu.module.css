@@ -1,6 +1,6 @@
 #singlePage {
-    width: 400px;
-    border: 2px solid #f9e9f9;
+    width: 360px;
+    box-shadow: 0px 0px 6px#f9e9f9;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -9,6 +9,20 @@
     overflow: auto;
     background-color: rgb(24,24,24);
     cursor: pointer;
+}
+
+#bigDog {
+    display: flex;
+    justify-content: space-around;
+}
+
+.buttono {
+    background-color: black;
+}
+
+.buttono:hover {
+    background-color: #cbadcb; 
+    color: black;
 }
 
 .selectors {
@@ -34,6 +48,7 @@
     font-size: 14px;
     border: none;
     border-radius: 0;
-    border: 1px solid #f9e9f9;
+    box-shadow: 0px 0px 4px #f9e9f9;
+    background-color: black;
     padding-left: 4px;
 }

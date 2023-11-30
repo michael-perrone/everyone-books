@@ -204,6 +204,53 @@ function AddEmployees(props) {
 
     return (
         <div id={styles.mainContainer}>
+            
+    {selected === "Add" &&
+            <div>
+                <p style={{fontSize: "28px", fontFamily: "Josefin Sans", marginTop: "18px", textAlign: "center"}}>Add Employees</p>
+                <ul style={{marginTop: "14px", width: "350px",}}>
+                    <li style={{ lineHeight: "20px"}}>Enter Employee ID or Phone Number below to send an invite to potential employees to join your business.</li>
+                    <li style={{marginTop: "12px", lineHeight: "20px"}}>If the employee accepts the invitation, they will be able to scheduled and start working for your business.</li>
+                    <li style={{marginTop: "12px", lineHeight: "20px"}}>You will receive a notification whether they accepted or declined your invitation.</li>
+                </ul>
+            </div>
+    }
+     {selected === "Pending" &&
+            <div>
+                <p style={{fontSize: "28px", fontFamily: "Josefin Sans", marginTop: "18px", textAlign: "center"}}>Pending Employees</p>
+                <ul style={{marginTop: "14px", width: "350px",}}>
+                    <li style={{ lineHeight: "20px"}}>These are the employees that you have already invited to join your business.</li>
+                    <li style={{marginTop: "12px", lineHeight: "20px"}}>If the employee accepts the invitation, they will be able to scheduled and start working for your business.</li>
+                    <li style={{marginTop: "12px", lineHeight: "20px"}}>If you would like to remove the employee, you can click the delete button next to their name.</li>
+                </ul>
+            </div>
+    }
+     {selected === "Current" &&
+            <div>
+                <p style={{fontSize: "28px", fontFamily: "Josefin Sans", marginTop: "18px", textAlign: "center"}}>Current Employees</p>
+                <ul style={{marginTop: "14px", width: "350px",}}>
+                    <li style={{ lineHeight: "20px"}}>These are the current employees working for your business.</li>
+                    <li style={{marginTop: "12px", lineHeight: "20px"}}>If an employee no longer works at your business, you can delete them from your current employees list.</li>
+                    
+                    <li style={{marginTop: "12px", lineHeight: "20px"}}>You will be prompted to enter the password for your admin account again to confirm the removal.</li>
+                    <li style={{marginTop: "12px", lineHeight: "20px"}}>Once an employee is removed, all further scheduled bookings with that employee will be deleted.</li>
+                </ul>
+            </div>
+    }
+     {selected === "Hiring" &&
+            <div>
+                <p style={{fontSize: "28px", fontFamily: "Josefin Sans", marginTop: "18px", textAlign: "center"}}>Hiring Portal</p>
+                <ul style={{marginTop: "14px", width: "350px",}}>
+                    <li style={{ lineHeight: "20px"}}>In the hiring portal, you can set the hiring preferences for your business.</li>
+                    <li style={{marginTop: "12px", lineHeight: "20px"}}>All of these things will be visible to potential employees currently looking for jobs.</li>
+                    <li style={{marginTop: "12px", lineHeight: "20px"}}>You will see any inquirements about employment for your business appear in your notifications.</li>
+                    <li style={{marginTop: "12px", lineHeight: "20px"}}>.</li>
+                </ul>
+            </div>
+    }
+                        {/* <ul>Enter the employee username or unique ID to find an employee. Once employee is found, click the add button to add the employee to your business. Once the employee accepts your employment request they will be able to be scheduled at your business.</ul> */}
+            
+            <div style={{display: "flex", flexDirection: "column"}}>
             <div style={{display: "flex", width: "360px", justifyContent: "space-around", marginTop: "20px", marginBottom: "20px", alignSelf: "center"}}>
                 <p onClick={settingSelected("Add")} style={selected === "Add" ? {backgroundColor: "black", boxShadow: "0px 0px 4px #f9e9f9"} : {backgroundColor: "", boxShadow: ""}} className={styles.miniTabs}>Add</p>
                 <p onClick={settingSelected("Pending")} style={selected === "Pending" ? {backgroundColor: "black", boxShadow: "0px 0px 4px #f9e9f9"} : {backgroundColor: "", boxShadow: ""}} className={styles.miniTabs}>Pending</p>
@@ -212,7 +259,7 @@ function AddEmployees(props) {
             </div>
             {selected === "Add" &&
             <React.Fragment>
-            <p>Enter the employee username or unique ID to find an employee. Once employee is found, click the add button to add the employee to your business. Once the employee accepts your employment request they will be able to be scheduled at your business.</p>
+    
             <div style={{display: 'flex', marginTop: "15px", justifyContent: "center"}}>
                 <input value={employeeId} onChange={employeeIdChanged} style={{width: "200px", height: "27px", border: "none", boxShadow: "0px 0px 5px #f9e9f9", fontSize: "14px", backgroundColor: "rgb(24,24,24)", paddingLeft: "5px"}} placeholder={"Enter Employee ID"}/>
                 <SubmitButton onClick={findEmployee}>Find Employee</SubmitButton>
@@ -224,19 +271,19 @@ function AddEmployees(props) {
             </React.Fragment>}
             {selected === "Pending" &&
             <React.Fragment>
-                <p style={{marginBottom: "20px"}}>The employees listed below if any are employees that you have recently invited to join your business as employees. If you wish to undo this request, you can delete the employee from the list below.</p>
+
                 <Maplist delete={(id) => deleteEmployeePending(id)} array={employeesPending} none={"No employees currently invited"}/>
             </React.Fragment>
             }
             {selected === "Current" &&
              <React.Fragment>
-             <p style={{marginBottom: "20px"}}>The employees listed below are registered employees of your business. If you wish to remove an employee, you can delete the employee from the list below. Please keep in mind this action is permanent.</p>
+
              <Maplist delete={(id) => deleteEmployeeHere(id)} array={employeesHere} none={"No employees currently employed"}/>
             </React.Fragment>
             }
             {selected === "Hiring" &&
              <React.Fragment>
-                <p>This is the EveryoneBooks Hiring Portal. Here you can set your hiring settings depending on whether you are looking for additional employees. These can be changed at any time.</p>
+
                 <div style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
                     <div className={styles.q} style={{display: "flex", width: "375px", justifyContent: "space-around"}}>
                         <p style={{position: "relative", right: "4px"}}>Is your business currently hiring?</p>
@@ -280,6 +327,7 @@ function AddEmployees(props) {
                 
             </React.Fragment>
             }
+            </div>
             <OtherAlert showAlert={successMessage !== ""} alertType={"success"} alertMessage={successMessage}/>
             <OtherAlert alertType={"fail"} alertMessage={error} showAlert={error !== ""}/>
         </div>

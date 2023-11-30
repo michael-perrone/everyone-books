@@ -231,7 +231,7 @@ export function chattyKathy1(msg) {
         return "Would you like to create an advertisement?"
     }
     if (msg.includes('edit') && (msg.includes('advertisement') || msg.includes('adver'))) {
-        return "Would you like to edit an advertise"
+        return "Would you like to edit an advertisement?"
     }
     else {
         return "I couldn't find what you were looking for, would you please try a different command?";

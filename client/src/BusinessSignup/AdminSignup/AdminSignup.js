@@ -13,7 +13,7 @@ import OtherAlert from '../../OtherAlerts/OtherAlerts';
 
 function AdminSignup(props) {
     const [formError, setFormError] = React.useState(false)
-    const [email, setEmail] = React.useState('');
+    const [email, setEmail] = React.useState(localStorage.getItem("email") ? localStorage.getItem("email"): '');
     const [password, setPassword] = React.useState('');
     const [passwordConfirm, setPasswordConfirm] = React.useState('');
     const [emailDirty, setEmailDirty] = React.useState(false);
@@ -70,6 +70,8 @@ function AdminSignup(props) {
             password,
             passwordConfirm
         }
+        localStorage.setItem("email", email);
+        localStorage.setItem('password', password);
         props.saveAdminInfo(admin)
     }
 }

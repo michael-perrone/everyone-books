@@ -79,11 +79,11 @@ const BusinessSignup = (props) => {
                     {props.businessScheduleComplete && !props.showAdminDropDown && <p style={{fontSize: '18px', textAlign: 'center', borderBottom: '2px solid #f9e9f9', paddingBottom: '5px', color: '#f9e9f9'}}>We are about done, read the diretions below to finish up. Click help if any help is needed.</p>}
                     {props.showAdminDropDown && <p style={{fontSize: '18px', textAlign: 'center', borderBottom: '2px solid #f9e9f9', paddingBottom: '5px', color: '#f9e9f9'}}>We're just going to make sure we have all your information correctly, click the back button to go back and edit your information if needed.</p>}
                 </div>
-                {(props.kindOfBusiness === "" || props.nameOfBusiness === "" || props.kindBusinessCompleted === false)  && <KindOfBusiness/>}
+                {(!props.kindBusinessCompleted)  && <KindOfBusiness/>}
                 {props.kindBusinessCompleted && !props.adminInfoComplete && <AdminSignup/>}
                 {props.adminInfoComplete && !props.businessInfoComplete && <BusinessInfoEnter/>}
-                {((props.businessInfoComplete && !props.businessScheduleComplete) || (props.kindOfBusiness === "Restaurant" && props.restaurantSendNotHit && props.businessInfoComplete && props.adminInfoComplete)) && <BusinessScheduleCreate/>}
-                {props.businessScheduleComplete && !props.showAdminDropDown && props.kindOfBusiness !== "Restaurant" && <BookingColumnsEnter/>}
+                {((props.businessInfoComplete && !props.businessScheduleComplete) || (localStorage.getItem("typeOfBusiness") === "Restaurant" && props.restaurantSendNotHit && props.businessInfoComplete && props.adminInfoComplete)) && <BusinessScheduleCreate/>}
+                {props.businessScheduleComplete && !props.showAdminDropDown && localStorage.getItem("typeOfBusiness") !== "Restaurant" && <BookingColumnsEnter/>}
             </div>
         </div>
     </React.Fragment>

@@ -14,7 +14,8 @@ import AddEditPayroll from './AddEditPayroll/AddEditPayroll';
 import menu from './menu.png';
 import layout from './layout.png';
 import AddMenu from './AddMenu/AddMenu';
-import AddLayout from "./AddLayout/AddLayout";
+import TableCreator from '../../Business/Restaurant/TableCreator/TableCreator'
+// import AddLayout from "./AddLayout/AddLayout";
 
 const AdminProfileCreate = props => {
   const [selected, setSelected] = useState('Employees');
@@ -25,11 +26,10 @@ const AdminProfileCreate = props => {
 
   return (
     <div id={styles.mainContainer}>
-      <p className={styles.header}>{selected === "Employees" && "Add/Edit Employees"}{selected === "Services" && "Add/Edit Services"}{selected === "Products" && "Add/Edit Products"}{selected === "Payroll" && "Payroll Suite Setup"}</p>
       {selected === "Employees" && <AddEditEmployees/>}
       {selected === "Services" && props.admin.admin.tob !== "Restaurant" && <AddEditServices/>}
       {selected === "Menu" && props.admin.admin.tob === "Restaurant" && <AddMenu/>}
-      {selected === "Layout" && props.admin.admin.tob === "Restaurant" && <AddLayout/>}
+      {selected === "Layout" && props.admin.admin.tob === "Restaurant" && <TableCreator/>}
       {selected === "Products" && props.admin.admin.tob !== "Restaurant" && <AddEditProducts/>}
       {selected === "Payroll" && <AddEditPayroll/>}
       <div className={styles.bottomAnchor}>

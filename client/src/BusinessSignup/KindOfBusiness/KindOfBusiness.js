@@ -10,11 +10,14 @@ import {withRouter} from 'react-router';
 
 
 const KindOfBusiness = (props) => {
-    const [businessKindEntered, setBusinessKindEntered] = React.useState(false);
-    const [nameOfBusiness, setNameOfBusiness] = React.useState('');
-    
+    const [businessKindEntered, setBusinessKindEntered] = React.useState(localStorage.getItem("nameOfBusiness") && localStorage.getItem("typeOfBusiness") ? true : false);
+    const [nameOfBusiness, setNameOfBusiness] = React.useState(localStorage.getItem("nameOfBusiness") ? localStorage.getItem("nameOfBusiness"): "");
+    const [kindOfBusiness, setKindOfBusiness] = React.useState(localStorage.getItem("typeOfBusiness") ? localStorage.getItem("typeOfBusiness"): "");
+
+
     function getKindOfBusinessFunction(e) {
         props.getKindOfBusiness(e.target.value);
+        setKindOfBusiness(e.target.value);
         setBusinessKindEntered(true);
         setTimeout(() => setBusinessKindEntered(false), 2000)
     }
@@ -30,12 +33,14 @@ const KindOfBusiness = (props) => {
 
     function checkThis() {
         props.kindBusinessCompleted();
+        localStorage.setItem('typeOfBusiness', kindOfBusiness);
+        localStorage.setItem('nameOfBusiness', nameOfBusiness);
     }
 
     return (
     <div id={styles.kindOfBusinessDiv}>
         <p>First, select below what business you would like to set up. If you don't see your type of business, please choose other or contact us.</p>
-        <select style={{border: "none", boxShadow: "0px 0px 4px #f9e9f9" }} onChange={getKindOfBusinessFunction} id={styles.inputOrSelectKindBusiness}>
+        <select value={kindOfBusiness} style={{border: "none", boxShadow: "0px 0px 4px #f9e9f9", paddingLeft: "4px" }} onChange={getKindOfBusinessFunction} id={styles.inputOrSelectKindBusiness}>
             <option> </option>
             <option>Wax Center</option>
             <option>Beauty Center</option>
@@ -49,13 +54,13 @@ const KindOfBusiness = (props) => {
             <option>Tennis Club</option>
             <option>Other</option>
         </select>
-        <TemporaryStatement marginTop={'15px'} show={businessKindEntered && props.kindOfBusiness !== ""}>Cool!  A {props.kindOfBusiness}.  You got it.</TemporaryStatement>
-        <StatementAppear appear={props.kindOfBusiness !== ""}>
+        <TemporaryStatement marginTop={'15px'} show={businessKindEntered}>Cool!  A {kindOfBusiness}.  You got it.</TemporaryStatement>
+        <StatementAppear appear={kindOfBusiness !== ""}>
         <p>Now let's get the name of your business.</p>
-        <input onChange={getNameOfBusinessFunction} style={{paddingLeft: "8px", boxShadow: "0px 0px 4px #f9e9f9", width: '200px', border: "none"}} id={styles.inputOrSelectKindBusiness} placeholder="Business Name"/>
+        <input value={nameOfBusiness} onChange={getNameOfBusinessFunction} style={{paddingLeft: "8px", boxShadow: "0px 0px 4px #f9e9f9", width: '200px', border: "none"}} id={styles.inputOrSelectKindBusiness} placeholder="Business Name"/>
         <SubmitButton onClick={submitName}>Submit</SubmitButton>
         </StatementAppear>
-        <StatementAppear marginTop={'40px'} appear={props.nameOfBusiness !== "" && props.kindOfBusiness !== ""}>
+        <StatementAppear marginTop={'40px'} appear={nameOfBusiness !== "" && kindOfBusiness !== ""}>
         <p>Great! Next we need some information about you. Would you like to continue?</p>
         <SubmitButton marginTop={'30px'} onClick={checkThis}>Yes, lets do it!</SubmitButton>
         </StatementAppear>

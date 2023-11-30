@@ -39,7 +39,16 @@ export const stringToIntTime = {
 }
 
 
-
+export function sortGroupsIntoSingleArray(groups) {
+    console.log(groups);
+    const bigArray = [];
+    for (let i = 0; i < groups.length; i++) {
+        for (let t = 0; t < groups[i].tables.length; t++) {
+            bigArray.push(groups[i].label + groups[i].tables[t].table_num)
+        }
+    }
+    return bigArray;
+}
 
 
 

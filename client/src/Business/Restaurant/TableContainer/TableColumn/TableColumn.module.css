@@ -1,0 +1,78 @@
+#courtColumn {
+    position: relative;
+    width: 200px;
+    border: 1.5px solid black;
+    background-color: rgb(91, 91, 91);
+
+}
+
+#columnus {
+    position: absolute;
+    font-size: 18px;
+    font-weight: bold;
+    width: 140px;
+    text-align: center;
+    top: -30px;
+}
+
+#subo {
+    left: 10px;
+    top: 80px;
+    width: 80px; 
+    position: relative;
+}
+
+#bigGuy {
+    display: flex;
+    justify-content: space-around;
+}
+
+
+.bookingContainer {
+    background-color: rgb(255, 187, 180);
+    border-top: 1.5px solid black;
+    border-bottom: 1.5px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.groupContainer {
+    background-color: rgb(240, 255, 180);
+    border-top: 1.4px solid black;
+    border-bottom: 1.4px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.groupContainer:hover {
+    background-color: rgb(241, 243, 122);
+}
+
+.bookingContainer:hover {
+    background-color: rgb(246, 165, 156);
+}
+
+
+@media (min-width: 600px) {
+    #bigGuy {
+        width: 150px;
+    }
+}
+
+@media (max-width: 600px) {
+    #courtColumn {
+        margin-top: 90px;
+        width: 225px;
+    }
+    #columnus {
+        font-size: 24px;
+        position: relative;
+        width: 225px;
+    }
+}

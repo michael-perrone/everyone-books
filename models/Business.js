@@ -5,7 +5,7 @@ const BusinessSchema = new mongoose.Schema({
   schedule: [
     Object
   ],
-  tables: [
+  groups: [
     Object
   ],
   menu: [],
@@ -42,9 +42,6 @@ const BusinessSchema = new mongoose.Schema({
   },
   promos: {
     type: [String]
-  },
-  bio: {
-    type: String
   },
   followers: {
     type: [mongoose.Schema.Types.ObjectId],

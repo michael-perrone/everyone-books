@@ -743,6 +743,9 @@ router.post("/employeeclickedyes", async (req, res) => {
 
 router.get("/getAdminNotiNumber", authAdmin, async function(req, res) {
     const admin = await Admin.findOne({_id: req.admin.id})
+    if (!admin) {
+      return res.status(406).send();
+    }
     const adminNotis = await Notification.find({_id: admin.notifications});
     const adminBookedNotis = await BookedNotification.find({_id: admin.bookedNotifications});
     const totalNotifications = [...adminBookedNotis, ...adminNotis];
@@ -758,7 +761,13 @@ router.get("/getAdminNotiNumber", authAdmin, async function(req, res) {
 
 router.post("/checkAdminNotiNumber", authAdmin, async function(req, res) {
   const admin = await Admin.findOne({_id: req.admin.id})
-  const adminNotis = await Notification.find({_id: admin.notifications});
+  let adminNotis;
+  if (admin) {
+    adminNotis = await Notification.find({_id: admin.notifications});
+  }
+  else {
+    return res.status(406).send();
+  }
   const adminBookedNotis = await BookedNotification.find({_id: admin.bookedNotifications});
   const totalNotifications = [...adminBookedNotis, ...adminNotis];
   let num = totalNotifications.length;

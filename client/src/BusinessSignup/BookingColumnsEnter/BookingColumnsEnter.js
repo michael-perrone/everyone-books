@@ -29,7 +29,7 @@ const BookingColumnsEnter = (props) => {
     function sendAllInfo() {
         const allInfo = {
            adminInfo: props.adminInfo, businessInfo: props.businessInfo, schedule: props.businessSchedule,
-           businessName: props.nameOfBusiness, typeOfBusiness: props.kindOfBusiness, bookingColumnNumber: bookingColumnNumber, bookingColumnType: bookingColumnType, eq: usesShifts ? "y" : "n"
+           businessName: localStorage.getItem("nameOfBusiness"), typeOfBusiness: props.kindOfBusiness, bookingColumnNumber: bookingColumnNumber, bookingColumnType: bookingColumnType, eq: usesShifts ? "y" : "n"
         }
         console.log(props.nameOfBusiness, "BUSINESS NAMEO");
         axios.post('/api/adminSignup', allInfo).then(

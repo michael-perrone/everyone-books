@@ -1,0 +1,8 @@
+.buttono {
+    background-color: black;
+}
+
+.buttono:hover {
+    background-color: #cbadcb; 
+    color: black;
+}

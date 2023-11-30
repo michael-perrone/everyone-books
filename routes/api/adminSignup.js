@@ -27,6 +27,7 @@ router.post('/check', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
+      console.log(req.body);
       if (req.body.monOpen) {
         console.log("RUNNING FROM THE POPO");
         let employee = await Employee.findOne({ email: req.body.email.toLowerCase() });
@@ -128,12 +129,12 @@ router.post('/', async (req, res) => {
         );
         try {
           await newAdmin.save();
+          console.log(newBusiness);
           await newBusiness.save();
         } catch (error) {
           console.log(error)
         }
       } else {
-        console.log("NOT RUNNING FROM THE POPO")
         let employee = await Employee.findOne({ email: req.body.adminInfo.email.toLowerCase() });
         let admin = await Admin.findOne({ email: req.body.adminInfo.email.toLowerCase() });
         let user = await User.findOne({ email: req.body.adminInfo.email.toLowerCase() });

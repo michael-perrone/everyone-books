@@ -27,6 +27,7 @@ import BusinessesByService from "./UserHome/BusinessesByService/BusinessesByServ
 import AdBuilder from './AdminHome/AdBuilder/AdBuilder';
 import EmployeePortal from './EmployeeHome/EmployeePortal/EmployeePortal';
 import Ana from './Business/Ana/Ana';
+import TableCreator from './Business/Restaurant/TableCreator/TableCreator'
 
 
 class App extends React.Component {
@@ -64,7 +65,7 @@ class App extends React.Component {
       <div onClick={this.props.hideDropDown}>
       <Switch>
       <Route path="/restaurant/:adminId/" exact component={Restaurant}></Route>
-        <Route path="/restaurantBuilder" exact component={RestaurantBuilder}></Route>
+        <Route path="/restaurantBuilder" exact component={TableCreator}></Route>
       <Route path="/employee/:employeeId/notifications" exact component={EmployeeNotifications}></Route>
       <Route path="/user/:userId/notifications" exact component={UserNotifications}></Route>
       <Route path="/admin/:adminId/AdBuilder" exact component={AdBuilder}></Route>

@@ -1,12 +1,10 @@
 #mainContainer {
-    width: 70%;
     display: flex;
-    flex-direction: column;
     padding-bottom: 100px;
+    justify-content: space-around;
 }
 
 #mainContainerServices {
-    width: 70%;
     display: flex;
     flex-direction: column;
     padding-bottom: 110px;

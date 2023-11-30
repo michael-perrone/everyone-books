@@ -3,10 +3,12 @@
     display: flex;
     align-items: center;
     flex-direction: column;
+    background-color: #f9e9f9;
 }
 
 input {
-    background-color: rgb(105, 105, 105);
+    background-color: #f9e9f9;
+    border: 2px solid black;
 }
 
 #mainInside {
@@ -22,14 +24,12 @@ input {
     align-items: center;
 }
 
-#borderr {
-    border-left: 2px solid #f9e9f9;
-}
+
 
 #modelAd {
     height: 300px;
     width: 350px;
-    box-shadow: 0px 0px 5px #f9e9f9;
+    box-shadow: 0px 0px 5px black;
     display: flex;
     background-color: rgb(55,55,55);
     flex-direction: column;
@@ -41,6 +41,7 @@ input {
     max-height: 500px;
     width: 375px;
     overflow: auto;
+    background-color: black;
 }
 
 

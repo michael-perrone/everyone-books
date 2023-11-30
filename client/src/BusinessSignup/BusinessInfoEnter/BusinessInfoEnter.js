@@ -6,12 +6,12 @@ import {connect} from 'react-redux';
 import {SAVE_BUSINESS_INFO, SET_BUSINESS_INFO_COMPLETE} from '../../actions/actions';
 
 const BusinessInfoEnter = (props) => {
-    const [address, setAddress] = React.useState('');
-    const [city, setCity] = React.useState('');
-    const [state, setState] = React.useState('');
-    const [zip, setZip] = React.useState('');
-    const [phoneNumber, setPhoneNumber] = React.useState('');
-    const [website, setWebsite] = React.useState('')
+    const [address, setAddress] = React.useState(localStorage.getItem("address") ? localStorage.getItem("address") : '');
+    const [city, setCity] = React.useState(localStorage.getItem("city") ? localStorage.getItem("city") : '');
+    const [state, setState] = React.useState(localStorage.getItem("state") ? localStorage.getItem("state") : '');
+    const [zip, setZip] = React.useState(localStorage.getItem("zip") ? localStorage.getItem("zip") : '');
+    const [phoneNumber, setPhoneNumber] = React.useState(localStorage.getItem("phoneNumber") ? localStorage.getItem("phoneNumber") : '');
+    const [website, setWebsite] = React.useState(localStorage.getItem("website") ? localStorage.getItem("website") : '')
     const [addressDirty, setAddressDirty] = React.useState(false);
     const [cityDirty, setCityDirty] = React.useState(false);
     const [stateDirty, setStateDirty] = React.useState(false);
@@ -81,8 +81,15 @@ const BusinessInfoEnter = (props) => {
             phoneNumber,
             website
         }
+        localStorage.setItem('address', address);
+        localStorage.setItem("city", city);
+        localStorage.setItem("state", state);
+        localStorage.setItem("zip", zip);
+        localStorage.setItem("phoneNumber", phoneNumber);
+        localStorage.setItem("website", website);
         props.saveBusinessInfo(business)
-        props.setBusinessInfoComplete() 
+        props.setBusinessInfoComplete()
+    
     }
 
 
@@ -90,15 +97,15 @@ const BusinessInfoEnter = (props) => {
        <div>
             <div style={{height: "400px"}} id={styles.adminSignUpContainer}>
             <div className={styles.inputContainer}>
-            <input onBlur={addressHandlerDirty} placeholder="Street Address" className={styles.adminInput} onChange={addressHandler}/>
+            <input value={address} onBlur={addressHandlerDirty} placeholder="Street Address" className={styles.adminInput} onChange={addressHandler}/>
             {address === "" && addressDirty === true && <Alert top={'25px'} alertPhrase={"Field Cannot Be Blank"}/>}
             </div>
             <div className={styles.inputContainer}>
-            <input onBlur={cityHandlerDirty} placeholder="City" className={styles.adminInput} onChange={cityHandler}/>
+            <input value={city} onBlur={cityHandlerDirty} placeholder="City" className={styles.adminInput} onChange={cityHandler}/>
             {city === "" && cityDirty === true && <Alert top={'25px'} alertPhrase={"Field Cannot Be Blank"}/>}
             </div>
             <div className={styles.inputContainer}>
-            <select style={{width: '258px'}} onBlur={stateHandlerDirty} placeholder="State" className={styles.adminInput} onChange={stateHandler}>
+            <select value={state} style={{width: '258px'}} onBlur={stateHandlerDirty} placeholder="State" className={styles.adminInput} onChange={stateHandler}>
               <option>State</option>
               <option>AL</option>
               <option>AK</option>
@@ -154,15 +161,15 @@ const BusinessInfoEnter = (props) => {
             {state === "" && stateDirty === true && <Alert top={'25px'} alertPhrase={"Not a Valid state"}/>}
             </div>
             <div className={styles.inputContainer}>
-            <input onBlur={zipHandlerDirty} placeholder="Zip Code" className={styles.adminInput} onChange={zipHandler}/>
+            <input value={zip} onBlur={zipHandlerDirty} placeholder="Zip Code" className={styles.adminInput} onChange={zipHandler}/>
             {zip.length < 4 && zipDirty === true && <Alert top={'25px'} alertPhrase={"Not a valid Zip Code"}/>}
             </div>
             <div className={styles.inputContainer}>
-            <input onBlur={phoneNumberHandlerDirty} placeholder="Phone Number" className={styles.adminInput} onChange={phoneNumberHandler}/>
+            <input value={phoneNumber} onBlur={phoneNumberHandlerDirty} placeholder="Phone Number" className={styles.adminInput} onChange={phoneNumberHandler}/>
             {!validatePhone(phoneNumber) && phoneNumberDirty === true && <Alert top={'25px'} alertPhrase={"Not a Valid Phone number"}/>}
             </div>
             
-            <input placeholder="Business Website (If applicable)" className={styles.adminInput} onChange={websiteHandler}></input>
+            <input value={website} placeholder="Business Website (If applicable)" className={styles.adminInput} onChange={websiteHandler}></input>
             {!goodToGo && <Alert bottom={"170px"} right={""} top={""} alertPhrase={"Please fill in required info above"}/>}
             <SubmitButton marginTop={"20px"} onClick={storeAdminInfoInRedux}>Let's Finish Up!</SubmitButton>
         </div>
