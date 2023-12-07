@@ -10,12 +10,10 @@ import {sortGroupsIntoSingleArray} from "../../feutils/feutils";
 import Chatty from "../../Chatty/Chatty";
 
 function Restaurant(props) {
+  const [unsortedBookings, setUnsortedBookings] = useState([]);
   const [sortedBookings, setSortedBookings] = useState([]);
-//   const [bcn, setBcn] = useState("");
-//   const [bct, setBct] = useState("");
   const [openTime, setOpenTime] = useState("");
   const [closeTime, setCloseTime] = useState("");
-//   const [updateBookings, setUpdateBookings] = useState();
   const [showBackDropBooking, setShowBackDropBooking] = useState(false);
   const [bookingToView, setBookingToView] = useState({});
   const [loading, setLoading] = useState(true);
@@ -23,25 +21,44 @@ function Restaurant(props) {
   const [tables, setTables] = useState([]);
   const [employees, setEmployees] = useState([]);
 
+  function sortBookings(bookings) {
+    let wholeThing = [];
+      for (let i = 0; i < tables.length; i++) {
+          let column = [];
+          for (let t = 0; t < bookings.length; t++) {
+            if (bookings[t].tableId === tables[i]) {
+              console.log("wdkwqdkwqdkjqdkjq")
+                column.push(bookings[t]);
+              }
+          }
+        wholeThing.push(column); 
+      }
+    return wholeThing;
+  } 
+
 
   function loadSchedule() {
-    axios.get('/api/restaurant/checkBusiness', {headers:{'x-auth-token': localStorage.getItem("adminToken")}}).then(
+    axios.post('/api/restaurant/checkBusiness', {date: new Date(props.dateChosen).toDateString()}, {headers:{'x-auth-token': localStorage.getItem("adminToken")}}).then(
         response => {
             if (response.status === 200) {
                 setTables(sortGroupsIntoSingleArray(response.data.business.groups));
                 const daySched = response.data.business.schedule[new Date(props.dateChosen).getDay()];
                 console.log(daySched)
                 setOpenTime(daySched.open);
-                setCloseTime(daySched.close)
-                setLoading(false);   
+                setCloseTime(daySched.close);
+                setLoading(false);
+                setUnsortedBookings(response.data.tableBookings);
             }
         }
     )
   }
 
-  function addBookingFromChat() {
 
-  }
+  useEffect(function() {
+    if (unsortedBookings.length > 0) {
+      setSortedBookings(sortBookings(unsortedBookings))
+    }
+  }, [unsortedBookings.length])
 
 
   useEffect(function() {
@@ -55,15 +72,13 @@ function Restaurant(props) {
 
   function clickBooking(booking) {
     return () => {
-      axios.post('/api/getBookings/moreBookingInfo', {bookingId: booking._id}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
+      axios.post('/api/restaurant/moreBookingInfo', {bookingId: booking._id}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
           if (response.status === 200) {
-              const newBooking = booking;
-              newBooking.services = response.data.services;
-              newBooking.customer = response.data.customer;
-              newBooking.products = response.data.products;
-              newBooking.employeeName = response.data.employeeName;
-              setBookingToView(newBooking);
-              setShowBackDropBooking(true);
+            let newTable = booking;
+            newTable.customer = response.data.customer;
+            newTable.employee = response.data.employee;
+            setBookingToView(newTable);
+            setShowBackDropBooking(true);
           }
       }).catch(error => {
         console.log(error);
@@ -86,7 +101,7 @@ function Restaurant(props) {
 
     return (
           <div id={styles.businessContainer}>
-           {showBackDropBooking && <div style={{display: "flex", position: "absolute", top: 0, lef: 0, width: "100%", justifyContent: "center"}}><div onClick={() => setShowBackDropBooking(false)} id={styles.backDrop}></div> <ViewTable reload={loadSchedule}  hide={hide} booking={bookingToView}/></div>}
+           {showBackDropBooking && <div style={{display: "flex", position: "absolute", top: 0, lef: 0, width: "100%", justifyContent: "center"}}><div onClick={() => setShowBackDropBooking(false)} id={styles.backDrop}></div> <ViewTable reload={loadSchedule} hide={hide} booking={bookingToView}/></div>}
                 <RestaurantBooking
                   tables={tables}
                   loadSchedule={loadSchedule}    

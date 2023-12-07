@@ -435,6 +435,9 @@ router.post('/getEmployeeBookingsForDay', async (req, res) => {
   if (business.eq === "y" && !shift) {
       return res.status(406).send()
   }
+  else if (!business.eq && !shift) {
+      return res.status(406).send() // fix this;
+  }
   else {
     const bookings = await Booking.find({ employeeBooked: req.body.employeeId, date: date });
     const updatedWithNameBookings = [];
@@ -487,9 +490,11 @@ router.post('/getEmployeeBookingsForDay', async (req, res) => {
     else {
       let bcn;
       let bct;
-      if (shift.bookingColumnNumber) {
-        bcn = shift.bookingColumnNumber;
-        bct = business.bookingColumnType;
+      if (shift) {
+        if (shift.bookingColumnNumber) {
+          bcn = shift.bookingColumnNumber;
+          bct = business.bookingColumnType;
+        }
       }
       let shiftTimes = { start: shift.timeStart, end: shift.timeEnd };
       if (shift.breakStart && shift.breakEnd) {

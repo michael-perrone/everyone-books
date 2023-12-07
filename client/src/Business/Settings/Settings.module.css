@@ -1,0 +1,35 @@
+#bigSettingsContainer {
+    display: flex;
+}
+
+#sideBar {
+    border-right: 2px solid #f9e9f9;
+    display: flex;
+    flex-direction: column;
+    height: 300px;
+    justify-content: space-around;
+    font-size: 20px;
+    border-bottom: 1px solid #f9e9f9;
+}
+
+.tab {
+    background-color: black;
+    width: 140px;
+    color: #f9e9f9;
+    height: 35px;
+    padding-left: 20px;
+    padding-top: 15px;
+    cursor: pointer;
+}
+
+.tab:hover {
+    background-color: rgb(66, 66, 66);
+    color: #f9e9f9;
+}
+
+
+#selectedTab {
+    background-color: #f9e9f9;
+    color: black;
+}
+

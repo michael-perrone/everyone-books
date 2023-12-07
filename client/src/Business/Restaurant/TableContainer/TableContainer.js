@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 import {stringToIntTime, intToStringTime} from '../../../feutils/feutils';
 import TableColumn from './TableColumn/TableColumn';
 
-
 var numbo;
 function TableContainer(props) {
     const [heightNum, setHeightNum] = useState(0);
@@ -14,12 +13,6 @@ function TableContainer(props) {
     const [minned, setMinned] = useState(false);
 
     useEffect(function() {
-        document.getElementById(styles.mainContainer).scrollTo({
-            top: heightNum * 16
-         });
-    },[heightNum])
-
-    useEffect(function() {
         if (props.openTime && props.closeTime) {
             const newHeightNum = stringToIntTime[props.closeTime] - stringToIntTime[props.openTime];
             setHeightNum(newHeightNum);
@@ -27,20 +20,7 @@ function TableContainer(props) {
         }
     },[ props.openTime, props.closeTime])
 
-    useEffect(function() {
-        let bcn = Number(props.bcn);
-        console.log(bcn)
-        numbo = bcn;
-        const array = [];
-        let i = 1;
-        while (i <= bcn) {
-            array.push(i);
-            i = i + 1;
-        }
-        setBcnArray(array);
-        
-      
-    },[props.bcn])
+
 
     useEffect(function() {
         if (window.innerWidth > 600) {
@@ -92,12 +72,10 @@ function TableContainer(props) {
                 </div>}
                 <div id={styles.courto} style={{ height:`${heightNum * 16}px`, }}>
                     {props.tables.map((table,index) => {
-                        return <TableColumn times={times} table={table} minned={minned} clickGroup={props.clickGroup} clickBooking={props.clickBooking}  openTime={props.openTime}  key={table} height={heightNum * 16} />
+                        return <TableColumn sortedBookings={props.sortedBookings[index]} times={times} table={table} minned={minned} clickGroup={props.clickGroup}  clickBooking={props.clickBooking}  openTime={props.openTime}  key={table} height={heightNum * 16} />
                     })}
                 </div>
             </div>
-        
-
     )
 }
 

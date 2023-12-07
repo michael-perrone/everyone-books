@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './TableColumn.module.css';
-import {stringToIntTime} from '../../../../feutils/feutils';
+import {stringToIntTime, intToStringTime} from '../../../../feutils/feutils';
 
 function TableColumn(props) {
     return (    
@@ -13,7 +13,7 @@ function TableColumn(props) {
         <div style={{height: props.height}} id={styles.courtColumn}>
             <p id={styles.columnus}>{"Table"}: {props.table}</p>
             {props.sortedBookings && props.sortedBookings.map(sortedBooking => {
-                let timeSplit = sortedBooking.time.split("-");
+                let timeSplit = [sortedBooking.timeStart, intToStringTime[stringToIntTime[sortedBooking.timeStart] + 18]]
                 let timeStartNum = stringToIntTime[timeSplit[0]];
                 let timeEndNum = stringToIntTime[timeSplit[1]];
                 let openTimeNum = stringToIntTime[props.openTime];

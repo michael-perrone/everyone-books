@@ -28,6 +28,7 @@ import AdBuilder from './AdminHome/AdBuilder/AdBuilder';
 import EmployeePortal from './EmployeeHome/EmployeePortal/EmployeePortal';
 import Ana from './Business/Ana/Ana';
 import TableCreator from './Business/Restaurant/TableCreator/TableCreator'
+import Settings from './Business/Settings/Settings';
 
 
 class App extends React.Component {
@@ -64,6 +65,8 @@ class App extends React.Component {
       {(token || employeeToken || adminToken) && <Nav/>}
       <div onClick={this.props.hideDropDown}>
       <Switch>
+      <Route path="/:adminId/settings" exact component={Settings}></Route>
+      {/* <Route path="/restaurant/:adminId/settings" exact component={RestaurantSettings}></Route> */}
       <Route path="/restaurant/:adminId/" exact component={Restaurant}></Route>
         <Route path="/restaurantBuilder" exact component={TableCreator}></Route>
       <Route path="/employee/:employeeId/notifications" exact component={EmployeeNotifications}></Route>

@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './SelectOneList.module.css';
 
 function SelectOneList(props) {
+    console.log(props.array);
     return (
         props.array ?
         <div style={{maxHeight: "270px", overflow: "auto", boxShadow: '0px 0px 3px #f9e9f9', width: "250px"}}>

@@ -12,15 +12,8 @@ import {EXIT_NUM} from '../../../actions/actions';
 
 
 function ViewTable(props) {
-    const [showProducts, setShowProducts] = useState(false);
-    const [selectedProducts, setSelectedProducts] = useState([]);
-    const [selectedServices, setSelectedServices] = useState([]);
-    const [productsInBooking, setProductsInBooking] = useState(props.booking.products.length > 0 ? createMaplist(props.booking.products, "name") : []);
     const [time, setTime] = useState(props.booking.time);
     const [cost, setCost] = useState(props.booking.cost)
-    const [servicesInBooking, setServicesInBooking] = useState(createMaplist(props.booking.services, "serviceName"));
-    const [selectedProductIds, setSelectedProductIds] = useState([]);
-    const [selectedServiceIds, setSelectedServiceIds] = useState([]);
     const [error, setError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
     const [custoName, setCustoName] = useState("");
@@ -30,209 +23,23 @@ function ViewTable(props) {
     // check this -- make it so that
 
     function deleteBooking() {
-        Axios.post("/api/iosBooking/delete", {bookingId: props.booking._id}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
-            if (response.status === 200) {
-                props.hide();
-                setSuccessMessage("");
-                setTimeout(setSuccessMessage("Booking successfully deleted"));
-                if (props.adminToken) {
-                    props.reload();
-                }
-                else {
-                    //props.addExitNum();
-                }
-            }
-        }).catch(error => {
-            console.log(error);
-        })
+        // Axios.post("/api/iosBooking/delete", {bookingId: props.booking._id}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
+        //     if (response.status === 200) {
+        //         props.hide();
+        //         setSuccessMessage("");
+        //         setTimeout(setSuccessMessage("Booking successfully deleted"));
+        //         if (props.adminToken) {
+        //             props.reload();
+        //         }
+        //         else {
+        //             //props.addExitNum();
+        //         }
+        //     }
+        // }).catch(error => {
+        //     console.log(error);
+        // })
     }
 
-    function addProducts() {
-        for (let i = 0; i < selectedProducts.length; i++) {
-            for (let t = 0; t < productsInBooking.length; t++) {
-                if (selectedProducts[i]._id === productsInBooking[t]._id) {
-                    setError("");
-                    setTimeout(() => setError("Product already exists in booking"), 200);
-                    return;
-                }
-            }
-        }
-        Axios.post("api/products/addProducts", {bookingId: props.booking._id, productIds: selectedProducts}).then(response => {
-            if (response.status === 200) {
-                const productsHere = [...createMaplist(selectedProducts, "name"), ...productsInBooking];
-                setProductsInBooking(productsHere);
-                setCost(response.data.newCost);
-            }
-        }).catch(error => {
-            console.log(error)
-        })
-    }
-
-    function addServices() {
-        for (let i = 0; i < selectedServices.length; i++) {
-            for (let t = 0; t < servicesInBooking.length; t++) {
-                if (selectedServices[i]._id === servicesInBooking[t].id) {
-                    setError("");
-                    setTimeout(() => setError("Service already exists in booking"), 200);
-                    return;
-                }
-            }
-        }
-        if (props.adminToken) {
-            Axios.post('api/getBookings/editBooking', {bookingId: props.booking._id, servicesToAdd: selectedServiceIds}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
-                if (response.status === 200) {
-                    setSuccessMessage("");
-                    setTimeout(() => setSuccessMessage("Services sucessfully updated"));
-                    const servicesHere = [...createMaplist(selectedServices, "serviceName"), ...servicesInBooking];
-                    setServicesInBooking(servicesHere);
-                    setTime(response.data.time);
-                    setCost(response.data.cost);
-                }
-            }
-        ).catch(error => {
-            if (error.response.status === 400) {
-                setError("");
-                setTimeout(() => setError("Adding these service(s) to this booking will make the booking overlap with the next booking."),200);
-                return;
-                }
-            if (error.response.status === 406) {
-                setError("");
-                setTimeout(() => setError("Adding these service(s) to this booking will extend the time of the service past the business closing time."),200);
-            }
-          })
-        }
-        else {
-            Axios.post('api/getBookings/editBookingEmployee', {bookingId: props.booking._id, servicesToAdd: selectedServiceIds}, {headers: {'x-auth-token': props.employeeToken}}).then(response => {
-                if (response.status === 200) {
-                    setSuccessMessage("");
-                    setTimeout(() => setSuccessMessage("Services sucessfully updated"));
-                    const servicesHere = [...createMaplist(selectedServices, "serviceName"), ...servicesInBooking];
-                    setServicesInBooking(servicesHere);
-                    setTime(response.data.time);
-                    setCost(response.data.cost);
-                }
-            }
-        ).catch(error => {
-            if (error.response.status === 400) {
-                setError("");
-                setTimeout(() => setError("Adding these service(s) to this booking will make the booking overlap with the next booking."),200);
-                return;
-                }
-            if (error.response.status === 406) {
-                setError("");
-                setTimeout(() => setError("Adding these service(s) to this booking will extend the time of the service past the business closing time."),200);
-            }
-          })
-        }
-    }
-
-    function toSetProducts() {
-       setShowProducts(true);
-       setSelectedServices([]);
-       setSelectedServiceIds([]);
-    }
-
-    function toSetServices() {
-        setShowProducts(false);
-        setSelectedProducts([]);
-        setSelectedProductIds([]);
-    }
-
-    function deleteProduct(productId) {
-        return () => {
-            Axios.post("api/products/removeProducts", {bookingId: props.booking._id, productId: productId}).then(
-                response => {
-                    if (response.status === 200) {
-                        const newProducts = [...productsInBooking];
-                        console.log(newProducts.length)
-                        const index = newProducts.findIndex(e => {
-                         return e.id === productId
-                        })
-                        newProducts.splice(index, 1);
-                        setProductsInBooking(newProducts);
-                        setSuccessMessage("");
-                        setTimeout(() => setSuccessMessage("Product deleted successfully"), 200);
-                        setCost(response.data.newCost);
-                    }
-                }
-            ).catch(error => {
-                console.log(error)
-            })
-        }
-    }
-
-    function deleteService(serviceId) {
-        return () => {
-            if (servicesInBooking.length === 1) {
-                setError("");
-                setTimeout(() => setError("A booking must have at least one service."), 200);
-                return;
-            }
-            Axios.post("api/getBookings/removeService", {bookingId: props.booking._id, serviceId}).then(
-                response => {
-                    if (response.status === 200) {
-                        const newServicesInBooking = servicesInBooking.filter(e => {
-                          return serviceId !== e.id;
-                        })
-                        if (newServicesInBooking.length > 0) {
-                            setServicesInBooking(newServicesInBooking);
-                            setSuccessMessage("");
-                            setTimeout(() => setSuccessMessage("Service deleted successfully"), 200);
-                            setCost(response.data.cost);
-                            setTime(response.data.time);
-                        }
-                    }
-                }
-            )
-        }
-    }
-
-    function selectService(service) {
-        return function() {
-          const selectedServicesArray = [...selectedServices];
-          selectedServicesArray.push(service);
-          setSelectedServices(selectedServicesArray);
-          const selectedServiceIdsArray = [...selectedServiceIds];
-          selectedServiceIdsArray.push(service._id);
-          setSelectedServiceIds(selectedServiceIdsArray);
-        }
-      }
-
-      function selectProduct(product) {
-        return function() {
-          const selectedProductsArray = [...selectedProducts];
-          selectedProductsArray.push(product);
-          setSelectedProducts(selectedProductsArray);
-          const selectedProductIdsArray = [...selectedProductIds];
-          selectedProductIdsArray.push(product._id);
-          setSelectedProductIds(selectedProductIdsArray);
-        }
-      }
-
-      function minusService(id) {
-        return function() {
-            const selectedServiceIdsArray = [...selectedServiceIds].filter((e) => {
-              return e !== id
-            });
-         setSelectedServiceIds(selectedServiceIdsArray);
-         const selectedServicesArray = [...selectedServices].filter(e => e._id !== id);
-         setSelectedServices(selectedServicesArray)
-         }
-    }
-
-    function minusProduct(id) {
-        return function() {
-            const selectedProductIdsArray = [...selectedProductIds].filter((e) => {
-                console.log(e, id)
-              return e !== id
-            });
-            console.log(selectedProductIdsArray);
-
-         setSelectedProductIds(selectedProductIdsArray);
-         const selectedProductsArray = [...selectedProducts].filter(e => e._id !== id);
-         setSelectedProducts(selectedProductsArray);
-         }
-    }
 
     function hide() {
         props.hide();
@@ -240,6 +47,10 @@ function ViewTable(props) {
             props.addExitNum();
             console.log("yoooo");
         }
+    }
+
+    function getCustomer() {
+        Axios.post('api/restaurant/getCustomer')
     }
 
     function enterPhone() {
@@ -253,15 +64,14 @@ function ViewTable(props) {
     }
 
 
-
     return (
         <div id={styles.viewBookingContainer}>
-            <p style={{fontWeight: "bold", fontSize: "18px", position: "absolute", top: 5}}>Booking Info</p>
-            <img onClick={hide} style={{position: "absolute", right: 20, top: 10, cursor: "pointer"}} src={x}/>
+            <p style={{fontWeight: "bold", fontSize: "18px", position: "absolute", top: 5}}>Table Info</p>
+            <img id={styles.x} onClick={hide} style={{position: "absolute", cursor: "pointer"}} src={x}/>
             <div id={styles.leftContainer}>
                 <div>
                     <p className={styles.bolder}>Employee Name:</p>
-                    <p className={styles.fontFourteen}>{props.booking.employeeName}</p>
+                    <p className={styles.fontFourteen}>{props.booking.employee.fullName}</p>
                 </div>
                 <div style={{display: "flex", flexDirection: "column"}}>
                     <p className={styles.bolder}>Customer Name:</p>
@@ -274,7 +84,7 @@ function ViewTable(props) {
                 </div>
                 <div>
                     <p className={styles.bolder}>Time of Booking:</p>
-                    <p className={styles.fontFourteen}>{time}</p>
+                    <p className={styles.fontFourteen}>{props.booking.timeStart}</p>
                 </div>
                 <div>
                     <p className={styles.bolder}>Date of Booking:</p>
@@ -286,46 +96,8 @@ function ViewTable(props) {
                 </div>
                 <button onClick={deleteBooking} style={{backgroundColor: "salmon", color: "black", height: "35px", width: "120px", position: "absolute", bottom: "10px", fontWeight: "bold", boxShadow: "0px 0px 2px #f9e9f9", border: "none"}}>Delete Booking</button>
             </div>
-            <div id={styles.rightContainer}>
-                {showProducts ?
-                <div style={{maxHeight: "180px", overflow: "auto"}}>
-                    <p style={{textAlign: "center"}} className={styles.bolder}>Products</p>
-                    <Maplist small={true} delete={deleteProduct} array={productsInBooking}/>
-                </div>
-                :
-                <div style={{maxHeight: "180px", overflow: "auto"}}>
-                     <p style={{textAlign: "center"}} className={styles.bolder}>Services</p>
-                    <Maplist small={true} delete={deleteService} array={servicesInBooking}/>
-                </div>
-                }
-                <div style={{position: "absolute", top: "270px", width: "198px", right: "1px"}}>
-                    <div style={{display: "flex", justifyContent: "space-between", position: "relative", top: "1px"}}>
-                        <p onClick={toSetServices} style={{paddingBottom: "3px", cursor: "pointer"}} className={showProducts ? styles.unselected : styles.selected}>Add Services</p>
-                        <p onClick={toSetProducts} style={{paddingBottom: "3px", cursor: "pointer"}} className={showProducts ? styles.selected : styles.unselected}>Add Products</p>
-                    </div>
-                    
-                   <div style={{width: "224px", height: "200px"}}>
-                   {showProducts ?
-                        <ServiceList array={props.products} small={true} addService={(id) => selectProduct(id)} minusService={minusProduct} prod={true}  selectedServices={selectedProductIds}/>
-                           :
-                          <ServiceList array={props.services} small={true} addService={(id) => selectService(id)} minusService={minusService}  selectedServices={selectedServiceIds}/>
-                   }
-                    </div>
-                </div>
-                {showProducts && 
-                <StatementAppear appear={selectedProducts.length > 0 && showProducts}>
-                    <div className={styles.bottomButton}>
-                   <button style={{height: "35px", width: "120px", backgroundColor: "rgb(24,24,24)", boxShadow: "0px 0px 2px #f9e9f9", border: "none"}} onClick={addProducts}>Add Product(s)</button>
-                   </div>
-                </StatementAppear>
-                }
-                { !showProducts &&
-                <StatementAppear appear={selectedServices.length > 0 && !showProducts}>
-                    <div className={styles.bottomButton}>
-                   <button style={{height: "35px", width: "120px", backgroundColor: "rgb(24,24,24)", boxShadow: "0px 0px 2px #f9e9f9", border: "none"}} onClick={addServices}>Add Service(s)</button>
-                   </div>
-                </StatementAppear>
-                }
+            <div style={{width: "200px"}}>
+
             </div>
             <OtherAlert showAlert={successMessage !== ""} alertMessage={successMessage} alertType={"success"}/>
              <OtherAlert showAlert={error !== ""} alertMessage={error} alertType={"notgood"}/>

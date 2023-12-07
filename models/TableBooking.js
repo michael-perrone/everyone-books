@@ -12,14 +12,12 @@ const TableBookingSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "employee"
   },
-  customerName: String,
   customer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user"
   },
-  estDuration: String,
-  fakeId: Number,
-  numOfPeople: String,
+  tableId: String,
+  numOfPeople: String
 });
 
 const Booking = mongoose.model("tableBooking", TableBookingSchema);

@@ -80,7 +80,7 @@ router.post("/addNewCustomer", adminAuth, async (req, res) => {
     }
   }
   let realPhoneArray = phoneArray.filter(e => e !== "");
-  console.log(phoneArray.length)
+  console.log(phoneArray.length);
   if (realPhoneArray.length === 0) {
     return res.status(406).send();
   }

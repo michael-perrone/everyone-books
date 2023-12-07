@@ -9,7 +9,7 @@ import { chattyKathy1, gettingConfirmation, bigMagic, getLoc, findDate, findTime
 //import ChatBubble from './ChatBubble/ChatBubble';
 
 const Chatty = (props) => {
-    const intro = "Hello my name is Bookie the booking bot. I can create and delete bookings for you. How can I help?"
+    const intro = "Hello my name is Bookie the booking bot. How can I help?"
     let counter = 0;
 
     /////// CHAT BOOKINGS CHAT BOOKINGS CHAT BOOKINGS BELOW ////////

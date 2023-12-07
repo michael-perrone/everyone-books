@@ -28,7 +28,8 @@ function Business(props) {
   const [employees, setEmployees] = useState([]);
 
 
-  function loadSchedule() {
+  function loadSchedule() { /// check this -- if not restaurant?
+    console.log("WKDJWQJKDQWJKD QWKJDHQWKJDH QWKJDHQKWJ DHWKJDHQWKJDHQJKW")
     axios
     .post("/api/adminSchedule", {
       date: props.dateChosen.toDateString()
@@ -88,7 +89,7 @@ function Business(props) {
     })
   }, [])
 
-  useEffect(function() {
+  useEffect(function() { // check this -- if not restaurant?
     axios.post("api/services/getServices", {businessId: props.admin.admin.businessId}).then(response => {
       if (response.status === 200) {
         setServices(response.data.services);
@@ -96,7 +97,7 @@ function Business(props) {
     })
 }, [])
 
-  function clickBooking(booking) {
+  function clickBooking(booking) { // check this -- here?
     return () => {
       axios.post('/api/getBookings/moreBookingInfo', {bookingId: booking._id}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
           if (response.status === 200) {

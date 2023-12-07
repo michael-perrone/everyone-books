@@ -8,6 +8,15 @@
     display: inline;
   }
   
+  .buttono {
+    background-color: black;
+}
+
+.buttono:hover {
+    background-color: #cbadcb; 
+    color: black;
+}
+  
   .calWidth {
     max-width: 400px;
   }

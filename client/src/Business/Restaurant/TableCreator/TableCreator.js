@@ -228,7 +228,7 @@ function TableCreator(props) {
             <div style={{ marginTop: "20px", maxWidth: "100%", overflow: "auto", padding: "20px", display: "block ruby"}}>
                 <div style={{paddingRight: "70px", display: "flex"}}>
                 {groups.map((group, index) => {
-                   return <div style={{width: "300px", marginLeft: "40px", maxHeight: "600px", overflow: "auto", boxShadow: "0px 0px 6px #f9e9f9", paddingTop: "6px", height: "600px", display: "flex", flexDirection: "column", alignItems: "center", paddingBottom: "20px"}}>
+                   return <div style={{width: "300px", backgroundColor: "rgb(55,55,55)", marginLeft: "40px", maxHeight: "600px", overflow: "auto", boxShadow: "0px 0px 6px #f9e9f9", paddingTop: "6px", height: "600px", display: "flex", flexDirection: "column", alignItems: "center", paddingBottom: "20px"}}>
                         <p style={{textAlign: "center", fontWeight: "bold"}}>Table Group: {group.label}</p>
                         <div style={{display: "flex", width: "100%", borderBottom: "1px solid #f9e9f9", paddingBottom: "20px", justifyContent: "space-around", marginTop: "20px", height: "60px"}}>
                         {(!finishHit && usli === index) && <input placeholder='Seating Location' value={prefo} onChange={(e) => setPrefo(e.target.value)} style={{fontSize: '14px', marginTop: "4px", paddingLeft: "6px", backgroundColor: "black", boxShadow: "0px 0px 4px #f9e9f9", height: "30px", width: "200px", border: "none"}}/>}
@@ -240,16 +240,15 @@ function TableCreator(props) {
                         </div>
                         }
                         </div>
-                        
-                        
                         {group.tables.map((table,i) => {
-                            return <div style={{padding: "6px", paddingBottom: "10px", height: "90px", width: "165px", boxShadow: "0px 0px 4px #f9e9f9", marginTop: "20px"}}>
-                                        <p style={{marginTop: "2px", marginLeft: "12px"}}>Table Number: {table.table_num}</p>
-                                        <p style={{marginTop: "6px", marginLeft: "12px"}}>Table Capacity: {table.capacity}</p>
+                            return <div style={{padding: "6px", paddingBottom: "10px", height: "90px", width: "165px", boxShadow: "0px 0px 4px #f9e9f9", marginTop: "20px", backgroundColor: "rgb(25,25,25)"}}>
+                                        <p style={{marginTop: "2px", marginLeft: "26px"}}>Table Number: {table.table_num}</p>
+                                        <p style={{marginTop: "6px", marginLeft: "26px"}}>Table Capacity: {table.capacity}</p>
                                         <button className={styles.buttono} style={{marginLeft: "30px", marginTop: "16px", padding: "4px", width: "100px", border: "none", boxShadow: "0px 0px 4px black", color: "black", backgroundColor: "salmon", fontWeight: "bold", cursor: "pointer"}} onDoubleClick={() => deleteTable(index, i, group.id)}>Delete Table</button>
                                 </div>
                             })}
-                        {hitIndex === index && <select onChange={(e) => setTableNum(e.target.value) } style={{padding: "4px", marginTop: "40px", border: "none", width: "130px", boxShadow: "0px 0px 4px #f9e9f9", backgroundColor: "black"}}>
+                        {hitIndex === index && <p style={{marginTop: "15px"}}>Table Details:</p>}
+                        {hitIndex === index && <select onChange={(e) => setTableNum(e.target.value) } style={{padding: "4px", marginTop: "20px", border: "none", width: "130px", boxShadow: "0px 0px 4px #f9e9f9", backgroundColor: "black"}}>
                             <option>Table Number</option>
                             <option>1</option>
                             <option>2</option>

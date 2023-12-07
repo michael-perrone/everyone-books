@@ -29,41 +29,46 @@ import BCAList from "../../../Shared/BCAList/BCAList";
 import x from '../../BookingHelpers/AdminBooking/x.png'
 import {withRouter} from 'react-router-dom';
 
-
-
-
-
-  function RestaurantBooking(props) {
-
-    const [cloneBooking, setCloneBooking] = useState();
+function RestaurantBooking(props) {
     const [dateString, setDateString] = useState("");
-    const [numberOfTimesToClone, setNumberOfTimesToClone] = useState("1");
     const [time, setTime] = useState(getTimeRightAway);
-    const [daysBetweenBookings, setDaysBetweenBookings] = useState("1");
+    // const [daysBetweenBookings, setDaysBetweenBookings] = useState("1");
     const [times, setTimes] = useState([]);
-    const [selectedServices, setSelectedServices] = useState([]);
+    // const [selectedServices, setSelectedServices] = useState([]);
     const [successMessage, setSuccessMessage] = useState("");
     const [error, setError] = useState("");
-    const [employeesBack, setEmployeesBack] = useState([]);
-    const [bcnArray, setBcnArray] = useState();
-    const [selectedEmployee, setSelectedEmployee] = useState();
+    const [employees, setEmployees] = useState([]);
+    const [selectedEmployee, setSelectedEmployee] = useState("");
     const [customerFound, setCustomerFound] = useState();
     const [phoneNumber, setPhoneNumber] = useState("");
-    const [selectedBcn, setSelectedBcn] = useState("");
+    // const [selectedBcn, setSelectedBcn] = useState("");
     const [registeringNewGuest, setRegisteringNewGuest] = useState(false);
     const [newGuestName, setNewGuestName] = useState("");
-    const [employeeNeeded, setEmployeeNeeded] = useState();
-
+    // const [employeeNeeded, setEmployeeNeeded] = useState();
+    const [guestNotFound, setGuestNotFound] = useState(false);
+    const [guestFound, setGuestFound] = useState(false);
+    const [guestName, setGuestName] = useState("");
+    const [selectedTable, setSelectedTable] = useState();
+    const [occupants, setOccupants] = useState("1");
+  
+    useEffect(function() {
+      setSelectedTable(props.tables[0]);
+    }, [props.tables.length])
 
     function goToEditBusiness() {
       props.history.push(`/admin/${props.admin.admin.id}/createeditprofile`)
     }
 
     useEffect(function() {
-
+      Axios.get('/api/getEmployees', {headers: {"x-auth-token": localStorage.getItem("adminToken")}}).then(
+        response => {
+          if (response.status === 200) {
+            setEmployees(response.data.employees)
+            setSelectedEmployee(response.data.employees[0]._id)
+          }
+        }
+      )
     }, [])
-
-
 
     function toSetNewGuestName(e) {
       setNewGuestName(e.target.value)
@@ -84,156 +89,33 @@ import {withRouter} from 'react-router-dom';
     }
 
     function findGuest() {
-
       Axios.post("api/getCustomers/addNewCustomer", {phoneNumber}, {headers: {'x-auth-token': props.adminToken}}).then(response => {
           if (response.status === 200) {
             setCustomerFound(response.data.user);
+            setGuestFound(true);
+            setGuestNotFound(false)
           }
       }).catch(error => {
-        setError("");
-        setTimeout(() => setError("Customer Not Found"), 200);
+        if (error.response.status === 406 || error.response.status === 400) {
+            setGuestNotFound(true);
+            setGuestFound(false)
+        }        
       })
     }
 
-    function toSetBcn(bcn) {
-      return function() {
-        setSelectedBcn(bcn);
-      }
-    }
+   
 
     function removeFound() {
       setCustomerFound();
     }
 
-    function toSetPhoneNumber(e) {
-      setPhoneNumber(e.target.value)
-    }
 
     function toSetTime(time) {
         setTime(time);
     }
 
-    function toSetCloneBooking(bool) {
-        return () => {
-          setCloneBooking(bool);
-        }
-    }
-
-    function selectService(service) {
-      return function() {
-         if (employeeNeeded && service.requiresEmployee === false) {
-            setError("");
-            setTimeout(() => setError("Please reselect your services, these cannot be combined due to employee requrements."))
-            setSelectedServices([]);
-            setEmployeeNeeded();
-            setBcnArray();
-            setEmployeesBack([]);
-            return;
-        }
-        if (employeeNeeded === false && service.requiresEmployee === true) {
-          setError("");
-          setTimeout(() => setError("Please reselect your services, these cannot be combined due to employee requrements."))
-          setSelectedServices([]);
-          setEmployeeNeeded();
-          setBcnArray();
-          setEmployeesBack([]);
-          return;
-        }
-        setEmployeeNeeded(service.requiresEmployee)
-        const selectedServiceIds = [...selectedServices];
-        selectedServiceIds.push(service._id);
-        setSelectedServices(selectedServiceIds);
-      }
-    }
-
-    function minusService(id) {
-      return function() {
-        const selectedServiceIds = [...selectedServices].filter((e) => {
-            return e !== id
-         });
-        setSelectedServices(selectedServiceIds);
-        if (selectedServiceIds.length === 0) {
-          setEmployeeNeeded();
-          setBcnArray();
-          setEmployeesBack([]);
-        }
-      }
-    }
-
-    function getAvailableEmployees() {
-      if (cloneBooking === undefined) {
-        setError("");
-        setTimeout(() => setError("Choose whether this booking will be cloned"), 200);
-        return;
-      }
-      if (selectedServices.length === 0) {
-        setError("");
-        setTimeout(() => setError("Choose at least one service to be performed"), 200);
-        return;
-      }
-
-      if (employeeNeeded === false && cloneBooking === false) {
-        Axios.post('/api/getBookings/areas', {date: dateString, serviceIds: selectedServices, timeChosen: time, businessId: props.admin.admin.businessId, cloneNum: numberOfTimesToClone, daysBetween: daysBetweenBookings}).then(
-          response => {
-            if (response.status === 201) {
-              setError("");
-              setTimeout(() => setError("The business will close before the service can end"))
-            }
-            if (response.status === 200) {
-              setBcnArray(response.data.bcnArray);
-            }
-          }
-        ).catch(error => {
-          if (error.response.status === 409) {
-            setError("");
-            setTimeout(() => setError("This time has already passed and cannot be scheduled"))
-          }
-          else if (error.response.status === 406) {
-            setError("");
-            setTimeout(() => setError("There is no availability at this time"), 200);
-          }
-        })
-        setEmployeesBack([])
-        return;
-      }
-
-
-      if (cloneBooking === false && employeeNeeded === true) {
-      Axios.post('api/getBookings', {date: dateString, serviceIds: selectedServices, timeChosen: time, businessId: props.admin.admin.businessId}, {headers: {'x-auth-token': props.adminToken}}).then(
-        response => {
-           if (response.status === 200) {
-             if (response.data.bcnArray) {
-                setBcnArray(response.data.bcnArray);
-             }
-             setEmployeesBack(createMaplist(response.data.employees, "fullName"));
-             props.slideLeft()
-           }
-           if (response.status === 201) {
-            setError("");
-            setTimeout(() => setError("The business will close before the service can end"))
-           }
-        }
-      ).catch(error => {
-        if (error.response) {
-          if (error.response.status === 409) {
-            setError("");
-            setTimeout(() => setError("This time has already passed and cannot be scheduled"))
-          }
-          else if (error.response.status === 406) {
-            setError("");
-            setTimeout(() => setError("There is no availability at this time"), 200);
-          }
-          else {
-            console.log(error)
-          }
-        }
-      })
-    }
-  }
-
-    function selectEmployee(id) {
-        setSelectedEmployee(id)
-    }
+ 
+  
 
     function unSelectEmployee() {
       setSelectedEmployee();
@@ -270,13 +152,22 @@ import {withRouter} from 'react-router-dom';
 
     //appear={employeesBack.length > 0 && (bcnArray === undefined || (bcnArray && bcnArray.length > 0))}
 
-    function toSetCloneNumber(e) {
-        setNumberOfTimesToClone(e.target.value);
-    }
 
-    function toSetDaysBetweenBookings(e) {
-      setDaysBetweenBookings(e.target.value);
-  }
+    function bookTable() {
+      Axios.post('/api/restaurant/createTableBooking', {
+          time,
+          date: dateString,
+          customer: customerFound._id,
+          tableId: selectedTable,
+          numOfPeople: occupants,
+          employeeBooked: selectedEmployee
+        },
+          {headers: {"x-auth-token": localStorage.getItem("adminToken")}}).then(
+        response => {
+          console.log(response.data)
+        }
+      )
+    }
 
     return (
       <div id={styles.bookingHolder} onClick={props.hideDropDown}>
@@ -290,19 +181,79 @@ import {withRouter} from 'react-router-dom';
                 <p className={styles.ptags}>Select Date:</p>
                 <DateDrop setDateString={(dateString) => toSetDateString(dateString)}/>
               </div>
-              <div style={{marginTop: "26px"}}>
+              <div style={{marginTop: "24px", justifyContent: "flex-start", display: 'flex'}}>
+                 <p style={{ marginTop: "4px"}} className={styles.ptags}>Guest Phone:</p>
+                 <input value={phoneNumber} placeholder="Guest Phone Number"  onChange={(e) => setPhoneNumber(e.target.value)} style={{backgroundColor: "rgb(20,20,20)", height: "28px", width: "145px", boxShadow: "0px 0px 4px #f9e9f9", paddingLeft: "6px"}}/>
+                 <button style={{boxShadow: "0px 0px 4px #f9e9f9", border: "none", paddingLeft: "10px", paddingRight: "10px", marginLeft: "15px"}} className={styles.buttono} onClick={findGuest}>Search</button>
+              </div>
+              
+                {guestNotFound && <StatementAppear appear={guestNotFound}>
+                  <p style={{marginLeft: "20px", width: "300px", marginTop: "20px"}}>We couldn't find this customer in our system.</p>
+                  <p style={{marginLeft: "20px", width: "300px", marginTop: "4px"}}> Optionally, you can add first and last name.</p>
+                  <div style={{marginTop: "24px", justifyContent: "flex-start", display: 'flex'}}>
+                 <p style={{ marginTop: "4px"}} className={styles.ptags}>Guest Name:</p>
+                 <input placeholder="Guest Name" value={guestName} onChange={(e) => setGuestName(e.target.value)} style={{backgroundColor: "rgb(20,20,20)", height: "28px", width: "170px", boxShadow: "0px 0px 4px #f9e9f9", paddingLeft: "6px"}}/>
+                </div>
+                  </StatementAppear>}
+                  {guestFound && <StatementAppear appear={guestFound}>
+                  <p style={{marginLeft: "20px", width: "300px", marginTop: "20px"}}>Guest Found: {customerFound.fullName}</p>
+                  </StatementAppear>}
+                  <div style={{marginTop: "20px", justifyContent: "flex-start", display: 'flex'}}>
+                 <p style={{ marginTop: "4px"}} className={styles.ptags}>Select Employee:</p>
+                 <select style={{width: "150px", height: "28px", paddingLeft: "6px", border: "none", boxShadow: '0px 0px 4px #f9e9f9'}}>
+                  {employees.map(employee => <option onClick={(e) => setSelectedEmployee(employee._id)}>{employee.fullName}</option>)}
+                 </select>
+                </div>
+              <div style={{marginTop: "20px"}}>
                    <p className={styles.ptags}>Select Time:</p>
                   <TimeList time={time} times={times} setTime={(time) => toSetTime(time)}/>
               </div>
               </div>
               <div style={{paddingBottom: "20px"}}>
                 <div style={{marginTop: "22px", justifyContent: "flex-start", display: 'flex'}}>
-                 <p style={{marginLeft: "20px"}} className={styles.ptags}>Select Table:</p>
-                 <select style={{width: "70px", paddingLeft: "6px", border: "none", boxShadow: '0px 0px 4px #f9e9f9'}}>
+                 <p style={{marginLeft: "20px", marginTop: "4px"}} className={styles.ptags}>Select Table:</p>
+                 <select onChange={(e) => setSelectedTable(e.target.value)} style={{width: "70px", height: "28px", paddingLeft: "6px", border: "none", boxShadow: '0px 0px 4px #f9e9f9'}}>
                   {props.tables.map(table => <option>{table}</option>)}
-                  
                  </select>
                 </div>
+                <div style={{marginTop: "22px", justifyContent: "flex-start", display: 'flex'}}>
+                 <p style={{marginLeft: "20px", marginTop: "4px"}} className={styles.ptags}>Occupants:</p>
+                 <select onChange={(e) => setOccupants(e.target.value)} style={{width: "70px", height: "28px", paddingLeft: "6px", border: "none", boxShadow: '0px 0px 4px #f9e9f9'}}>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    <option>25</option>
+                    <option>26</option>
+                    <option>27</option>
+                    <option>28</option>
+                    <option>29</option>
+                    <option>30</option>
+                 </select>
+                </div>
+              </div>
+            <div style={{display: "flex", justifyContent: "center", paddingBottom: "20px", marginTop: "20px"}}>
+              <button onClick={bookTable} className={styles.buttono} style={{fontSize: "16px", width: "120px", height: "30px", border: "none", boxShadow: "0px 0px 4px #f9e9f9"}}>Create Table</button>
               </div>
         </div>
         <OtherAlert showAlert={successMessage !== ""} alertMessage={successMessage} alertType={"success"}/>

@@ -264,7 +264,7 @@ function AddEmployees(props) {
                 <input value={employeeId} onChange={employeeIdChanged} style={{width: "200px", height: "27px", border: "none", boxShadow: "0px 0px 5px #f9e9f9", fontSize: "14px", backgroundColor: "rgb(24,24,24)", paddingLeft: "5px"}} placeholder={"Enter Employee ID"}/>
                 <SubmitButton onClick={findEmployee}>Find Employee</SubmitButton>
             </div>
-            {employeeName !== "" && successMessage === "" && <div style={{display: 'flex', width: "300px", marginTop: "20px", justifyContent: "space-between", alignSelf: "center", boxShadow: "0px 0px 5px black", padding: "10px"}}>
+            {employeeName !== "" && successMessage === "" && <div style={{display: 'flex', width: "300px", marginTop: "20px", justifyContent: "space-between", backgroundColor: "rgb(65,65,65)", alignSelf: "center", boxShadow: "0px 0px 5px #f9e9f9", padding: "10px"}}>
                 <p style={{fontSize: "18px", marginTop: "4px"}}>{employeeName}</p>
                 <SubmitButton onClick={addEmployee}>Add Employee</SubmitButton>       
             </div>}

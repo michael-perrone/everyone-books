@@ -12,6 +12,7 @@ const BookedNotification = require("../../models/BookedNotification");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const config = require("config");
+const BusinessProfile = require("../../models/BusinessProfile");
 
 router.get("/checkTables", adminAuth, async (req, res) => {
     const business = await Business.findOne({_id: req.admin.businessId});
@@ -21,10 +22,12 @@ router.get("/checkTables", adminAuth, async (req, res) => {
     }
 })
 
-router.get("/checkBusiness", adminAuth, async (req, res) => {
+router.post("/checkBusiness", adminAuth, async (req, res) => {
   const business = await Business.findOne({_id: req.admin.businessId});
+  console.log(req.body.date)
+  const tableBookings = await TableBooking.find({businessId: req.admin.businessId, date: req.body.date});
   if (business) {
-      res.status(200).json({business});
+      res.status(200).json({business, tableBookings});
   }
 })
 
@@ -137,6 +140,29 @@ router.post('/deleteTable', adminAuth, async (req, res) => {
     }
 })
 
+router.post('/createTableBooking', adminAuth, async (req, res) => {
+  try {
+    const business = await Business.findOne({_id: req.admin.businessId});
+    if (business) {
+      const allBookings = await TableBooking.find({businessId: req.admin.businessId, tableId: req.body.tableId, date: req.body.date});
+      let newTableBooking = new TableBooking({
+          timeStart: req.body.time,
+          businessId: req.admin.businessId,
+          date: req.body.date,
+          customer: req.body.customer,
+          employeeBooked: req.body.employeeBooked,
+          tableId: req.body.tableId,
+          numOfPeople: req.body.numOfPeople
+      })
+      await newTableBooking.save();
+      res.status(200).json({newTableBooking});
+    }
+  }
+  catch(error) {
+    console.log(error)
+  }
+})
+
 router.post('/seatingLocationSet', adminAuth, async (req, res) => {
     try{
         const business = await Business.findOne({_id: req.admin.businessId});
@@ -151,6 +177,30 @@ router.post('/seatingLocationSet', adminAuth, async (req, res) => {
     catch(error){
         res.status(500).send(); 
     }
+})
+
+router.get('/getEmployees', adminAuth, async (req, res) => {
+  try {
+    const bp = await BusinessProfile.findOne({business: req.admin.businessId});
+    return res.status(200).json({employees: bp.employeesWhoAccepted})
+  }
+  catch(error) {
+    console.log(error);
+    res.status(500).send();
+  }
+})
+
+
+router.post('/moreBookingInfo', adminAuth, async (req, res) => {
+  try {
+    const tableBooking = await TableBooking.findOne({_id: req.body.bookingId});
+    const customer = await User.findOne({_id: tableBooking.customer}).select(["fullName", 'phoneNumber']);
+    const employee = await Employee.findOne({_id: tableBooking.employeeBooked}).select(['fullName']);
+    res.status(200).json({customer, employee});
+  }
+  catch(error) {
+    res.status(500).send();
+  }
 })
 
 
